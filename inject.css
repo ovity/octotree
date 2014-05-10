@@ -18,8 +18,10 @@ html.octotree {
   width: 8px;
   height: 8px;
   z-index: 999999;
+  visibility: hidden;
 }
 .octotree_sidebar .inner:hover::-webkit-scrollbar {
+	visibility: visible;
 }
 .octotree_sidebar .inner::-webkit-scrollbar-track {
   border-radius: 10px;
