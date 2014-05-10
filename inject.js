@@ -81,9 +81,9 @@
         folder.push(item)
         item.text   = name
         item.icon   = item.type
-        item._url   = url
         item.a_attr = { href: url }
         if (item.type === 'tree') folders[item.path] = item.children = []
+        else if (item.type === 'blob') item._url = url
       })
 
       done(null, sort(root))

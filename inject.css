@@ -75,7 +75,7 @@ html.octotree {
 }
 
 /* Source tree */
-.octotree_sidebar .tree {
+.octotree_sidebar inner > .tree {
 	margin: 5px;
 }
 
