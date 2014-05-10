@@ -6,10 +6,10 @@
       , REGEXP = /([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/
       
   var $html    = $('html')
-    , $sidebar = $('<nav class="octotree_sidebar">' +
+    , $sidebar = $('<nav class="octotree_sidebar"><div class="inner">' +
                      '<h1>loading...</h1>' +
                      '<div class="tree"></div>' +
-                   '</nav>')
+                   '</div></nav>')
     , $tree    = $sidebar.find('.tree')
     , $token   = $('<form>' +
                      '<div>' +
