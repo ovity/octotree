@@ -76,17 +76,14 @@
           , index  = path.lastIndexOf('/')
           , name   = path.substring(index + 1)
           , folder = folders[path.substring(0, index)]
+          , url    = '/' + repo.username + '/' + repo.reponame + '/' + item.type + '/' + repo.branch + '/' + path
 
         folder.push(item)
-        item.text = name
-        if (item.type === 'tree') {
-          folders[item.path] = item.children = []
-          item.icon = 'dir'
-        } else {
-          // there should be a better way than this...
-          item._url = '/' + repo.username + '/' + repo.reponame + '/blob/' + repo.branch + '/' + path
-          item.icon = 'file'
-        }
+        item.text   = name
+        item.icon   = item.type
+        item._url   = url
+        item.a_attr = { href: url }
+        if (item.type === 'tree') folders[item.path] = item.children = []
       })
 
       done(null, sort(root))
