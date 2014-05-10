@@ -6,7 +6,7 @@ Chrome extension to display GitHub code in tree format. Useful for code junkies 
 * Navigate to any GitHub project (or just refresh this page as an example)
 * The code tree should show as follows:
 
-![When extension is active](https://github.com/buunguyen/octotree/screen_ext.png)
+![When extension is active](https://raw.githubusercontent.com/buunguyen/octotree/master/screen_ext.png)
 
 ## GitHub API Rate Limit
 Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve repository metadata. By default, it makes unauthenticated requests to the GitHub API. However, there are two situations when requests must be authenticated:
@@ -16,7 +16,7 @@ Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve reposit
 
 When that happens, Octotree will show use the following screen to ask for your [GitHub personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use). 
 
-![Enter personal access token](https://github.com/buunguyen/octotree/screen_token.png)
+![Enter personal access token](https://raw.githubusercontent.com/buunguyen/octotree/master/screen_token.png)
 
 If you don't already have one, create one at [this page](https://github.com/settings/tokens/new). Then enter the generated token into the textbox and save.
 

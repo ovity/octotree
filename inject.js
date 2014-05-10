@@ -18,7 +18,7 @@
                      '<div>' +
                        '<button type="submit">Save</button>' +
                        '<a href="https://github.com/settings/tokens/new" target="_blank">Create token</a> | ' +
-                       '<a href="https://github.com/buunguyen/octotree" target="_blank">Help</a>' +
+                       '<a href="https://github.com/buunguyen/octotree#github-api-rate-limit" target="_blank">Help</a>' +
                      '</div>' +
                      '<div class="error"></div>' +
                    '</form>')
