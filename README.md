@@ -1,5 +1,5 @@
 ## Octotree
-Chrome extension to display GitHub code in tree format. Useful for code junkies who frequently read source in GitHub and do not want download or checkout every single repository.
+Chrome extension to display GitHub code in tree format. Useful for developers who frequently read source in GitHub and do not want download or checkout every single repository.
 
 ## Install
 * Download and install [Octotree](tbd) from the Chrome store

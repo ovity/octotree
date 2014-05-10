@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "manifest_version": 2,
   "author": "Buu Nguyen",
-  "description": "Chrome extension to display GitHub code in tree format",
+  "description": "Display GitHub code in tree format",
   "homepage_url": "https://github.com/buunguyen/octotree",
   "icons": {
     "16": "icons/icon16.png",
