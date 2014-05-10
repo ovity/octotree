@@ -2,7 +2,7 @@
 Chrome extension to display GitHub code in tree format. Useful for developers who frequently read source in GitHub and do not want download or checkout every single repository.
 
 ## Install
-* Download and install [Octotree](tbd) from the Chrome store
+* Download and install [Octotree](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc) from the Chrome store
 * Navigate to any GitHub project (or just refresh this page as an example)
 * The code tree should show as follows:
 
