@@ -103,10 +103,8 @@
 
   function onFetchError(err) {
     var msg = 'Error: ' + err.error
-    if (err.error === 401)
-      msg = 'Invalid token!'
-    else if (err.error === 404) 
-      msg = 'Private or invalid repository!'
+    if (err.error === 401) msg = 'Invalid token!'
+    else if (err.error === 404) msg = 'Private or invalid repository!'
     else if (err.error === 403 && ~err.request.getAllResponseHeaders().indexOf('X-RateLimit-Remaining: 0')) 
       msg = 'API limit exceeded!'
     updateSidebar(msg, true)
@@ -135,6 +133,7 @@
         selectedItem = data.node.original
       })
       .bind('click.jstree', function() {
+        // TODO: Pjax instead of reloading entire page
         if (selectedItem && selectedItem._url) window.location.href = selectedItem._url
       })
       .bind('ready.jstree', function() {
