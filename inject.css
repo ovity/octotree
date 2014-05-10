@@ -11,12 +11,16 @@ html.octotree {
 .octotree_sidebar .inner{
 	height: 100%;
 	overflow: auto;
-	margin: 0 5px;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
 .octotree_sidebar .inner::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
+    z-index: 999999;
+}
+
+.octotree_sidebar .inner:hover::-webkit-scrollbar {
 }
 
 .octotree_sidebar .inner::-webkit-scrollbar-track {
@@ -25,13 +29,16 @@ html.octotree {
 }
 
 .octotree_sidebar .inner::-webkit-scrollbar-thumb {
+    height: 8px;
     border-radius: 10px;
     background: #888;
 }
 .octotree_sidebar .inner::-webkit-scrollbar-thumb:window-inactive {
     background: rgba(100,100,100,0.4); 
 }
-
+.octotree_sidebar .inner::-webkit-scrollbar-corner {
+    background: transparent;
+}
 /* Sidebar */
 .octotree_sidebar {
 	position: fixed;
@@ -40,6 +47,7 @@ html.octotree {
 	bottom: 0;
 	left: 0;
 	width: 250px;
+    padding: 5px;
 	background-color: #e7ecee;
 	overflow: hidden;
   	z-index: 999991;
@@ -47,12 +55,14 @@ html.octotree {
 	transition: transform 0.2s;
 	-webkit-transform: translate3d(-100%, 0, 0);
 	transform: translate3d(-100%, 0, 0);
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 .octotree .octotree_sidebar {
 	-webkit-transform: translate3d(0, 0, 0);
 	transform: translate3d(0, 0, 0);
-	-webkit-box-shadow: inset rgba(50, 50, 50, 0.2) -2px 0 2px;
-	box-shadow:         inset rgba(50, 50, 50, 0.2) -2px 0 2px;
+	-webkit-box-shadow: rgba(50, 50, 50, 0.74902) 2px 2px 5px 0px;
+	box-shadow:         rgba(50, 50, 50, 0.74902) 2px 2px 5px 0px;
 }
 
 .octotree_sidebar h1 {
@@ -60,7 +70,7 @@ html.octotree {
 	margin: 10px 5px;
 	height: 20px;
 	white-space: nowrap;
-  overflow: hidden;
+  	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
