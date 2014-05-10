@@ -34,9 +34,10 @@ There are several improvements that can be made to Octotree. Contribution is ver
 
 - [ ] Make the width of the sidebar resizable
 - [ ] Allow users to enter access token any time (i.e. a new button?)
-- [ ] Synchronize selection when users navigate using GitHub links (instead of Octotree links)
+- [ ] Synchronize (two-way) between sidebar selection and GitHub selection
 - [ ] Show progress indicator while a repository is being loaded
 - [ ] Hide sidebar when navigating to non-code pages like Issues, PRs...
+- [ ] Pjax when navigating among code files, like GitHub does natively
 
 ## Credit
 [Icon](https://github.com/pstadler/octofolders) by [pstadler](https://github.com/pstadler)
