@@ -1,0 +1,106 @@
+/* Page */
+html {
+	transition: margin-left 0.2s ease-in;
+	-webkit-transition: margin-left 0.2s ease-in;
+}
+html.octotree {
+	margin-left: 240px;
+}
+
+/* Sidebar */
+.octotree_sidebar {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	width: 250px;
+	background-color: #e7ecee;
+	overflow-y:scroll;
+  overflow-x:auto;
+  z-index: 999991;
+  -webkit-transition: -webkit-transform 0.2s;
+	transition: transform 0.2s;
+	-webkit-transform: translate3d(-100%, 0, 0);
+	transform: translate3d(-100%, 0, 0);
+}
+.octotree .octotree_sidebar {
+	-webkit-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
+	-webkit-box-shadow: 2px 2px 5px 0px rgba(50, 50, 50, 0.75);
+	box-shadow:         2px 2px 5px 0px rgba(50, 50, 50, 0.75);
+}
+
+.octotree_sidebar h1 {
+	font-size: 16px;
+	margin: 10px 5px;
+	height: 20px;
+	white-space: nowrap;
+  overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* Source tree */
+.octotree_sidebar .tree {
+	margin: 5px;
+}
+
+.jstree-icon.dir {
+	background: url('chrome-extension://__MSG_@@extension_id__/lib/images/32px.png') no-repeat -264px -8px;
+	width: 16px;
+	height: 16px;
+	border: 0;
+}
+
+.jstree-icon.file {
+	background: url('chrome-extension://__MSG_@@extension_id__/lib/images/32px.png') no-repeat -106px -73px;
+	width: 13px;
+	height: 16px;
+	border: 0;
+}
+
+/* Login form */
+.octotree_sidebar form div {
+	margin: 5px
+}
+.octotree_sidebar form input {
+	width: 230px;
+}
+.octotree_sidebar form button {
+	padding: 5px 10px;
+	margin-right: 10px; 
+  background: rgba(52, 73, 94, 1);
+  color: #FFF;
+	border: solid 1px #eee;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1p
+}
+.octotree_sidebar form > .error {
+	color: #d35400;
+}
+
+/* Toggle button */
+.octotree_toggle {
+	position: fixed;
+	top: auto;
+	right: auto;
+	bottom: 5px;
+	left: 5px;
+	width: 30px;
+	height: 30px;
+	border-radius: 3px;
+	background-color: rgba(52, 73, 94, 0.3);
+	font-size: 15pt;
+	color: white;
+	text-align: center;
+  line-height: 30px;
+	cursor: pointer;
+	z-index: 999992;
+	transition: left 0.2s ease-in;
+	-webkit-transition: left 0.2s ease-in;
+}
+.octotree .octotree_toggle {
+	left: 215px;
+}
