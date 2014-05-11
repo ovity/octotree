@@ -1,8 +1,7 @@
 ## Octotree
-Chrome extension to display GitHub code in tree format, making it much easier to navigate code. Useful for developers who frequently read source in GitHub and do not want download or checkout every single repository.
+Chrome extension to display GitHub code in tree format, making it much easier to navigate code. Useful for developers who frequently read source in GitHub and do not want to download or checkout every single repository.
 
-### Features
-* Easy-to-navigate tree just like IDEs
+* Easy-to-navigate code tree like IDEs
 * Super fast browsing with Pjax
 * Work with public and private repositories
 
