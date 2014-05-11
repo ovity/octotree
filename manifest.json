@@ -26,6 +26,7 @@
         "lib/js/underscore.js",
         "lib/js/jquery.js",
         "lib/js/jstree.js",
+        "lib/js/jquery.pjax.js",
         "lib/js/base64.js",
         "lib/js/github.js",
         "inject.js"

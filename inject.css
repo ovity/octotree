@@ -4,6 +4,7 @@ html {
     -webkit-transition: margin-left 0.2s ease-in;
 }
 html.octotree { margin-left: 240px }
+
 /* Scrollbar */
 .octotree_sidebar .inner {
     height: 100%;
@@ -31,6 +32,7 @@ html.octotree { margin-left: 240px }
 }
 .octotree_sidebar .inner::-webkit-scrollbar-thumb:window-inactive { background: rgba(100,100,100,0.4) }
 .octotree_sidebar .inner::-webkit-scrollbar-corner { background: transparent }
+
 /* Sidebar */
 .octotree_sidebar {
     position: fixed;
@@ -78,6 +80,7 @@ html.octotree { margin-left: 240px }
     height: 16px;
     border: 0;
 }
+
 /* Token form */
 .octotree_sidebar form div { margin: 5px }
 .octotree_sidebar form input { width: 230px }
@@ -93,6 +96,7 @@ html.octotree { margin-left: 240px }
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1p;
 }
 .octotree_sidebar form > .error { color: #d35400 }
+
 /* Toggle button */
 .octotree_toggle {
     position: fixed;

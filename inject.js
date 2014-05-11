@@ -24,7 +24,6 @@
                    '</form>')
     , $toggler = $('<div class="octotree_toggle">&#9776;</div>')
     , store    = new Storage()
-    , selectedItem
 
   $(document).ready(function() {
     loadRepo(true)
@@ -52,8 +51,11 @@
     // must not be a reserved `username`
     if (~['settings', 'organizations', 'site'].indexOf(match[1])) return false
 
+    // TODO: the intention is to hide the sidebar when users navigate to non-code areas (e.g. Issues, Pulls)
+    // and show it again when users navigate back to the code area
+    // the first part is achieved with the next two lines; but need to implement the second part
+    // before activating the entire feature, PR is welcome
     // if match[3] exists, it must be either 'tree' or 'blob'
-    // TODO: problem is, when navigate back, say from Issues to code, need to detect & refetch
     // if (match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
 
     return { 
@@ -81,9 +83,13 @@
         folder.push(item)
         item.text   = name
         item.icon   = item.type
-        item.a_attr = { href: url }
-        if (item.type === 'tree') folders[item.path] = item.children = []
-        else if (item.type === 'blob') item._url = url
+        if (item.type === 'tree') {
+          folders[item.path] = item.children = []
+          item.a_attr = { href: '#' }
+        }
+        else if (item.type === 'blob') {
+          item.a_attr = { href: url }
+        }
       })
 
       done(null, sort(root))
@@ -124,19 +130,16 @@
       .delegate('.jstree-closed>a', 'click.jstree', function() {
         $.jstree.reference(this).open_node(this)
       })
-
-      // The next 2 listeners are ugly
-      // basically I need a way to distingush between selection caused by user clicking a node 
-      // and selection caused during restoration phase of jsTree's state plugin
-      // The former happens to trigger a `click` after `select_node`
-      .bind('select_node.jstree', function(e, data) {
-        selectedItem = data.node.original
+      .on('click', function(e) {
+        var $target = $(e.target)
+        if ($target.is('a.jstree-anchor') && $target.children(':first').hasClass('blob')) {
+          $.pjax({ 
+            url: $target.attr('href'), 
+            container: $('#js-repo-pjax-container') 
+          })
+        }
       })
-      .bind('click.jstree', function() {
-        // TODO: Pjax instead of reloading entire page
-        if (selectedItem && selectedItem._url) window.location.href = selectedItem._url
-      })
-      .bind('ready.jstree', function() {
+      .on('ready.jstree', function() {
         updateSidebar(repo.username + ' / ' + repo.reponame + ' [' + repo.branch + ']')  
       })
   }
