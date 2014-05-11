@@ -5,34 +5,6 @@ html {
 }
 html.octotree { margin-left: 240px }
 
-/* Scrollbar */
-.octotree_sidebar .inner {
-    height: 100%;
-    overflow: auto;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-}
-.octotree_sidebar .inner::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-    z-index: 999999;
-    -webkit-transition: all 1s ease-in-out;
-    transition: all 1s ease-in-out;
-    opacity: 0;
-}
-.octotree_sidebar .inner:hover::-webkit-scrollbar { opacity: 1 }
-.octotree_sidebar .inner::-webkit-scrollbar-track {
-    border-radius: 10px;
-    background: transparent;
-}
-.octotree_sidebar .inner::-webkit-scrollbar-thumb {
-    height: 8px;
-    border-radius: 10px;
-    background: #888;
-}
-.octotree_sidebar .inner::-webkit-scrollbar-thumb:window-inactive { background: rgba(100,100,100,0.4) }
-.octotree_sidebar .inner::-webkit-scrollbar-corner { background: transparent }
-
 /* Sidebar */
 .octotree_sidebar {
     position: fixed;
@@ -43,7 +15,7 @@ html.octotree { margin-left: 240px }
     width: 250px;
     padding: 5px;
     background-color: #e7ecee;
-    overflow: hidden;
+    overflow: auto;
     z-index: 999991;
     -webkit-transition: -webkit-transform 0.2s;
     transition: transform 0.2s;
