@@ -3,7 +3,9 @@ html {
     transition: margin-left 0.2s ease-in;
     -webkit-transition: margin-left 0.2s ease-in;
 }
-html.octotree { margin-left: 240px }
+html.octotree { 
+    margin-left: 240px;
+}
 
 /* Sidebar */
 .octotree_sidebar {
@@ -35,12 +37,13 @@ html.octotree { margin-left: 240px }
     margin: 10px 5px;
     height: 20px;
     white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
 }
 
 /* Source tree */
-.octotree_sidebar inner > .tree { margin: 5px }
+.octotree_sidebar inner > .tree { 
+    margin: 5px;
+}
 .jstree-icon.tree {
     background: url('chrome-extension://__MSG_@@extension_id__/lib/images/32px.png') no-repeat -264px -8px;
     width: 16px;
@@ -55,8 +58,12 @@ html.octotree { margin-left: 240px }
 }
 
 /* Token form */
-.octotree_sidebar form div { margin: 5px }
-.octotree_sidebar form input { width: 230px }
+.octotree_sidebar form div { 
+    margin: 5px; 
+}
+.octotree_sidebar form input { 
+    width: 230px; 
+}
 .octotree_sidebar form button {
     padding: 5px 10px;
     margin-right: 10px;
@@ -68,7 +75,9 @@ html.octotree { margin-left: 240px }
     -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
 }
-.octotree_sidebar form > .error { color: #d35400 }
+.octotree_sidebar form > .error { 
+    color: #d35400; 
+}
 
 /* Toggle button */
 .octotree_toggle {
@@ -90,4 +99,6 @@ html.octotree { margin-left: 240px }
     transition: left 0.2s ease-in;
     -webkit-transition: left 0.2s ease-in;
 }
-.octotree .octotree_toggle { left: 215px }
+.octotree .octotree_toggle { 
+    left: 215px;
+}
