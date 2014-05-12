@@ -38,6 +38,7 @@ There are several improvements that can be made to Octotree. Contribution is ver
 
 - [ ] Hide sidebar when navigating to non-code pages like Issues, PRs...
 - [ ] Make the width of the sidebar resizable.
+- [ ] Allow docking sidebar to either the left or right side.
 - [ ] Allow users to enter access token any time.
 - [ ] Synchronize (two-way) between sidebar selection and GitHub selection.
 - [ ] Show progress indicator while the code tree or a file is being loaded (with Pjax). (Showing spinner in the toggle button?)
