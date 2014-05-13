@@ -71,7 +71,7 @@
       , root    = []
       , folders = { '': root }
 
-    api.getTree(repo.branch + '?recursive=true', function(err, tree) {
+    api.getTree(encodeURIComponent(repo.branch) + '?recursive=true', function(err, tree) {
       if (err) return done(err)
       tree.forEach(function(item) {
         var path   = item.path
