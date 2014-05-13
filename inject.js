@@ -49,7 +49,7 @@
     if (!match) return false
 
     // must not be a reserved `username`
-    if (~['settings', 'organizations', 'site'].indexOf(match[1])) return false
+    if (~['settings', 'organizations', 'site', 'blog'].indexOf(match[1])) return false
 
     // TODO: the intention is to hide the sidebar when users navigate to non-code areas (e.g. Issues, Pulls)
     // and show it again when users navigate back to the code area
