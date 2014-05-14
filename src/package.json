@@ -1,0 +1,15 @@
+{
+  "name": "octotree",
+  "title": "Octotree",
+  "id": "jid1-Om7eJGwA1U8Akg",
+  "description": "Display GitHub code in tree format",
+  "author": "Buu Nguyen",
+  "homepage": "https://github.com/buunguyen/octotree",
+  "lib": "data",
+  "main": "data/firefox",
+  "data": "data",
+  "icon": "data/icons/icon48.png",
+  "icon64": "data/icons/icon64.png",
+  "license": "MIT",
+  "version": "1.0"
+}

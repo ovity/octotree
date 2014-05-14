@@ -1,13 +1,9 @@
-var gulp      = require('gulp')
-  , clean     = require('gulp-clean')
-  , replace   = require('gulp-replace')
-  , es        = require('event-stream')
-  , series    = require('stream-series')
-  , rseq      = require('gulp-run-sequence')
+var gulp  = require('gulp')
+  , clean = require('gulp-clean')
+  , es    = require('event-stream')
+  , rseq  = require('gulp-run-sequence')
 
 // helpers
-const EXT_BASE = '@EXT_BASE@'
-
 function pipe(src, transforms, dest) {
   if (typeof transforms === 'string') {
     dest = transforms
@@ -26,7 +22,7 @@ gulp.task('clean', function() {
   return pipe('./dist', [clean()])
 })
 
-gulp.task('chrome:copy', function() {
+gulp.task('chrome', function() {
   return es.merge(
     pipe('./src/lib/**/*', './dist/chrome/lib'),
     pipe('./src/icons/**/*', './dist/chrome/icons'),
@@ -34,15 +30,7 @@ gulp.task('chrome:copy', function() {
   )
 })
 
-gulp.task('chrome', ['chrome:copy'], function() {
-  return pipe(
-    './dist/chrome/**/*.css', 
-    [replace(EXT_BASE, 'chrome-extension://__MSG_@@extension_id__/')],
-    './dist/chrome/'
-  )
-})
-
-gulp.task('safari:copy', function() {
+gulp.task('safari', function() {
   return es.merge(
     pipe('./src/lib/**/*', './dist/safari/octotree.safariextension/lib'),
     pipe('./src/icons/**/*', './dist/safari/octotree.safariextension/icons'),
@@ -50,17 +38,13 @@ gulp.task('safari:copy', function() {
   )
 })
 
-gulp.task('safari', ['safari:copy'], function() {
-  return es.merge(
-    pipe('./dist/safari/octotree.safariextension/inject.css', [replace(EXT_BASE, '')], 
-         './dist/safari/octotree.safariextension/'),
-    pipe('./dist/safari/octotree.safariextension/lib/css/jstree.css', [replace(EXT_BASE + 'lib/', '../')],
-         './dist/safari/octotree.safariextension/lib/css')
-  )
-})
-
 gulp.task('firefox', function() {
-  // TODO
+  return es.merge(
+    pipe('./src/lib/**/*', './dist/firefox/data/lib'),
+    pipe('./src/icons/**/*', './dist/firefox/data/icons'),
+    pipe(['./src/inject.js', './src/inject.css', './src/firefox.js'], './dist/firefox/data'),
+    pipe('./src/package.json', './dist/firefox')
+  )
 })
 
 gulp.task('default', function(cb) {
