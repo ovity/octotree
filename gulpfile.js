@@ -50,11 +50,5 @@ gulp.task('default', function(cb) {
 })
 
 gulp.task('watch', function() {
-  gulp.watch(['./src/lib/**/*',
-              './src/icons/**/*',
-              './src/inject.js',
-              './src/inject.css'], ['default'])
-  gulp.watch(['./src/manifest.json'], ['chrome'])
-  gulp.watch(['./src/Info.plist'], ['safari'])
-  gulp.watch(['./src/firefox.js', './src/package.json'], ['firefox'])
+  gulp.watch(['./src/**/*'], ['default'])
 })
