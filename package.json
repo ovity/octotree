@@ -20,8 +20,6 @@
     "gulp": "^3.6.2",
     "gulp-clean": "^0.2.4",
     "event-stream": "^3.1.5",
-    "gulp-run-sequence": "^0.3.2",
-    "gulp-replace": "^0.3.0",
-    "stream-series": "^0.1.0"
+    "gulp-run-sequence": "^0.3.2"
   }
 }

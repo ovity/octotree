@@ -1,12 +1,7 @@
-var gulp      = require('gulp')
-  , clean     = require('gulp-clean')
-  , replace   = require('gulp-replace')
-  , es        = require('event-stream')
-  , series    = require('stream-series')
-  , rseq      = require('gulp-run-sequence')
-
-// helpers
-const EXT_BASE = '@EXT_BASE@'
+var gulp  = require('gulp')
+  , clean = require('gulp-clean')
+  , es    = require('event-stream')
+  , rseq  = require('gulp-run-sequence')
 
 function pipe(src, transforms, dest) {
   if (typeof transforms === 'string') {
@@ -21,46 +16,33 @@ function pipe(src, transforms, dest) {
   return stream
 }
 
-// tasks
 gulp.task('clean', function() {
-  return pipe('./dist', [clean()])
+  return pipe('./tmp', [clean()])
 })
 
-gulp.task('chrome:copy', function() {
+gulp.task('chrome', function() {
   return es.merge(
-    pipe('./src/lib/**/*', './dist/chrome/lib'),
-    pipe('./src/icons/**/*', './dist/chrome/icons'),
-    pipe(['./src/inject.js', './src/inject.css', './src/manifest.json'], './dist/chrome/')
+    pipe('./src/lib/**/*', './tmp/chrome/lib'),
+    pipe('./src/icons/**/*', './tmp/chrome/icons'),
+    pipe(['./src/inject.js', './src/inject.css', './src/manifest.json'], './tmp/chrome/')
   )
 })
 
-gulp.task('chrome', ['chrome:copy'], function() {
-  return pipe(
-    './dist/chrome/**/*.css', 
-    [replace(EXT_BASE, 'chrome-extension://__MSG_@@extension_id__/')],
-    './dist/chrome/'
-  )
-})
-
-gulp.task('safari:copy', function() {
+gulp.task('safari', function() {
   return es.merge(
-    pipe('./src/lib/**/*', './dist/safari/octotree.safariextension/lib'),
-    pipe('./src/icons/**/*', './dist/safari/octotree.safariextension/icons'),
-    pipe(['./src/inject.js', './src/inject.css', './src/Info.plist'], './dist/safari/octotree.safariextension/')
-  )
-})
-
-gulp.task('safari', ['safari:copy'], function() {
-  return es.merge(
-    pipe('./dist/safari/octotree.safariextension/inject.css', [replace(EXT_BASE, '')], 
-         './dist/safari/octotree.safariextension/'),
-    pipe('./dist/safari/octotree.safariextension/lib/css/jstree.css', [replace(EXT_BASE + 'lib/', '../')],
-         './dist/safari/octotree.safariextension/lib/css')
+    pipe('./src/lib/**/*', './tmp/safari/octotree.safariextension/lib'),
+    pipe('./src/icons/**/*', './tmp/safari/octotree.safariextension/icons'),
+    pipe(['./src/inject.js', './src/inject.css', './src/Info.plist'], './tmp/safari/octotree.safariextension/')
   )
 })
 
 gulp.task('firefox', function() {
-  // TODO
+  return es.merge(
+    pipe('./src/lib/**/*', './tmp/firefox/data/lib'),
+    pipe('./src/icons/**/*', './tmp/firefox/data/icons'),
+    pipe(['./src/inject.js', './src/inject.css', './src/firefox.js'], './tmp/firefox/data'),
+    pipe('./src/package.json', './tmp/firefox')
+  )
 })
 
 gulp.task('default', function(cb) {
