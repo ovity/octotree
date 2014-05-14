@@ -30,7 +30,7 @@ Alternatively, you can always manually enter or update the token by following th
 * Open the Chrome developer console
 * Execute the following line:
 ```javascript
-localStorage.setItem('octotree.github_access_token', 'REPLACE WITH TOKEN')
+localStorage.setItem('octotree.github_access_token', JSON.stringify('REPLACE WITH TOKEN'))
 ```
 
 ## Contribution
