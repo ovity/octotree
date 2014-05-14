@@ -4,18 +4,10 @@
       , SHOWN  = 'octotree.shown'
       , REGEXP = /([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/ // (username)/(reponame)/(subpart)
       , RESERVED_USER_NAMES = [
-          'settings',
-          'organizations',
-          'site',
-          'blog',
-          'about',
-          'orgs',
-          'styleguide',
-          'showcases',
-          'trending',
-          'stars',
-          'dashboard',
-          'notifications'
+          'settings', 'orgs', 'organizations', 
+          'site', 'blog', 'about',      
+          'styleguide', 'showcases', 'trending',
+          'stars', 'dashboard', 'notifications'
         ]
       , RESERVED_REPO_NAMES = ['followers', 'following']
       
@@ -37,6 +29,7 @@
                      '<div class="error"></div>' +
                    '</form>')
     , $toggler = $('<div class="octotree_toggle">&#9776;</div>')
+    , $dummy   = $('<div/>')
     , store    = new Storage()
 
   $(document).ready(function() {
@@ -89,21 +82,23 @@
       if (err) return done(err)
       tree.forEach(function(item) {
         var path   = item.path
+          , type   = item.type
           , index  = path.lastIndexOf('/')
           , name   = path.substring(index + 1)
           , folder = folders[path.substring(0, index)]
-          , url    = '/' + repo.username + '/' + repo.reponame + '/' + item.type + '/' + repo.branch + '/' + path
+          , url    = '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path
 
         folder.push(item)
-        item.text   = name
-        item.icon   = item.type
-        if (item.type === 'tree') {
+        item.text = sanitize(name)
+        item.icon = type // use `type` as class name for tree node
+        if (type === 'tree') {
           folders[item.path] = item.children = []
           item.a_attr = { href: '#' }
         }
-        else if (item.type === 'blob') {
+        else if (type === 'blob') {
           item.a_attr = { href: url }
         }
+        // TOOD: handle submodule
       })
 
       done(null, sort(root))
@@ -211,7 +206,11 @@
     }
     store.set(TOKEN, token)
     loadRepo()
-  }   
+  }
+
+  function sanitize(str) {
+    return $dummy.text(str).html()
+  }
 
   function Storage() {
     this.get = function(key) {
