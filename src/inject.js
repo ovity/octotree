@@ -129,7 +129,7 @@
           }
         },
         plugins : ['wholerow', 'state'],
-        state   : { key : PREFIX + '.' + repo.username + '/' + repo.reponame },
+        state   : { key : PREFIX + '.' + repo.username + '/' + repo.reponame }
       })
       .delegate('.jstree-open>a', 'click.jstree', function() {
         $.jstree.reference(this).close_node(this)
