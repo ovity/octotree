@@ -24,7 +24,7 @@
   }
 
 
-  var API_URL = 'https://api.github.com';
+  var API_URL = 'https://' + (document.domain == 'github.com' ? 'api.github.com' : document.domain + '/api/v3');
 
   var Github = function(options) {
 
