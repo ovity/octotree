@@ -358,7 +358,7 @@
 }
 #jstree-dnd.jstree-default .jstree-ok,
 #jstree-dnd.jstree-default .jstree-er {
-  background-image: url("chrome-extension://__MSG_@@extension_id__/lib/images/32px.png");
+  background-image: url("@EXT_BASE@lib/images/32px.png");
   background-repeat: no-repeat;
   background-color: transparent;
 }
@@ -428,7 +428,7 @@
 }
 .jstree-default .jstree-node,
 .jstree-default .jstree-icon {
-  background-image: url("chrome-extension://__MSG_@@extension_id__/lib/images/32px.png");
+  background-image: url("@EXT_BASE@lib/images/32px.png");
 }
 .jstree-default .jstree-node {
   background-position: -292px -4px;
@@ -522,13 +522,13 @@
   background-position: 0 0;
 }
 .jstree-default > .jstree-container-ul .jstree-loading > .jstree-ocl {
-  background: url("chrome-extension://__MSG_@@extension_id__/lib/images/throbber.gif") center center no-repeat;
+  background: url("@EXT_BASE@lib/images/throbber.gif") center center no-repeat;
 }
 .jstree-default .jstree-file {
-  background: url("chrome-extension://__MSG_@@extension_id__/lib/images/32px.png") -100px -68px no-repeat;
+  background: url("@EXT_BASE@lib/images/32px.png") -100px -68px no-repeat;
 }
 .jstree-default .jstree-folder {
-  background: url("chrome-extension://__MSG_@@extension_id__/lib/images/32px.png") -260px -4px no-repeat;
+  background: url("@EXT_BASE@lib/images/32px.png") -260px -4px no-repeat;
 }
 .jstree-default.jstree-rtl .jstree-node {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAACAQMAAAB49I5GAAAABlBMVEUAAAAdHRvEkCwcAAAAAXRSTlMAQObYZgAAAAxJREFUCNdjAAMOBgAAGAAJMwQHdQAAAABJRU5ErkJggg==");
@@ -564,7 +564,7 @@
 }
 .jstree-default-small .jstree-node,
 .jstree-default-small .jstree-icon {
-  background-image: url("chrome-extension://__MSG_@@extension_id__/lib/images/32px.png");
+  background-image: url("@EXT_BASE@lib/images/32px.png");
 }
 .jstree-default-small .jstree-node {
   background-position: -295px -7px;
@@ -658,13 +658,13 @@
   background-position: 0 0;
 }
 .jstree-default-small > .jstree-container-ul .jstree-loading > .jstree-ocl {
-  background: url("throbber.gif") center center no-repeat;
+  background: url("@EXT_BASE@lib/images/throbber.gif") center center no-repeat;
 }
 .jstree-default-small .jstree-file {
-  background: url("chrome-extension://__MSG_@@extension_id__/lib/images/32px.png") -103px -71px no-repeat;
+  background: url("@EXT_BASE@lib/images/32px.png") -103px -71px no-repeat;
 }
 .jstree-default-small .jstree-folder {
-  background: url("chrome-extension://__MSG_@@extension_id__/lib/images/32px.png") -263px -7px no-repeat;
+  background: url("@EXT_BASE@lib/images/32px.png") -263px -7px no-repeat;
 }
 .jstree-default-small.jstree-rtl .jstree-node {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAACAQMAAABv1h6PAAAABlBMVEUAAAAdHRvEkCwcAAAAAXRSTlMAQObYZgAAAAxJREFUCNdjAAMHBgAAiABBI4gz9AAAAABJRU5ErkJggg==");
@@ -700,7 +700,7 @@
 }
 .jstree-default-large .jstree-node,
 .jstree-default-large .jstree-icon {
-  background-image: url("chrome-extension://__MSG_@@extension_id__/lib/images/32px.png");
+  background-image: url("@EXT_BASE@lib/images/32px.png");
 }
 .jstree-default-large .jstree-node {
   background-position: -288px 0px;
@@ -794,13 +794,13 @@
   background-position: 0 0;
 }
 .jstree-default-large > .jstree-container-ul .jstree-loading > .jstree-ocl {
-  background: url("throbber.gif") center center no-repeat;
+  background: url("@EXT_BASE@lib/images/throbber.gif") center center no-repeat;
 }
 .jstree-default-large .jstree-file {
-  background: url("chrome-extension://__MSG_@@extension_id__/lib/images/32px.png") -96px -64px no-repeat;
+  background: url("@EXT_BASE@lib/images/32px.png") -96px -64px no-repeat;
 }
 .jstree-default-large .jstree-folder {
-  background: url("chrome-extension://__MSG_@@extension_id__/lib/images/32px.png") -256px 0px no-repeat;
+  background: url("@EXT_BASE@lib/images/32px.png") -256px 0px no-repeat;
 }
 .jstree-default-large.jstree-rtl .jstree-node {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAACAQMAAAAD0EyKAAAABlBMVEUAAAAdHRvEkCwcAAAAAXRSTlMAQObYZgAAAAxJREFUCNdjgIIGBgABCgCBvVLXcAAAAABJRU5ErkJggg==");
@@ -816,7 +816,7 @@
 		*/
   }
   .jstree-default-responsive .jstree-icon {
-    background-image: url("chrome-extension://__MSG_@@extension_id__/lib/images/40px.png");
+    background-image: url("@EXT_BASE@lib/images/40px.png");
   }
   .jstree-default-responsive .jstree-node,
   .jstree-default-responsive .jstree-leaf > .jstree-ocl {

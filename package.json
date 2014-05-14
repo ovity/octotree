@@ -1,0 +1,27 @@
+{
+  "name": "octotree",
+  "version": "1.0.0",
+  "description": "Display GitHub code in tree format",
+  "main": "inject.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/buunguyen/octotree"
+  },
+  "author": "Buu Nguyen <buunguyen@gmail.com> (https://github.com/buunguyen)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/buunguyen/octotree/issues"
+  },
+  "homepage": "https://github.com/buunguyen/octotree",
+  "devDependencies": {
+    "gulp": "^3.6.2",
+    "gulp-clean": "^0.2.4",
+    "event-stream": "^3.1.5",
+    "gulp-run-sequence": "^0.3.2",
+    "gulp-replace": "^0.3.0",
+    "stream-series": "^0.1.0"
+  }
+}

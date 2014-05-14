@@ -45,13 +45,13 @@ html.octotree {
     margin: 5px;
 }
 .jstree-icon.tree {
-    background: url('chrome-extension://__MSG_@@extension_id__/lib/images/32px.png') no-repeat -264px -8px;
+    background: url('@EXT_BASE@lib/images/32px.png') no-repeat -264px -8px;
     width: 16px;
     height: 16px;
     border: 0;
 }
 .jstree-icon.blob {
-    background: url('chrome-extension://__MSG_@@extension_id__/lib/images/32px.png') no-repeat -106px -73px;
+    background: url('@EXT_BASE@lib/images/32px.png') no-repeat -106px -73px;
     width: 13px;
     height: 16px;
     border: 0;
