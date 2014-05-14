@@ -9,7 +9,8 @@ pageMod.PageMod({
                       data.url('lib/js/jquery.pjax.js'),
                       data.url('lib/js/base64.js'),
                       data.url('lib/js/github.js'),
-                      data.url('inject.js')],
+                      data.url('inject.js'),
+                      data.url('locationChange.js')],
   contentStyleFile: [data.url('lib/css/jstree.css'),
                      data.url('inject.css')],
   contentScriptWhen: 'start'

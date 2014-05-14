@@ -31,14 +31,20 @@
     , $toggler = $('<div class="octotree_toggle">&#9776;</div>')
     , $dummy   = $('<div/>')
     , store    = new Storage()
+    , currentRepo     = false
 
   $(document).ready(function() {
     loadRepo(true)
   })
+  $(location).bind('change', true, loadRepo)
 
   function loadRepo(initDom) {
     var repo = getRepoFromPath()
-    if (repo) {
+      , repoChanged = JSON.stringify(currentRepo) != JSON.stringify(repo)
+
+    if (repo && repoChanged) {
+      currentRepo = repo
+
       if (initDom) {
         $('body')
           .append($sidebar)
@@ -57,13 +63,7 @@
      
     if (~RESERVED_USER_NAMES.indexOf(match[1])) return false
     if (~RESERVED_REPO_NAMES.indexOf(match[2])) return false
-
-    // TODO: the intention is to hide the sidebar when users navigate to non-code areas (e.g. Issues, Pulls)
-    // and show it again when users navigate back to the code area
-    // the first part is achieved with the next two lines; but need to implement the second part
-    // before activating the entire feature, PR is welcome
-    // if match[3] exists, it must be either 'tree' or 'blob'
-    // if (match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
+    if (match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
 
     return { 
       username : match[1], 

@@ -29,7 +29,8 @@
         "lib/js/jquery.pjax.js",
         "lib/js/base64.js",
         "lib/js/github.js",
-        "inject.js"
+        "inject.js",
+        "locationChange.js"
       ]
     }
   ],
