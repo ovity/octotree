@@ -12,13 +12,13 @@
                    '</nav>')
     , $tree    = $sidebar.find('.tree')
     , $token   = $('<form>' +
+                     '<div class="message"></div>' +
                      '<div>' +
-                       '<input name="token" type="text" placeholder="Enter personal access token"></input>' +
+                       '<input name="token" type="text" placeholder="Paste access token here"></input>' +
                      '</div>' +
                      '<div>' +
                        '<button type="submit">Save</button>' +
-                       '<a href="https://github.com/settings/tokens/new" target="_blank">Create token</a> | ' +
-                       '<a href="https://github.com/buunguyen/octotree#github-api-rate-limit" target="_blank">Help</a>' +
+                       '<a href="https://github.com/buunguyen/octotree#github-api-rate-limit" target="_blank">Why need access token?</a>' +
                      '</div>' +
                      '<div class="error"></div>' +
                    '</form>')
@@ -108,12 +108,28 @@
   }
 
   function onFetchError(err) {
-    var msg = 'Error: ' + err.error
-    if (err.error === 401) msg = 'Invalid token!'
-    else if (err.error === 404) msg = 'Private or invalid repository!'
-    else if (err.error === 403 && ~err.request.getAllResponseHeaders().indexOf('X-RateLimit-Remaining: 0')) 
-      msg = 'API limit exceeded!'
-    updateSidebar(msg, true)
+    var header = 'Error: ' + err.error
+      , hasToken = !!store.get(TOKEN)
+      , message
+
+    if (err.error === 401) {
+      header = 'Invalid token!'
+      message = 'The provided token is invalid. Please enter another one.'
+    }
+
+    else if (err.error === 404) {
+      header = 'Private or invalid repository!'
+      if (hasToken) message = 'You are not allowed to access this repository.'
+      else message = 'Accessing private repositories requires a GitHub access token. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it in the textbox below.'
+    }
+
+    else if (err.error === 403 && ~err.request.getAllResponseHeaders().indexOf('X-RateLimit-Remaining: 0')) {
+      header = 'API limit exceeded!'
+      if (hasToken) message = 'Whoa, you have exceeded the API hourly limit, please create a new access token or take a break :).'
+      else message = 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it in the textbox below.'
+    }
+
+    updateSidebar(header, message)
   }
 
   function renderTree(repo, tree) {
@@ -144,18 +160,20 @@
       })
   }
 
-  function updateSidebar(header, askForToken) {
+  function updateSidebar(header, errorMessage) {
     $sidebar.find('h1').text(header)
 
-    if (askForToken) {
+    if (errorMessage) {
+      var token = store.get(TOKEN)
+      if (token) $token.find('[name="token"]').val(token)
+      $token.find('.message').html(errorMessage)
       $tree.empty().append($token.submit(saveToken))
     }
 
     // Shows sidebar when:
-    // 1. ask for access token
-    // 2. first time extension is used
-    // 3. if it was previously shown
-    if (askForToken || store.get(SHOWN) !== false) {
+    // 1. first time extension is used
+    // 2. if it was previously shown
+    if (store.get(SHOWN) !== false) {
       $html.addClass(PREFIX)
       store.set(SHOWN, true)
     }
@@ -172,7 +190,7 @@
     event.preventDefault()
 
     var token = $token.find('[name="token"]').val()
-      , $error = $token.find('div.error').text('')
+      , $error = $token.find('.error').text('')
 
     if (token === '') {
       return $error.text('Token is required')
