@@ -183,13 +183,15 @@
 
   function Storage() {
     this.get = function(key) {
-      return JSON.parse(localStorage.getItem(key))
+      var val = localStorage.getItem(key)
+      try {
+        return JSON.parse(val)
+      } catch (e) {
+        return val
+      }
     }
     this.set = function(key, val) {
       return localStorage.setItem(key, JSON.stringify(val))
-    }
-    this.del = function(key) {
-      return localStorage.removeItem(key)
     }
   }
 })()
