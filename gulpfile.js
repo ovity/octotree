@@ -48,3 +48,13 @@ gulp.task('firefox', function() {
 gulp.task('default', function(cb) {
   return rseq('clean', ['chrome', 'safari', 'firefox'], cb)
 })
+
+gulp.task('watch', function() {
+  gulp.watch(['./src/lib/**/*',
+              './src/icons/**/*',
+              './src/inject.js',
+              './src/inject.css'], ['default'])
+  gulp.watch(['./src/manifest.json'], ['chrome'])
+  gulp.watch(['./src/Info.plist'], ['safari'])
+  gulp.watch(['./src/firefox.js', './src/package.json'], ['firefox'])
+})
