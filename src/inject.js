@@ -33,7 +33,8 @@
     , store    = new Storage()
 
   $(document).ready(function() {
-    loadRepo(true)
+    is_github = $('link[rel=search]').attr('title') == 'GitHub' && $('link[rel=fluid-icon]').attr('title') == 'GitHub'
+    if (is_github) loadRepo(true)
   })
 
   function loadRepo(initDom) {
