@@ -3,24 +3,24 @@ Chrome extension to display GitHub code in tree format. Useful for developers wh
 
 * Easy-to-navigate code tree like IDEs
 * Fast browsing with pjax
-* Work with both public and private repositories
+* Support private repositories (require [personal access token](#github-api-rate-limit))
 
 ## Install
 * Download and install [Octotree](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc) from the Chrome store
 * Navigate to any GitHub project (or just refresh this page as an example)
 * The code tree should show as follows:
 
-![When extension is active](https://raw.githubusercontent.com/buunguyen/octotree/master/docs/screen_ext.png)
+![When extension is active](https://raw.githubusercontent.com/buunguyen/octotree/master/docs/chrome.png)
 
 ## GitHub API Rate Limit
 Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve repository metadata. By default, it makes unauthenticated requests to the GitHub API. However, there are two situations when requests must be authenticated:
 
-* You are accessing a private repository
+* You access a private repository
 * You exceed the [rate limit of unauthenticated requests](https://developer.github.com/v3/#rate-limiting)
 
 When that happens, Octotree will show the following screen to ask for your [GitHub personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use). 
 
-![Enter personal access token](https://raw.githubusercontent.com/buunguyen/octotree/master/docs/screen_token.png)
+![Enter personal access token](https://raw.githubusercontent.com/buunguyen/octotree/master/docs/token.png)
 
 If you don't already have one, create one at [this page](https://github.com/settings/tokens/new). Then enter the generated token into the textbox and save.
 

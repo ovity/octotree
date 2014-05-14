@@ -11,6 +11,6 @@ pageMod.PageMod({
                       data.url('lib/js/github.js'),
                       data.url('inject.js')],
   contentStyleFile: [data.url('lib/css/jstree.css'),
-                     data.url('inject.css'),],
+                     data.url('inject.css')],
   contentScriptWhen: 'start'
 })

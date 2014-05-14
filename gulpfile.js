@@ -3,7 +3,6 @@ var gulp  = require('gulp')
   , es    = require('event-stream')
   , rseq  = require('gulp-run-sequence')
 
-// helpers
 function pipe(src, transforms, dest) {
   if (typeof transforms === 'string') {
     dest = transforms
@@ -17,33 +16,32 @@ function pipe(src, transforms, dest) {
   return stream
 }
 
-// tasks
 gulp.task('clean', function() {
-  return pipe('./dist', [clean()])
+  return pipe('./tmp', [clean()])
 })
 
 gulp.task('chrome', function() {
   return es.merge(
-    pipe('./src/lib/**/*', './dist/chrome/lib'),
-    pipe('./src/icons/**/*', './dist/chrome/icons'),
-    pipe(['./src/inject.js', './src/inject.css', './src/manifest.json'], './dist/chrome/')
+    pipe('./src/lib/**/*', './tmp/chrome/lib'),
+    pipe('./src/icons/**/*', './tmp/chrome/icons'),
+    pipe(['./src/inject.js', './src/inject.css', './src/manifest.json'], './tmp/chrome/')
   )
 })
 
 gulp.task('safari', function() {
   return es.merge(
-    pipe('./src/lib/**/*', './dist/safari/octotree.safariextension/lib'),
-    pipe('./src/icons/**/*', './dist/safari/octotree.safariextension/icons'),
-    pipe(['./src/inject.js', './src/inject.css', './src/Info.plist'], './dist/safari/octotree.safariextension/')
+    pipe('./src/lib/**/*', './tmp/safari/octotree.safariextension/lib'),
+    pipe('./src/icons/**/*', './tmp/safari/octotree.safariextension/icons'),
+    pipe(['./src/inject.js', './src/inject.css', './src/Info.plist'], './tmp/safari/octotree.safariextension/')
   )
 })
 
 gulp.task('firefox', function() {
   return es.merge(
-    pipe('./src/lib/**/*', './dist/firefox/data/lib'),
-    pipe('./src/icons/**/*', './dist/firefox/data/icons'),
-    pipe(['./src/inject.js', './src/inject.css', './src/firefox.js'], './dist/firefox/data'),
-    pipe('./src/package.json', './dist/firefox')
+    pipe('./src/lib/**/*', './tmp/firefox/data/lib'),
+    pipe('./src/icons/**/*', './tmp/firefox/data/icons'),
+    pipe(['./src/inject.js', './src/inject.css', './src/firefox.js'], './tmp/firefox/data'),
+    pipe('./src/package.json', './tmp/firefox')
   )
 })
 
