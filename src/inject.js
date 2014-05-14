@@ -120,7 +120,7 @@
     $tree
       .empty()
       .jstree({
-        core    : { data: tree, animation: 100 },
+        core    : { data: tree, animation: 100, themes : { responsive : false } },
         plugins : ['wholerow', 'state'],
         state   : { key : PREFIX + '.' + repo.username + '/' + repo.reponame }
       })
