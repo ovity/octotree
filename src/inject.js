@@ -26,7 +26,8 @@
     , store    = new Storage()
 
   $(document).ready(function() {
-    loadRepo(true)
+    is_github = $('link[rel=search]').attr('title') == 'GitHub' && $('link[rel=fluid-icon]').attr('title') == 'GitHub'
+    if (is_github) loadRepo(true)
   })
 
   function loadRepo(initDom) {
@@ -49,7 +50,7 @@
     if (!match) return false
 
     // must not be a reserved `username`
-    if (~['settings', 'organizations', 'site', 'blog'].indexOf(match[1])) return false
+    if (~['settings', 'organizations', 'site', 'blog', 'api'].indexOf(match[1])) return false
 
     // TODO: the intention is to hide the sidebar when users navigate to non-code areas (e.g. Issues, Pulls)
     // and show it again when users navigate back to the code area
@@ -120,7 +121,13 @@
     $tree
       .empty()
       .jstree({
-        core    : { data: tree, animation: 100 },
+        core    : {
+          data: tree,
+          animation: 100,
+          themes: {
+            dots: false
+          }
+        },
         plugins : ['wholerow', 'state'],
         state   : { key : PREFIX + '.' + repo.username + '/' + repo.reponame }
       })
