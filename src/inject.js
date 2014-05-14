@@ -101,7 +101,21 @@
         // TOOD: handle submodule
       })
 
-      done(null, sort(root))
+      done(null, collapse(sort(root)))
+
+      function collapse(folder) {
+        return folder.map(function(item) {
+          if (item.type === 'tree') {
+            item.children = collapse(item.children)
+            if (item.children.length === 1 && item.children[0].type === 'tree') {
+              var onlyChild = item.children[0];
+              onlyChild.text = item.text + "/" + onlyChild.text
+              return onlyChild
+            }
+          }
+          return item
+        })
+      }
 
       function sort(folder) {
         folder.sort(function(a, b) {
