@@ -24,13 +24,11 @@ Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve reposit
 * You access a private repository
 * You exceed the [rate limit of unauthenticated requests](https://developer.github.com/v3/#rate-limiting)
 
-When that happens, Octotree will show the following screen to ask for your [GitHub personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use). 
+When that happens, Octotree shows the screen below to ask for your [GitHub personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use). If you don't already have one, [create one](https://github.com/settings/tokens/new) and enter it into the textbox and save.
 
 ![Enter personal access token](https://raw.githubusercontent.com/buunguyen/octotree/master/docs/token.png)
 
-If you don't already have one, create one at [this page](https://github.com/settings/tokens/new). Then enter the generated token into the textbox and save.
-
-Alternatively, you can always manually enter or update the token by following these steps:
+Alternatively, you can manually enter or update the token by following these steps:
 
 * Navigate to any GitHub page
 * Open the Chrome (or Safari, Firefox) developer console
