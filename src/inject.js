@@ -125,7 +125,7 @@
           data: tree,
           animation: 100,
           themes: {
-            dots: false,
+            dots: false
           }
         },
         plugins : ['wholerow', 'state'],
