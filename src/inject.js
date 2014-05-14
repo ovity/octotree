@@ -159,8 +159,9 @@
         var $target = $(e.target)
         if ($target.is('a.jstree-anchor') && $target.children(':first').hasClass('blob')) {
           $.pjax({ 
-            url: $target.attr('href'), 
-            container: $('#js-repo-pjax-container') 
+            url       : $target.attr('href'), 
+            timeout   : 5000, //gives it more time, should really have a progress indicator...
+            container : $('#js-repo-pjax-container') 
           })
         }
       })
