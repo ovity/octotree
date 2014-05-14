@@ -48,3 +48,7 @@ gulp.task('firefox', function() {
 gulp.task('default', function(cb) {
   return rseq('clean', ['chrome', 'safari', 'firefox'], cb)
 })
+
+gulp.task('watch', function() {
+  gulp.watch(['./src/**/*'], ['default'])
+})
