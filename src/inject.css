@@ -39,6 +39,11 @@ html.octotree {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+.octotree_sidebar input[type=text].filter {
+    min-height: 16px;
+    height: 26px;
+    width: 100%;
+}
 
 /* Source tree */
 .octotree_sidebar inner > .tree { 

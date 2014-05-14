@@ -8,8 +8,10 @@
   var $html    = $('html')
     , $sidebar = $('<nav class="octotree_sidebar">' +
                      '<h1>loading...</h1>' +
+                     '<input type="text" class="filter" />' +
                      '<div class="tree"></div>' +
                    '</nav>')
+    , $filter  = $sidebar.find('.filter')
     , $tree    = $sidebar.find('.tree')
     , $token   = $('<form>' +
                      '<div>' +
@@ -24,6 +26,9 @@
                    '</form>')
     , $toggler = $('<div class="octotree_toggle">&#9776;</div>')
     , store    = new Storage()
+
+  $.jstree.defaults.search.show_only_matches = true
+  $.jstree.defaults.search.fuzzy = false
 
   $(document).ready(function() {
     loadRepo(true)
@@ -40,6 +45,9 @@
       fetchData(repo, function(err, tree) {
         if (err) return onFetchError(err)
         renderTree(repo, tree)
+        $filter.keyup(function(e) {
+          $tree.jstree(true).search($(this).val())
+        })
       })
     }
   }
@@ -121,7 +129,7 @@
       .empty()
       .jstree({
         core    : { data: tree, animation: 100 },
-        plugins : ['wholerow', 'state'],
+        plugins : ['wholerow', 'state', 'search'],
         state   : { key : PREFIX + '.' + repo.username + '/' + repo.reponame }
       })
       .delegate('.jstree-open>a', 'click.jstree', function() {
