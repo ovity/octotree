@@ -11,19 +11,19 @@
           'stars', 'dashboard', 'notifications'
         ]
       , RESERVED_REPO_NAMES = ['followers', 'following']
-      
+
   var $html    = $('html')
     , $sidebar = $('<nav class="octotree_sidebar">' +
                      '<div class="octotree_wrapper">' +
                        '<div class="octotree_header">loading...</div>' +
-                       '<div class="tree"></div>' +
+                       '<div class="octotree_treeview"></div>' +
                      '</div>' +
                      '<div class="octotree_toggle button"></div>' +
                    '</nav>')
     , $wrapper = $sidebar.find('.octotree_wrapper')
-    , $tree    = $sidebar.find('.tree')
-    , $toggler = $sidebar.find('.octotree_toggle')
-    , $token   = $('<form>' +
+    , $treeView = $sidebar.find('.octotree_treeview')
+    , $toggleBtn = $('<a class="octotree_toggle button"><span></span></a>')
+    , $tokenFrm = $('<form>' +
                      '<div class="message"></div>' +
                      '<div>' +
                        '<input name="token" type="text" placeholder="Paste access token here"></input>' +
@@ -34,8 +34,8 @@
                      '</div>' +
                      '<div class="error"></div>' +
                    '</form>')
-    , $dummy   = $('<div/>')
-    , store    = new Storage()
+    , $dummyDiv  = $('<div/>')
+    , store      = new Storage()
     , domInitialized = false
     , currentRepo    = false
 
@@ -43,7 +43,7 @@
     loadRepo()
 
     // When navigating from non-code pages (i.e. Pulls, Issues) to code page
-    // GitHub doesn't reload the page but use pjax. Need to de
+    // GitHub doesn't reload the page but uses pjax. Need to detect and load Octotree.
     var href = location.href
       , hash = location.hash
     function detectLocationChange() {
@@ -67,7 +67,7 @@
       if (!domInitialized) {
         $sidebar
           .width(store.get(WIDTH))
-          .append($toggler.click(toggleSidebar))
+          .append($toggleBtn.click(toggleSidebar))
           .resizable({handles: 'e', minWidth: 215})
           .resize(function(){resizeSidebar()})
         $('body')
@@ -83,11 +83,17 @@
   }
 
   function getRepoFromPath() {
+    // 404 page, skip
+    if ($('#parallax_wrapper').length) return false
+
     var match = location.pathname.match(REGEXP)
     if (!match) return false
      
+    // Not a repository, skip
     if (~RESERVED_USER_NAMES.indexOf(match[1])) return false
     if (~RESERVED_REPO_NAMES.indexOf(match[2])) return false
+
+    // Not a code page, skip
     if (match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
 
     return { 
@@ -123,7 +129,7 @@
         else if (type === 'blob') {
           item.a_attr = { href: url }
         }
-        // TOOD: handle submodule
+        // TOOD: handle submodule, anyone?
       })
 
       done(null, sort(root))
@@ -147,27 +153,27 @@
       , message
 
     if (err.error === 401) {
-      header = 'Invalid token!'
-      message = 'The provided token is invalid. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create a new token and paste it in the textbox below.'
+      header  = 'Invalid token!'
+      message = 'The token is invalid. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create a new token and paste it in the textbox below.'
     }
 
     else if (err.error === 404) {
       header = 'Private or invalid repository!'
       if (hasToken) message = 'You are not allowed to access this repository.'
-      else message = 'Accessing private repositories requires a GitHub access token. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it in the textbox below.'
+      else          message = 'Accessing private repositories requires a GitHub access token. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it in the textbox below.'
     }
 
     else if (err.error === 403 && ~err.request.getAllResponseHeaders().indexOf('X-RateLimit-Remaining: 0')) {
       header = 'API limit exceeded!'
       if (hasToken) message = 'Whoa, you have exceeded the API hourly limit, please create a new access token or take a break :).'
-      else message = 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it in the textbox below.'
+      else          message = 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it in the textbox below.'
     }
 
-    updateSidebar(header, message)
+    updateSidebar('<div class="octotree_header_error">' + header + '</div>', message)
   }
 
   function renderTree(repo, tree) {
-    $tree
+    $treeView
       .empty()
       .jstree({
         core    : { data: tree, animation: 100, themes : { responsive : false } },
@@ -191,21 +197,24 @@
         }
       })
       .on('ready.jstree', function() {
-        updateSidebar(
-          '<div class="octotree_header_repo">' + repo.username + ' / ' + repo.reponame + '</div>' +
-          '<div class="octotree_header_branch">' + repo.branch + '</div>'
-        )
+        var headerText = '<div class="octotree_header_repo">' + 
+                           repo.username + ' / ' + repo.reponame + 
+                         '</div>' +
+                         '<div class="octotree_header_branch">' + 
+                           repo.branch + 
+                         '</div>'
+        updateSidebar(headerText)
       })
   }
 
-  function updateSidebar(header, errorMessage) {
+  function updateSidebar(header, message) {
     $sidebar.find('.octotree_header').html(header)
 
-    if (errorMessage) {
+    if (message) {
       var token = store.get(TOKEN)
-      if (token) $token.find('[name="token"]').val(token)
-      $token.find('.message').html(errorMessage)
-      $tree.empty().append($token.submit(saveToken))
+      if (token) $tokenFrm.find('[name="token"]').val(token)
+      $tokenFrm.find('.message').html(message)
+      $treeView.empty().append($tokenFrm.submit(saveToken))
     }
 
     // Shows sidebar when:
@@ -235,18 +244,17 @@
   function saveToken(event) {
     event.preventDefault()
 
-    var token = $token.find('[name="token"]').val()
-      , $error = $token.find('.error').text('')
+    var token  = $tokenFrm.find('[name="token"]').val()
+      , $error = $tokenFrm.find('.error').text('')
 
-    if (token === '') {
-      return $error.text('Token is required')
-    }
+    if (!token) return $error.text('Token is required')
+
     store.set(TOKEN, token)
     loadRepo(true)
   }
 
   function sanitize(str) {
-    return $dummy.text(str).html()
+    return $dummyDiv.text(str).html()
   }
 
   function Storage() {
@@ -263,4 +271,3 @@
     }
   }
 })()
-
