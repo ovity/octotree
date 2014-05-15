@@ -50,8 +50,6 @@
       window.setTimeout(detectLocationChange, 200)
     }
     detectLocationChange()
-
-    Mousetrap.bind('ctrl+b', toggleSidebar)
   })
 
   function loadRepo(reload) {
@@ -59,19 +57,22 @@
       , repoChanged = JSON.stringify(repo) !== JSON.stringify(currentRepo)
 
     if (repo && (repoChanged || reload)) {
+      initializeDom()
       currentRepo = repo
-
-      if (!domInitialized) {
-        $('body')
-          .append($sidebar)
-          .append($toggleBtn.click(toggleSidebar))
-        domInitialized = true
-      }
-
       fetchData(repo, function(err, tree) {
         if (err) return onFetchError(err)
         renderTree(repo, tree)
       })
+    }
+  }
+
+  function initializeDom() {
+    if (!domInitialized) {
+      $('body')
+        .append($sidebar)
+        .append($toggleBtn.click(toggleSidebar))
+      key('⌘+b, ctrl+b', toggleSidebar)
+      domInitialized = true
     }
   }
 

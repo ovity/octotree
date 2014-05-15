@@ -23,13 +23,13 @@
         "inject.css"
       ],
       "js": [
-        "lib/js/underscore.js",
         "lib/js/jquery.js",
         "lib/js/jstree.js",
         "lib/js/jquery.pjax.js",
+        "lib/js/keymaster.js",
+        "lib/js/underscore.js",
         "lib/js/base64.js",
         "lib/js/github.js",
-        "lib/js/mousetrap.js",
         "inject.js"
       ]
     }

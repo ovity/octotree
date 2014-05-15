@@ -24,10 +24,11 @@
 		<dict>
 			<key>Start</key>
 			<array>
-				<string>lib/js/underscore.js</string>
 				<string>lib/js/jquery.js</string>
 				<string>lib/js/jstree.js</string>
 				<string>lib/js/jquery.pjax.js</string>
+				<string>lib/js/keymaster.js</string>
+				<string>lib/js/underscore.js</string>
 				<string>lib/js/base64.js</string>
 				<string>lib/js/github.js</string>
 				<string>inject.js</string>
