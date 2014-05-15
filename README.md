@@ -40,7 +40,6 @@ localStorage.setItem('octotree.github_access_token', JSON.stringify('REPLACE WIT
 ## Contribution
 There are several improvements that can be made to Octotree. Contribution is very welcome.
 
-- [ ] Hide sidebar when navigating to non-code pages like Issues, PRs...
 - [ ] Make the width of the sidebar resizable.
 - [ ] Allow docking sidebar to either the left or right side.
 - [ ] Allow users to enter access token any time.
