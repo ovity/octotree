@@ -31,7 +31,6 @@
 				<string>lib/js/base64.js</string>
 				<string>lib/js/github.js</string>
 				<string>inject.js</string>
-				<string>locationChange.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>

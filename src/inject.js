@@ -31,25 +31,41 @@
     , $toggler = $('<div class="octotree_toggle">&#9776;</div>')
     , $dummy   = $('<div/>')
     , store    = new Storage()
-    , currentRepo     = false
+    , domInitialized = false
+    , currentRepo    = false
 
   $(document).ready(function() {
-    loadRepo(true)
+    loadRepo()
+
+    // When navigating from non-code pages (i.e. Pulls, Issues) to code page
+    // GitHub doesn't reload the page but use pjax. Need to de
+    var href = location.href
+      , hash = location.hash
+    function detectLocationChange() {
+      if (location.href !== href || location.hash != hash) {
+        href = location.href
+        hash = location.hash
+        loadRepo()
+      }
+      window.setTimeout(detectLocationChange, 200)
+    }
+    detectLocationChange()
   })
-  $(location).bind('change', true, loadRepo)
 
-  function loadRepo(initDom) {
+  function loadRepo(reload) {
     var repo = getRepoFromPath()
-      , repoChanged = JSON.stringify(currentRepo) != JSON.stringify(repo)
+      , repoChanged = JSON.stringify(repo) !== JSON.stringify(currentRepo)
 
-    if (repo && repoChanged) {
+    if (repo && (repoChanged || reload)) {
       currentRepo = repo
 
-      if (initDom) {
+      if (!domInitialized) {
         $('body')
           .append($sidebar)
           .append($toggler.click(toggleSidebar))
+        domInitialized = true
       }
+
       fetchData(repo, function(err, tree) {
         if (err) return onFetchError(err)
         renderTree(repo, tree)
@@ -181,8 +197,8 @@
     }
 
     // Shows sidebar when:
-    // 1. first time extension is used
-    // 2. if it was previously shown
+    // 1. First time after extension is installed
+    // 2. If it was previously shown (TODO: many seem not to like it)
     if (store.get(SHOWN) !== false) {
       $html.addClass(PREFIX)
       store.set(SHOWN, true)
@@ -206,7 +222,7 @@
       return $error.text('Token is required')
     }
     store.set(TOKEN, token)
-    loadRepo()
+    loadRepo(true)
   }
 
   function sanitize(str) {
