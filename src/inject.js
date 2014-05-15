@@ -50,6 +50,8 @@
       window.setTimeout(detectLocationChange, 200)
     }
     detectLocationChange()
+
+    Mousetrap.bind('ctrl+b', toggleSidebar)
   })
 
   function loadRepo(reload) {
