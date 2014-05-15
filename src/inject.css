@@ -17,7 +17,7 @@ html.octotree {
     width: 250px;
     background-color: #f8f8f8;
     border-right: 1px solid #ddd;
-    overflow: auto;
+    overflow: visible;
     z-index: 999991;
     -webkit-transition: -webkit-transform 0.2s ease;
     transition: transform 0.2s ease;
@@ -139,9 +139,9 @@ html.octotree {
 .octotree_toggle {
     position: fixed !important;
     top: 5px;
-    right: auto;
+    right: -35px;
     bottom: auto;
-    left: 5px;
+    left: auto;
     width: 30px;
     height: 30px;
     font-family: octicons;
@@ -150,8 +150,8 @@ html.octotree {
     text-align: center;
     line-height: 1;
     z-index: 999992;
-    transition: left 0.2s ease, color 0.1s ease-in;
-    -webkit-transition: left 0.2s ease, color 0.1s ease-in;
+    transition: right 0.2s ease, color 0.1s ease-in;
+    -webkit-transition: right 0.2s ease, color 0.1s ease-in;
 }
 .octotree_toggle:hover {
     color: #4183C4;
@@ -163,6 +163,14 @@ html.octotree {
     content: '\f0a4';
 }
 .octotree .octotree_toggle {
-    left: 214px;
+    right: 5px;
 }
 
+.octotree_sidebar .ui-resizable-e {
+    position: absolute;
+    cursor: e-resize; 
+    width: 7px; 
+    right: -5px; 
+    top: 0; 
+    height: 100%
+}

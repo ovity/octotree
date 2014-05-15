@@ -2,6 +2,7 @@
   const PREFIX = 'octotree'
       , TOKEN  = 'octotree.github_access_token'
       , SHOWN  = 'octotree.shown'
+      , WIDTH  = 'octotree.width'
       , REGEXP = /([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/ // (username)/(reponame)/(subpart)
       , RESERVED_USER_NAMES = [
           'settings', 'orgs', 'organizations', 
@@ -60,9 +61,13 @@
       currentRepo = repo
 
       if (!domInitialized) {
+        $sidebar
+          .width(store.get(WIDTH))
+          .append($toggler.click(toggleSidebar))
+          .resizable({handles: 'e', minWidth: 215})
+          .resize(function(){resizeSidebar()})
         $('body')
           .append($sidebar)
-          .append($toggler.click(toggleSidebar))
         domInitialized = true
       }
 
@@ -212,8 +217,15 @@
     var shown = store.get(SHOWN)
     if (shown) $html.removeClass(PREFIX)
     else $html.addClass(PREFIX)
+    resizeSidebar()
     store.set(SHOWN, !shown)
   } 
+
+  function resizeSidebar() {
+    width = $sidebar.width()
+    $html.css({"margin-left": $html.hasClass(PREFIX) ? width : 'auto'})
+    store.set(WIDTH, width)
+  }
 
   function saveToken(event) {
     event.preventDefault()
