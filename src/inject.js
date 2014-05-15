@@ -38,7 +38,7 @@
     loadRepo()
 
     // When navigating from non-code pages (i.e. Pulls, Issues) to code page
-    // GitHub doesn't reload the page but use pjax. Need to detect and load Octotree.
+    // GitHub doesn't reload the page but uses pjax. Need to detect and load Octotree.
     var href = location.href
       , hash = location.hash
     function detectLocationChange() {
@@ -120,7 +120,7 @@
         else if (type === 'blob') {
           item.a_attr = { href: url }
         }
-        // TOOD: handle submodule
+        // TOOD: handle submodule, anyone?
       })
 
       done(null, sort(root))
@@ -144,20 +144,20 @@
       , message
 
     if (err.error === 401) {
-      header = 'Invalid token!'
+      header  = 'Invalid token!'
       message = 'The token is invalid. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create a new token and paste it in the textbox below.'
     }
 
     else if (err.error === 404) {
       header = 'Private or invalid repository!'
       if (hasToken) message = 'You are not allowed to access this repository.'
-      else message = 'Accessing private repositories requires a GitHub access token. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it in the textbox below.'
+      else          message = 'Accessing private repositories requires a GitHub access token. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it in the textbox below.'
     }
 
     else if (err.error === 403 && ~err.request.getAllResponseHeaders().indexOf('X-RateLimit-Remaining: 0')) {
       header = 'API limit exceeded!'
       if (hasToken) message = 'Whoa, you have exceeded the API hourly limit, please create a new access token or take a break :).'
-      else message = 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it in the textbox below.'
+      else          message = 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it in the textbox below.'
     }
 
     updateSidebar('<div class="octotree_header_error">' + header + '</div>', message)
