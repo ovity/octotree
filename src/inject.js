@@ -10,14 +10,14 @@
           'stars', 'dashboard', 'notifications'
         ]
       , RESERVED_REPO_NAMES = ['followers', 'following']
-      
+
   var $html    = $('html')
     , $sidebar = $('<nav class="octotree_sidebar">' +
                      '<div class="octotree_header">loading...</div>' +
-                     '<div class="tree"></div>' +
+                     '<div class="octotree_treeview"></div>' +
                    '</nav>')
-    , $tree    = $sidebar.find('.tree')
-    , $token   = $('<form>' +
+    , $treeView = $sidebar.find('.octotree_treeview')
+    , $tokenFrm = $('<form>' +
                      '<div class="message"></div>' +
                      '<div>' +
                        '<input name="token" type="text" placeholder="Paste access token here"></input>' +
@@ -28,9 +28,9 @@
                      '</div>' +
                      '<div class="error"></div>' +
                    '</form>')
-    , $toggler = $('<div class="octotree_toggle button"></div>')
-    , $dummy   = $('<div/>')
-    , store    = new Storage()
+    , $toggleBtn = $('<div class="octotree_toggle button"></div>')
+    , $dummyDiv  = $('<div/>')
+    , store      = new Storage()
     , domInitialized = false
     , currentRepo    = false
 
@@ -62,7 +62,7 @@
       if (!domInitialized) {
         $('body')
           .append($sidebar)
-          .append($toggler.click(toggleSidebar))
+          .append($toggleBtn.click(toggleSidebar))
         domInitialized = true
       }
 
@@ -139,7 +139,7 @@
 
     if (err.error === 401) {
       header = 'Invalid token!'
-      message = 'The provided token is invalid. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create a new token and paste it in the textbox below.'
+      message = 'The token is invalid. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create a new token and paste it in the textbox below.'
     }
 
     else if (err.error === 404) {
@@ -154,11 +154,11 @@
       else message = 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it in the textbox below.'
     }
 
-    updateSidebar(header, message)
+    updateSidebar('<div class="octotree_header_error">' + header + '</div>', message)
   }
 
   function renderTree(repo, tree) {
-    $tree
+    $treeView
       .empty()
       .jstree({
         core    : { data: tree, animation: 100, themes : { responsive : false } },
@@ -182,21 +182,24 @@
         }
       })
       .on('ready.jstree', function() {
-        updateSidebar(
-          '<div class="octotree_header_repo">' + repo.username + ' / ' + repo.reponame + '</div>' +
-          '<div class="octotree_header_branch">' + repo.branch + '</div>'
-        )
+        var headerText = '<div class="octotree_header_repo">' + 
+                           repo.username + ' / ' + repo.reponame + 
+                         '</div>' +
+                         '<div class="octotree_header_branch">' + 
+                           repo.branch + 
+                         '</div>'
+        updateSidebar(headerText)
       })
   }
 
-  function updateSidebar(header, errorMessage) {
+  function updateSidebar(header, message) {
     $sidebar.find('.octotree_header').html(header)
 
-    if (errorMessage) {
+    if (message) {
       var token = store.get(TOKEN)
-      if (token) $token.find('[name="token"]').val(token)
-      $token.find('.message').html(errorMessage)
-      $tree.empty().append($token.submit(saveToken))
+      if (token) $tokenFrm.find('[name="token"]').val(token)
+      $tokenFrm.find('.message').html(message)
+      $treeView.empty().append($tokenFrm.submit(saveToken))
     }
 
     // Shows sidebar when:
@@ -218,18 +221,17 @@
   function saveToken(event) {
     event.preventDefault()
 
-    var token = $token.find('[name="token"]').val()
-      , $error = $token.find('.error').text('')
+    var token  = $tokenFrm.find('[name="token"]').val()
+      , $error = $tokenFrm.find('.error').text('')
 
-    if (token === '') {
-      return $error.text('Token is required')
-    }
+    if (!token) return $error.text('Token is required')
+
     store.set(TOKEN, token)
     loadRepo(true)
   }
 
   function sanitize(str) {
-    return $dummy.text(str).html()
+    return $dummyDiv.text(str).html()
   }
 
   function Storage() {

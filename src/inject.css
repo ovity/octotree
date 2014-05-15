@@ -37,6 +37,13 @@ html.octotree {
     padding-left: 13px;
     width: 100%;
 }
+
+.octotree_header_error {
+    margin-left: -3px;
+    margin-top: 6px;
+    color: #900;
+}
+
 .octotree_header_repo {
     font-size: 16px;
     width: 201px;
@@ -51,6 +58,7 @@ html.octotree {
     margin-right: 6px;
     line-height: 28px;
 }
+
 .octotree_header_branch {
     line-height: 1;
     margin-top: -10px;
@@ -66,9 +74,6 @@ html.octotree {
 }
 
 /* Source tree */
-.octotree_sidebar inner > .tree { 
-    margin: 5px;
-}
 .jstree-icon.tree,
 .jstree-icon.blob {
     font: normal normal 16px octicons;
@@ -90,16 +95,8 @@ html.octotree {
     color: #4183c4 !important;
     text-decoration: none;
 }
-.jstree-anchor:hover {
-    text-decoration: underline;
-}
-
-.jstree-default {
-    border-bottom: 1px solid #eee;
-}
 
 .jstree-default .jstree-wholerow {
-    border-top: 1px solid #eee;
     height: auto;
 }
 .jstree-default .jstree-wholerow-hovered {
@@ -110,8 +107,8 @@ html.octotree {
 }
 
 .jstree-default .jstree-node {
-  line-height: 24px;
-  margin-left: 12px;
+    line-height: 24px;
+    margin-left: 12px;
 }
 .jstree-default .jstree-icon,
 .jstree-default .jstree-icon:empty,
@@ -126,13 +123,16 @@ html.octotree {
 
 /* Token form */
 .octotree_sidebar form div { 
-    margin: 5px; 
+    margin: 6px; 
 }
 .octotree_sidebar form input { 
-    width: 230px; 
+    width: 237px; 
 }
-.octotree_sidebar form > .error { 
-    color: #d35400; 
+.octotree_sidebar form .error { 
+    color: #900; 
+}
+.octotree_sidebar form button { 
+    margin-right: 5px; 
 }
 
 /* Toggle button */
@@ -153,16 +153,16 @@ html.octotree {
     transition: left 0.2s ease, color 0.1s ease-in;
     -webkit-transition: left 0.2s ease, color 0.1s ease-in;
 }
+.octotree_toggle:after {
+    content: '\f078';
+}
 .octotree_toggle:hover {
     color: #4183C4;
 }
-.octotree_toggle:after {
-    content: '\f078';
+
+.octotree .octotree_toggle {
+    left: 214px;
 }
 .octotree .octotree_toggle:after {
     content: '\f0a4';
 }
-.octotree .octotree_toggle {
-    left: 214px;
-}
-
