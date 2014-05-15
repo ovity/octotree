@@ -14,10 +14,15 @@
       
   var $html    = $('html')
     , $sidebar = $('<nav class="octotree_sidebar">' +
-                     '<div class="octotree_header">loading...</div>' +
-                     '<div class="tree"></div>' +
+                     '<div class="octotree_wrapper">' +
+                       '<div class="octotree_header">loading...</div>' +
+                       '<div class="tree"></div>' +
+                     '</div>' +
+                     '<div class="octotree_toggle button"></div>' +
                    '</nav>')
+    , $wrapper = $sidebar.find('.octotree_wrapper')
     , $tree    = $sidebar.find('.tree')
+    , $toggler = $sidebar.find('.octotree_toggle')
     , $token   = $('<form>' +
                      '<div class="message"></div>' +
                      '<div>' +
@@ -29,7 +34,6 @@
                      '</div>' +
                      '<div class="error"></div>' +
                    '</form>')
-    , $toggler = $('<div class="octotree_toggle button"></div>')
     , $dummy   = $('<div/>')
     , store    = new Storage()
     , domInitialized = false
@@ -223,6 +227,7 @@
 
   function resizeSidebar() {
     width = $sidebar.width()
+    scrollbar = $wrapper.get(0).scrollHeight > $wrapper.height()
     $html.css({"margin-left": $html.hasClass(PREFIX) ? width : 'auto'})
     store.set(WIDTH, width)
   }

@@ -17,7 +17,6 @@ html.octotree {
     width: 250px;
     background-color: #f8f8f8;
     border-right: 1px solid #ddd;
-    overflow: visible;
     z-index: 999991;
     -webkit-transition: -webkit-transform 0.2s ease;
     transition: transform 0.2s ease;
@@ -67,8 +66,9 @@ html.octotree {
 }
 
 /* Source tree */
-.octotree_sidebar inner > .tree { 
-    margin: 5px;
+.octotree_sidebar > .tree { 
+    margin: 5px 0 0 5px;
+    overflow-x: hidden;
 }
 .jstree-icon.tree,
 .jstree-icon.blob {
@@ -174,4 +174,10 @@ html.octotree {
     right: -5px; 
     top: 0; 
     height: 100%;
+}
+
+.octotree_wrapper {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
