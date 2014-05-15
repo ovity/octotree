@@ -74,6 +74,7 @@
   }
 
   function getRepoFromPath() {
+    if (!!$('#parallax_wrapper').length) return false
     var match = location.pathname.match(REGEXP)
     if (!match) return false
      
