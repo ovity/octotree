@@ -13,7 +13,7 @@
       
   var $html    = $('html')
     , $sidebar = $('<nav class="octotree_sidebar">' +
-                     '<h1>loading...</h1>' +
+                     '<div class="octotree_header">loading...</div>' +
                      '<div class="tree"></div>' +
                    '</nav>')
     , $tree    = $sidebar.find('.tree')
@@ -23,12 +23,12 @@
                        '<input name="token" type="text" placeholder="Paste access token here"></input>' +
                      '</div>' +
                      '<div>' +
-                       '<button type="submit">Save</button>' +
+                       '<button type="submit" class="button">Save</button>' +
                        '<a href="https://github.com/buunguyen/octotree#github-api-rate-limit" target="_blank">Why need access token?</a>' +
                      '</div>' +
                      '<div class="error"></div>' +
                    '</form>')
-    , $toggler = $('<div class="octotree_toggle">&#9776;</div>')
+    , $toggler = $('<div class="octotree_toggle button"></div>')
     , $dummy   = $('<div/>')
     , store    = new Storage()
     , domInitialized = false
@@ -182,12 +182,15 @@
         }
       })
       .on('ready.jstree', function() {
-        updateSidebar(repo.username + ' / ' + repo.reponame + ' [' + repo.branch + ']')  
+        updateSidebar(
+          '<div class="octotree_header_repo">' + repo.username + ' / ' + repo.reponame + '</div>' +
+          '<div class="octotree_header_branch">' + repo.branch + '</div>'
+        )
       })
   }
 
   function updateSidebar(header, errorMessage) {
-    $sidebar.find('h1').text(header)
+    $sidebar.find('.octotree_header').html(header)
 
     if (errorMessage) {
       var token = store.get(TOKEN)
@@ -243,3 +246,4 @@
     }
   }
 })()
+
