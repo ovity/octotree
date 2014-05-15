@@ -28,7 +28,7 @@
                      '</div>' +
                      '<div class="error"></div>' +
                    '</form>')
-    , $toggleBtn = $('<div class="octotree_toggle button"></div>')
+    , $toggleBtn = $('<a class="octotree_toggle button"><span></span></a>')
     , $dummyDiv  = $('<div/>')
     , store      = new Storage()
     , domInitialized = false
@@ -38,7 +38,7 @@
     loadRepo()
 
     // When navigating from non-code pages (i.e. Pulls, Issues) to code page
-    // GitHub doesn't reload the page but use pjax. Need to de
+    // GitHub doesn't reload the page but use pjax. Need to detect and load Octotree.
     var href = location.href
       , hash = location.hash
     function detectLocationChange() {
@@ -74,12 +74,17 @@
   }
 
   function getRepoFromPath() {
-    if (!!$('#parallax_wrapper').length) return false
+    // 404 page, skip
+    if ($('#parallax_wrapper').length) return false
+
     var match = location.pathname.match(REGEXP)
     if (!match) return false
      
+    // Not a repository, skip
     if (~RESERVED_USER_NAMES.indexOf(match[1])) return false
     if (~RESERVED_REPO_NAMES.indexOf(match[2])) return false
+
+    // Not a code page, skip
     if (match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
 
     return { 
@@ -249,4 +254,3 @@
     }
   }
 })()
-

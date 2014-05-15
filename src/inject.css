@@ -94,6 +94,10 @@ html.octotree {
 .jstree-anchor {
     color: #4183c4 !important;
     text-decoration: none;
+    outline: none;
+}
+.jstree-anchor:hover {
+    text-decoration: none !important; /* Safari needs this */
 }
 
 .jstree-default .jstree-wholerow {
@@ -144,25 +148,34 @@ html.octotree {
     left: 5px;
     width: 30px;
     height: 30px;
-    font-family: octicons;
-    font-size: 20px;
-    color: #333;
+    padding: 6px 10px !important;
+    color: black;
     text-align: center;
     line-height: 1;
     z-index: 999992;
     transition: left 0.2s ease, color 0.1s ease-in;
     -webkit-transition: left 0.2s ease, color 0.1s ease-in;
 }
-.octotree_toggle:after {
-    content: '\f078';
-}
 .octotree_toggle:hover {
     color: #4183C4;
+}
+
+.octotree_toggle > span {
+    font: normal normal 16px octicons;
+    line-height: 1;
+    display: inline-block;
+    text-decoration: none;
+    -webkit-font-smoothing: antialiased;
+
+}
+
+.octotree_toggle > span:after {
+    content: '\f078';
 }
 
 .octotree .octotree_toggle {
     left: 214px;
 }
-.octotree .octotree_toggle:after {
+.octotree .octotree_toggle > span:after {
     content: '\f0a4';
 }
