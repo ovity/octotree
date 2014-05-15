@@ -10,41 +10,65 @@
           'stars', 'dashboard', 'notifications'
         ]
       , RESERVED_REPO_NAMES = ['followers', 'following']
-      
+
   var $html    = $('html')
     , $sidebar = $('<nav class="octotree_sidebar">' +
-                     '<h1>loading...</h1>' +
-                     '<div class="tree"></div>' +
+                     '<div class="octotree_header">loading...</div>' +
+                     '<div class="octotree_treeview"></div>' +
                    '</nav>')
-    , $tree    = $sidebar.find('.tree')
-    , $token   = $('<form>' +
+    , $treeView = $sidebar.find('.octotree_treeview')
+    , $tokenFrm = $('<form>' +
                      '<div class="message"></div>' +
                      '<div>' +
                        '<input name="token" type="text" placeholder="Paste access token here"></input>' +
                      '</div>' +
                      '<div>' +
-                       '<button type="submit">Save</button>' +
+                       '<button type="submit" class="button">Save</button>' +
                        '<a href="https://github.com/buunguyen/octotree#github-api-rate-limit" target="_blank">Why need access token?</a>' +
                      '</div>' +
                      '<div class="error"></div>' +
                    '</form>')
-    , $toggler = $('<div class="octotree_toggle">&#9776;</div>')
-    , $dummy   = $('<div/>')
-    , store    = new Storage()
+    , $toggleBtn = $('<a class="octotree_toggle button"><span></span></a>')
+    , $dummyDiv  = $('<div/>')
+    , store      = new Storage()
+    , domInitialized = false
+    , currentRepo    = false
 
   $(document).ready(function() {
     is_github = $('link[rel=search]').attr('title') == 'GitHub' && $('link[rel=fluid-icon]').attr('title') == 'GitHub'
-    if (is_github) loadRepo(true)
+    if (!is_github) return false
+
+    // When navigating from non-code pages (i.e. Pulls, Issues) to code page
+    // GitHub doesn't reload the page but uses pjax. Need to detect and load Octotree.
+    var href = location.href
+      , hash = location.hash
+    function detectLocationChange() {
+      if (location.href !== href || location.hash != hash) {
+        href = location.href
+        hash = location.hash
+        loadRepo(true)
+      }
+      window.setTimeout(detectLocationChange, 200)
+    }
+    detectLocationChange()
+
+    Mousetrap.bind('ctrl+b', toggleSidebar)
   })
 
-  function loadRepo(initDom) {
+  function loadRepo(reload) {
     var repo = getRepoFromPath()
-    if (repo) {
-      if (initDom) {
+      , repoChanged = JSON.stringify(repo) !== JSON.stringify(currentRepo)
+
+    if (repo && (repoChanged || reload)) {
+      currentRepo = repo
+
+      if (!domInitialized) {
         $('body')
           .append($sidebar)
-          .append($toggler.click(toggleSidebar))
+          .append($toggleBtn.click(toggleSidebar))
+        domInitialized = true
       }
+
       fetchData(repo, function(err, tree) {
         if (err) return onFetchError(err)
         renderTree(repo, tree)
@@ -53,18 +77,18 @@
   }
 
   function getRepoFromPath() {
+    // 404 page, skip
+    if ($('#parallax_wrapper').length) return false
+
     var match = location.pathname.match(REGEXP)
     if (!match) return false
      
+    // Not a repository, skip
     if (~RESERVED_USER_NAMES.indexOf(match[1])) return false
     if (~RESERVED_REPO_NAMES.indexOf(match[2])) return false
 
-    // TODO: the intention is to hide the sidebar when users navigate to non-code areas (e.g. Issues, Pulls)
-    // and show it again when users navigate back to the code area
-    // the first part is achieved with the next two lines; but need to implement the second part
-    // before activating the entire feature, PR is welcome
-    // if match[3] exists, it must be either 'tree' or 'blob'
-    // if (match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
+    // Not a code page, skip
+    if (match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
 
     return { 
       username : match[1], 
@@ -99,7 +123,7 @@
         else if (type === 'blob') {
           item.a_attr = { href: url }
         }
-        // TOOD: handle submodule
+        // TOOD: handle submodule, anyone?
       })
 
       done(null, sort(root))
@@ -123,27 +147,27 @@
       , message
 
     if (err.error === 401) {
-      header = 'Invalid token!'
-      message = 'The provided token is invalid. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create a new token and paste it in the textbox below.'
+      header  = 'Invalid token!'
+      message = 'The token is invalid. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create a new token and paste it in the textbox below.'
     }
 
     else if (err.error === 404) {
       header = 'Private or invalid repository!'
       if (hasToken) message = 'You are not allowed to access this repository.'
-      else message = 'Accessing private repositories requires a GitHub access token. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it in the textbox below.'
+      else          message = 'Accessing private repositories requires a GitHub access token. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it in the textbox below.'
     }
 
     else if (err.error === 403 && ~err.request.getAllResponseHeaders().indexOf('X-RateLimit-Remaining: 0')) {
       header = 'API limit exceeded!'
       if (hasToken) message = 'Whoa, you have exceeded the API hourly limit, please create a new access token or take a break :).'
-      else message = 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it in the textbox below.'
+      else          message = 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it in the textbox below.'
     }
 
-    updateSidebar(header, message)
+    updateSidebar('<div class="octotree_header_error">' + header + '</div>', message)
   }
 
   function renderTree(repo, tree) {
-    $tree
+    $treeView
       .empty()
       .jstree({
         core    : { data: tree, animation: 100, themes : { responsive : false } },
@@ -160,29 +184,36 @@
         var $target = $(e.target)
         if ($target.is('a.jstree-anchor') && $target.children(':first').hasClass('blob')) {
           $.pjax({ 
-            url: $target.attr('href'), 
-            container: $('#js-repo-pjax-container') 
+            url       : $target.attr('href'), 
+            timeout   : 5000, //gives it more time, should really have a progress indicator...
+            container : $('#js-repo-pjax-container') 
           })
         }
       })
       .on('ready.jstree', function() {
-        updateSidebar(repo.username + ' / ' + repo.reponame + ' [' + repo.branch + ']')  
+        var headerText = '<div class="octotree_header_repo">' + 
+                           repo.username + ' / ' + repo.reponame + 
+                         '</div>' +
+                         '<div class="octotree_header_branch">' + 
+                           repo.branch + 
+                         '</div>'
+        updateSidebar(headerText)
       })
   }
 
-  function updateSidebar(header, errorMessage) {
-    $sidebar.find('h1').text(header)
+  function updateSidebar(header, message) {
+    $sidebar.find('.octotree_header').html(header)
 
-    if (errorMessage) {
+    if (message) {
       var token = store.get(TOKEN)
-      if (token) $token.find('[name="token"]').val(token)
-      $token.find('.message').html(errorMessage)
-      $tree.empty().append($token.submit(saveToken))
+      if (token) $tokenFrm.find('[name="token"]').val(token)
+      $tokenFrm.find('.message').html(message)
+      $treeView.empty().append($tokenFrm.submit(saveToken))
     }
 
     // Shows sidebar when:
-    // 1. first time extension is used
-    // 2. if it was previously shown
+    // 1. First time after extension is installed
+    // 2. If it was previously shown (TODO: many seem not to like it)
     if (store.get(SHOWN) !== false) {
       $html.addClass(PREFIX)
       store.set(SHOWN, true)
@@ -199,18 +230,17 @@
   function saveToken(event) {
     event.preventDefault()
 
-    var token = $token.find('[name="token"]').val()
-      , $error = $token.find('.error').text('')
+    var token  = $tokenFrm.find('[name="token"]').val()
+      , $error = $tokenFrm.find('.error').text('')
 
-    if (token === '') {
-      return $error.text('Token is required')
-    }
+    if (!token) return $error.text('Token is required')
+
     store.set(TOKEN, token)
-    loadRepo()
+    loadRepo(true)
   }
 
   function sanitize(str) {
-    return $dummy.text(str).html()
+    return $dummyDiv.text(str).html()
   }
 
   function Storage() {
