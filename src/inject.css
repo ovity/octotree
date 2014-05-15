@@ -39,7 +39,8 @@ html.octotree {
 }
 .octotree_header_repo {
     font-size: 16px;
-    width: 201px;
+    width: 100%;
+    padding-right: 35px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -172,5 +173,5 @@ html.octotree {
     width: 7px; 
     right: -5px; 
     top: 0; 
-    height: 100%
+    height: 100%;
 }
