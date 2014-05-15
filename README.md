@@ -43,13 +43,13 @@ localStorage.setItem('octotree.github_access_token', 'REPLACE WITH TOKEN')
 
 ## Changelog
 ### v1.1
-* New UI that blends better with GitHub! https://github.com/buunguyen/octotree/pull/43
-* Hide Octotree on non-code pages https://github.com/buunguyen/octotree/pull/44, https://github.com/buunguyen/octotree/pull/42, https://github.com/buunguyen/octotree/pull/52 
-* When asking for token, show more detailed message and not fly out automatically https://github.com/buunguyen/octotree/commit/96ff6196bb99aa36ae8bf08c345354fcd4db79a1
-* Extend pjax timeout to work better with big files https://github.com/buunguyen/octotree/commit/4d5f526a719191d7f756443c60f471f1c775f8c8
-* Sanitize file and folder names before displaying https://github.com/buunguyen/octotree/commit/a1e8a63ca894d4ecc58ba722727ca8b3c1a2128d
-* Fix error when a branch name contains slashes https://github.com/buunguyen/octotree/pull/12
-* Gulp script to build for Chrome, Firefox and Safari https://github.com/buunguyen/octotree/commit/c485b144a3d6a9114148e7ca8e2fe4ce0d74b1c4, https://github.com/buunguyen/octotree/commit/61a9e8af864365df4ece208f213a3d49d241de0e
+* New UI that blends better with GitHub! [#43](https://github.com/buunguyen/octotree/pull/43)
+* Hide Octotree on non-code pages [#44](https://github.com/buunguyen/octotree/pull/44), [#42](https://github.com/buunguyen/octotree/pull/42), [#52](https://github.com/buunguyen/octotree/pull/52)
+* When asking for token, show more detailed message and not fly out automatically [96ff6](https://github.com/buunguyen/octotree/commit/96ff6196bb99aa36ae8bf08c345354fcd4db79a1)
+* Extend pjax timeout to work better with big files [4d5f5](https://github.com/buunguyen/octotree/commit/4d5f526a719191d7f756443c60f471f1c775f8c8)
+* Sanitize file and folder names before displaying [a1e8a](https://github.com/buunguyen/octotree/commit/a1e8a63ca894d4ecc58ba722727ca8b3c1a2128d)
+* Fix error when a branch name contains slashes [#12](https://github.com/buunguyen/octotree/pull/12)
+* Gulp script to build for Chrome, Firefox and Safari [c485b](https://github.com/buunguyen/octotree/commit/c485b144a3d6a9114148e7ca8e2fe4ce0d74b1c4), [61a9e](https://github.com/buunguyen/octotree/commit/61a9e8af864365df4ece208f213a3d49d241de0e)
 * And some other minor changes
 
 
