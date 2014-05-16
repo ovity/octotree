@@ -2,6 +2,7 @@
   const PREFIX = 'octotree'
       , TOKEN  = 'octotree.github_access_token'
       , SHOWN  = 'octotree.shown'
+      , WIDTH  = 'octotree.width'
       , REGEXP = /([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/ // (username)/(reponame)/(subpart)
       , RESERVED_USER_NAMES = [
           'settings', 'orgs', 'organizations', 
@@ -13,10 +14,15 @@
 
   var $html    = $('html')
     , $sidebar = $('<nav class="octotree_sidebar">' +
-                     '<div class="octotree_header">loading...</div>' +
-                     '<div class="octotree_treeview"></div>' +
+                     '<div class="octotree_wrapper">' +
+                       '<div class="octotree_header">loading...</div>' +
+                       '<div class="octotree_treeview"></div>' +
+                     '</div>' +
+                     '<div class="octotree_toggle button"></div>' +
                    '</nav>')
+    , $wrapper = $sidebar.find('.octotree_wrapper')
     , $treeView = $sidebar.find('.octotree_treeview')
+    , $toggleBtn = $('<a class="octotree_toggle button"><span></span></a>')
     , $tokenFrm = $('<form>' +
                      '<div class="message"></div>' +
                      '<div>' +
@@ -28,7 +34,6 @@
                      '</div>' +
                      '<div class="error"></div>' +
                    '</form>')
-    , $toggleBtn = $('<a class="octotree_toggle button"><span></span></a>')
     , $dummyDiv  = $('<div/>')
     , store      = new Storage()
     , domInitialized = false
@@ -62,9 +67,14 @@
       currentRepo = repo
 
       if (!domInitialized) {
+        $sidebar
+          .width(store.get(WIDTH, 215))
+          .append($toggleBtn.click(toggleSidebar))
+          .resizable({handles: 'e', minWidth: 215})
+          .resize(resizeSidebar)
+          .resize()
         $('body')
           .append($sidebar)
-          .append($toggleBtn.click(toggleSidebar))
         domInitialized = true
       }
 
@@ -213,18 +223,32 @@
     // Shows sidebar when:
     // 1. First time after extension is installed
     // 2. If it was previously shown (TODO: many seem not to like it)
-    if (store.get(SHOWN) !== false) {
-      $html.addClass(PREFIX)
-      store.set(SHOWN, true)
-    }
+    if (store.get(SHOWN, true)) showSidebar()
   }
 
   function toggleSidebar() {
     var shown = store.get(SHOWN)
-    if (shown) $html.removeClass(PREFIX)
-    else $html.addClass(PREFIX)
-    store.set(SHOWN, !shown)
+    if (shown) hideSidebar()
+    else showSidebar()
   } 
+
+  function hideSidebar() {
+    $html.removeClass(PREFIX)
+    resizeSidebar()
+    store.set(SHOWN, false)
+  }
+
+  function showSidebar() {
+    $html.addClass(PREFIX)
+    resizeSidebar()
+    store.set(SHOWN, true)
+  }
+
+  function resizeSidebar() {
+    width = $sidebar.width()
+    $html.css({"margin-left": $html.hasClass(PREFIX) ? width : 0})
+    store.set(WIDTH, width)
+  }
 
   function saveToken(event) {
     event.preventDefault()
@@ -243,8 +267,9 @@
   }
 
   function Storage() {
-    this.get = function(key) {
+    this.get = function(key, def) {
       var val = localStorage.getItem(key)
+      val = val || def
       try {
         return JSON.parse(val)
       } catch (e) {
