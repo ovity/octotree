@@ -244,7 +244,6 @@
 
   function resizeSidebar() {
     width = $sidebar.width()
-    scrollbar = $wrapper.get(0).scrollHeight > $wrapper.height()
     $html.css({"margin-left": $html.hasClass(PREFIX) ? width : 0})
     store.set(WIDTH, width)
   }
