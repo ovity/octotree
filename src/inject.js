@@ -66,10 +66,11 @@
 
       if (!domInitialized) {
         $sidebar
-          .width(store.get(WIDTH))
+          .width(store.get(WIDTH, 215))
           .append($toggleBtn.click(toggleSidebar))
           .resizable({handles: 'e', minWidth: 215})
-          .resize(function(){resizeSidebar()})
+          .resize(resizeSidebar)
+          .resize()
         $('body')
           .append($sidebar)
         domInitialized = true
@@ -220,24 +221,31 @@
     // Shows sidebar when:
     // 1. First time after extension is installed
     // 2. If it was previously shown (TODO: many seem not to like it)
-    if (store.get(SHOWN) !== false) {
-      $html.addClass(PREFIX)
-      store.set(SHOWN, true)
-    }
+    if (store.get(SHOWN, true)) showSidebar()
   }
 
   function toggleSidebar() {
     var shown = store.get(SHOWN)
-    if (shown) $html.removeClass(PREFIX)
-    else $html.addClass(PREFIX)
-    resizeSidebar()
-    store.set(SHOWN, !shown)
+    if (shown) hideSidebar()
+    else showSidebar()
   } 
+
+  function hideSidebar() {
+    $html.removeClass(PREFIX)
+    resizeSidebar()
+    store.set(SHOWN, false)
+  }
+
+  function showSidebar() {
+    $html.addClass(PREFIX)
+    resizeSidebar()
+    store.set(SHOWN, true)
+  }
 
   function resizeSidebar() {
     width = $sidebar.width()
     scrollbar = $wrapper.get(0).scrollHeight > $wrapper.height()
-    $html.css({"margin-left": $html.hasClass(PREFIX) ? width : 'auto'})
+    $html.css({"margin-left": $html.hasClass(PREFIX) ? width : 0})
     store.set(WIDTH, width)
   }
 
@@ -258,8 +266,9 @@
   }
 
   function Storage() {
-    this.get = function(key) {
+    this.get = function(key, def) {
       var val = localStorage.getItem(key)
+      val = val || def
       try {
         return JSON.parse(val)
       } catch (e) {

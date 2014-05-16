@@ -3,9 +3,6 @@ html {
     transition: margin-left 0.2s ease;
     -webkit-transition: margin-left 0.2s ease;
 }
-html.octotree { 
-    margin-left: 240px;
-}
 
 /* Sidebar */
 .octotree_sidebar {
