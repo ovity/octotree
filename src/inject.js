@@ -37,19 +37,23 @@
     , isGitHub       = false
 
   $(document).ready(function() {
-    var shouldContinue = loadRepo()
-    if(!shouldContinue)
-      return;
+    if($(".navbar-gitlab").length > 0)
+      isGitLab = true;
+    else if(location.host == "github.com")
+      isGitHub = true;
+    else // none of the above
+      return false;
 
+    loadRepo()
     // When navigating from non-code pages (i.e. Pulls, Issues) to code page
     // GitHub doesn't reload the page but uses pjax. Need to detect and load Octotree.
     var href = location.href
       , hash = location.hash
     function detectLocationChange() {
-      if (location.href !== href || location.hash != hash) {
-        href = location.href
-        hash = location.hash
-        loadRepo()
+        if (location.href !== href || location.hash != hash) {
+          href = location.href
+          hash = location.hash
+          loadRepo()
       }
       window.setTimeout(detectLocationChange, 200)
     }
@@ -59,23 +63,25 @@
   })
 
   function loadRepo(reload) {
-     if($(".navbar-gitlab").length > 0)
-      isGitLab = true;
-    else if(location.host == "github.com")
-      isGitHub = true;
-    else // none of the above
-      return false;
 
     var repo = getRepoFromPath()
       , repoChanged = JSON.stringify(repo) !== JSON.stringify(currentRepo)
-      
-    if (repo && (repoChanged || reload)) {
-      currentRepo = repo
 
+    if (repo && (repoChanged || reload || isGitLab) ) {
+      currentRepo = repo
+      
+      if(isGitLab)
+      {
+          domInitialized = false;
+      }
       if (!domInitialized) {
+        $(".octotree_sidebar").remove();
+        
         $('body')
           .append($sidebar)
           .append($toggleBtn.click(toggleSidebar))
+
+        $treeView = $sidebar.find('.octotree_treeview')
         domInitialized = true
       }
 
@@ -166,10 +172,43 @@
     }
     else if(isGitLab)
     {
-      var gitlab  = new GitLab();
-      gitlab.getTree(function(data){
-        done(null, sort(data))  
-      });
+      var oldTreeName = store.get("git_lab_repo_hash");
+      var oldTree = store.get("git_lab_repo");
+      var oldTreeCommit = store.get("git_lab_repo_commit");
+      var $lastCommit = $(".last-commit");
+
+      if(oldTree && oldTreeName == repo.username + "/" + repo.reponame)
+      {
+        if($lastCommit.length == 0 || ($lastCommit.length > 0 && $lastCommit.find("a").text == oldTreeCommit))
+        {
+          done(null, sort(JSON.parse(oldTree)))
+        }
+        else
+        {
+          getLiveDataFromGitLab();
+        }
+      }
+      else
+      {
+        getLiveDataFromGitLab();
+      }
+    }
+    function getLiveDataFromGitLab()
+    {
+      var gitlab  = new GitLab({
+          "base_url" : location.href.match(/(https?).+/)[1] + "://" + location.host,
+          "user" : repo.username,
+          "repo" : repo.reponame, 
+          "private_token" : store.get(location.host+"_token")
+        });
+        gitlab.getTree(function(err, data){
+          if(err) return onFetchError(err);
+
+          store.set("git_lab_repo_hash",repo.username + "/" + repo.reponame);
+          store.set("git_lab_repo",JSON.stringify(data));
+          store.set("git_lab_repo_commit", $(".last-commit").find("a").text());
+          done(null, sort(data))  
+        });
     }
     function sort(folder) {
           folder.sort(function(a, b) {
@@ -188,7 +227,13 @@
       , hasToken = !!store.get(TOKEN)
       , message
 
-    if (err.error === 401) {
+
+    if(err.error == "401" && isGitLab)
+    {
+      header  = 'Invalid token!'
+      message = 'The token is invalid. Follow <a href="http://git.mready.net/profile/account" target="_blank">this link</a> to create a new token and paste it in the textbox below.'
+    }
+    else if (err.error === 401 && isGitHub) {
       header  = 'Invalid token!'
       message = 'The token is invalid. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create a new token and paste it in the textbox below.'
     }
@@ -223,13 +268,25 @@
         $.jstree.reference(this).open_node(this)
       })
       .on('click', function(e) {
-        var $target = $(e.target)
+        var $target = $(e.target);
         if ($target.is('a.jstree-anchor') && $target.children(':first').hasClass('blob')) {
-          $.pjax({ 
-            url       : $target.attr('href'), 
-            timeout   : 5000, //gives it more time, should really have a progress indicator...
-            container : $('#js-repo-pjax-container') 
-          })
+          if(isGitHub)
+          {
+            $.pjax({ 
+              url       : $target.attr('href'), 
+              timeout   : 5000, //gives it more time, should really have a progress indicator...
+              container : $('#js-repo-pjax-container') 
+            })
+          }
+          else if (isGitLab)
+          {
+
+               $.pjax({ 
+                url       : "/" + $target.attr('href'), 
+                timeout   : 5000, //gives it more time, should really have a progress indicator...
+                container : $('.container') 
+              })
+          }
         }
       })
       .on('ready.jstree', function() {
@@ -247,10 +304,20 @@
     $sidebar.find('.octotree_header').html(header)
 
     if (message) {
-      var token = store.get(TOKEN)
-      if (token) $tokenFrm.find('[name="token"]').val(token)
-      $tokenFrm.find('.message').html(message)
-      $treeView.empty().append($tokenFrm.submit(saveToken))
+      if(isGitHub)
+      {
+        var token = store.get(TOKEN)
+        if (token) $tokenFrm.find('[name="token"]').val(token)
+        $tokenFrm.find('.message').html(message)
+        $treeView.empty().append($tokenFrm.submit(saveToken))
+      }
+      else if(isGitLab)
+      {
+        var token = store.get(location.host + "_token");
+        if (token) $tokenFrm.find('[name="token"]').val(token)
+        $tokenFrm.find('.message').html(message)
+        $treeView.empty().append($tokenFrm.submit(saveToken)) 
+      }
     }
 
     // Shows sidebar when:
@@ -271,14 +338,21 @@
 
   function saveToken(event) {
     event.preventDefault()
-
     var token  = $tokenFrm.find('[name="token"]').val()
       , $error = $tokenFrm.find('.error').text('')
 
     if (!token) return $error.text('Token is required')
 
-    store.set(TOKEN, token)
+    if(isGitHub)
+    {
+      store.set(TOKEN, token)
+    }
+    else if(isGitLab)
+    {
+      store.set(location.host + "_token", token) 
+    }
     loadRepo(true)
+
   }
 
   function sanitize(str) {
