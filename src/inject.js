@@ -211,14 +211,13 @@
   }
 
   function renderTree(repo, tree) {
-    var treeView =$treeView
+    $treeView
       .empty()
       .jstree({
         core    : { data: tree, animation: 100, themes : { responsive : false } },
         plugins : ['wholerow', 'state'],
         state   : { key : PREFIX + '.' + repo.username + '/' + repo.reponame }
       })
-    treeView
       .delegate('.jstree-open>a', 'click.jstree', function() {
         $.jstree.reference(this).close_node(this)
       })
