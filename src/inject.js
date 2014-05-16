@@ -37,7 +37,9 @@
     , isGitHub       = false
 
   $(document).ready(function() {
-    loadRepo()
+    var shouldContinue = loadRepo()
+    if(!shouldContinue)
+      return;
 
     // When navigating from non-code pages (i.e. Pulls, Issues) to code page
     // GitHub doesn't reload the page but uses pjax. Need to detect and load Octotree.
@@ -57,6 +59,13 @@
   })
 
   function loadRepo(reload) {
+     if($(".navbar-gitlab").length > 0)
+      isGitLab = true;
+    else if(location.host == "github.com")
+      isGitHub = true;
+    else // none of the above
+      return false;
+
     var repo = getRepoFromPath()
       , repoChanged = JSON.stringify(repo) !== JSON.stringify(currentRepo)
       
@@ -75,14 +84,10 @@
         renderTree(repo, tree)
       })
     }
+    return true;
   }
 
   function getRepoFromPath() {
-    if($(".navbar-gitlab").length > 0)
-      isGitLab = true;
-    else 
-      isGitHub = true;
-
     if(isGitHub)
     {
       // 404 page, skip
@@ -125,9 +130,6 @@
   }
 
   function fetchData(repo, done) {
-    console.log("asd");
-    console.log("GitHub" + (isGitHub ? " yes" : " no"));
-    console.log("GitLab" + (isGitLab ? " yes" : " no"));
     if(isGitHub)
     {
       var github  = new Github({ token: store.get(TOKEN) })
