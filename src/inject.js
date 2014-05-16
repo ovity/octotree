@@ -67,7 +67,6 @@
           .append($toggleBtn.click(toggleSidebar))
         domInitialized = true
       }
-
       fetchData(repo, function(err, tree) {
         if (err) return onFetchError(err)
         renderTree(repo, tree)
@@ -111,8 +110,10 @@
           , name   = path.substring(index + 1)
           , folder = folders[path.substring(0, index)]
           , url    = '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path
+          , sha    = item.sha
 
         folder.push(item)
+        item.id = sha
         item.text = sanitize(name)
         item.icon = type // use `type` as class name for tree node
         if (type === 'tree') {
@@ -198,6 +199,12 @@
                          '</div>'
         updateSidebar(headerText)
       })
+    $('.repo-container').delegate('.js-directory-link', 'click', function() {
+      id = $(this).attr('id')
+      tree = $.jstree.reference($treeView)
+      tree.deselect_all()
+      tree.select_node(id.substring(id.search('-')+1))
+    })
   }
 
   function updateSidebar(header, message) {
