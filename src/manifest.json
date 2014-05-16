@@ -16,7 +16,8 @@
   "content_scripts": [
     {
       "matches": [
-        "https://github.com/*"
+        "http://*/*",
+        "https://*/*"
       ],
       "css": [
         "lib/css/jstree.css",
@@ -29,6 +30,7 @@
         "lib/js/jquery.pjax.js",
         "lib/js/base64.js",
         "lib/js/github.js",
+        "lib/js/gitlab.js",
         "lib/js/mousetrap.js",
         "inject.js"
       ]
