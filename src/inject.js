@@ -4,8 +4,8 @@
       , SHOWN  = 'octotree.shown'
       , REGEXP = /([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/ // (username)/(reponame)/(subpart)
       , RESERVED_USER_NAMES = [
-          'settings', 'orgs', 'organizations', 
-          'site', 'blog', 'about',      
+          'settings', 'orgs', 'organizations',
+          'site', 'blog', 'about',
           'styleguide', 'showcases', 'trending',
           'stars', 'dashboard', 'notifications'
         ]
@@ -81,7 +81,7 @@
 
     var match = location.pathname.match(REGEXP)
     if (!match) return false
-     
+
     // Not a repository, skip
     if (~RESERVED_USER_NAMES.indexOf(match[1])) return false
     if (~RESERVED_REPO_NAMES.indexOf(match[2])) return false
@@ -89,8 +89,8 @@
     // Not a code page, skip
     if (match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
 
-    return { 
-      username : match[1], 
+    return {
+      username : match[1],
       reponame : match[2],
       branch   : $('*[data-master-branch]').data('ref') || 'master'
     }
@@ -101,43 +101,83 @@
       , api     = github.getRepo(repo.username, repo.reponame)
       , root    = []
       , folders = { '': root }
+      , submods = []
 
-    api.getTree(encodeURIComponent(repo.branch) + '?recursive=true', function(err, tree) {
-      if (err) return done(err)
-      tree.forEach(function(item) {
-        var path   = item.path
-          , type   = item.type
-          , index  = path.lastIndexOf('/')
-          , name   = path.substring(index + 1)
-          , folder = folders[path.substring(0, index)]
-          , url    = '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path
+    submods = fetchSubmoduleData(api, repo, function(submods){
+      api.getTree(encodeURIComponent(repo.branch) + '?recursive=true', function(err, tree) {
+        if (err) return done(err)
+        tree.forEach(function(item) {
+          var path   = item.path
+            , type   = item.type
+            , index  = path.lastIndexOf('/')
+            , name   = path.substring(index + 1)
+            , folder = folders[path.substring(0, index)]
+            , url    = '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path
 
-        folder.push(item)
-        item.text = sanitize(name)
-        item.icon = type // use `type` as class name for tree node
-        if (type === 'tree') {
-          folders[item.path] = item.children = []
-          item.a_attr = { href: '#' }
+          folder.push(item)
+          item.text = sanitize(name)
+          item.icon = type // use `type` as class name for tree node
+          if (type === 'tree') {
+            folders[item.path] = item.children = []
+            item.a_attr = { href: '#' }
+          }
+          else if (type === 'blob') {
+            item.a_attr = { href: url }
+          }
+          // handle submodule, anyone?
+          else if (type === 'commit'){
+            if(submods){
+              submod = submods[item.path]
+              item.a_attr = { href: location.protocol + "//github.com/" + submod.owner + "/" + submod.repo }
+              // TODO: link to commit sha also
+              item.a2_attr = { href: item.a_attr.href + "/tree/" + item.sha }
+            }
+          }
+        })
+
+        done(null, sort(root))
+
+        function sort(folder) {
+          folder.sort(function(a, b) {
+            if (a.type === b.type) return a.text.localeCompare(b.text)
+            return a.type === 'tree' ? -1 : 1
+          })
+          folder.forEach(function(item) {
+            if (item.type === 'tree') sort(item.children)
+          })
+          return folder
         }
-        else if (type === 'blob') {
-          item.a_attr = { href: url }
-        }
-        // TOOD: handle submodule, anyone?
       })
-
-      done(null, sort(root))
-
-      function sort(folder) {
-        folder.sort(function(a, b) {
-          if (a.type === b.type) return a.text.localeCompare(b.text)
-          return a.type === 'tree' ? -1 : 1
-        })
-        folder.forEach(function(item) {
-          if (item.type === 'tree') sort(item.children)
-        })
-        return folder
-      }
     })
+  }
+
+  function fetchSubmoduleData(api, repo, done){
+    var submodules = []
+    //fetch submodule from .gitmodules file
+    api.read(repo.branch, '.gitmodules', function (err, content, sha){
+      if(err) done(submodules)
+      if(content){
+        lines = content.match(/[^\r\n]+/g)
+        grouped = groupBy(lines, 3)
+        _.each(grouped, function(submodule) {
+          path = submodule[1].match(/=\s([\w\d\/]+)/i)[1]
+          repoParts = submodule[2].match(/([\w]+)\/([\w]+).git$/i)
+          owner = repoParts[1]
+          repo = repoParts[2]
+          submodules[path]= {
+            owner: owner,
+            repo: repo
+          }
+        })
+      }
+      done(submodules)
+    })
+  }
+
+  function groupBy(data, n){
+    return _.groupBy(data, function(element, index){
+      return Math.floor(index/n);
+    });
   }
 
   function onFetchError(err) {
@@ -182,19 +222,23 @@
       .on('click', function(e) {
         var $target = $(e.target)
         if ($target.is('a.jstree-anchor') && $target.children(':first').hasClass('blob')) {
-          $.pjax({ 
-            url       : $target.attr('href'), 
+          $.pjax({
+            url       : $target.attr('href'),
             timeout   : 5000, //gives it more time, should really have a progress indicator...
-            container : $('#js-repo-pjax-container') 
+            container : $('#js-repo-pjax-container')
           })
+        }
+        else if ($target.is('a.jstree-anchor') && $target.children(':first').hasClass('commit')) {
+          //link to submodule new page
+          window.location.href = $target.attr('href');
         }
       })
       .on('ready.jstree', function() {
-        var headerText = '<div class="octotree_header_repo">' + 
-                           repo.username + ' / ' + repo.reponame + 
+        var headerText = '<div class="octotree_header_repo">' +
+                           repo.username + ' / ' + repo.reponame +
                          '</div>' +
-                         '<div class="octotree_header_branch">' + 
-                           repo.branch + 
+                         '<div class="octotree_header_branch">' +
+                           repo.branch +
                          '</div>'
         updateSidebar(headerText)
       })
@@ -224,7 +268,7 @@
     if (shown) $html.removeClass(PREFIX)
     else $html.addClass(PREFIX)
     store.set(SHOWN, !shown)
-  } 
+  }
 
   function saveToken(event) {
     event.preventDefault()
