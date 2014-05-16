@@ -105,7 +105,6 @@
 
     api.getTree(encodeURIComponent(repo.branch) + '?recursive=true', function(err, tree) {
       if (err) return done(err)
-
       fetchSubmoduleData(api, repo, tree, function(submods){
         tree.forEach(function(item) {
           var path   = item.path
@@ -135,9 +134,8 @@
             }
           }
         })
+        done(null, sort(root))
       })
-      done(null, sort(root))
-
       function sort(folder) {
         folder.sort(function(a, b) {
           //github treats submodules like folders
@@ -157,12 +155,12 @@
 
   function fetchSubmoduleData(api, repo, tree, cb){
     var submodules = []
-        , sha = null
+        , item = null
     //fetch submodule from .gitmodules file
     //use tree to find sha
-    sha = _.find(tree, function(item) { return /\.gitmodules/i.test(item.path) })
-    if(sha){
-      api.getBlob(sha, function (err, content, sha){
+    item = _.find(tree, function(file) { return /\.gitmodules/i.test(file.path) })
+    if(item){
+      api.getBlob(item.sha, function (err, content, sha){
         if(err) cb(null)
         if(content){
           lines = content.match(/[^\r\n]+/g)
@@ -182,7 +180,10 @@
         }
       })
     }
-    cb(null)
+    else
+    {
+      cb(null)
+    }
   }
 
   function groupBy(data, n){
