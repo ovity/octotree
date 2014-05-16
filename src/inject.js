@@ -103,9 +103,10 @@
       , root    = []
       , folders = { '': root }
 
-    fetchSubmoduleData(api, repo, function(submods){
-      api.getTree(encodeURIComponent(repo.branch) + '?recursive=true', function(err, tree) {
-        if (err) return done(err)
+    api.getTree(encodeURIComponent(repo.branch) + '?recursive=true', function(err, tree) {
+      if (err) return done(err)
+
+      fetchSubmoduleData(api, repo, tree, function(submods){
         tree.forEach(function(item) {
           var path   = item.path
             , type   = item.type
@@ -134,49 +135,54 @@
             }
           }
         })
-
-        done(null, sort(root))
-
-        function sort(folder) {
-          folder.sort(function(a, b) {
-            //github treats submodules like folders
-            var compare = ((a.type === 'tree' || a.type === 'commit') &&
-                            (b.type === 'tree' || b.type === 'commit'))
-
-            if (a.type === b.type || compare) return a.text.localeCompare(b.text)
-            return a.type === 'tree' ? -1 : 1
-          })
-          folder.forEach(function(item) {
-            if (item.type === 'tree') sort(item.children)
-          })
-          return folder
-        }
       })
+      done(null, sort(root))
+
+      function sort(folder) {
+        folder.sort(function(a, b) {
+          //github treats submodules like folders
+          var compare = ((a.type === 'tree' || a.type === 'commit') &&
+                          (b.type === 'tree' || b.type === 'commit'))
+
+          if (a.type === b.type || compare) return a.text.localeCompare(b.text)
+          return a.type === 'tree' ? -1 : 1
+        })
+        folder.forEach(function(item) {
+          if (item.type === 'tree') sort(item.children)
+        })
+        return folder
+      }
     })
   }
 
-  function fetchSubmoduleData(api, repo, cb){
+  function fetchSubmoduleData(api, repo, tree, cb){
     var submodules = []
+        , sha = null
     //fetch submodule from .gitmodules file
-    api.read(repo.branch, '.gitmodules', function (err, content, sha){
-      if(err) cb(submodules)
-      if(content){
-        lines = content.match(/[^\r\n]+/g)
-        // each submodule is defined on 3 lines, group them for easier iterating
-        grouped = groupBy(lines, 3)
-        _.each(grouped, function(submodule) {
-          path = submodule[1].match(/=\s([\w\d\/]+)/i)[1] // = (path)
-          repoParts = submodule[2].match(/([\w]+)\/([\w]+).git$/i) // (owner)/(repo).git$
-          owner = repoParts[1]
-          repo = repoParts[2]
-          submodules[path]= {
-            owner: owner,
-            repo: repo
-          }
-        })
-        cb(submodules)
-      }
-    })
+    //use tree to find sha
+    sha = _.find(tree, function(item) { return /\.gitmodules/i.test(item.path) })
+    if(sha){
+      api.getBlob(sha, function (err, content, sha){
+        if(err) cb(null)
+        if(content){
+          lines = content.match(/[^\r\n]+/g)
+          // each submodule is defined on 3 lines, group them for easier iterating
+          grouped = groupBy(lines, 3)
+          _.each(grouped, function(submodule) {
+            path = submodule[1].match(/=\s([\w\d\/]+)/i)[1] // = (path)
+            repoParts = submodule[2].match(/([\w]+)\/([\w]+).git$/i) // (owner)/(repo).git$
+            owner = repoParts[1]
+            repo = repoParts[2]
+            submodules[path]= {
+              owner: owner,
+              repo: repo
+            }
+          })
+          cb(submodules)
+        }
+      })
+    }
+    cb(null)
   }
 
   function groupBy(data, n){
