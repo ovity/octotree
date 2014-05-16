@@ -49,7 +49,7 @@
       if (location.href !== href || location.hash != hash) {
         href = location.href
         hash = location.hash
-        loadRepo(true)
+        loadRepo()
       }
       window.setTimeout(detectLocationChange, 200)
     }
