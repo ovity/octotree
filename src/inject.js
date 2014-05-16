@@ -33,6 +33,7 @@
     , store      = new Storage()
     , domInitialized = false
     , currentRepo    = false
+    , baseUrl = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/'
 
   $(document).ready(function() {
     loadRepo()
@@ -101,9 +102,8 @@
       , api     = github.getRepo(repo.username, repo.reponame)
       , root    = []
       , folders = { '': root }
-      , submods = []
 
-    submods = fetchSubmoduleData(api, repo, function(submods){
+    fetchSubmoduleData(api, repo, function(submods){
       api.getTree(encodeURIComponent(repo.branch) + '?recursive=true', function(err, tree) {
         if (err) return done(err)
         tree.forEach(function(item) {
@@ -128,9 +128,9 @@
           else if (type === 'commit'){
             if(submods){
               submod = submods[item.path]
-              item.a_attr = { href: location.protocol + "//github.com/" + submod.owner + "/" + submod.repo }
+              item.a_attr = { href: baseUrl + submod.owner + '/' + submod.repo }
               // TODO: link to commit sha also
-              item.a2_attr = { href: item.a_attr.href + "/tree/" + item.sha }
+              item.a2_attr = { href: item.a_attr.href + '/tree/' + item.sha }
             }
           }
         })
@@ -139,7 +139,11 @@
 
         function sort(folder) {
           folder.sort(function(a, b) {
-            if (a.type === b.type) return a.text.localeCompare(b.text)
+            //github treats submodules like folders
+            var compare = ((a.type === 'tree' || a.type === 'commit') &&
+                            (b.type === 'tree' || b.type === 'commit'))
+
+            if (a.type === b.type || compare) return a.text.localeCompare(b.text)
             return a.type === 'tree' ? -1 : 1
           })
           folder.forEach(function(item) {
@@ -151,17 +155,18 @@
     })
   }
 
-  function fetchSubmoduleData(api, repo, done){
+  function fetchSubmoduleData(api, repo, cb){
     var submodules = []
     //fetch submodule from .gitmodules file
     api.read(repo.branch, '.gitmodules', function (err, content, sha){
-      if(err) done(submodules)
+      if(err) cb(submodules)
       if(content){
         lines = content.match(/[^\r\n]+/g)
+        // each submodule is defined on 3 lines, group them for easier iterating
         grouped = groupBy(lines, 3)
         _.each(grouped, function(submodule) {
-          path = submodule[1].match(/=\s([\w\d\/]+)/i)[1]
-          repoParts = submodule[2].match(/([\w]+)\/([\w]+).git$/i)
+          path = submodule[1].match(/=\s([\w\d\/]+)/i)[1] // = (path)
+          repoParts = submodule[2].match(/([\w]+)\/([\w]+).git$/i) // (owner)/(repo).git$
           owner = repoParts[1]
           repo = repoParts[2]
           submodules[path]= {
@@ -169,8 +174,8 @@
             repo: repo
           }
         })
+        cb(submodules)
       }
-      done(submodules)
     })
   }
 
@@ -206,13 +211,14 @@
   }
 
   function renderTree(repo, tree) {
-    $treeView
+    var treeView =$treeView
       .empty()
       .jstree({
         core    : { data: tree, animation: 100, themes : { responsive : false } },
         plugins : ['wholerow', 'state'],
         state   : { key : PREFIX + '.' + repo.username + '/' + repo.reponame }
       })
+    treeView
       .delegate('.jstree-open>a', 'click.jstree', function() {
         $.jstree.reference(this).close_node(this)
       })
