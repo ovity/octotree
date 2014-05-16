@@ -181,7 +181,7 @@ html {
 
 .octotree_sidebar .ui-resizable-e {
     position: absolute;
-    cursor: e-resize; 
+    cursor: ew-resize; 
     width: 7px; 
     right: -5px; 
     top: 0; 
