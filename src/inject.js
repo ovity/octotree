@@ -10,6 +10,7 @@
           'stars', 'dashboard', 'notifications'
         ]
       , RESERVED_REPO_NAMES = ['followers', 'following']
+      , API_URL = 'https://' + (document.domain == 'github.com' ? 'api.github.com' : document.domain + '/api/v3')
 
   var $html    = $('html')
     , $sidebar = $('<nav class="octotree_sidebar">' +
@@ -37,6 +38,8 @@
   $(document).ready(function() {
     is_github = $('link[rel=search]').attr('title') == 'GitHub' && $('link[rel=fluid-icon]').attr('title') == 'GitHub'
     if (!is_github) return false
+
+    loadRepo()
 
     // When navigating from non-code pages (i.e. Pulls, Issues) to code page
     // GitHub doesn't reload the page but uses pjax. Need to detect and load Octotree.
@@ -98,7 +101,7 @@
   }
 
   function fetchData(repo, done) {
-    var github  = new Github({ token: store.get(TOKEN) })
+    var github  = new Github({ token: store.get(TOKEN), api_url: API_URL })
       , api     = github.getRepo(repo.username, repo.reponame)
       , root    = []
       , folders = { '': root }
