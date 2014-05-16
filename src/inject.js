@@ -33,6 +33,8 @@
     , store      = new Storage()
     , domInitialized = false
     , currentRepo    = false
+    , isGitLab       = false
+    , isGitHub       = false
 
   $(document).ready(function() {
     loadRepo()
@@ -57,7 +59,7 @@
   function loadRepo(reload) {
     var repo = getRepoFromPath()
       , repoChanged = JSON.stringify(repo) !== JSON.stringify(currentRepo)
-
+      
     if (repo && (repoChanged || reload)) {
       currentRepo = repo
 
@@ -76,68 +78,107 @@
   }
 
   function getRepoFromPath() {
-    // 404 page, skip
-    if ($('#parallax_wrapper').length) return false
+    if($(".navbar-gitlab").length > 0)
+      isGitLab = true;
+    else 
+      isGitHub = true;
 
-    var match = location.pathname.match(REGEXP)
-    if (!match) return false
-     
-    // Not a repository, skip
-    if (~RESERVED_USER_NAMES.indexOf(match[1])) return false
-    if (~RESERVED_REPO_NAMES.indexOf(match[2])) return false
+    if(isGitHub)
+    {
+      // 404 page, skip
+      if ($('#parallax_wrapper').length) return false
 
-    // Not a code page, skip
-    if (match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
+      var match = location.pathname.match(REGEXP)
+      if (!match) return false
+       
+      // Not a repository, skip
+      if (~RESERVED_USER_NAMES.indexOf(match[1])) return false
+      if (~RESERVED_REPO_NAMES.indexOf(match[2])) return false
 
-    return { 
-      username : match[1], 
-      reponame : match[2],
-      branch   : $('*[data-master-branch]').data('ref') || 'master'
+      // Not a code page, skip
+      if (match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
+
+      return { 
+        username : match[1], 
+        reponame : match[2],
+        branch   : $('*[data-master-branch]').data('ref') || 'master'
+      }
+    }
+    else
+    {
+      var match = location.pathname.match(REGEXP)
+      if (!match) return false
+       
+      // Not a repository, skip
+      if (~RESERVED_USER_NAMES.indexOf(match[1])) return false
+      if (~RESERVED_REPO_NAMES.indexOf(match[2])) return false
+
+      // Not a code page, skip
+      if (match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
+
+      return { 
+        username : match[1], 
+        reponame : match[2],
+        branch   : $('*[data-master-branch]').data('ref') || 'master'
+      }
     }
   }
 
   function fetchData(repo, done) {
-    var github  = new Github({ token: store.get(TOKEN) })
+    console.log("asd");
+    console.log("GitHub" + (isGitHub ? " yes" : " no"));
+    console.log("GitLab" + (isGitLab ? " yes" : " no"));
+    if(isGitHub)
+    {
+      var github  = new Github({ token: store.get(TOKEN) })
       , api     = github.getRepo(repo.username, repo.reponame)
       , root    = []
       , folders = { '': root }
 
-    api.getTree(encodeURIComponent(repo.branch) + '?recursive=true', function(err, tree) {
-      if (err) return done(err)
-      tree.forEach(function(item) {
-        var path   = item.path
-          , type   = item.type
-          , index  = path.lastIndexOf('/')
-          , name   = path.substring(index + 1)
-          , folder = folders[path.substring(0, index)]
-          , url    = '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path
+      api.getTree(encodeURIComponent(repo.branch) + '?recursive=true', function(err, tree) {
+        if (err) return done(err)
+        tree.forEach(function(item) {
+          var path   = item.path
+            , type   = item.type
+            , index  = path.lastIndexOf('/')
+            , name   = path.substring(index + 1)
+            , folder = folders[path.substring(0, index)]
+            , url    = '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path
 
-        folder.push(item)
-        item.text = sanitize(name)
-        item.icon = type // use `type` as class name for tree node
-        if (type === 'tree') {
-          folders[item.path] = item.children = []
-          item.a_attr = { href: '#' }
-        }
-        else if (type === 'blob') {
-          item.a_attr = { href: url }
-        }
-        // TOOD: handle submodule, anyone?
+          folder.push(item)
+          item.text = sanitize(name)
+          item.icon = type // use `type` as class name for tree node
+          if (type === 'tree') {
+            folders[item.path] = item.children = []
+            item.a_attr = { href: '#' }
+          }
+          else if (type === 'blob') {
+            item.a_attr = { href: url }
+          }
+          // TOOD: handle submodule, anyone?
+        })
+
+        done(null, sort(root))
+
       })
-
-      done(null, sort(root))
-
-      function sort(folder) {
-        folder.sort(function(a, b) {
-          if (a.type === b.type) return a.text.localeCompare(b.text)
-          return a.type === 'tree' ? -1 : 1
-        })
-        folder.forEach(function(item) {
-          if (item.type === 'tree') sort(item.children)
-        })
-        return folder
-      }
-    })
+    }
+    else if(isGitLab)
+    {
+      var gitlab  = new GitLab();
+      gitlab.getTree(function(data){
+        done(null, sort(data))  
+      });
+    }
+    function sort(folder) {
+          folder.sort(function(a, b) {
+            if (a.type === b.type) return a.text.localeCompare(b.text)
+            return a.type === 'tree' ? -1 : 1
+          })
+          folder.forEach(function(item) {
+            if (item.type === 'tree') sort(item.children)
+          })
+          return folder
+        }
   }
 
   function onFetchError(err) {
