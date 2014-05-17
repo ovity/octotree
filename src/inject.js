@@ -164,6 +164,11 @@
       else          message = 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it in the textbox below.'
     }
 
+    else if (err.error === 409) {
+      header  = 'Empty repository!'
+      message = 'This repository is empty.'
+    }
+
     updateSidebar('<div class="octotree_header_error">' + header + '</div>', message)
   }
 
