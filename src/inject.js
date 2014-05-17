@@ -90,7 +90,9 @@
     // Not a code page, skip
     if (match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
 
-    var branch = $('*[data-master-branch] > .js-select-button').text() || 'master'
+    var branch = $('*[data-master-branch]').data('ref') || 
+                 $('*[data-master-branch] > .js-select-button').text() || 
+                 'master'
     return { 
       username : match[1], 
       reponame : match[2],
