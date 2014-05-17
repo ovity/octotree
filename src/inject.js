@@ -93,7 +93,7 @@
     return { 
       username : match[1], 
       reponame : match[2],
-      branch   : $('*[data-master-branch]').data('ref') || 'master'
+      branch   : $('*[data-master-branch]').data('ref') || $('*[data-master-branch] > .js-select-button').text() || 'master'
     }
   }
 
