@@ -2,7 +2,6 @@
   const PREFIX = 'octotree'
       , TOKEN  = 'octotree.github_access_token'
       , SHOWN  = 'octotree.shown'
-      , REGEXP = /([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/ // (username)/(reponame)/(subpart)
       , RESERVED_USER_NAMES = [
           'settings', 'orgs', 'organizations', 
           'site', 'blog', 'about',      
@@ -61,9 +60,21 @@
       currentRepo = repo
       fetchData(repo, function(err, tree) {
         if (err) return onFetchError(err)
-        renderTree(repo, tree)
+        renderTree(repo, tree, selectTreeNode)
+
       })
-    }
+    } else selectTreeNode()
+  }
+
+  function selectTreeNode() {      
+    var tree = $.jstree.reference($treeView)
+      , path = location.pathname
+
+    tree.deselect_all()
+
+    // e.g. converts /buunguyen/octotree/type/branch/path to path
+    var match = path.match(/(?:[^\/]+\/){4}(.*)/)
+    if (match) tree.select_node(nodeIdFromPath(decodeURIComponent(match[1])))
   }
 
   function initializeDom() {
@@ -71,6 +82,7 @@
       $('body')
         .append($sidebar)
         .append($toggleBtn.click(toggleSidebar))
+
       key('⌘+b, ctrl+b', toggleSidebar)
       domInitialized = true
     }
@@ -80,7 +92,8 @@
     // 404 page, skip
     if ($('#parallax_wrapper').length) return false
 
-    var match = location.pathname.match(REGEXP)
+    // (username)/(reponame)[/(subpart)]
+    var match = location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/)
     if (!match) return false
      
     // Not a repository, skip
@@ -117,6 +130,7 @@
           , url    = '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path
 
         folder.push(item)
+        item.id   = nodeIdFromPath(path)
         item.text = sanitize(name)
         item.icon = type // use `type` as class name for tree node
         if (type === 'tree') {
@@ -126,7 +140,6 @@
         else if (type === 'blob') {
           item.a_attr = { href: url }
         }
-        // TOOD: handle submodule, anyone?
       })
 
       done(null, sort(root))
@@ -174,7 +187,7 @@
     updateSidebar('<div class="octotree_header_error">' + header + '</div>', message)
   }
 
-  function renderTree(repo, tree) {
+  function renderTree(repo, tree, cb) {
     $treeView
       .empty()
       .jstree({
@@ -182,10 +195,10 @@
         plugins : ['wholerow', 'state'],
         state   : { key : PREFIX + '.' + repo.username + '/' + repo.reponame }
       })
-      .delegate('.jstree-open>a', 'click.jstree', function() {
+      .on('click.jstree', '.jstree-open>a', function() {
         $.jstree.reference(this).close_node(this)
       })
-      .delegate('.jstree-closed>a', 'click.jstree', function() {
+      .on('click.jstree', '.jstree-closed>a', function() {
         $.jstree.reference(this).open_node(this)
       })
       .on('click', function(e) {
@@ -206,6 +219,7 @@
                            repo.branch + 
                          '</div>'
         updateSidebar(headerText)
+        cb()
       })
   }
 
@@ -249,6 +263,12 @@
 
   function sanitize(str) {
     return $dummyDiv.text(str).html()
+  }
+
+  // jstree messes up badly when node ID contains $, so need to handle it
+  // TODO: check if there's other character that breaks jstree
+  function nodeIdFromPath(path) {
+    return PREFIX + path.replace(/\$/g, '_')
   }
 
   function Storage() {
