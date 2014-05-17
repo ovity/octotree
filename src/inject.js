@@ -63,7 +63,7 @@
         renderTree(repo, tree, selectTreeNode)
 
       })
-    } else selectTreeNode()
+    } else if (domInitialized) selectTreeNode()
   }
 
   function selectTreeNode() {      
