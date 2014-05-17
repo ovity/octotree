@@ -74,7 +74,7 @@
 
     // e.g. converts /buunguyen/octotree/type/branch/path to path
     var match = path.match(/(?:[^\/]+\/){4}(.*)/)
-    if (match) tree.select_node(nodeIdFromPath(decodeURIComponent(match[1])))
+    if (match) tree.select_node(PREFIX + decodeURIComponent(match[1]))
   }
 
   function initializeDom() {
@@ -130,7 +130,7 @@
           , url    = '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path
 
         folder.push(item)
-        item.id   = nodeIdFromPath(path)
+        item.id   = PREFIX + path
         item.text = sanitize(name)
         item.icon = type // use `type` as class name for tree node
         if (type === 'tree') {
@@ -263,12 +263,6 @@
 
   function sanitize(str) {
     return $dummyDiv.text(str).html()
-  }
-
-  // jstree messes up badly when node ID contains $, so need to handle it
-  // TODO: check if there's other character that breaks jstree
-  function nodeIdFromPath(path) {
-    return PREFIX + path.replace(/\$/g, '_')
   }
 
   function Storage() {
