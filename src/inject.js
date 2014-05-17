@@ -4,8 +4,8 @@
       , SHOWN  = 'octotree.shown'
       , REGEXP = /([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/ // (username)/(reponame)/(subpart)
       , RESERVED_USER_NAMES = [
-          'settings', 'orgs', 'organizations', 
-          'site', 'blog', 'about',      
+          'settings', 'orgs', 'organizations',
+          'site', 'blog', 'about',
           'styleguide', 'showcases', 'trending',
           'stars', 'dashboard', 'notifications'
         ]
@@ -82,7 +82,7 @@
 
     var match = location.pathname.match(REGEXP)
     if (!match) return false
-     
+
     // Not a repository, skip
     if (~RESERVED_USER_NAMES.indexOf(match[1])) return false
     if (~RESERVED_REPO_NAMES.indexOf(match[2])) return false
@@ -90,8 +90,8 @@
     // Not a code page, skip
     if (match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
 
-    return { 
-      username : match[1], 
+    return {
+      username : match[1],
       reponame : match[2],
       branch   : $('*[data-master-branch]').data('ref') || $('*[data-master-branch] > .js-select-button').text() || 'master'
     }
@@ -163,6 +163,11 @@
       else          message = 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it in the textbox below.'
     }
 
+    else if (err.error === 409) {
+      header  = 'Repository is empty or not yet available!'
+      message = 'This repository is not ready for browsing yet. Follow <a href="https://developer.github.com/v3/git/" target="_blank">this link</a> for details.'
+    }
+
     updateSidebar('<div class="octotree_header_error">' + header + '</div>', message)
   }
 
@@ -183,19 +188,19 @@
       .on('click', function(e) {
         var $target = $(e.target)
         if ($target.is('a.jstree-anchor') && $target.children(':first').hasClass('blob')) {
-          $.pjax({ 
-            url       : $target.attr('href'), 
+          $.pjax({
+            url       : $target.attr('href'),
             timeout   : 5000, //gives it more time, should really have a progress indicator...
-            container : $('#js-repo-pjax-container') 
+            container : $('#js-repo-pjax-container')
           })
         }
       })
       .on('ready.jstree', function() {
-        var headerText = '<div class="octotree_header_repo">' + 
-                           repo.username + ' / ' + repo.reponame + 
+        var headerText = '<div class="octotree_header_repo">' +
+                           repo.username + ' / ' + repo.reponame +
                          '</div>' +
-                         '<div class="octotree_header_branch">' + 
-                           repo.branch + 
+                         '<div class="octotree_header_branch">' +
+                           repo.branch +
                          '</div>'
         updateSidebar(headerText)
       })
@@ -225,7 +230,7 @@
     if (shown) $html.removeClass(PREFIX)
     else $html.addClass(PREFIX)
     store.set(SHOWN, !shown)
-  } 
+  }
 
   function saveToken(event) {
     event.preventDefault()
