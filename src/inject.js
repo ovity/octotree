@@ -14,6 +14,7 @@
     , $sidebar = $('<nav class="octotree_sidebar">' +
                      '<div class="octotree_header"/>' +
                      '<div class="octotree_treeview"/>' +
+                     '<div class="octotree_footer"/>' +
                      '<form class="octotree_options">' +
                        '<div class="message"/>' +
                        '<div>' +
