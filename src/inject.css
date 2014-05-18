@@ -10,13 +10,13 @@ html.octotree {
 /* Sidebar */
 .octotree_sidebar {
     position: fixed;
-    padding-top: 50px;
+    padding-top: 41px;
     width: 250px;
     top: 0;
     right: 0;
     bottom: 0;
     left: -250px;
-    background-color: #f8f8f8;
+    background-color: #f7f7f7;
     border-right: 1px solid #ddd;
     overflow: auto;
     z-index: 999991;
@@ -28,6 +28,7 @@ html.octotree {
 }
 
 .octotree_header {
+    height: 46px;
     font-size: 16px;
     line-height: 2.7;
     background-color: #f3f3f3;
@@ -46,13 +47,13 @@ html.octotree {
 }
 
 .octotree_header_error {
-    margin-left: -3px;
+    margin-left: -8px;
     margin-top: 6px;
     color: #900;
 }
 
 .octotree_header_repo {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;
     width: 201px;
     white-space: nowrap;

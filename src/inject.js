@@ -1,7 +1,7 @@
 (function() {
   const PREFIX = 'octotree'
       , TOKEN  = 'octotree.github_access_token'
-      , SHOWN  = 'octotree.shown'
+      , SHOWN  = 'octotree.already_shown'
       , RESERVED_USER_NAMES = [
           'settings', 'orgs', 'organizations', 
           'site', 'blog', 'about',      
@@ -61,7 +61,6 @@
       , repoChanged = JSON.stringify(repo) !== JSON.stringify(currentRepo)
 
     if (repo) {
-      $sidebar.show()
       $toggleBtn.show()
       if (repoChanged || reload) {
         currentRepo = repo
@@ -71,17 +70,16 @@
         })
       } else selectTreeNode()
     } else {
-      $sidebar.hide()
+      $html.removeClass(PREFIX)
       $toggleBtn.hide()
     }
   }
 
   function selectTreeNode() {
-    if ($treeView.is(':hidden')) return
-
     var tree = $.jstree.reference($treeView)
       , path = location.pathname
 
+    if (!tree) return
     tree.deselect_all()
 
     // e.g. converts /buunguyen/octotree/type/branch/path to path
@@ -132,7 +130,7 @@
 
         folder.push(item)
         item.id   = PREFIX + path
-        item.text = $dummyDiv.text(name).html() // sanitizes, closes #9
+        item.text = $dummyDiv.text(name).html() // sanitizes, close #9
         item.icon = type // use `type` as class name for tree node
         if (type === 'tree') {
           folders[item.path] = item.children = []
@@ -161,7 +159,6 @@
   function onFetchError(err) {
     var header   = 'Error: ' + err.error
       , hasToken = !!store.get(TOKEN)
-      , requestToken = true
       , message
 
     switch (err.error) {
@@ -211,7 +208,7 @@
         if ($target.is('a.jstree-anchor') && $target.children(':first').hasClass('blob')) {
           $.pjax({ 
             url       : $target.attr('href'), 
-            timeout   : 5000, //gives it more time, should really have a progress indicator...
+            timeout   : 5000, // gives it more time, should really have a progress indicator...
             container : $('#js-repo-pjax-container') 
           })
         }
@@ -242,21 +239,12 @@
       $treeView.show()
     }
 
-    // Shows sidebar when:
-    // 1. First time after extension is installed
-    // 2. If it was previously shown (TODO: many seem not to like it)
-    if (store.get(SHOWN) !== false) {
+    // Shows sidebar automatically only the first time in this site, close #32
+    if (store.get(SHOWN) !== true) {
       $html.addClass(PREFIX)
       store.set(SHOWN, true)
     }
   }
-
-  function toggleSidebar() {
-    var shown = store.get(SHOWN)
-    if (shown) $html.removeClass(PREFIX)
-    else $html.addClass(PREFIX)
-    store.set(SHOWN, !shown)
-  } 
 
   function saveToken(event) {
     event.preventDefault()
@@ -268,6 +256,10 @@
 
     store.set(TOKEN, token)
     loadRepo(true)
+  }
+
+  function toggleSidebar() {
+    $html.toggleClass(PREFIX)
   }
 
   function Storage() {
