@@ -29,6 +29,7 @@ html.octotree {
 
 .octotree_header {
     font-size: 16px;
+    height: 46px;
     line-height: 2.7;
     background-color: #f3f3f3;
     background-image: -moz-linear-gradient(#f9f9f9, #f3f3f3);
