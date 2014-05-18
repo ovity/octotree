@@ -3,7 +3,7 @@ html {
     transition: margin-left 0.2s ease;
     -webkit-transition: margin-left 0.2s ease;
 }
-html.octotree {
+html.octotree { 
     margin-left: 240px;
 }
 
@@ -75,8 +75,7 @@ html.octotree {
 
 /* Source tree */
 .jstree-icon.tree,
-.jstree-icon.blob,
-.jstree-icon.commit {
+.jstree-icon.blob {
     font: normal normal 16px octicons;
     display: inline-block;
     margin-right: 5px;
@@ -89,10 +88,6 @@ html.octotree {
 }
 .jstree-icon.blob:before {
     content: '\f011';
-    color: #777;
-}
-.jstree-icon.commit:before {
-    content: '\f017';
     color: #777;
 }
 
@@ -131,17 +126,17 @@ html.octotree {
 }
 
 /* Token form */
-.octotree_sidebar form div {
-    margin: 6px;
+.octotree_sidebar form div { 
+    margin: 6px; 
 }
-.octotree_sidebar form input {
-    width: 237px;
+.octotree_sidebar form input { 
+    width: 237px; 
 }
-.octotree_sidebar form .error {
-    color: #900;
+.octotree_sidebar form .error { 
+    color: #900; 
 }
-.octotree_sidebar form button {
-    margin-right: 5px;
+.octotree_sidebar form button { 
+    margin-right: 5px; 
 }
 
 /* Toggle button */
