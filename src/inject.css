@@ -74,68 +74,69 @@ html.octotree {
 }
 
 /* Source tree */
-.jstree-icon.tree,
-.jstree-icon.blob {
+.octotree_treeview .jstree-icon.tree,
+.octotree_treeview .jstree-icon.blob {
     font: normal normal 16px octicons;
     display: inline-block;
+    margin-top: 4px;
     margin-right: 5px;
     text-decoration: none;
     -webkit-font-smoothing: antialiased;
 }
-.jstree-icon.tree:before {
+.octotree_treeview .jstree-icon.tree:before {
     content: '\f016';
     color: #80a6cd;
 }
-.jstree-icon.blob:before {
+.octotree_treeview .jstree-icon.blob:before {
     content: '\f011';
     color: #777;
 }
 
-.jstree-anchor {
+.octotree_treeview .jstree-anchor {
     color: #4183c4 !important;
     text-decoration: none;
     outline: none;
 }
-.jstree-anchor:hover {
+.octotree_treeview .jstree-anchor:hover {
     text-decoration: none !important; /* Safari needs this */
 }
 
-.jstree-default .jstree-wholerow {
+.octotree_treeview .jstree-default .jstree-wholerow {
     height: auto;
 }
-.jstree-default .jstree-wholerow-hovered {
+.octotree_treeview .jstree-default .jstree-wholerow-hovered {
     background: #eee;
 }
-.jstree-default .jstree-wholerow-clicked {
+.octotree_treeview .jstree-default .jstree-wholerow-clicked {
     background: #dbeeff;
 }
 
-.jstree-default .jstree-node {
+.octotree_treeview .jstree-default .jstree-node {
     line-height: 24px;
     margin-left: 12px;
 }
-.jstree-default .jstree-icon,
-.jstree-default .jstree-icon:empty,
-.jstree-default .jstree-anchor {
+.octotree_treeview .jstree-default .jstree-icon,
+.octotree_treeview .jstree-default .jstree-icon:empty,
+.octotree_treeview .jstree-default .jstree-anchor {
     line-height: 28px;
 }
 
-.jstree-default .jstree-icon.jstree-ocl {
+.octotree_treeview .jstree-default .jstree-icon.jstree-ocl {
     margin-top: 1px;
     margin-right: -4px;
 }
 
-/* Token form */
-.octotree_sidebar form div { 
+/* Options form */
+.octotree_options div { 
     margin: 6px; 
 }
-.octotree_sidebar form input { 
+.octotree_options input { 
     width: 237px; 
 }
-.octotree_sidebar form .error { 
+.octotree_options .error { 
     color: #900; 
 }
-.octotree_sidebar form button { 
+.octotree_options button { 
     margin-right: 5px; 
 }
 
