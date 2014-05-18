@@ -10,7 +10,7 @@ html.octotree {
 /* Sidebar */
 .octotree_sidebar {
     position: fixed;
-    padding-top: 50px;
+    padding-top: 40px;
     width: 250px;
     top: 0;
     right: 0;
@@ -52,7 +52,7 @@ html.octotree {
 }
 
 .octotree_header_repo {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;
     width: 201px;
     white-space: nowrap;
@@ -69,9 +69,7 @@ html.octotree {
 
 .octotree_header_branch {
     line-height: 1;
-    margin-top: -10px;
     margin-bottom: 5px;
-    font-size: 12px;
     margin-top: -6px;
     font-size: 11px;
 }
