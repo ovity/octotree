@@ -3,8 +3,8 @@
       , TOKEN  = 'octotree.github_access_token'
       , SHOWN  = 'octotree.shown'
       , RESERVED_USER_NAMES = [
-          'settings', 'orgs', 'organizations', 
-          'site', 'blog', 'about',      
+          'settings', 'orgs', 'organizations',
+          'site', 'blog', 'about',
           'styleguide', 'showcases', 'trending',
           'stars', 'dashboard', 'notifications'
         ]
@@ -96,7 +96,7 @@
     // (username)/(reponame)[/(subpart)]
     var match = location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/)
     if (!match) return false
-     
+
     // Not a repository, skip
     if (~RESERVED_USER_NAMES.indexOf(match[1])) return false
     if (~RESERVED_REPO_NAMES.indexOf(match[2])) return false
@@ -104,11 +104,11 @@
     // Not a code page, skip
     if (match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
 
-    var branch = $('*[data-master-branch]').data('ref') || 
-                 $('*[data-master-branch] > .js-select-button').text() || 
+    var branch = $('*[data-master-branch]').data('ref') ||
+                 $('*[data-master-branch] > .js-select-button').text() ||
                  'master'
-    return { 
-      username : match[1], 
+    return {
+      username : match[1],
       reponame : match[2],
       branch   : branch
     }
@@ -122,32 +122,45 @@
 
     api.getTree(encodeURIComponent(repo.branch) + '?recursive=true', function(err, tree) {
       if (err) return done(err)
-      tree.forEach(function(item) {
-        var path   = item.path
-          , type   = item.type
-          , index  = path.lastIndexOf('/')
-          , name   = path.substring(index + 1)
-          , folder = folders[path.substring(0, index)]
-          , url    = '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path
+      fetchSubmoduleData(api, repo, tree, function(err, submods) {
+        if (err) return done(err)
+        tree.forEach(function(item) {
+          var path   = item.path
+            , type   = item.type
+            , index  = path.lastIndexOf('/')
+            , name   = path.substring(index + 1)
+            , folder = folders[path.substring(0, index)]
+            , url    = '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path
+            , modkey = ''
 
-        folder.push(item)
-        item.id   = PREFIX + path
-        item.text = $dummyDiv.text(name).html() // sanitizes, closes #9
-        item.icon = type // use `type` as class name for tree node
-        if (type === 'tree') {
-          folders[item.path] = item.children = []
-          item.a_attr = { href: '#' }
-        }
-        else if (type === 'blob') {
-          item.a_attr = { href: url }
-        }
+          folder.push(item)
+          item.id   = PREFIX + path
+          item.text = $dummyDiv.text(name).html() // sanitizes, closes #9
+          item.icon = type // use `type` as class name for tree node
+          if (type === 'tree') {
+            folders[item.path] = item.children = []
+            item.a_attr = { href: '#' }
+          }
+          else if (type === 'blob') {
+            item.a_attr = { href: url }
+          }
+          else if (type === 'commit') {
+            modkey = 'submodule "' + item.path + '"' //key from parsing gitmodules file
+            if(submods && submods[modkey]) {
+              submod = submods[modkey]
+              item.a_attr = { href: submod.url.replace("git@github.com:", "/") }
+            }
+          }
+        })
+        done(null, sort(root))
       })
-
-      done(null, sort(root))
-
       function sort(folder) {
         folder.sort(function(a, b) {
-          if (a.type === b.type) return a.text.localeCompare(b.text)
+          //github treats submodules like folders
+          var compare = ((a.type === 'tree' || a.type === 'commit') &&
+                          (b.type === 'tree' || b.type === 'commit'))
+
+          if (a.type === b.type || compare) return a.text.localeCompare(b.text)
           return a.type === 'tree' ? -1 : 1
         })
         folder.forEach(function(item) {
@@ -156,6 +169,26 @@
         return folder
       }
     })
+  }
+
+  function fetchSubmoduleData(api, repo, tree, cb) {
+    var submodules = {}
+        , item = null
+    //use tree to find sha for .gitmodules
+    item = _.find(tree, function(file) { return /\.gitmodules/i.test(file.path) })
+    if(item) {
+      api.getBlob(item.sha, function (err, content, sha) {
+        if(err) cb(err, null)
+        if(content) {
+          submodules = iniParser.parse(content)
+        }
+        cb(null, submodules)
+      })
+    }
+    else
+    {
+      cb(null, null)
+    }
   }
 
   function onFetchError(err) {
@@ -176,20 +209,20 @@
         break
       case 404:
         header  = 'Private repository!'
-        message = hasToken 
+        message = hasToken
           ? 'You are not allowed to access this repository.'
           : 'Accessing private repositories requires a GitHub access token. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it below.'
         break
       case 403:
         if (~err.request.getAllResponseHeaders().indexOf('X-RateLimit-Remaining: 0')) {
           header  = 'API limit exceeded!'
-          message = hasToken 
+          message = hasToken
             ? 'You have exceeded the API hourly limit.'
             : 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it below.'
         }
         break
     }
-    
+
     renderSidebar('<div class="octotree_header_error">' + header + '</div>', message)
   }
 
@@ -209,19 +242,23 @@
       .on('click', function(e) {
         var $target = $(e.target)
         if ($target.is('a.jstree-anchor') && $target.children(':first').hasClass('blob')) {
-          $.pjax({ 
-            url       : $target.attr('href'), 
+          $.pjax({
+            url       : $target.attr('href'),
             timeout   : 5000, //gives it more time, should really have a progress indicator...
-            container : $('#js-repo-pjax-container') 
+            container : $('#js-repo-pjax-container')
           })
+        }
+        else if ($target.is('a.jstree-anchor') && $target.children(':first').hasClass('commit')) {
+          //link to submodule new page
+          window.location.href = $target.attr('href')
         }
       })
       .on('ready.jstree', function() {
-        var headerText = '<div class="octotree_header_repo">' + 
-                           repo.username + ' / ' + repo.reponame + 
+        var headerText = '<div class="octotree_header_repo">' +
+                           repo.username + ' / ' + repo.reponame +
                          '</div>' +
-                         '<div class="octotree_header_branch">' + 
-                           repo.branch + 
+                         '<div class="octotree_header_branch">' +
+                           repo.branch +
                          '</div>'
         renderSidebar(headerText)
         cb()
@@ -256,7 +293,7 @@
     if (shown) $html.removeClass(PREFIX)
     else $html.addClass(PREFIX)
     store.set(SHOWN, !shown)
-  } 
+  }
 
   function saveToken(event) {
     event.preventDefault()

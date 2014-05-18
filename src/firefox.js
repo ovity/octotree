@@ -10,6 +10,7 @@ pageMod.PageMod({
                       data.url('lib/js/underscore.js'),
                       data.url('lib/js/base64.js'),
                       data.url('lib/js/github.js'),
+                      data.url('lib/js/iniparser.js'),
                       data.url('inject.js')],
   contentStyleFile: [data.url('lib/css/jstree.css'),
                      data.url('inject.css')],

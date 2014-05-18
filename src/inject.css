@@ -90,7 +90,8 @@ html.octotree {
 }
 
 .octotree_treeview .jstree-icon.tree,
-.octotree_treeview .jstree-icon.blob {
+.octotree_treeview .jstree-icon.blob,
+.octotree_treeview .jstree-icon.commit {
     font: normal normal 16px octicons;
     display: inline-block;
     margin-top: 4px;
@@ -104,6 +105,10 @@ html.octotree {
 }
 .octotree_treeview .jstree-icon.blob:before {
     content: '\f011';
+    color: #777;
+}
+.octotree_treeview .jstree-icon.commit:before {
+    content: '\f017';
     color: #777;
 }
 
@@ -142,17 +147,17 @@ html.octotree {
 }
 
 /* Options form */
-.octotree_options div { 
-    margin: 6px; 
+.octotree_options div {
+    margin: 6px;
 }
-.octotree_options input { 
-    width: 237px; 
+.octotree_options input {
+    width: 237px;
 }
-.octotree_options .error { 
-    color: #900; 
+.octotree_options .error {
+    color: #900;
 }
-.octotree_options button { 
-    margin-right: 5px; 
+.octotree_options button {
+    margin-right: 5px;
 }
 
 /* Toggle button */

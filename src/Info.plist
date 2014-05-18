@@ -31,6 +31,7 @@
 				<string>lib/js/underscore.js</string>
 				<string>lib/js/base64.js</string>
 				<string>lib/js/github.js</string>
+				<string>lib/js/iniparser.js</string>
 				<string>inject.js</string>
 			</array>
 		</dict>

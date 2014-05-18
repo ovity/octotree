@@ -30,6 +30,7 @@
         "lib/js/underscore.js",
         "lib/js/base64.js",
         "lib/js/github.js",
+        "lib/js/iniparser.js",
         "inject.js"
       ]
     }
