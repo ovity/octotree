@@ -1,32 +1,30 @@
 /* Page */
 html {
-    transition: margin-left 0.2s ease;
-    -webkit-transition: margin-left 0.2s ease;
+    transition: margin-left 0.15s ease-out;
+    -webkit-transition: margin-left 0.15s ease-out;
 }
-html.octotree { 
+html.octotree {
     margin-left: 240px;
 }
 
 /* Sidebar */
 .octotree_sidebar {
     position: fixed;
+    padding-top: 50px;
+    width: 250px;
     top: 0;
     right: 0;
     bottom: 0;
-    left: 0;
-    width: 250px;
+    left: -250px;
     background-color: #f8f8f8;
     border-right: 1px solid #ddd;
     overflow: auto;
     z-index: 999991;
-    -webkit-transition: -webkit-transform 0.2s ease;
-    transition: transform 0.2s ease;
-    -webkit-transform: translate3d(-100%, 0, 0);
-    transform: translate3d(-100%, 0, 0);
+    -webkit-transition: left 0.15s ease-out;
+    transition: left 0.15s ease-out;
 }
 .octotree .octotree_sidebar {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
+    left:0;
 }
 
 .octotree_header {
@@ -36,6 +34,9 @@ html.octotree {
     margin-bottom: 0;
     padding-left: 13px;
     width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .octotree_header_error {
@@ -74,6 +75,11 @@ html.octotree {
 }
 
 /* Source tree */
+.octotree_treeview{
+    height: 100%;
+    overflow: auto;
+}
+
 .octotree_treeview .jstree-icon.tree,
 .octotree_treeview .jstree-icon.blob {
     font: normal normal 16px octicons;
@@ -154,8 +160,8 @@ html.octotree {
     text-align: center;
     line-height: 1;
     z-index: 999992;
-    transition: left 0.2s ease, color 0.1s ease-in;
-    -webkit-transition: left 0.2s ease, color 0.1s ease-in;
+    transition: left 0.3s ease, color 0.1s ease-in;
+    -webkit-transition: left 0.3s ease, color 0.1s ease-in;
 }
 .octotree_toggle:hover {
     color: #4183C4;

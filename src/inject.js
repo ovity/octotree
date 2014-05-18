@@ -25,13 +25,14 @@
                        '</div>' +
                        '<div class="error"/>' +
                      '</form>' +
+                     '<a class="octotree_toggle button"><span/></a>' +
                    '</nav>')
     , $treeView  = $sidebar.find('.octotree_treeview')
     , $optsFrm   = $sidebar.find('.octotree_options')
-    , $toggleBtn = $('<a class="octotree_toggle button"><span/></a>')
+    , $toggleBtn = $sidebar.find('.octotree_toggle')
     , $dummyDiv  = $('<div/>')
     , store      = new Storage()
-    , currentRepo    = false
+    , currentRepo = false
 
   $(document).ready(function() {
 
@@ -60,8 +61,8 @@
       , repoChanged = JSON.stringify(repo) !== JSON.stringify(currentRepo)
 
     if (repo) {
-      $toggleBtn.show()
       $sidebar.show()
+      $toggleBtn.show()
       if (repoChanged || reload) {
         currentRepo = repo
         fetchData(repo, function(err, tree) {
@@ -70,8 +71,8 @@
         })
       } else selectTreeNode()
     } else {
-      $toggleBtn.hide()
       $sidebar.hide()
+      $toggleBtn.hide()
     }
   }
 
@@ -158,46 +159,42 @@
   }
 
   function onFetchError(err) {
-    var header = 'Error: ' + err.error
-      , token  = store.get(TOKEN)
+    var header   = 'Error: ' + err.error
+      , hasToken = !!store.get(TOKEN)
+      , requestToken = true
       , message
-
-    $optsFrm.show()
-    $treeView.hide()
-    if (token) $optsFrm.find('[name="token"]').val(token)
 
     switch (err.error) {
       case 401:
         header  = 'Invalid token!'
-        message = 'The token is invalid. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create a new token and paste it in the textbox below.'
+        message = 'The token is invalid. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create a new token and paste it below.'
         break
       case 409:
         header  = 'Empty repository!'
         message = 'This repository is empty.'
+        requestToken = false
         break
       case 404:
-        header  = 'Private or invalid repository!'
-        message = token 
+        header  = 'Private repository!'
+        message = hasToken 
           ? 'You are not allowed to access this repository.'
-          : 'Accessing private repositories requires a GitHub access token. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it in the textbox below.'
+          : 'Accessing private repositories requires a GitHub access token. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it below.'
         break
       case 403:
         if (~err.request.getAllResponseHeaders().indexOf('X-RateLimit-Remaining: 0')) {
           header  = 'API limit exceeded!'
-          message = token 
-            ? 'You have exceeded the API hourly limit, please create a new access token.'
-            : 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it in the textbox below.'
+          message = hasToken 
+            ? 'You have exceeded the API hourly limit.'
+            : 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it below.'
         }
         break
     }
-
-    $optsFrm.find('.message').html(message)
-    updateSidebar('<div class="octotree_header_error">' + header + '</div>')
+    
+    renderSidebar('<div class="octotree_header_error">' + header + '</div>', message)
   }
 
   function renderTree(repo, tree, cb) {
-    $optsFrm.hide()
-    $treeView.show().empty()
+    $treeView.empty()
       .jstree({
         core    : { data: tree, animation: 100, themes : { responsive : false } },
         plugins : ['wholerow', 'state'],
@@ -226,13 +223,24 @@
                          '<div class="octotree_header_branch">' + 
                            repo.branch + 
                          '</div>'
-        updateSidebar(headerText)
+        renderSidebar(headerText)
         cb()
       })
   }
 
-  function updateSidebar(header) {
+  function renderSidebar(header, message) {
     $sidebar.find('.octotree_header').html(header)
+
+    if (message) {
+      var token = store.get(TOKEN)
+      $optsFrm.find('.message').html(message)
+      $optsFrm.show()
+      $treeView.hide()
+      if (token) $optsFrm.find('[name="token"]').val(token)
+    } else {
+      $optsFrm.hide()
+      $treeView.show()
+    }
 
     // Shows sidebar when:
     // 1. First time after extension is installed
