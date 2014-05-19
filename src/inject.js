@@ -157,10 +157,10 @@
       function sort(folder) {
         folder.sort(function(a, b) {
           //github treats submodules like folders
-          var compare = ((a.type === 'tree' || a.type === 'commit') &&
+          var treeOrCommit = ((a.type === 'tree' || a.type === 'commit') &&
                           (b.type === 'tree' || b.type === 'commit'))
 
-          if (a.type === b.type || compare) return a.text.localeCompare(b.text)
+          if (a.type === b.type || treeOrCommit) return a.text.localeCompare(b.text)
           return a.type === 'tree' ? -1 : 1
         })
         folder.forEach(function(item) {
@@ -175,7 +175,7 @@
     var submodules = {}
         , item = null
     //use tree to find sha for .gitmodules
-    item = _.find(tree, function(file) { return /\.gitmodules/i.test(file.path) })
+    item = _.find(tree, function(file) { return /^\.gitmodules$/i.test(file.path) })
     if(item) {
       api.getBlob(item.sha, function (err, content, sha) {
         if(err) cb(err, null)
