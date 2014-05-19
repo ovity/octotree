@@ -5,7 +5,7 @@
       , WIDTH  = 'octotree.sidebar_width'
       , RESERVED_USER_NAMES = [
           'settings', 'orgs', 'organizations', 
-          'site', 'blog', 'about',      
+          'site', 'blog', 'about', 'explore',
           'styleguide', 'showcases', 'trending',
           'stars', 'dashboard', 'notifications'
         ]
