@@ -11,6 +11,12 @@
         ]
       , RESERVED_REPO_NAMES = ['followers', 'following']
 
+      // fragile selectors based GitHub DOM, tries to be change-proof
+      , GH_BRANCH_SEL     = '*[data-master-branch]'
+      , GH_BRANCH_BTN_SEL = '*[data-master-branch] > .js-select-button'
+      , GH_PJAX_SEL       = '#js-repo-pjax-container'
+      , GH_404_SEL        = '#parallax_wrapper'
+
   var $html    = $('html')
     , $sidebar = $('<nav class="octotree_sidebar">' +
                      '<div class="octotree_header"/>' +
@@ -100,22 +106,22 @@
 
   function getRepoFromPath() {
     // 404 page, skip
-    if ($('#parallax_wrapper').length) return false
+    if ($(GH_404_SEL).length) return false
 
     // (username)/(reponame)[/(subpart)]
     var match = location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/)
     if (!match) return false
      
-    // Not a repository, skip
+    // not a repository, skip
     if (~RESERVED_USER_NAMES.indexOf(match[1])) return false
     if (~RESERVED_REPO_NAMES.indexOf(match[2])) return false
 
-    // Not a code page, skip
+    // not a code page, skip
     if (match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
 
-    var branch = $('*[data-master-branch]').data('ref') || 
-                 $('*[data-master-branch] > .js-select-button').text() || 
-                 'master'
+    // can actually check if *[data-master-branch] exists and remove all the checks above
+    // but the current approach is less fragile in case of GitHub DOM changes
+    var branch = $(GH_BRANCH_SEL).data('ref') || $(GH_BRANCH_BTN_SEL).text() || 'master'
     return { 
       username : match[1], 
       reponame : match[2],
@@ -215,13 +221,17 @@
         $.jstree.reference(this).open_node(this)
       })
       .on('click', function(e) {
-        var $target = $(e.target)
+        var $target = $(e.target), container
         if ($target.is('a.jstree-anchor') && $target.children(':first').hasClass('blob')) {
-          $.pjax({ 
-            url       : $target.attr('href'), 
-            timeout   : 5000, // gives it more time, should really have a progress indicator...
-            container : $('#js-repo-pjax-container') 
-          })
+          container = $(GH_PJAX_SEL)
+          if (container.length) {
+            $.pjax({ 
+              url       : $target.attr('href'), 
+              timeout   : 5000, // gives it more time, should really have a progress indicator...
+              container : container
+            })  
+          }
+          else location.href = $target.attr('href') // falls back
         }
       })
       .on('ready.jstree', function() {
@@ -250,7 +260,7 @@
       $treeView.show()
     }
 
-    // Shows sidebar automatically only the first time in this site, close #32
+    // shows sidebar automatically only the first time in this site, close #32
     if (!store.get(SHOWN)) {
       toggleSidebar(true)
       store.set(SHOWN, true) 
