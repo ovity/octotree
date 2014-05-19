@@ -4,6 +4,7 @@ var data = require('sdk/self').data
 pageMod.PageMod({
   include: '*.github.com',
   contentScriptFile: [data.url('lib/js/jquery.js'),
+                      data.url('lib/js/jquery-ui.js'),
                       data.url('lib/js/jstree.js'),
                       data.url('lib/js/jquery.pjax.js'),
                       data.url('lib/js/keymaster.js'),

@@ -25,6 +25,7 @@
 			<key>Start</key>
 			<array>
 				<string>lib/js/jquery.js</string>
+				<string>lib/js/jquery-ui.js</string>
 				<string>lib/js/jstree.js</string>
 				<string>lib/js/jquery.pjax.js</string>
 				<string>lib/js/keymaster.js</string>

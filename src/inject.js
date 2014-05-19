@@ -2,6 +2,7 @@
   const PREFIX = 'octotree'
       , TOKEN  = 'octotree.github_access_token'
       , SHOWN  = 'octotree.already_shown'
+      , WIDTH  = 'octotree.sidebar_width'
       , RESERVED_USER_NAMES = [
           'settings', 'orgs', 'organizations', 
           'site', 'blog', 'about',      
@@ -38,7 +39,17 @@
 
     // initializes DOM
     $('body').append($sidebar).append($toggleBtn)
-    $optsFrm.submit(saveToken)
+    $sidebar
+      .width(store.get(WIDTH) || 250)
+      .css('left', -$sidebar.width())
+      .hide() // prevents Safari from showing sidebar briefly
+      .resizable({
+        handles  : 'e',
+        minWidth : 200
+      })
+      .resize(sidebarResized)
+    $treeView.hide()
+    $optsFrm.hide().submit(saveToken)
     $toggleBtn.click(toggleSidebar)
     key('⌘+b, ctrl+b', toggleSidebar)
 
@@ -70,7 +81,7 @@
         })
       } else selectTreeNode()
     } else {
-      $html.removeClass(PREFIX)
+      toggleSidebar(false)
       $toggleBtn.hide()
     }
   }
@@ -193,7 +204,7 @@
   function renderTree(repo, tree, cb) {
     $treeView.empty()
       .jstree({
-        core    : { data: tree, animation: 100, themes : { responsive : false } },
+        core    : { data: tree, multiple: false, themes : { responsive : false } },
         plugins : ['wholerow', 'state'],
         state   : { key : PREFIX + '.' + repo.username + '/' + repo.reponame }
       })
@@ -240,9 +251,9 @@
     }
 
     // Shows sidebar automatically only the first time in this site, close #32
-    if (store.get(SHOWN) !== true) {
-      $html.addClass(PREFIX)
-      store.set(SHOWN, true)
+    if (!store.get(SHOWN)) {
+      toggleSidebar(true)
+      store.set(SHOWN, true) 
     }
   }
 
@@ -258,8 +269,25 @@
     loadRepo(true)
   }
 
-  function toggleSidebar() {
-    $html.toggleClass(PREFIX)
+  function toggleSidebar(visibility) {
+    if (typeof visibility !== 'undefined') {
+      if ($html.hasClass(PREFIX) === visibility) return
+      toggleSidebar()
+    } 
+    else {
+      $html.toggleClass(PREFIX)
+      $sidebar.show().css('left', $html.hasClass(PREFIX) ? 0 : -$sidebar.width())
+      sidebarResized()
+    }
+  }
+
+  function sidebarResized() {
+    var width = $sidebar.width()
+      , shown = $html.hasClass(PREFIX)
+
+    $html.css('margin-left', shown ? width - 10 : 0)
+    $toggleBtn.css('left', shown ? width - 35 : 5)
+    store.set(WIDTH, width)
   }
 
   function Storage() {
