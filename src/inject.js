@@ -18,6 +18,11 @@
       , GH_LOADER_SEL     = 'h1 > .page-context-loader'
       , GH_404_SEL        = '#parallax_wrapper'
 
+      // regexps from https://github.com/shockie/node-iniparser
+      , INI_SECTION = /^\s*\[\s*([^\]]*)\s*\]\s*$/
+      , INI_COMMENT = /^\s*;.*$/
+      , INI_PARAM   = /^\s*([\w\.\-\_]+)\s*=\s*(.*?)\s*$/
+
   var $html    = $('html')
     , $sidebar = $('<nav class="octotree_sidebar">' +
                      '<div class="octotree_header"/>' +
@@ -112,7 +117,7 @@
     // (username)/(reponame)[/(subpart)]
     var match = location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/)
     if (!match) return false
-     
+
     // not a repository, skip
     if (~RESERVED_USER_NAMES.indexOf(match[1])) return false
     if (~RESERVED_REPO_NAMES.indexOf(match[2])) return false
@@ -138,33 +143,59 @@
 
     api.getTree(encodeURIComponent(repo.branch) + '?recursive=true', function(err, tree) {
       if (err) return done(err)
-      tree.forEach(function(item) {
-        var path   = item.path
-          , type   = item.type
-          , index  = path.lastIndexOf('/')
-          , name   = path.substring(index + 1)
-          , folder = folders[path.substring(0, index)]
-          , url    = '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path
 
-        folder.push(item)
-        item.id   = PREFIX + path
-        item.text = $dummyDiv.text(name).html() // sanitizes, close #9
-        item.icon = type // use `type` as class name for tree node
-        if (type === 'tree') {
-          folders[item.path] = item.children = []
-          item.a_attr = { href: '#' }
-        }
-        else if (type === 'blob') {
-          item.a_attr = { href: url }
-        }
+      fetchSubmodules(function(err, submodules) {
+        if (err) return done(err)
+
+        tree.forEach(function(item) {
+          var path   = item.path
+            , type   = item.type
+            , index  = path.lastIndexOf('/')
+            , name   = path.substring(index + 1)
+            , folder = folders[path.substring(0, index)]
+
+          folder.push(item)
+          item.id   = PREFIX + path
+          item.text = $dummyDiv.text(name).html() // sanitizes, closes #9
+          item.icon = type // use `type` as class name for tree node
+
+          if (type === 'tree') {
+            folders[item.path] = item.children = []
+            item.a_attr = { href: '#' }
+          }
+          else if (type === 'blob')   item.a_attr = { href: '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path }
+          else if (type === 'commit') item.a_attr = { href: submodules[item.path] }
+        })
+
+        done(null, sort(root))
       })
 
-      done(null, sort(root))
+      function fetchSubmodules(cb) {
+        var item = tree.filter(function(item) { return /^\.gitmodules$/i.test(item.path) })[0]
+        if (!item) return cb()
+
+        api.getBlob(item.sha, function(err, data) {
+          if (err || !data) return cb(err)
+
+          var submodules = {}
+            , lines   = data.split(/\r\n|\r|\n/)
+            , lastPath
+
+          lines.forEach(function(line) {
+            var match
+            if (INI_SECTION.test(line) || INI_COMMENT.test(line) || !(match = line.match(INI_PARAM))) return
+            if (match[1] === 'path') lastPath = match[2]
+            else if (match[1] === 'url') submodules[lastPath] = match[2].replace(/^git:/, 'http:')
+          })
+
+          cb(null, submodules)
+        })
+      }
 
       function sort(folder) {
         folder.sort(function(a, b) {
           if (a.type === b.type) return a.text.localeCompare(b.text)
-          return a.type === 'tree' ? -1 : 1
+          return a.type === 'blob' ? 1 : -1
         })
         folder.forEach(function(item) {
           if (item.type === 'tree') sort(item.children)
@@ -191,20 +222,20 @@
         break
       case 404:
         header  = 'Private repository!'
-        message = hasToken 
+        message = hasToken
           ? 'You are not allowed to access this repository.'
           : 'Accessing private repositories requires a GitHub access token. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it below.'
         break
       case 403:
         if (~err.request.getAllResponseHeaders().indexOf('X-RateLimit-Remaining: 0')) {
           header  = 'API limit exceeded!'
-          message = hasToken 
+          message = hasToken
             ? 'You have exceeded the API hourly limit.'
             : 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it below.'
         }
         break
     }
-    
+
     renderSidebar('<div class="octotree_header_error">' + header + '</div>', message)
   }
 
@@ -223,29 +254,32 @@
       })
       .on('click', function(e) {
         var $target = $(e.target)
-          , container 
-          , loader
-        if ($target.is('a.jstree-anchor') && $target.children(':first').hasClass('blob')) {
-          container = $(GH_PJAX_SEL)
-          loader    = $(GH_LOADER_SEL).addClass('is-context-loading')
+        if (!$target.is('a.jstree-anchor')) return
+
+        var $first = $target.children(':first')
+          , href   = $target.attr('href')
+        if ($first.hasClass('blob')) {
+          var container = $(GH_PJAX_SEL)
+            , loader    = $(GH_LOADER_SEL).addClass('is-context-loading')
           if (container.length) {
             $.pjax({ 
-              url       : $target.attr('href'), 
+              url       : href, 
               timeout   : 8000,
               container : container
             }).always(function() {
               loader.removeClass('is-context-loading')
             })
           }
-          else location.href = $target.attr('href') // falls back
+          else location.href = href // falls back
         }
+        else if ($first.hasClass('commit')) location.href = href
       })
       .on('ready.jstree', function() {
-        var headerText = '<div class="octotree_header_repo">' + 
-                           repo.username + ' / ' + repo.reponame + 
+        var headerText = '<div class="octotree_header_repo">' +
+                           repo.username + ' / ' + repo.reponame +
                          '</div>' +
-                         '<div class="octotree_header_branch">' + 
-                           repo.branch + 
+                         '<div class="octotree_header_branch">' +
+                           repo.branch +
                          '</div>'
         renderSidebar(headerText)
         cb()

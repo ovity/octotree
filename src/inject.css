@@ -92,7 +92,8 @@ html {
 }
 
 .octotree_treeview .jstree-icon.tree,
-.octotree_treeview .jstree-icon.blob {
+.octotree_treeview .jstree-icon.blob,
+.octotree_treeview .jstree-icon.commit {
     font: normal normal 16px octicons;
     display: inline-block;
     margin-top: 4px;
@@ -106,6 +107,10 @@ html {
 }
 .octotree_treeview .jstree-icon.blob:before {
     content: '\f011';
+    color: #777;
+}
+.octotree_treeview .jstree-icon.commit:before {
+    content: '\f017';
     color: #777;
 }
 
