@@ -15,6 +15,7 @@
       , GH_BRANCH_SEL     = '*[data-master-branch]'
       , GH_BRANCH_BTN_SEL = '*[data-master-branch] > .js-select-button'
       , GH_PJAX_SEL       = '#js-repo-pjax-container'
+      , GH_LOADER_SEL     = 'h1 > .page-context-loader'
       , GH_404_SEL        = '#parallax_wrapper'
 
   var $html    = $('html')
@@ -221,15 +222,20 @@
         $.jstree.reference(this).open_node(this)
       })
       .on('click', function(e) {
-        var $target = $(e.target), container
+        var $target = $(e.target)
+          , container 
+          , loader
         if ($target.is('a.jstree-anchor') && $target.children(':first').hasClass('blob')) {
           container = $(GH_PJAX_SEL)
+          loader    = $(GH_LOADER_SEL).addClass('is-context-loading')
           if (container.length) {
             $.pjax({ 
               url       : $target.attr('href'), 
-              timeout   : 5000, // gives it more time, should really have a progress indicator...
+              timeout   : 8000,
               container : container
-            })  
+            }).always(function() {
+              loader.removeClass('is-context-loading')
+            })
           }
           else location.href = $target.attr('href') // falls back
         }
