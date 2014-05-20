@@ -141,7 +141,7 @@
       , root    = []
       , folders = { '': root }
 
-    api.getTree(encodeURIComponent(repo.branch) + '?recursive=true', function(err, tree) {
+    api.getTree(encodeURIComponent(decodeURIComponent(repo.branch)) + '?recursive=true', function(err, tree) {
       if (err) return done(err)
 
       fetchSubmodules(function(err, submodules) {
@@ -178,7 +178,7 @@
           if (err || !data) return cb(err)
 
           var submodules = {}
-            , lines   = data.split(/\r\n|\r|\n/)
+            , lines = data.split(/\r\n|\r|\n/)
             , lastPath
 
           lines.forEach(function(line) {
