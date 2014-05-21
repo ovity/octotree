@@ -34,7 +34,7 @@
                        '</div>' +
                        '<div>' +
                          '<button type="submit" class="button">Save</button>' +
-                         '<a href="https://github.com/buunguyen/octotree#github-api-rate-limit" target="_blank">Why need access token?</a>' +
+                         '<a href="https://github.com/buunguyen/octotree#github-api-rate-limit" target="_blank">Why is this required?</a>' +
                        '</div>' +
                        '<div class="error"/>' +
                      '</form>' +
