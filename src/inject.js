@@ -140,8 +140,9 @@
       , api     = github.getRepo(repo.username, repo.reponame)
       , root    = []
       , folders = { '': root }
+      , encodedBranch = encodeURIComponent(decodeURIComponent(repo.branch))
 
-    api.getTree(encodeURIComponent(decodeURIComponent(repo.branch)) + '?recursive=true', function(err, tree) {
+    api.getTree(encodedBranch + '?recursive=true', function(err, tree) {
       if (err) return done(err)
 
       fetchSubmodules(function(err, submodules) {
@@ -151,29 +152,31 @@
           var path   = item.path
             , type   = item.type
             , index  = path.lastIndexOf('/')
-            , name   = path.substring(index + 1)
+            , name   = $dummyDiv.text(path.substring(index + 1)).html() // sanitizes, closes #9
             , folder = folders[path.substring(0, index)]
 
           folder.push(item)
           item.id   = PREFIX + path
-          item.text = $dummyDiv.text(name).html() // sanitizes, closes #9
+          item.text = name
           item.icon = type // use `type` as class name for tree node
 
           if (type === 'tree') {
             folders[item.path] = item.children = []
             item.a_attr = { href: '#' }
           }
-          else if (type === 'blob')   item.a_attr = { href: '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path }
+          else if (type === 'blob') {
+            item.a_attr = { href: '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path }
+          }
           else if (type === 'commit') {
-            var url = submodules[item.path]
-            if (~url.indexOf('github.com')) {
-              var uri = url.split('github.com')[1].substr(1).replace(/.git$/, '')
-              item.text = '<a href="/' + uri + '" class="jstree-anchor">' + item.text + '</a><span>@ </span><a href="/' + uri + '/tree/' + item.sha + '" class="jstree-anchor">' + item.sha.substr(0, 7) + '</a>'
+            var moduleUrl = submodules[item.path]
+
+            // Special handling for submodules hosted in GitHub
+            if (~moduleUrl.indexOf('github.com')) {
+              item.text = '<a href="' + moduleUrl + '" class="jstree-anchor">' + name + '</a>' +
+                          '<span>@ </span>' +
+                          '<a href="' + moduleUrl.replace(/.git$/, '') + '/tree/' + item.sha + '" class="jstree-anchor">' + item.sha.substr(0, 7) + '</a>'
             }
-            else {
-              item.text = '<span>' + item.text + ' @ ' + item.sha.substr(0, 7) + '</span>'
-            }
-            item.a_attr = { href: '#', title: url + ' @ ' + item.sha }
+            item.a_attr = { href: moduleUrl }
           }
         })
 
@@ -195,7 +198,7 @@
             var match
             if (INI_SECTION.test(line) || INI_COMMENT.test(line) || !(match = line.match(INI_PARAM))) return
             if (match[1] === 'path') lastPath = match[2]
-            else if (match[1] === 'url') submodules[lastPath] = match[2].replace(/^git:/, 'http:')
+            else if (match[1] === 'url') submodules[lastPath] = match[2]
           })
 
           cb(null, submodules)
@@ -266,9 +269,15 @@
         var $target = $(e.target)
         if (!$target.is('a.jstree-anchor')) return
 
-        var $first = $target.children().length !== 0 ? $target.children(':first') : $target.siblings(':first')
-          , href   = $target.attr('href')
-        if ($first.hasClass('blob')) {
+        var href  = $target.attr('href')
+          , $icon = $target.children().length 
+            ? $target.children(':first') 
+            : $target.siblings(':first') // handles child links in submodule
+
+        if ($icon.hasClass('commit')) {
+          location.href = href
+        }
+        else if ($icon.hasClass('blob')) {
           var container = $(GH_PJAX_SEL)
             , loader    = $(GH_LOADER_SEL).addClass('is-context-loading')
           if (container.length) {
@@ -282,7 +291,6 @@
           }
           else location.href = href // falls back
         }
-        else if ($first.hasClass('commit')) location.href = href
       })
       .on('ready.jstree', function() {
         var headerText = '<div class="octotree_header_repo">' +
