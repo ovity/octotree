@@ -164,7 +164,11 @@
             item.a_attr = { href: '#' }
           }
           else if (type === 'blob')   item.a_attr = { href: '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path }
-          else if (type === 'commit') item.a_attr = { href: submodules[item.path] }
+          else if (type === 'commit') {
+            var url = submodules[item.path]
+            item.text = item.text + ' @ ' + item.sha.substr(0, 7)
+            item.a_attr = { href: ~url.indexOf('github.com') ? url.replace(/.git$/,'') + '/tree/' + item.sha : url }
+          }
         })
 
         done(null, sort(root))
