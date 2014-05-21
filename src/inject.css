@@ -180,3 +180,53 @@ html.octotree {
 .octotree .octotree_toggle > span:after {
     content: '\f0a4';
 }
+
+/* Popover */
+.popover {
+    position: fixed;
+    top: 30px;
+    left: 5px;
+    z-index: 1010;
+    display: none;
+    max-width: 276px;
+    padding: 1px;
+    text-align: left;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 6px;
+    -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    white-space: normal;
+    margin-top: 10px;
+}
+.popover > .arrow, 
+.popover > .arrow:after {
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+}
+.popover > .arrow {
+    left: 15px;
+    border-width: 6px;
+    margin-left: -6px;
+    border-top-width: 0;
+    border-bottom-color: #999;
+    border-bottom-color: rgba(0,0,0,.25);
+    top: -6px;
+}
+.popover>.arrow:after {
+    border-width: 5px;
+    content: " ";
+    top: 1px;
+    margin-left: -5px;
+    border-top-width: 0;
+    border-bottom-color: #fff;
+}
+.popover-content {
+    padding: 9px 14px;
+}

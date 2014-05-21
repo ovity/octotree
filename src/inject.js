@@ -28,7 +28,11 @@
                    '</nav>')
     , $treeView  = $sidebar.find('.octotree_treeview')
     , $optsFrm   = $sidebar.find('.octotree_options')
-    , $toggleBtn = $('<a class="octotree_toggle button"><span/></a>')
+    , $toggleBtn = $('<a class="octotree_toggle button"><span/></a>'+
+                      '<div class="popover">' +
+                      '<div class="arrow"/>' +
+                      '<div class="popover-content">Vivamus sagittis lacus vel augue laoreet rutrum faucibus.' +
+                      '</div></div>')
     , $dummyDiv  = $('<div/>')
     , store      = new Storage()
     , currentRepo    = false
