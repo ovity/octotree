@@ -164,7 +164,17 @@
             item.a_attr = { href: '#' }
           }
           else if (type === 'blob')   item.a_attr = { href: '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path }
-          else if (type === 'commit') item.a_attr = { href: submodules[item.path] }
+          else if (type === 'commit') {
+            var url = submodules[item.path]
+            if (~url.indexOf('github.com')) {
+              var uri = url.split('github.com')[1].substr(1).replace(/.git$/, '')
+              item.text = '<a href="/' + uri + '" class="jstree-anchor">' + item.text + '</a><span>@ </span><a href="/' + uri + '/tree/' + item.sha + '" class="jstree-anchor">' + item.sha.substr(0, 7) + '</a>'
+            }
+            else {
+              item.text = '<span>' + item.text + ' @ ' + item.sha.substr(0, 7) + '</span>'
+            }
+            item.a_attr = { href: '#', title: url + ' @ ' + item.sha }
+          }
         })
 
         done(null, sort(root))
@@ -256,7 +266,7 @@
         var $target = $(e.target)
         if (!$target.is('a.jstree-anchor')) return
 
-        var $first = $target.children(':first')
+        var $first = $target.children().length !== 0 ? $target.children(':first') : $target.siblings(':first')
           , href   = $target.attr('href')
         if ($first.hasClass('blob')) {
           var container = $(GH_PJAX_SEL)

@@ -122,6 +122,9 @@ html {
 .octotree_treeview .jstree-anchor:hover {
     text-decoration: none !important; /* Safari needs this */
 }
+.octotree_treeview .jstree-anchor > span {
+    color: black;
+}
 
 .octotree_treeview .jstree-default .jstree-wholerow {
     height: auto;
