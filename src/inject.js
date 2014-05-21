@@ -1,8 +1,9 @@
 (function() {
   const PREFIX = 'octotree'
-      , TOKEN  = 'octotree.github_access_token'
-      , SHOWN  = 'octotree.already_shown'
-      , WIDTH  = 'octotree.sidebar_width'
+      , STORE_TOKEN = 'octotree.github_access_token'
+      , STORE_POPUP = 'octotree.popup_shown'
+      , STORE_WIDTH = 'octotree.sidebar_width'
+      , DEFAULT_WIDTH = 250
       , RESERVED_USER_NAMES = [
           'settings', 'orgs', 'organizations', 
           'site', 'blog', 'about', 'explore',
@@ -23,26 +24,34 @@
       , INI_COMMENT = /^\s*;.*$/
       , INI_PARAM   = /^\s*([\w\.\-\_]+)\s*=\s*(.*?)\s*$/
 
-  var $html    = $('html')
-    , $sidebar = $('<nav class="octotree_sidebar">' +
-                     '<div class="octotree_header"/>' +
-                     '<div class="octotree_treeview"/>' +
-                     '<form class="octotree_options">' +
-                       '<div class="message"/>' +
-                       '<div>' +
-                         '<input name="token" type="text" placeholder="Paste access token here" autocomplete="off"/>' +
-                       '</div>' +
-                       '<div>' +
-                         '<button type="submit" class="button">Save</button>' +
-                         '<a href="https://github.com/buunguyen/octotree#github-api-rate-limit" target="_blank">Why is this required?</a>' +
-                       '</div>' +
-                       '<div class="error"/>' +
-                     '</form>' +
-                     '<a class="octotree_toggle button"><span/></a>' +
-                   '</nav>')
+  var $html = $('html')
+    , $dom  = $('<div>' +
+                  '<nav class="octotree_sidebar">' +
+                    '<div class="octotree_header"/>' +
+                    '<div class="octotree_treeview"/>' +
+                    '<form class="octotree_options">' +
+                      '<div class="message"/>' +
+                      '<div>' +
+                        '<input name="token" type="text" placeholder="Paste access token here" autocomplete="off"/>' +
+                      '</div>' +
+                      '<div>' +
+                        '<button type="submit" class="button">Save</button>' +
+                        '<a href="https://github.com/buunguyen/octotree#github-api-rate-limit" target="_blank">Why is this required?</a>' +
+                      '</div>' +
+                      '<div class="error"/>' +
+                    '</form>' +
+                  '</nav>' +
+                  '<a class="octotree_toggle button"><span/></a>' +
+                  '<div class="octotree_popup">' +
+                    '<div class="arrow"/>' +
+                    '<div class="content">Octotree is hidden by default, click this button or press <kbd>⌘ b</kbd> (or <kbd>ctrl b</kbd>) to toggle.</div>' +
+                  '</div>' +
+                '</div>')
+    , $sidebar   = $dom.find('.octotree_sidebar')
     , $treeView  = $sidebar.find('.octotree_treeview')
     , $optsFrm   = $sidebar.find('.octotree_options')
-    , $toggleBtn = $sidebar.find('.octotree_toggle')
+    , $toggleBtn = $dom.find('.octotree_toggle')
+    , $helpPopup = $dom.find('.octotree_popup')
     , $dummyDiv  = $('<div/>')
     , store      = new Storage()
     , currentRepo = false
@@ -50,9 +59,11 @@
   $(document).ready(function() {
 
     // initializes DOM
-    $('body').append($sidebar).append($toggleBtn)
+    $('body')
+      .append($sidebar)
+      .append($toggleBtn)
     $sidebar
-      .width(store.get(WIDTH) || 250)
+      .width(store.get(STORE_WIDTH) || DEFAULT_WIDTH)
       .css('left', -$sidebar.width())
       .hide() // prevents Safari from showing sidebar briefly
       .resizable({
@@ -72,19 +83,21 @@
       if (location.href !== href || location.hash != hash) {
         href = location.href
         hash = location.hash
-        loadRepo()
+        tryLoadRepo()
       }
       setTimeout(detectLocationChange, 200)
     }
     detectLocationChange()
   })
 
-  function loadRepo(reload) {
+  function tryLoadRepo(reload) {
     var repo = getRepoFromPath()
       , repoChanged = JSON.stringify(repo) !== JSON.stringify(currentRepo)
 
     if (repo) {
       $toggleBtn.show()
+      showHelpPopup()
+
       if (repoChanged || reload) {
         currentRepo = repo
         fetchData(repo, function(err, tree) {
@@ -136,7 +149,7 @@
   }
 
   function fetchData(repo, done) {
-    var github  = new Github({ token: store.get(TOKEN) })
+    var github  = new Github({ token: store.get(STORE_TOKEN) })
       , api     = github.getRepo(repo.username, repo.reponame)
       , root    = []
       , folders = { '': root }
@@ -220,7 +233,7 @@
 
   function onFetchError(err) {
     var header   = 'Error: ' + err.error
-      , hasToken = !!store.get(TOKEN)
+      , hasToken = !!store.get(STORE_TOKEN)
       , message
 
     switch (err.error) {
@@ -308,7 +321,7 @@
     $sidebar.find('.octotree_header').html(header)
 
     if (message) {
-      var token = store.get(TOKEN)
+      var token = store.get(STORE_TOKEN)
       $optsFrm.find('.message').html(message)
       $optsFrm.show()
       $treeView.hide()
@@ -316,12 +329,6 @@
     } else {
       $optsFrm.hide()
       $treeView.show()
-    }
-
-    // shows sidebar automatically only the first time in this site, close #32
-    if (!store.get(SHOWN)) {
-      toggleSidebar(true)
-      store.set(SHOWN, true) 
     }
   }
 
@@ -333,7 +340,7 @@
 
     if (!token) return $error.text('Token is required')
 
-    store.set(TOKEN, token)
+    store.set(STORE_TOKEN, token)
     loadRepo(true)
   }
 
@@ -343,6 +350,7 @@
       toggleSidebar()
     } 
     else {
+      hideHelpPopup()
       $html.toggleClass(PREFIX)
       $sidebar.show().css('left', $html.hasClass(PREFIX) ? 0 : -$sidebar.width())
       sidebarResized()
@@ -355,7 +363,26 @@
 
     $html.css('margin-left', shown ? width - 10 : 0)
     $toggleBtn.css('left', shown ? width - 35 : 5)
-    store.set(WIDTH, width)
+    store.set(STORE_WIDTH, width)
+  }
+
+  function showHelpPopup() {
+    if (!store.get(STORE_POPUP)) {
+      // TODO: move to domain-agnostic storage
+      store.set(STORE_POPUP, true)
+      $helpPopup
+        .appendTo($('body'))
+        .delay(1000) // delay a bit seems nicer
+        .fadeIn('slow')
+        .click(hideHelpPopup)
+      setTimeout(hideHelpPopup, 8000)
+    }
+  }
+
+  function hideHelpPopup() {
+    $helpPopup.fadeOut(function() {
+      $helpPopup.remove()
+    })
   }
 
   function Storage() {
