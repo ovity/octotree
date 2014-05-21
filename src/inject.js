@@ -53,8 +53,9 @@
     , $toggleBtn = $dom.find('.octotree_toggle')
     , $helpPopup = $dom.find('.octotree_popup')
     , $dummyDiv  = $('<div/>')
-    , store      = new Storage()
+    , store = new Storage()
     , currentRepo = false
+    , showingPopup = false
 
   $(document).ready(function() {
 
@@ -64,8 +65,8 @@
       .append($toggleBtn)
     $sidebar
       .width(store.get(STORE_WIDTH) || DEFAULT_WIDTH)
-      .css('left', -$sidebar.width())
-      .hide() // prevents Safari from showing sidebar briefly
+      // .css('left', -$sidebar.width())
+      // .hide() // prevents Safari from showing sidebar briefly
       .resizable({
         handles  : 'e',
         minWidth : 200
@@ -352,7 +353,13 @@
     else {
       hideHelpPopup()
       $html.toggleClass(PREFIX)
-      $sidebar.show().css('left', $html.hasClass(PREFIX) ? 0 : -$sidebar.width())
+      // $sidebar.show()
+      // if ($html.hasClass(PREFIX)) {
+      //   $sidebar.css('-webkit-transform', 'translate3d(0, 0, 0)')  
+      // } else {
+      //   $sidebar.css('-webkit-transform', 'translate3d(-100%, 0, 0)')  
+      // }
+      
       sidebarResized()
     }
   }
@@ -368,6 +375,7 @@
 
   function showHelpPopup() {
     if (!store.get(STORE_POPUP)) {
+      showingPopup = true
       // TODO: move to domain-agnostic storage
       store.set(STORE_POPUP, true)
       $helpPopup
@@ -380,6 +388,8 @@
   }
 
   function hideHelpPopup() {
+    if (!showingPopup) return
+    showingPopup = false
     $helpPopup.fadeOut(function() {
       $helpPopup.remove()
     })

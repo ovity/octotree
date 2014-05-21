@@ -9,14 +9,22 @@ html {
     position: fixed;
     padding-top: 41px;
     top: 0;
-    right: auto;
+    right: 0;
+    left: 0;
     bottom: 0;
     background-color: #f7f7f7;
     border-right: 1px solid #ddd;
     overflow: auto;
     z-index: 999991;
-    -webkit-transition: left .2s ease;
-    transition: left .2s ease;
+    -webkit-transition: -webkit-transform .2s;
+    transition: transform .2s;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+
+}
+.octotree .octotree_sidebar {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
 }
 
 .octotree_sidebar .ui-resizable-e {
