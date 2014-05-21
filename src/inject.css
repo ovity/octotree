@@ -21,7 +21,7 @@ html {
 
 .octotree_sidebar .ui-resizable-e {
     position: absolute;
-    cursor: ew-resize; 
+    cursor: col-resize; 
     width: 5px; 
     right: 0; 
     top: 0; 
