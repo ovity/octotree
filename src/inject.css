@@ -210,7 +210,7 @@ html {
     top: 40px;
     left: 5px;
     z-index: 999993;
-    width: 250px;
+    width: 260px;
     text-align: left;
     background-color: #fff;
     background-clip: padding-box;
@@ -248,4 +248,5 @@ html {
 
 .octotree_popup > .content {
     padding: 9px 14px;
+    font-size: 13px;
 }

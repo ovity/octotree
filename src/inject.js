@@ -44,7 +44,7 @@
                   '<a class="octotree_toggle button"><span/></a>' +
                   '<div class="octotree_popup">' +
                     '<div class="arrow"/>' +
-                    '<div class="content">Octotree is hidden by default, click this button or press <kbd>⌘ b</kbd> (or <kbd>ctrl b</kbd>) to toggle.</div>' +
+                    '<div class="content">Octotree is activated on GitHub code page. Click this button or press <kbd>⌘ b</kbd> (or <kbd>ctrl b</kbd>) to show the code tree.</div>' +
                   '</div>' +
                 '</div>')
     , $sidebar   = $dom.find('.octotree_sidebar')
@@ -53,8 +53,9 @@
     , $toggleBtn = $dom.find('.octotree_toggle')
     , $helpPopup = $dom.find('.octotree_popup')
     , $dummyDiv  = $('<div/>')
-    , store      = new Storage()
-    , currentRepo = false
+    , store        = new Storage()
+    , currentRepo  = false
+    , showingPopup = false
 
   $(document).ready(function() {
 
@@ -368,6 +369,7 @@
 
   function showHelpPopup() {
     if (!store.get(STORE_POPUP)) {
+      showingPopup = true
       // TODO: move to domain-agnostic storage
       store.set(STORE_POPUP, true)
       $helpPopup
@@ -375,11 +377,13 @@
         .delay(1000) // delay a bit seems nicer
         .fadeIn('slow')
         .click(hideHelpPopup)
-      setTimeout(hideHelpPopup, 8000)
+      setTimeout(hideHelpPopup, 15000)
     }
   }
 
   function hideHelpPopup() {
+    if (!showingPopup) return
+    showingPopup = false
     $helpPopup.fadeOut(function() {
       $helpPopup.remove()
     })
