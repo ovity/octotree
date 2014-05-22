@@ -53,9 +53,10 @@
     , $toggleBtn = $dom.find('.octotree_toggle')
     , $helpPopup = $dom.find('.octotree_popup')
     , $dummyDiv  = $('<div/>')
-    , store        = new Storage()
-    , currentRepo  = false
-    , showingPopup = false
+    , store       = new Storage()
+    , currentRepo = false
+    , popupShown  = false
+    , keysBound   = false
 
   $(document).ready(function() {
 
@@ -75,7 +76,6 @@
     $treeView.hide()
     $optsFrm.hide().submit(saveToken)
     $toggleBtn.click(toggleSidebar)
-    key('⌘+b, ctrl+b', toggleSidebar)
 
     // When navigating from non-code pages (i.e. Pulls, Issues) to code page
     // GitHub doesn't reload the page but uses pjax. Need to detect and load Octotree.
@@ -96,8 +96,12 @@
       , repoChanged = JSON.stringify(repo) !== JSON.stringify(currentRepo)
 
     if (repo) {
-      $toggleBtn.show()
       showHelpPopup()
+      $toggleBtn.show()
+      if (!keysBound) {
+        keysBound = true
+        key('⌘+b, ⌃+b', toggleSidebar)
+      }
 
       if (repoChanged || reload) {
         currentRepo = repo
@@ -105,10 +109,14 @@
           if (err) return onFetchError(err)
           renderTree(repo, tree, selectTreeNode)
         })
-      } else selectTreeNode()
-    } else {
+      } 
+      else selectTreeNode()
+    } 
+    else {
       toggleSidebar(false)
       $toggleBtn.hide()
+      key.unbind('⌘+b, ⌃+b')
+      keysBound = false
     }
   }
 
@@ -327,7 +335,8 @@
       $optsFrm.show()
       $treeView.hide()
       if (token) $optsFrm.find('[name="token"]').val(token)
-    } else {
+    } 
+    else {
       $optsFrm.hide()
       $treeView.show()
     }
@@ -342,7 +351,7 @@
     if (!token) return $error.text('Token is required')
 
     store.set(STORE_TOKEN, token)
-    loadRepo(true)
+    tryLoadRepo(true)
   }
 
   function toggleSidebar(visibility) {
@@ -369,7 +378,7 @@
 
   function showHelpPopup() {
     if (!store.get(STORE_POPUP)) {
-      showingPopup = true
+      popupShown = true
       // TODO: move to domain-agnostic storage
       store.set(STORE_POPUP, true)
       $helpPopup
@@ -382,8 +391,8 @@
   }
 
   function hideHelpPopup() {
-    if (!showingPopup) return
-    showingPopup = false
+    if (!popupShown) return
+    popupShown = false
     $helpPopup.fadeOut(function() {
       $helpPopup.remove()
     })
