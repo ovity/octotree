@@ -99,8 +99,8 @@
       showHelpPopup()
       $toggleBtn.show()
       if (!keysBound) {
-        keysBound = true
         key('⌘+b, ⌃+b', toggleSidebar)
+        keysBound = true
       }
 
       if (repoChanged || reload) {
@@ -115,8 +115,10 @@
     else {
       toggleSidebar(false)
       $toggleBtn.hide()
-      key.unbind('⌘+b, ⌃+b')
-      keysBound = false
+      if (keysBound) {
+        key.unbind('⌘+b, ⌃+b')
+        keysBound = false
+      }
     }
   }
 
