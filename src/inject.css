@@ -202,6 +202,10 @@ html {
     content: '\f0a4';
 }
 
+.octotree_toggle.spinning > span:after {
+    content: ' ';
+}
+
 /* Popup (customize from Twitter Bootstrap) */
 .octotree_popup {
     position: fixed;

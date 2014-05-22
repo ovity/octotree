@@ -16,7 +16,6 @@
       , GH_BRANCH_SEL     = '*[data-master-branch]'
       , GH_BRANCH_BTN_SEL = '*[data-master-branch] > .js-select-button'
       , GH_PJAX_SEL       = '#js-repo-pjax-container'
-      , GH_LOADER_SEL     = 'h1 > .page-context-loader'
       , GH_404_SEL        = '#parallax_wrapper'
 
       // regexps from https://github.com/shockie/node-iniparser
@@ -44,7 +43,7 @@
                   '<a class="octotree_toggle button"><span/></a>' +
                   '<div class="octotree_popup">' +
                     '<div class="arrow"/>' +
-                    '<div class="content">Octotree is activated on GitHub code page. Click this button or press <kbd>⌘ b</kbd> (or <kbd>ctrl b</kbd>) to show the code tree.</div>' +
+                    '<div class="content">Octotree is enabled on every GitHub code page. Click this button or press <kbd>⌘ b</kbd> (or <kbd>ctrl b</kbd>) to show it.</div>' +
                   '</div>' +
                 '</div>')
     , $sidebar   = $dom.find('.octotree_sidebar')
@@ -53,17 +52,17 @@
     , $toggleBtn = $dom.find('.octotree_toggle')
     , $helpPopup = $dom.find('.octotree_popup')
     , $dummyDiv  = $('<div/>')
+    , $document  = $(document)
     , store       = new Storage()
     , currentRepo = false
     , popupShown  = false
     , keysBound   = false
 
-  $(document).ready(function() {
-
+  $document.ready(function() {
     // initializes DOM
     $('body')
       .append($sidebar)
-      .append($toggleBtn)
+      .append($toggleBtn.click(toggleSidebar))
     $sidebar
       .width(store.get(STORE_WIDTH) || DEFAULT_WIDTH)
       .css('left', -$sidebar.width())
@@ -75,13 +74,33 @@
       .resize(sidebarResized)
     $treeView.hide()
     $optsFrm.hide().submit(saveToken)
-    $toggleBtn.click(toggleSidebar)
+
+    var spinner = new Spinner({
+      lines     : 9,
+      length    : 0,
+      width     : 2,
+      radius    : 6,
+      speed     : 1.5,
+      className : 'octotree_spinner'
+    })
+    $document
+      .on('pjax:send octotree:start', function() {
+        spinner.spin($toggleBtn[0])
+        $toggleBtn.addClass('spinning')
+      })
+      .on('pjax:end octotree:end', function() {
+        spinner.stop()
+        $toggleBtn.removeClass('spinning')
+      })
+      .on('pjax:timeout', function(event) {
+        event.preventDefault()
+      })
 
     // When navigating from non-code pages (i.e. Pulls, Issues) to code page
     // GitHub doesn't reload the page but uses pjax. Need to detect and load Octotree.
     var href, hash
     function detectLocationChange() {
-      if (location.href !== href || location.hash != hash) {
+      if (location.href !== href || location.hash !== hash) {
         href = location.href
         hash = location.hash
         tryLoadRepo()
@@ -104,16 +123,22 @@
       }
 
       if (repoChanged || reload) {
+        $document.trigger('octotree:start')
         currentRepo = repo
         fetchData(repo, function(err, tree) {
-          if (err) return onFetchError(err)
-          renderTree(repo, tree, selectTreeNode)
+          if (err) {
+            $document.trigger('octotree:end')
+            return onFetchError(err)
+          }
+          renderTree(repo, tree, function() {
+            $document.trigger('octotree:end')
+            selectTreeNode()
+          })
         })
       } 
       else selectTreeNode()
     } 
     else {
-      toggleSidebar(false)
       $toggleBtn.hide()
       if (keysBound) {
         key.unbind('⌘+b, ⌃+b')
@@ -303,14 +328,10 @@
         }
         else if ($icon.hasClass('blob')) {
           var container = $(GH_PJAX_SEL)
-            , loader    = $(GH_LOADER_SEL).addClass('is-context-loading')
           if (container.length) {
             $.pjax({ 
-              url       : href, 
-              timeout   : 8000,
+              url       : href,
               container : container
-            }).always(function() {
-              loader.removeClass('is-context-loading')
             })
           }
           else location.href = href // falls back
