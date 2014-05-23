@@ -327,7 +327,9 @@
       })
       .on('ready.jstree', function() {
         var headerText = '<div class="octotree_header_repo">' +
-                           repo.username + ' / ' + repo.reponame +
+                           '<a href="https://github.com/' + repo.username + '">' + repo.username +'</a>' +
+                           ' / ' +
+                           '<a href="https://github.com/' + repo.username + '/' + repo.reponame + '">' + repo.reponame +'</a>' +
                          '</div>' +
                          '<div class="octotree_header_branch">' +
                            repo.branch +
