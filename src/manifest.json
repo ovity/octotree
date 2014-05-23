@@ -23,7 +23,6 @@
         "inject.css"
       ],
       "js": [
-        "lib/js/spin.js",
         "lib/js/jquery.js",
         "lib/js/jquery-ui.js",
         "lib/js/jstree.js",

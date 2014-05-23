@@ -40,7 +40,7 @@
                       '<div class="error"/>' +
                     '</form>' +
                   '</nav>' +
-                  '<a class="octotree_toggle button"><span/></a>' +
+                  '<a class="octotree_toggle button"><div class="loader"/><span/></a>' +
                   '<div class="octotree_popup">' +
                     '<div class="arrow"/>' +
                     '<div class="content">Octotree is enabled on every GitHub code page. Click this button or press <kbd>⌘ b</kbd> (or <kbd>ctrl b</kbd>) to show it.</div>' +
@@ -75,22 +75,12 @@
     $treeView.hide()
     $optsFrm.hide().submit(saveToken)
 
-    var spinner = new Spinner({
-      lines     : 9,
-      length    : 0,
-      width     : 2,
-      radius    : 6,
-      speed     : 1.5,
-      className : 'octotree_spinner'
-    })
     $document
       .on('pjax:send octotree:start', function() {
-        spinner.spin($toggleBtn[0])
-        $toggleBtn.addClass('spinning')
+        $toggleBtn.addClass('loading')
       })
       .on('pjax:end octotree:end', function() {
-        spinner.stop()
-        $toggleBtn.removeClass('spinning')
+        $toggleBtn.removeClass('loading')
       })
       .on('pjax:timeout', function(event) {
         event.preventDefault()

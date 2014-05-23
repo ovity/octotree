@@ -156,17 +156,18 @@ html {
     margin: 6px; 
 }
 .octotree_options input { 
-    width: 237px; 
+    width: 100%;
+    max-width: 350px;
 }
 .octotree_options .error { 
     color: #900; 
 }
-.octotree_options button { 
-    margin-right: 5px; 
+.octotree_options .button { 
+    margin-right: 5px;
 }
 
 /* Toggle button */
-.octotree_toggle {
+a.octotree_toggle {
     position: fixed !important;
     top: 5px;
     right: auto;
@@ -174,7 +175,7 @@ html {
     left: 5px;
     width: 30px;
     height: 30px;
-    padding: 6px 10px !important;
+    padding: 6px 6px !important;
     color: black;
     text-align: center;
     line-height: 1;
@@ -182,28 +183,47 @@ html {
     transition: left .3s ease, color 0.1s ease-in;
     -webkit-transition: left .3s ease, color 0.1s ease-in;
 }
-.octotree_toggle:hover {
+a.octotree_toggle:hover {
     color: #4183C4;
 }
 
-.octotree_toggle > span {
+a.octotree_toggle > span {
     font: normal normal 16px octicons;
     line-height: 1;
     display: inline-block;
     text-decoration: none;
-    -webkit-font-smoothing: antialiased;
 }
 
-.octotree_toggle > span:after {
+a.octotree_toggle > span:after {
     content: '\f078';
 }
 
-.octotree .octotree_toggle > span:after {
+.octotree a.octotree_toggle > span:after {
     content: '\f0a4';
 }
 
-.octotree_toggle.spinning > span:after {
-    content: ' ';
+a.octotree_toggle.loading > span:after {
+    content: '';
+}
+
+a.octotree_toggle.loading .loader { 
+    border-radius: 50%;
+    border: 2px solid #000;
+    border-top: 2px solid rgba(0,0,0,0);
+    border-left: 2px solid rgba(0,0,0,0);
+    width: 16px;
+    height: 16px;
+    animation: loading .5s infinite linear;
+    -webkit-animation: loading .5s infinite linear;
+}
+@keyframes loading {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); };
+}
+
+@-webkit-keyframes loading {
+    0%   { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); };
 }
 
 /* Popup (customize from Twitter Bootstrap) */
@@ -243,7 +263,7 @@ html {
 }
 .octotree_popup > .arrow:after {
     border-width: 5px;
-    content: ' ';
+    content: '';
     top: 1px;
     margin-left: -5px;
     border-top-width: 0;
