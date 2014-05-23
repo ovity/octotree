@@ -177,8 +177,7 @@
   function fetchData(repo, done) {
     var github  = new Github({ token: store.get(STORE_TOKEN) })
       , api     = github.getRepo(repo.username, repo.reponame)
-      , root    = []
-      , folders = { '': root }
+      , folders = { '': [] }
       , encodedBranch = encodeURIComponent(decodeURIComponent(repo.branch))
 
     api.getTree(encodedBranch + '?recursive=true', function(err, tree) {
@@ -187,39 +186,52 @@
       fetchSubmodules(function(err, submodules) {
         if (err) return done(err)
 
-        tree.forEach(function(item) {
-          var path   = item.path
-            , type   = item.type
-            , index  = path.lastIndexOf('/')
-            , name   = $dummyDiv.text(path.substring(index + 1)).html() // sanitizes, closes #9
-            , folder = folders[path.substring(0, index)]
+        // split work in chunks to prevent blocking UI on large repos
+        nextChunk(0)
+        function nextChunk(iteration) {
+          var chunkSize = 500
+            , baseIndex = iteration * chunkSize
+            , i
+            , item, path, type, index, name
 
-          folder.push(item)
-          item.id   = PREFIX + path
-          item.text = name
-          item.icon = type // use `type` as class name for tree node
+          for (i = 0; i < chunkSize; i++) {
+            item = tree[baseIndex + i]
+            if (item === undefined) return done(null, sort(folders['']))
 
-          if (type === 'tree') {
-            folders[item.path] = item.children = []
-            item.a_attr = { href: '#' }
-          }
-          else if (type === 'blob') {
-            item.a_attr = { href: '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path }
-          }
-          else if (type === 'commit') {
-            var moduleUrl = submodules[item.path]
+            path  = item.path
+            type  = item.type
+            index = path.lastIndexOf('/')
+            name  = $dummyDiv.text(path.substring(index + 1)).html() // sanitizes, closes #9
+            item.id   = PREFIX + path
+            item.text = name
+            item.icon = type // use `type` as class name for tree node
 
-            // Special handling for submodules hosted in GitHub
-            if (~moduleUrl.indexOf('github.com')) {
-              item.text = '<a href="' + moduleUrl + '" class="jstree-anchor">' + name + '</a>' +
-                          '<span>@ </span>' +
-                          '<a href="' + moduleUrl.replace(/.git$/, '') + '/tree/' + item.sha + '" class="jstree-anchor">' + item.sha.substr(0, 7) + '</a>'
+            folders[path.substring(0, index)].push(item)
+
+            if (type === 'tree') {
+              folders[item.path] = item.children = []
+              item.a_attr = { href: '#' }
             }
-            item.a_attr = { href: moduleUrl }
-          }
-        })
+            else if (type === 'blob') {
+              item.a_attr = { href: '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path }
+            }
+            else if (type === 'commit') {
+              var moduleUrl = submodules[item.path]
 
-        done(null, sort(root))
+              // special handling for submodules hosted in GitHub
+              if (~moduleUrl.indexOf('github.com')) {
+                item.text = '<a href="' + moduleUrl + '" class="jstree-anchor">' + name + '</a>' +
+                            '<span>@ </span>' +
+                            '<a href="' + moduleUrl.replace(/.git$/, '') + '/tree/' + item.sha + '" class="jstree-anchor">' + item.sha.substr(0, 7) + '</a>'
+              }
+              item.a_attr = { href: moduleUrl }
+            }
+          }
+
+          setTimeout(function() { 
+            nextChunk(iteration + 1) 
+          }, 0)
+        }
       })
 
       function fetchSubmodules(cb) {
@@ -244,9 +256,10 @@
         })
       }
 
+      // sorts (try matching GitHub's sort order)
       function sort(folder) {
         folder.sort(function(a, b) {
-          if (a.type === b.type) return a.text.localeCompare(b.text)
+          if (a.type === b.type) return a.text === b.text ? 0 : a.text < b.text ? -1 : 1
           return a.type === 'blob' ? 1 : -1
         })
         folder.forEach(function(item) {
