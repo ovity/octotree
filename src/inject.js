@@ -5,7 +5,7 @@
       , STORE_WIDTH = 'octotree.sidebar_width'
       , DEFAULT_WIDTH = 250
       , RESERVED_USER_NAMES = [
-          'settings', 'orgs', 'organizations', 
+          'settings', 'orgs', 'organizations',
           'site', 'blog', 'about', 'explore',
           'styleguide', 'showcases', 'trending',
           'stars', 'dashboard', 'notifications'
@@ -123,9 +123,9 @@
             selectTreeNode()
           })
         })
-      } 
+      }
       else selectTreeNode()
-    } 
+    }
     else {
       $toggleBtn.hide()
       if (keysBound) {
@@ -165,8 +165,8 @@
     // can actually check if *[data-master-branch] exists and remove all the checks above
     // but the current approach is less fragile in case of GitHub DOM changes
     var branch = $(GH_BRANCH_SEL).data('ref') || $(GH_BRANCH_BTN_SEL).text() || 'master'
-    return { 
-      username : match[1], 
+    return {
+      username : match[1],
       reponame : match[2],
       branch   : branch
     }
@@ -307,8 +307,8 @@
         if (!$target.is('a.jstree-anchor')) return
 
         var href  = $target.attr('href')
-          , $icon = $target.children().length 
-            ? $target.children(':first') 
+          , $icon = $target.children().length
+            ? $target.children(':first')
             : $target.siblings(':first') // handles child links in submodule
 
         if ($icon.hasClass('commit')) {
@@ -317,7 +317,7 @@
         else if ($icon.hasClass('blob')) {
           var container = $(GH_PJAX_SEL)
           if (container.length) {
-            $.pjax({ 
+            $.pjax({
               url       : href,
               container : container
             })
@@ -348,7 +348,7 @@
       $optsFrm.show()
       $treeView.hide()
       if (token) $optsFrm.find('[name="token"]').val(token)
-    } 
+    }
     else {
       $optsFrm.hide()
       $treeView.show()
@@ -371,7 +371,7 @@
     if (typeof visibility !== 'undefined') {
       if ($html.hasClass(PREFIX) === visibility) return
       toggleSidebar()
-    } 
+    }
     else {
       $html.toggleClass(PREFIX)
       hideHelpPopup()
