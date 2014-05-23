@@ -65,8 +65,6 @@
       .append($toggleBtn.click(toggleSidebar))
     $sidebar
       .width(store.get(STORE_WIDTH) || DEFAULT_WIDTH)
-      .css('left', -$sidebar.width())
-      .hide() // prevents Safari from showing sidebar briefly
       .resizable({
         handles  : 'e',
         minWidth : 200
@@ -373,9 +371,8 @@
       toggleSidebar()
     } 
     else {
-      hideHelpPopup()
       $html.toggleClass(PREFIX)
-      $sidebar.show().css('left', $html.hasClass(PREFIX) ? 0 : -$sidebar.width())
+      hideHelpPopup()
       sidebarResized()
     }
   }
