@@ -11,6 +11,7 @@
           'stars', 'dashboard', 'notifications'
         ]
       , RESERVED_REPO_NAMES = ['followers', 'following']
+      , EVT_TOGGLED = 'octotree:toggled'
 
       // fragile selectors based GitHub DOM, tries to be change-proof
       , GH_BRANCH_SEL     = '*[data-master-branch]'
@@ -55,7 +56,6 @@
     , $document  = $(document)
     , store       = new Storage()
     , currentRepo = false
-    , popupShown  = false
     , keysBound   = false
 
   $document.ready(function() {
@@ -70,6 +70,7 @@
         minWidth : 200
       })
       .resize(sidebarResized)
+      .on(EVT_TOGGLED, sidebarResized)
     $treeView.hide()
     $optsFrm.hide().submit(saveToken)
 
@@ -366,14 +367,13 @@
   }
 
   function toggleSidebar(visibility) {
-    if (typeof visibility !== 'undefined') {
+    if (visibility !== undefined) {
       if ($html.hasClass(PREFIX) === visibility) return
       toggleSidebar()
     } 
     else {
       $html.toggleClass(PREFIX)
-      hideHelpPopup()
-      sidebarResized()
+      $sidebar.trigger(EVT_TOGGLED)
     }
   }
 
@@ -388,24 +388,24 @@
 
   function showHelpPopup() {
     if (!store.get(STORE_POPUP)) {
-      popupShown = true
-      // TODO: move to domain-agnostic storage
-      store.set(STORE_POPUP, true)
-      $helpPopup
-        .appendTo($('body'))
-        .delay(1000) // delay a bit seems nicer
-        .fadeIn('slow')
-        .click(hideHelpPopup)
-      setTimeout(hideHelpPopup, 15000)
-    }
-  }
+      $helpPopup.css('display', 'block').appendTo($('body'))
+      setTimeout(function() {
+        // TODO: move to domain-agnostic storage
+        store.set(STORE_POPUP, true)
+        $helpPopup.addClass('show').click(hide)
+        setTimeout(hide, 12000)
+        $sidebar.one(EVT_TOGGLED, hide)
+      }, 500 /* deplay a bit seems nicer */)      
 
-  function hideHelpPopup() {
-    if (!popupShown) return
-    popupShown = false
-    $helpPopup.fadeOut(function() {
-      $helpPopup.remove()
-    })
+      function hide() {
+        if (!$helpPopup.hasClass('show')) return
+        $helpPopup
+          .removeClass('show')
+          .one('transitionend', function() { 
+            $helpPopup.remove() 
+          })
+      }
+    }
   }
 
   function Storage() {

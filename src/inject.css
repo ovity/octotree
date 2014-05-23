@@ -226,19 +226,20 @@ a.octotree_toggle.loading .loader {
 }
 @keyframes loading {
     0%   { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); };
+    100% { transform: rotate(360deg); }
 }
 
 @-webkit-keyframes loading {
     0%   { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); };
+    100% { -webkit-transform: rotate(360deg); }
 }
 
 /* Popup (customize from Twitter Bootstrap) */
-div.octotree_popup {
+.octotree_popup {
     position: fixed;
     cursor: pointer;
     display: none;
+    opacity: 0;
     top: 40px;
     left: 5px;
     z-index: 999993;
@@ -250,6 +251,11 @@ div.octotree_popup {
     border-radius: 5px;
     box-shadow: 0 3px 12px rgba(0,0,0,0.25);
     white-space: normal;
+    -webkit-transition: opacity .3s linear;
+    transition: opacity .3s linear;
+}
+.octotree_popup.show {
+    opacity: 1;
 }
 
 .octotree_popup > .arrow,
