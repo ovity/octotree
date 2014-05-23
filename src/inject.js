@@ -26,24 +26,24 @@
   var $html = $('html')
     , $dom  = $('<div>' +
                   '<nav class="octotree_sidebar">' +
-                    '<div class="octotree_header"/>' +
-                    '<div class="octotree_treeview"/>' +
+                    '<div class="octotree_header"></div>' +
+                    '<div class="octotree_treeview"></div>' +
                     '<form class="octotree_options">' +
-                      '<div class="message"/>' +
+                      '<div class="message"></div>' +
                       '<div>' +
-                        '<input name="token" type="text" placeholder="Paste access token here" autocomplete="off"/>' +
+                        '<input name="token" type="text" placeholder="Paste access token here" autocomplete="off">' +
                       '</div>' +
                       '<div>' +
                         '<button type="submit" class="button">Save</button>' +
                         '<a href="https://github.com/buunguyen/octotree#github-api-rate-limit" target="_blank">Why is this required?</a>' +
                       '</div>' +
-                      '<div class="error"/>' +
+                      '<div class="error"></div>' +
                     '</form>' +
                   '</nav>' +
-                  '<a class="octotree_toggle button"><div class="loader"/><span/></a>' +
+                  '<a class="octotree_toggle button"><div class="loader"></div><span></span></a>' +
                   '<div class="octotree_popup">' +
-                    '<div class="arrow"/>' +
-                    '<div class="content">Octotree is enabled on every GitHub code page. Click this button or press <kbd>⌘ b</kbd> (or <kbd>ctrl b</kbd>) to show it.</div>' +
+                    '<div class="arrow"></div>' +
+                    '<div class="content">Octotree is enabled on every GitHub code page. Click this button or press <kbd>⌘ b</kbd> (or <kbd>ctrl+b</kbd>) to show it.</div>' +
                   '</div>' +
                 '</div>')
     , $sidebar   = $dom.find('.octotree_sidebar')
@@ -51,7 +51,7 @@
     , $optsFrm   = $sidebar.find('.octotree_options')
     , $toggleBtn = $dom.find('.octotree_toggle')
     , $helpPopup = $dom.find('.octotree_popup')
-    , $dummyDiv  = $('<div/>')
+    , $dummyDiv  = $('<div></div>')
     , $document  = $(document)
     , store       = new Storage()
     , currentRepo = false
