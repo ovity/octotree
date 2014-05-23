@@ -32,7 +32,7 @@ When that happens, Octotree shows the screen below to ask for your [GitHub perso
 
 ![Enter personal access token](docs/token.png)
 
-Minimal scopes that should be granted — is `public_repo` (increase the requests limit for public repositories) and `repo` (access to private repositories).
+Minimal scopes that should be granted are `public_repo` and `repo` (if you need access to private repositories).
 
 ![Minimal scopes](docs/scopes.png)
 
