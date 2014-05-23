@@ -10,12 +10,12 @@ Browser extensions (Chrome, Firefox and Safari) to display GitHub code in tree f
 * Navigate to any GitHub project (or just refresh this page as an example)
 * The code tree should show as follows:
 
-![When extension is active](https://raw.githubusercontent.com/buunguyen/octotree/master/docs/chrome.png)
+![When extension is active](docs/chrome.png)
 
 ## Install on Firefox and Safari
-Submitting to Mozilla and Safari stores is quite a tedious process. Octotree 1.0 (not even 1.1) was submitted to Mozilla store and is still being reviewed. Safari store requires even more work and time (that I don't have). 
+Submitting to Mozilla and Safari stores is quite a tedious process. Octotree 1.0 (not even 1.1) was submitted to Mozilla store and is still being reviewed. Safari store requires even more work and time (that I don't have).
 
-Alternatively, you can just install the prebuilt extensions located in the [dist](https://github.com/buunguyen/octotree/tree/master/dist) folder. For security reason, be sure to install from this location only. 
+Alternatively, you can just install the prebuilt extensions located in the [dist](https://github.com/buunguyen/octotree/tree/master/dist) folder. For security reason, be sure to install from this location only.
 
 * Firefox: drag `octotree.xpi` to the browser and follow the instructions
 * Safari: drag `octotree.safariextz` to the browser and follow the instructions
@@ -30,7 +30,11 @@ Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve reposit
 
 When that happens, Octotree shows the screen below to ask for your [GitHub personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use). If you don't already have one, [create one](https://github.com/settings/tokens/new), then copy and paste it into the textbox.
 
-![Enter personal access token](https://raw.githubusercontent.com/buunguyen/octotree/master/docs/token.png)
+![Enter personal access token](docs/token.png)
+
+Minimal scopes that should be granted — is `public_repo` (increase the requests limit for public repositories) and `repo` (access to private repositories).
+
+![Minimal scopes](docs/scopes.png)
 
 Alternatively, you can manually enter or update the token by following these steps:
 
