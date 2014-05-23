@@ -13,7 +13,7 @@
       , RESERVED_REPO_NAMES = ['followers', 'following']
       , EVT_TOGGLED = 'octotree:toggled'
 
-      // fragile selectors based GitHub DOM, tries to be change-proof
+      // fragile selectors based GitHub DOM, uses of them must be change-proof
       , GH_BRANCH_SEL     = '*[data-master-branch]'
       , GH_BRANCH_BTN_SEL = '*[data-master-branch] > .js-select-button'
       , GH_PJAX_SEL       = '#js-repo-pjax-container'
@@ -129,6 +129,7 @@
     } 
     else {
       $toggleBtn.hide()
+      toggleSidebar(false)
       if (keysBound) {
         key.unbind('⌘+b, ⌃+b')
         keysBound = false
