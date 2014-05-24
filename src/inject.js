@@ -5,7 +5,7 @@
       , STORE_WIDTH = 'octotree.sidebar_width'
       , DEFAULT_WIDTH = 250
       , RESERVED_USER_NAMES = [
-          'settings', 'orgs', 'organizations', 
+          'settings', 'orgs', 'organizations',
           'site', 'blog', 'about', 'explore',
           'styleguide', 'showcases', 'trending',
           'stars', 'dashboard', 'notifications'
@@ -17,12 +17,20 @@
       , GH_BRANCH_SEL     = '*[data-master-branch]'
       , GH_BRANCH_BTN_SEL = '*[data-master-branch] > .js-select-button'
       , GH_PJAX_SEL       = '#js-repo-pjax-container'
-      , GH_404_SEL        = '#parallax_wrapper'
 
       // regexps from https://github.com/shockie/node-iniparser
       , INI_SECTION = /^\s*\[\s*([^\]]*)\s*\]\s*$/
       , INI_COMMENT = /^\s*;.*$/
       , INI_PARAM   = /^\s*([\w\.\-\_]+)\s*=\s*(.*?)\s*$/
+
+      // errors page titles from https://github.com/styleguide/templates/2.0
+      , GH_ERROR_PAGE_TITLES = [
+          'Page not found · GitHub', // 404
+          'Oh no · GitHub',          // 422
+          'Server Error · GitHub',   // 500
+          'Unicorn! · GitHub',       // 502, 503
+          'GitHub — Down for Maintenance' // maintenance
+        ]
 
   var $html = $('html')
     , $dom  = $('<div>' +
@@ -124,9 +132,9 @@
             selectTreeNode()
           })
         })
-      } 
+      }
       else selectTreeNode()
-    } 
+    }
     else {
       $toggleBtn.hide()
       toggleSidebar(false)
@@ -150,8 +158,8 @@
   }
 
   function getRepoFromPath() {
-    // 404 page, skip
-    if ($(GH_404_SEL).length) return false
+    // error page, skip
+    if ($.inArray(document.title, GH_ERROR_PAGE_TITLES) !== -1) return false
 
     // (username)/(reponame)[/(subpart)]
     var match = location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/)
@@ -167,8 +175,8 @@
     // can actually check if *[data-master-branch] exists and remove all the checks above
     // but the current approach is less fragile in case of GitHub DOM changes
     var branch = $(GH_BRANCH_SEL).data('ref') || $(GH_BRANCH_BTN_SEL).text() || 'master'
-    return { 
-      username : match[1], 
+    return {
+      username : match[1],
       reponame : match[2],
       branch   : branch
     }
@@ -228,8 +236,8 @@
             }
           }
 
-          setTimeout(function() { 
-            nextChunk(iteration + 1) 
+          setTimeout(function() {
+            nextChunk(iteration + 1)
           }, 0)
         }
       })
@@ -322,8 +330,8 @@
         if (!$target.is('a.jstree-anchor')) return
 
         var href  = $target.attr('href')
-          , $icon = $target.children().length 
-            ? $target.children(':first') 
+          , $icon = $target.children().length
+            ? $target.children(':first')
             : $target.siblings(':first') // handles child links in submodule
 
         if ($icon.hasClass('commit')) {
@@ -332,7 +340,7 @@
         else if ($icon.hasClass('blob')) {
           var container = $(GH_PJAX_SEL)
           if (container.length) {
-            $.pjax({ 
+            $.pjax({
               url       : href,
               container : container
             })
@@ -361,7 +369,7 @@
       $optsFrm.show()
       $treeView.hide()
       if (token) $optsFrm.find('[name="token"]').val(token)
-    } 
+    }
     else {
       $optsFrm.hide()
       $treeView.show()
@@ -384,7 +392,7 @@
     if (visibility !== undefined) {
       if ($html.hasClass(PREFIX) === visibility) return
       toggleSidebar()
-    } 
+    }
     else {
       $html.toggleClass(PREFIX)
       $sidebar.trigger(EVT_TOGGLED)
@@ -409,14 +417,14 @@
         $helpPopup.addClass('show').click(hide)
         setTimeout(hide, 12000)
         $sidebar.one(EVT_TOGGLED, hide)
-      }, 500 /* deplay a bit seems nicer */)      
+      }, 500 /* deplay a bit seems nicer */)
 
       function hide() {
         if (!$helpPopup.hasClass('show')) return
         $helpPopup
           .removeClass('show')
-          .one('transitionend', function() { 
-            $helpPopup.remove() 
+          .one('transitionend', function() {
+            $helpPopup.remove()
           })
       }
     }
