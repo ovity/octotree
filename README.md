@@ -19,6 +19,7 @@ Alternatively, you can just install the prebuilt extensions located in the [dist
 
 * Firefox: drag `octotree.xpi` to the browser and follow the instructions
 * Safari: drag `octotree.safariextz` to the browser and follow the instructions
+* Opera: drag `octotree.nex` to the browser and follow the instructions
 
 Note: you can also pack extensions from source by executing the Gulp script that generates extension structures for Chrome, Firefox and Safari. Refer to the documentation of [Firefox](https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Getting_started) and [Safari](https://developer.apple.com/library/safari/documentation/tools/conceptual/safariextensionguide/UsingExtensionBuilder/UsingExtensionBuilder.html#//apple_ref/doc/uid/TP40009977-CH2-SW1) to learn how to package extensions.
 
