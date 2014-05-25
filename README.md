@@ -1,5 +1,5 @@
 ## Octotree
-Browser extensions (Chrome, Firefox and Safari) to display GitHub code in tree format. Useful for developers who frequently read source in GitHub and do not want to download or checkout too many repositories. Features:
+Browser extensions (Chrome, Firefox, Safari and Opera) to display GitHub code in tree format. Useful for developers who frequently read source in GitHub and do not want to download or checkout too many repositories. Features:
 
 * Easy-to-navigate code tree like IDEs
 * Fast browsing with pjax
@@ -12,7 +12,7 @@ Browser extensions (Chrome, Firefox and Safari) to display GitHub code in tree f
 
 ![When extension is active](docs/chrome.png)
 
-## Install on Firefox and Safari
+## Install on Firefox, Safari and Opera
 Submitting to Mozilla and Safari stores is quite a tedious process. Octotree 1.0 (not even 1.1) was submitted to Mozilla store and is still being reviewed. Safari store requires even more work and time (that I don't have).
 
 Alternatively, you can just install the prebuilt extensions located in the [dist](https://github.com/buunguyen/octotree/tree/master/dist) folder. For security reason, be sure to install from this location only.
