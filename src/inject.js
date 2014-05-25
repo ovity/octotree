@@ -202,6 +202,7 @@
             type  = item.type
             index = path.lastIndexOf('/')
             name  = $dummyDiv.text(path.substring(index + 1)).html() // sanitizes, closes #9
+
             item.id   = PREFIX + path
             item.text = name
             item.icon = type // use `type` as class name for tree node
@@ -213,7 +214,7 @@
               item.a_attr = { href: '#' }
             }
             else if (type === 'blob') {
-              item.a_attr = { href: '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path }
+              item.a_attr = { href: '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + encodeURIComponent(path) /* closes #97 */ }
             }
             else if (type === 'commit') {
               var moduleUrl = submodules[item.path]
