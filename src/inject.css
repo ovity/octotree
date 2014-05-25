@@ -196,6 +196,7 @@ a.octotree_toggle:hover {
 }
 
 a.octotree_toggle > span {
+    margin-top: 1px;
     font: normal normal 16px octicons;
     line-height: 1;
     display: inline-block;
@@ -216,9 +217,9 @@ a.octotree_toggle.loading > span:after {
 
 a.octotree_toggle.loading .loader { 
     border-radius: 50%;
-    border: 2px solid #000;
-    border-top: 2px solid rgba(0,0,0,0);
-    border-left: 2px solid rgba(0,0,0,0);
+    border: 3px solid #000;
+    border-top: 3px solid rgba(0,0,0,0);
+    border-left: 3px solid rgba(0,0,0,0);
     width: 16px;
     height: 16px;
     animation: loading .5s infinite linear;
