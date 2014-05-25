@@ -213,7 +213,7 @@
               item.a_attr = { href: '#' }
             }
             else if (type === 'blob') {
-              item.a_attr = { href: '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + path }
+              item.a_attr = { href: '/' + repo.username + '/' + repo.reponame + '/' + type + '/' + repo.branch + '/' + encodeURIComponent(path) }
             }
             else if (type === 'commit') {
               var moduleUrl = submodules[item.path]
