@@ -3,6 +3,7 @@ Browser extensions (Chrome, Firefox, Safari and Opera) to display GitHub code in
 
 * Easy-to-navigate code tree like IDEs
 * Fast browsing with pjax
+* Toggle code tree with `cmd+b`, `ctrl+b`
 * Support private repositories (require [personal access token](#github-api-rate-limit))
 
 ## Install on Chrome
