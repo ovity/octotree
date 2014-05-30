@@ -1,0 +1,58 @@
+<div>
+  <nav class="octotree_sidebar">
+    <a class="octotree_toggle button"><div class="loader"></div><span></span></a>
+    <a class="octotree_opts"><span></span></a>
+    <div class="octotree_views">
+      <div class="octotree_view octotree_treeview current">
+        <div class="octotree_view_header"></div>
+        <div class="octotree_view_body"></div>
+      </div>
+      <div class="octotree_view octotree_errorview">
+        <div class="octotree_view_header"></div>
+        <form class="octotree_view_body">
+          <div class="message"></div>
+          <div>
+            <input name="token" type="text" placeholder="Paste access token here" autocomplete="off">
+          </div>
+          <div>
+            <button type="submit" class="button">Save</button>
+            <a href="https://github.com/buunguyen/octotree#github-api-rate-limit" target="_blank" tabIndex="-1">Why is this required?</a>
+          </div>
+          <div class="error"></div>
+        </form>
+      </div>
+      <div class="octotree_view octotree_optsview">
+        <div class="octotree_view_header">Settings</div>
+        <form class="octotree_view_body">
+          <div>
+            <div>
+              <label>Access token</label>
+              <a href="https://github.com/buunguyen/octotree#github-api-rate-limit" target="_blank" tabIndex="-1">what's this?</a>
+            </div>
+            <input type="text" data-store="TOKEN">
+          </div>
+          <div>
+            <div>
+              <label>Short keys</label>
+              <a href="https://github.com/madrobby/keymaster#supported-keys" target="_blank" tabIndex="-1">supported keys</a>
+            </div>
+            <input type="text" data-store="SHORTKEY">
+          </div>
+          <div>
+            <label><input type="checkbox" data-store="REMEMBER"> Restore sidebar last visibility on load</label>
+          </div>
+          <div>
+            <label><input type="checkbox" data-store="COLLAPSE"> Collapse folders with single sub-folder</label>
+          </div>
+          <div>
+            <button type="submit" class="button">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </nav>
+  <div class="octotree_popup">
+    <div class="arrow"></div>
+    <div class="content">Octotree is enabled on every GitHub code page. Click this button or press <kbd>⌘ b</kbd> (or <kbd>ctrl b</kbd>) to show it.</div>
+  </div>
+</div>
