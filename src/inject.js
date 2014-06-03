@@ -396,12 +396,11 @@
   function sidebarResized() {
     var width = $sidebar.width()
       , shown = $html.hasClass(PREFIX)
-      , sidebarWidth = parseInt($('.octotree_sidebar').css('width'))
       , containerMarginLeft = parseInt($('.container').first().css('margin-left'))
 
     if (shown) {
-      if (containerMarginLeft <= sidebarWidth + 10) {
-        $(GH_REPO_CONTAINERS).css({'margin-left': sidebarWidth + 10 })
+      if (containerMarginLeft <= width + 10) {
+        $(GH_REPO_CONTAINERS).css({'margin-left': width + 10 })
       }
       else {
         $(GH_REPO_CONTAINERS).css({'margin-left': 'auto'})
