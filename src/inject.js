@@ -14,10 +14,11 @@
       , EVT_TOGGLED = 'octotree:toggled'
 
       // fragile selectors based GitHub DOM, uses of them must be change-proof
-      , GH_BRANCH_SEL     = '*[data-master-branch]'
-      , GH_BRANCH_BTN_SEL = '*[data-master-branch] > .js-select-button'
-      , GH_PJAX_SEL       = '#js-repo-pjax-container'
-      , GH_404_SEL        = '#parallax_wrapper'
+      , GH_BRANCH_SEL      = '*[data-master-branch]'
+      , GH_BRANCH_BTN_SEL  = '*[data-master-branch] > .js-select-button'
+      , GH_PJAX_SEL        = '#js-repo-pjax-container'
+      , GH_404_SEL         = '#parallax_wrapper'
+      , GH_REPO_CONTAINERS = '.repohead > .container, .site > .container'
 
       // regexps from https://github.com/shockie/node-iniparser
       , INI_SECTION = /^\s*\[\s*([^\]]*)\s*\]\s*$/
@@ -395,8 +396,20 @@
   function sidebarResized() {
     var width = $sidebar.width()
       , shown = $html.hasClass(PREFIX)
+      , sidebarWidth = parseInt($('.octotree_sidebar').css('width'))
+      , containerMarginLeft = parseInt($('.container').first().css('margin-left'))
 
-    $html.css('margin-left', shown ? width - 10 : 0)
+    if (shown) {
+      if (containerMarginLeft <= sidebarWidth + 10) {
+        $(GH_REPO_CONTAINERS).css({'margin-left': sidebarWidth + 10 })
+      }
+      else {
+        $(GH_REPO_CONTAINERS).css({'margin-left': 'auto'})
+      }
+    }
+    else {
+      $(GH_REPO_CONTAINERS).css({'margin-left': 'auto'})
+    }
     $toggleBtn.css('left', shown ? width - 35 : 5)
     store.set(STORE_WIDTH, width)
   }
