@@ -396,10 +396,10 @@
   function sidebarResized() {
     var width = $sidebar.width()
       , shown = $html.hasClass(PREFIX)
-      , containerMarginLeft = parseInt($('.container').first().css('margin-left'))
+      , standardMarginLeft = parseInt($('.container').first().css('margin-left'))
 
     if (shown) {
-      if (containerMarginLeft <= width + 10) {
+      if (standardMarginLeft <= width + 10) {
         $(GH_REPO_CONTAINERS).css({'margin-left': width + 10 })
       }
       else {
