@@ -5,7 +5,7 @@
       , STORE_WIDTH = 'octotree.sidebar_width'
       , DEFAULT_WIDTH = 250
       , RESERVED_USER_NAMES = [
-          'settings', 'orgs', 'organizations', 
+          'settings', 'orgs', 'organizations',
           'site', 'blog', 'about', 'explore',
           'styleguide', 'showcases', 'trending',
           'stars', 'dashboard', 'notifications'
@@ -27,24 +27,24 @@
   var $html = $('html')
     , $dom  = $('<div>' +
                   '<nav class="octotree_sidebar">' +
-                    '<div class="octotree_header"/>' +
-                    '<div class="octotree_treeview"/>' +
+                    '<div class="octotree_header"></div>' +
+                    '<div class="octotree_treeview"></div>' +
                     '<form class="octotree_options">' +
-                      '<div class="message"/>' +
+                      '<div class="message"></div>' +
                       '<div>' +
-                        '<input name="token" type="text" placeholder="Paste access token here" autocomplete="off"/>' +
+                        '<input name="token" type="text" placeholder="Paste access token here" autocomplete="off">' +
                       '</div>' +
                       '<div>' +
                         '<button type="submit" class="button">Save</button>' +
                         '<a href="https://github.com/buunguyen/octotree#github-api-rate-limit" target="_blank">Why is this required?</a>' +
                       '</div>' +
-                      '<div class="error"/>' +
+                      '<div class="error"></div>' +
                     '</form>' +
                   '</nav>' +
-                  '<a class="octotree_toggle button"><div class="loader"/><span/></a>' +
+                  '<a class="octotree_toggle button"><div class="loader"></div><span></span></a>' +
                   '<div class="octotree_popup">' +
-                    '<div class="arrow"/>' +
-                    '<div class="content">Octotree is enabled on every GitHub code page. Click this button or press <kbd>⌘ b</kbd> (or <kbd>ctrl b</kbd>) to show it.</div>' +
+                    '<div class="arrow"></div>' +
+                    '<div class="content">Octotree is enabled on every GitHub code page. Click this button or press <kbd>⌘ b</kbd> (or <kbd>ctrl+b</kbd>) to show it.</div>' +
                   '</div>' +
                 '</div>')
     , $sidebar   = $dom.find('.octotree_sidebar')
@@ -52,7 +52,7 @@
     , $optsFrm   = $sidebar.find('.octotree_options')
     , $toggleBtn = $dom.find('.octotree_toggle')
     , $helpPopup = $dom.find('.octotree_popup')
-    , $dummyDiv  = $('<div/>')
+    , $dummyDiv  = $('<div></div>')
     , $document  = $(document)
     , store       = new Storage()
     , currentRepo = false
@@ -124,9 +124,9 @@
             selectTreeNode()
           })
         })
-      } 
+      }
       else selectTreeNode()
-    } 
+    }
     else {
       $toggleBtn.hide()
       toggleSidebar(false)
@@ -167,8 +167,8 @@
     // can actually check if *[data-master-branch] exists and remove all the checks above
     // but the current approach is less fragile in case of GitHub DOM changes
     var branch = $(GH_BRANCH_SEL).data('ref') || $(GH_BRANCH_BTN_SEL).text() || 'master'
-    return { 
-      username : match[1], 
+    return {
+      username : match[1],
       reponame : match[2],
       branch   : branch
     }
@@ -323,8 +323,8 @@
         if (!$target.is('a.jstree-anchor')) return
 
         var href  = $target.attr('href')
-          , $icon = $target.children().length 
-            ? $target.children(':first') 
+          , $icon = $target.children().length
+            ? $target.children(':first')
             : $target.siblings(':first') // handles child links in submodule
 
         if ($icon.hasClass('commit')) {
@@ -333,7 +333,7 @@
         else if ($icon.hasClass('blob')) {
           var container = $(GH_PJAX_SEL)
           if (container.length) {
-            $.pjax({ 
+            $.pjax({
               url       : href,
               container : container
             })
@@ -343,7 +343,9 @@
       })
       .on('ready.jstree', function() {
         var headerText = '<div class="octotree_header_repo">' +
-                           repo.username + ' / ' + repo.reponame +
+                           '<a href="' + repo.username + '">' + repo.username +'</a>' +
+                           ' / ' +
+                           '<a href="' + repo.username + '/' + repo.reponame + '">' + repo.reponame +'</a>' +
                          '</div>' +
                          '<div class="octotree_header_branch">' +
                            repo.branch +
@@ -362,7 +364,7 @@
       $optsFrm.show()
       $treeView.hide()
       if (token) $optsFrm.find('[name="token"]').val(token)
-    } 
+    }
     else {
       $optsFrm.hide()
       $treeView.show()
@@ -385,7 +387,7 @@
     if (visibility !== undefined) {
       if ($html.hasClass(PREFIX) === visibility) return
       toggleSidebar()
-    } 
+    }
     else {
       $html.toggleClass(PREFIX)
       $sidebar.trigger(EVT_TOGGLED)
