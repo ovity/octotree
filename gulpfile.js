@@ -104,7 +104,8 @@ gulp.task('safari', function() {
 gulp.task('firefox', function() {
   return es.merge(
     pipe('./icons/**/*', './tmp/firefox/data/icons'),
-    pipe(['./tmp/inject.js', './tmp/inject.css', './src/firefox/**'], './tmp/firefox/data')
+    pipe(['./tmp/inject.js', './tmp/inject.css', './src/firefox/**.js'], './tmp/firefox/data'),
+    pipe('./src/firefox/package.json', './tmp/firefox')
   )
 })
 

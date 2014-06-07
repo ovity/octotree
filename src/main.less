@@ -195,7 +195,7 @@ html, .header > .container, .repohead > .container, .site > .container {
         }
       }
       label {
-        font-weight: normal;
+        font-weight: normal !important;
       }
       input[type=text], textarea {
         width: 100%;
@@ -206,12 +206,12 @@ html, .header > .container, .repohead > .container, .site > .container {
 }
 
 a.octotree_toggle, a.octotree_opts {
-  position: absolute;
+  position: absolute !important;
   text-align: center;
   line-height: 1;
   z-index: 999992;
   cursor: pointer;
-  color: black;
+  color: black !important;
 
   & > span {
     line-height: 1;
@@ -219,7 +219,7 @@ a.octotree_toggle, a.octotree_opts {
     text-decoration: none;
   }
   &:hover, &.selected {
-    color: #4183C4;
+    color: #4183C4 !important;
   }
 }
 
