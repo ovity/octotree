@@ -50,6 +50,13 @@
       .on(EVENT.LOC_CHANGE, tryLoadRepo)
       .on(EVENT.TOGGLE, sidebarResized)
 
+    $(window).resize(function() {
+      $(GH_CONTAINERS).addClass('notransition')
+      sidebarResized()
+      setTimeout(function() {
+        $(GH_CONTAINERS).removeClass('notransition')
+      }, 300)
+    })
     function optionsChanged(event, changes) {
       var reload = false
       Object.keys(changes).forEach(function(storeKey) {
