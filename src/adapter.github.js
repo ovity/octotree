@@ -23,9 +23,9 @@ GitHub.prototype.selectSubmodule = function(url) {
 }
 
 /**
- * Selects a file.
+ * Selects a path.
  */
-GitHub.prototype.selectFile = function(url) {
+GitHub.prototype.selectPath = function(url) {
   var container = $(GH_PJAX_SEL)
   if (container.length) {
     $.pjax({

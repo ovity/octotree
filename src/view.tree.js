@@ -1,6 +1,7 @@
 function TreeView($dom, store, adapter) {
   this.$view = $dom.find('.octotree_treeview')
   this.store = store
+  this.adapter = adapter
   this.$view
     .find('.octotree_view_body')
     .on('click.jstree', '.jstree-open>a', function() {
@@ -19,7 +20,7 @@ function TreeView($dom, store, adapter) {
           : $target.siblings(':first') // handles child links in submodule
 
       if ($icon.hasClass('commit')) adapter.selectSubmodule(href)
-      else if ($icon.hasClass('blob')) adapter.selectFile(href)
+      else if ($icon.hasClass('blob')) adapter.selectPath(href)
     })
     .jstree({
       core    : { multiple: false, themes : { responsive : false } },
@@ -28,14 +29,22 @@ function TreeView($dom, store, adapter) {
 }
 
 TreeView.prototype.showHeader = function(repo) {
-  this.$view.find('.octotree_view_header').html(
-    '<div class="octotree_header_repo">' +
-       repo.username + ' / ' + repo.reponame +
-     '</div>' +
-     '<div class="octotree_header_branch">' +
-       repo.branch +
-     '</div>'
-  )
+  var adapter = this.adapter
+  this.$view.find('.octotree_view_header')
+    .html(
+      '<div class="octotree_header_repo">' +
+         '<a href="/' + repo.username + '">' + repo.username +'</a>'  +
+         ' / ' +
+         '<a data-pjax href="/' + repo.username + '/' + repo.reponame + '">' + repo.reponame +'</a>' +
+       '</div>' +
+       '<div class="octotree_header_branch">' +
+         repo.branch +
+       '</div>'
+    )
+    .on('click', 'a[data-pjax]', function(event) {
+      event.preventDefault()
+      adapter.selectPath(this.href)
+    })
 }
 
 TreeView.prototype.show = function(repo, treeData) {
