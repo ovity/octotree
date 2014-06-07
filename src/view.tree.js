@@ -63,7 +63,7 @@ TreeView.prototype.show = function(repo, treeData) {
     self.syncSelection()
     $(self).trigger(EVENT.VIEW_READY)
   })
-  tree.refresh()
+  tree.refresh(true)
 
   function sort(folder) {
     folder.sort(function(a, b) {
