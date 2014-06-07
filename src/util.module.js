@@ -1,5 +1,5 @@
 // regexps from https://github.com/shockie/node-iniparser
-const 
+const
     INI_SECTION = /^\s*\[\s*([^\]]*)\s*\]\s*$/
   , INI_COMMENT = /^\s*;.*$/
   , INI_PARAM   = /^\s*([\w\.\-\_]+)\s*=\s*(.*?)\s*$/

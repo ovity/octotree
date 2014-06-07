@@ -1,4 +1,4 @@
-const 
+const
     PREFIX = 'octotree'
 
   , STORE = {
@@ -10,7 +10,7 @@ const
     POPUP    : 'octotree.popup_shown',
     SHOWN    : 'octotree.sidebar_shown',
   }
-  
+
   , EVENT = {
     TOGGLE      : 'octotree:toggle',
     LOC_CHANGE  : 'octotree:location',

@@ -86,7 +86,7 @@
           })
         }
         else treeView.syncSelection()
-      } 
+      }
       else {
         $toggleBtn.hide()
         toggleSidebar(false)
@@ -107,7 +107,7 @@
       if (visibility !== undefined) {
         if ($html.hasClass(PREFIX) === visibility) return
         toggleSidebar()
-      } 
+      }
       else {
         $html.toggleClass(PREFIX)
         $document.trigger(EVENT.TOGGLE, $html.hasClass(PREFIX))
@@ -118,6 +118,6 @@
       var width = $sidebar.width()
       adapter.updateLayout($html.hasClass(PREFIX), width)
       store.set(STORE.WIDTH, width)
-    }  
+    }
   })
 })()

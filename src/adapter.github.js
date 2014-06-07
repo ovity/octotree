@@ -1,6 +1,6 @@
-const 
+const
     RESERVED_USER_NAMES = [
-      'settings', 'orgs', 'organizations', 
+      'settings', 'orgs', 'organizations',
       'site', 'blog', 'about', 'explore',
       'styleguide', 'showcases', 'trending',
       'stars', 'dashboard', 'notifications'
@@ -28,7 +28,7 @@ GitHub.prototype.selectSubmodule = function(url) {
 GitHub.prototype.selectFile = function(url) {
   var container = $(GH_PJAX_SEL)
   if (container.length) {
-    $.pjax({ 
+    $.pjax({
       url       : url,
       container : container
     })
@@ -72,8 +72,8 @@ GitHub.prototype.getRepoFromPath = function() {
   // can actually check if *[data-master-branch] exists and remove all the checks above
   // but the current approach is less fragile in case of GitHub DOM changes
   var branch = $(GH_BRANCH_SEL).data('ref') || $(GH_BRANCH_BTN_SEL).text() || 'master'
-  return { 
-    username : match[1], 
+  return {
+    username : match[1],
     reponame : match[2],
     branch   : branch
   }
@@ -144,8 +144,8 @@ GitHub.prototype.fetchData = function(opts, cb) {
           }
         }
 
-        setTimeout(function() { 
-          nextChunk(iteration + 1) 
+        setTimeout(function() {
+          nextChunk(iteration + 1)
         }, 0)
       }
     })

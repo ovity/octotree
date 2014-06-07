@@ -14,8 +14,8 @@ function TreeView($dom, store, adapter) {
       if (!$target.is('a.jstree-anchor')) return
 
       var href  = $target.attr('href')
-        , $icon = $target.children().length 
-          ? $target.children(':first') 
+        , $icon = $target.children().length
+          ? $target.children(':first')
           : $target.siblings(':first') // handles child links in submodule
 
       if ($icon.hasClass('commit')) adapter.selectSubmodule(href)
@@ -27,7 +27,7 @@ function TreeView($dom, store, adapter) {
     })
 }
 
-TreeView.prototype.showHeader = function(repo) {  
+TreeView.prototype.showHeader = function(repo) {
   this.$view.find('.octotree_view_header').html(
     '<div class="octotree_header_repo">' +
        repo.username + ' / ' + repo.reponame +
@@ -44,11 +44,11 @@ TreeView.prototype.show = function(repo, treeData) {
     , store = this.store
     , treeContainer = $view.find('.octotree_view_body')
     , tree = treeContainer.jstree(true)
-    
+
   treeData = sort(treeData)
   if (store.get(STORE.COLLAPSE)) treeData = collapse(treeData)
   tree.settings.core.data = treeData
-  tree.settings.state.key = PREFIX + '.' + repo.username + '/' + repo.reponame 
+  tree.settings.state.key = PREFIX + '.' + repo.username + '/' + repo.reponame
 
   treeContainer.one('refresh.jstree', function() {
     self.syncSelection()

@@ -17,7 +17,7 @@ function OptionsView($dom, store) {
     if (visibility !== undefined) {
       if ($view.hasClass('current') === visibility) return
       return toggle()
-    } 
+    }
     if ($toggleBtn.hasClass('selected')) {
       $toggleBtn.removeClass('selected')
       $(self).trigger(EVENT.VIEW_CLOSE)
