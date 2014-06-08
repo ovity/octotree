@@ -1,12 +1,12 @@
 function OptionsView($dom, store) {
-  var self = this
-    , $view = $dom.find('.octotree_optsview').submit(save)
-    , $toggleBtn = $dom.find('.octotree_opts').click(toggle)
+  var self     = this
+    , $view    = $dom.find('.octotree_optsview').submit(save)
+    , $toggler = $dom.find('.octotree_opts').click(toggle)
 
   this.$view = $view
   if (store.get(STORE.COLLAPSE) == null) store.set(STORE.COLLAPSE, false)
   if (store.get(STORE.REMEMBER) == null) store.set(STORE.REMEMBER, false)
-  if (!store.get(STORE.SHORTKEY)) store.set(STORE.SHORTKEY, '⌘+b, ⌃+b')
+  if (!store.get(STORE.HOTKEYS)) store.set(STORE.HOTKEYS, '⌘+b, ⌃+b')
 
   $(document).on(EVENT.TOGGLE, function(event, visible) {
     // hide options view when sidebar is hidden
@@ -18,12 +18,12 @@ function OptionsView($dom, store) {
       if ($view.hasClass('current') === visibility) return
       return toggle()
     }
-    if ($toggleBtn.hasClass('selected')) {
-      $toggleBtn.removeClass('selected')
+    if ($toggler.hasClass('selected')) {
+      $toggler.removeClass('selected')
       $(self).trigger(EVENT.VIEW_CLOSE)
     }
     else {
-      $toggleBtn.addClass('selected')
+      $toggler.addClass('selected')
       $view.find('[data-store]').each(function() {
         var $elm = $(this)
           , storeKey = STORE[$elm.data('store')]

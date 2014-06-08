@@ -3,20 +3,16 @@ Browser extensions (Chrome, Firefox, Safari and Opera) to display GitHub code in
 
 * Easy-to-navigate code tree like IDEs
 * Fast browsing with pjax
-* Toggle code tree with `cmd+b`, `ctrl+b`
+* Customizable hotkey
 * Support private repositories (require [personal access token](#github-api-rate-limit))
 
 ## Install on Chrome
 * Download and install [Octotree](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc) from the Chrome store
 * Navigate to any GitHub project (or just refresh this page as an example)
-* The code tree should show as follows:
-
-![When extension is active](docs/chrome.png)
+* The code tree should show on the left-hand side of the screen
 
 ## Install on Firefox, Safari and Opera
-Submitting to Mozilla and Safari stores is quite a tedious process. Octotree 1.0 (not even 1.1) was submitted to Mozilla store and is still being reviewed. Safari store requires even more work and time (that I don't have).
-
-Alternatively, you can just install the prebuilt extensions located in the [dist](https://github.com/buunguyen/octotree/tree/master/dist) folder. For security reason, be sure to install from this location only.
+You can just install the prebuilt extensions located in the [dist](https://github.com/buunguyen/octotree/tree/master/dist) folder. For security reason, be sure to install from this location only.
 
 * Firefox: drag `octotree.xpi` to the browser and follow the instructions
 * Safari: drag `octotree.safariextz` to the browser and follow the instructions

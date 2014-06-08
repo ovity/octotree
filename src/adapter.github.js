@@ -10,7 +10,7 @@ const
   , GH_BRANCH_BTN_SEL   = '*[data-master-branch] > .js-select-button'
   , GH_404_SEL          = '#parallax_wrapper'
   , GH_PJAX_SEL         = '#js-repo-pjax-container'
-  , GH_CONTAINERS       = '.header > .container, .repohead > .container, .site > .container'
+  , GH_CONTAINERS       = 'body > .container, .header > .container, .site > .container, .repohead > .container'
   , SIDEBAR_SPACE       = 10
 
 function GitHub() {}
@@ -40,15 +40,20 @@ GitHub.prototype.selectPath = function(url) {
  * Updates page layout based on visibility status and width of the Octotree sidebar.
  */
 GitHub.prototype.updateLayout = function(sidebarVisible, sidebarWidth) {
-  var containers = $(GH_CONTAINERS)
-    , marginLeft
-  if (containers.length === 3) {
-    marginLeft = parseInt($('body > .container').css('margin-left')) || ($('body').width() - $('body > .container').width()) / 2
-    containers.css('margin-left', (sidebarVisible && marginLeft <= sidebarWidth + SIDEBAR_SPACE)
+  var $containers = $(GH_CONTAINERS)
+    , autoMarginLeft
+    , shouldPushLeft
+
+  if ($containers.length === 4) {
+    autoMarginLeft = ($('body').width() - $containers.width()) / 2
+    shouldPushLeft = sidebarVisible && (autoMarginLeft <= sidebarWidth + SIDEBAR_SPACE)
+    $containers.css('margin-left', shouldPushLeft
       ? sidebarWidth + SIDEBAR_SPACE
-      : marginLeft)
+      : autoMarginLeft)
   }
-  else $html.css('margin-left', sidebarVisible ? sidebarWidth - SIDEBAR_SPACE : 0)
+
+  // falls-back if GitHub DOM has been updated
+  else $('html').css('margin-left', sidebarVisible ? sidebarWidth - SIDEBAR_SPACE : 0)
 }
 
 /**

@@ -5,7 +5,7 @@ const
     TOKEN    : 'octotree.github_access_token',
     COLLAPSE : 'octotree.collapse',
     REMEMBER : 'octotree.remember',
-    SHORTKEY : 'octotree.key',
+    HOTKEYS  : 'octotree.hotkeys',
     WIDTH    : 'octotree.sidebar_width',
     POPUP    : 'octotree.popup_shown',
     SHOWN    : 'octotree.sidebar_shown',
