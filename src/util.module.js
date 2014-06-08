@@ -3,12 +3,13 @@ const
     INI_SECTION = /^\s*\[\s*([^\]]*)\s*\]\s*$/
   , INI_COMMENT = /^\s*;.*$/
   , INI_PARAM   = /^\s*([\w\.\-\_]+)\s*=\s*(.*?)\s*$/
+  , SEPARATOR   = /\r\n|\r|\n/
 
 function parseGitmodules(data, cb) {
   if (!data) return cb()
 
   var submodules = {}
-    , lines = data.split(/\r\n|\r|\n/)
+    , lines = data.split(SEPARATOR)
     , lastPath
 
   lines.forEach(function(line) {
