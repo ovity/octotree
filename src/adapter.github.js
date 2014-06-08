@@ -101,7 +101,7 @@ GitHub.prototype.fetchData = function(opts, cb) {
       // split work in chunks to prevent blocking UI on large repos
       nextChunk(0)
       function nextChunk(iteration) {
-        var chunkSize = 500
+        var chunkSize = 300
           , baseIndex = iteration * chunkSize
           , i
           , item, path, type, index, name, moduleUrl
