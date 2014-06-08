@@ -43,7 +43,7 @@ GitHub.prototype.updateLayout = function(sidebarVisible, sidebarWidth) {
   var containers = $(GH_CONTAINERS)
     , marginLeft
   if (containers.length === 3) {
-    marginLeft = parseInt($('.container').last().css('margin-left'))
+    marginLeft = parseInt($('body > .container').css('margin-left')) || ($('body').width() - $('body > .container').width()) / 2
     containers.css('margin-left', (sidebarVisible && marginLeft <= sidebarWidth + SIDEBAR_SPACE)
       ? sidebarWidth + SIDEBAR_SPACE
       : marginLeft)
