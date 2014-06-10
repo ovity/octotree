@@ -42,7 +42,7 @@ localStorage.setItem('octotree.github_access_token', 'REPLACE WITH TOKEN')
 * Setting panel allowing:
  * Changing access token
  * Changing hotkeys
- * Changing sidebar visibilty option
+ * Changing sidebar default visibility
  * Changing folder collapsing option
 * Sidebar appears better in large monitors
 * More responsive in big repositories
