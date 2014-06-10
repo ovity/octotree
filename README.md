@@ -18,8 +18,6 @@ You can just install the prebuilt extensions located in the [dist](https://githu
 * Safari: drag `octotree.safariextz` to the browser and follow the instructions
 * Opera: drag `octotree.nex` to the browser and follow the instructions
 
-Note: you can also pack extensions from source by executing the Gulp script that generates extension structures for Chrome, Firefox and Safari. Refer to the documentation of [Firefox](https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Getting_started) and [Safari](https://developer.apple.com/library/safari/documentation/tools/conceptual/safariextensionguide/UsingExtensionBuilder/UsingExtensionBuilder.html#//apple_ref/doc/uid/TP40009977-CH2-SW1) to learn how to package extensions.
-
 ## GitHub API Rate Limit
 Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve repository metadata. By default, it makes unauthenticated requests to the GitHub API. However, there are two situations when requests must be authenticated:
 
@@ -40,6 +38,16 @@ localStorage.setItem('octotree.github_access_token', 'REPLACE WITH TOKEN')
 ```
 
 ## Changelog
+### [v1.3](https://github.com/buunguyen/octotree/issues?labels=&milestone=3&page=1&state=closed)
+* Setting panel allowing:
+ * Changing access token
+ * Changing hotkeys
+ * Changing sidebar visibilty option
+ * Changing folder collapsing option
+* Sidebar appears better in large monitors
+* More responsive in big repositories
+* And bug fixes
+
 ### [v1.2](https://github.com/buunguyen/octotree/issues?labels=&milestone=1&page=1&state=closed)
 * Hide sidebar by default (upon many user requests)
 * Hotkey (`cmd+b`, `ctrl+b`) to toggle sidebar

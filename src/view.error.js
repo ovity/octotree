@@ -24,17 +24,20 @@ ErrorView.prototype.show = function(err) {
     , token = this.store.get(STORE.TOKEN)
     , $token = $view.find('input[name="token"]')
     , $submit = $view.find('button[type="submit"]')
+    , $help = $submit.next()
 
   $view.find('.octotree_view_header').html(err.error)
   $view.find('.message').html(err.message)
   if (err.needAuth) {
     $submit.show()
     $token.show()
+    $help.show()
     if (token) $token.val(token)
   }
   else {
     $submit.hide()
     $token.hide()
+    $help.hide()
   }
   $(this).trigger(EVENT.VIEW_READY)
 }

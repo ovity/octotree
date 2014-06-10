@@ -190,29 +190,40 @@ GitHub.prototype.fetchData = function(opts, cb) {
         cb(null, data)
       })
       .fail(function(jqXHR) {
-        var error = jqXHR.statusText
-          , message = ''
-          , needAuth = true
+        var error
+          , message
+          , needAuth
 
         switch (jqXHR.status) {
-          case 401:
-            error = 'Invalid token!'
-            message = 'The token is invalid. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create a new token and paste it below.'
-            break
-          case 409:
-            error = 'Empty repository!'
-            message = 'This repository is empty.'
+          case 0:
+            error = 'Connection error'
+            message = 'Cannot connect to GitHub. If your network connection to GitHub is fine, maybe there is an outage of the GitHub API. Please try again later.'
             needAuth = false
             break
+          case 401:
+            error = 'Invalid token'
+            message = 'The token is invalid. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create a new token and paste it below.'
+            needAuth = true
+            break
+          case 409:
+            error = 'Empty repository'
+            message = 'This repository is empty.'
+            break
           case 404:
-            error = 'Private repository!'
+            error = 'Private repository'
             message = 'Accessing private repositories requires a GitHub access token. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it below.'
+            needAuth = true
             break
           case 403:
             if (~jqXHR.getAllResponseHeaders().indexOf('X-RateLimit-Remaining: 0')) {
-              error = 'API limit exceeded!'
+              error = 'API limit exceeded'
               message = 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it below.'
+              needAuth = true
+              break
             }
+          default:
+            error = message = jqXHR.statusText
+            needAuth = false
             break
         }
         cb({
