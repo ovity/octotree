@@ -5,11 +5,14 @@
   "description": "Display GitHub code in tree format",
   "author": "Buu Nguyen",
   "homepage": "https://github.com/buunguyen/octotree",
-  "lib": "data",
-  "main": "data/firefox",
+  "lib": "lib",
+  "main": "lib/firefox",
   "data": "data",
   "icon": "data/icons/icon48.png",
   "icon64": "data/icons/icon64.png",
   "license": "MIT",
-  "version": "1.3"
+  "version": "1.3",
+  "permissions": {
+    "cross-domain-content": ["https://api.github.com", "https://github.com"]
+  }
 }

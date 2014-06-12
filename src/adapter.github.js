@@ -18,22 +18,23 @@ function GitHub() {}
 /**
  * Selects a submodule.
  */
-GitHub.prototype.selectSubmodule = function(url) {
-  window.location.href = url
+GitHub.prototype.selectSubmodule = function(path) {
+  window.location.href = path
 }
 
 /**
  * Selects a path.
  */
-GitHub.prototype.selectPath = function(url) {
+GitHub.prototype.selectPath = function(path) {
   var container = $(GH_PJAX_SEL)
   if (container.length) {
     $.pjax({
-      url       : url,
+      // needs full path for pjax to work with Firefox as per cross-domain-content setting
+      url : location.protocol + '//' + location.host + path,
       container : container
     })
   }
-  else window.location.href = url // falls back
+  else window.location.href = path // falls back
 }
 
 /**

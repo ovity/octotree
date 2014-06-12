@@ -31,6 +31,10 @@
 		<array>
 			<string>inject.css</string>
 		</array>
+    <key>Whitelist</key>
+    <array>
+      <string>https://github.com/*</string>
+    </array>
 	</dict>
 	<key>Description</key>
 	<string>Display GitHub code in tree format</string>
