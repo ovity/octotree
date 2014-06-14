@@ -19,10 +19,16 @@
         "https://github.com/*"
       ],
       "css": [
-        "inject.css"
+        "jstree.css",
+        "octotree.css"
       ],
       "js": [
-        "inject.js"
+        "jquery.js",
+        "jquery-ui.js",
+        "jquery.pjax.js",
+        "jstree.js",
+        "keymaster.js",
+        "octotree.js"
       ],
       "run_at": "document_start"
     }

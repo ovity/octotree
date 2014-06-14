@@ -141,9 +141,11 @@ GitHub.prototype.fetchData = function(opts, cb) {
             if (moduleUrl) { // fix #105
               // special handling for submodules hosted in GitHub
               if (~moduleUrl.indexOf('github.com')) {
+                moduleUrl = moduleUrl.replace(/^git:/, window.location.protocol)
+                                     .replace(/.git$/, '')
                 item.text = '<a href="' + moduleUrl + '" class="jstree-anchor">' + name + '</a>' +
                             '<span>@ </span>' +
-                            '<a href="' + moduleUrl.replace(/.git$/, '') + '/tree/' + item.sha + '" class="jstree-anchor">' + item.sha.substr(0, 7) + '</a>'
+                            '<a href="' + moduleUrl + '/tree/' + item.sha + '" class="jstree-anchor">' + item.sha.substr(0, 7) + '</a>'
               }
               item.a_attr = { href: moduleUrl }
             }

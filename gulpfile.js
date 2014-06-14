@@ -43,10 +43,7 @@ gulp.task('clean', function() {
 })
 
 gulp.task('css', function() {
-  return series(
-    pipe('./libs/**/*.css'),
-    pipe('./src/main.less', [less(), prefix({ cascade: true })])
-  ).pipe(concat('inject.css')).pipe(gulp.dest('./tmp'))
+  return pipe('./src/octotree.less', [less(), prefix({ cascade: true })], './tmp')
 })
 
 gulp.task('template', function() {
@@ -55,18 +52,10 @@ gulp.task('template', function() {
 
 gulp.task('js', ['template'], function() {
   return pipe(
-    [// libs
-     './libs/js/jquery.js',
-     './libs/js/jquery-ui.js',
-     './libs/js/jquery.pjax.js',
-     './libs/js/jstree.js',
-     './libs/js/keymaster.js',
-
-     // ext
-     './src/main.prefix.js',
+    ['./src/octotree.prefix.js',
      './tmp/template.js',
      './src/constants.js',
-     './src/main.js',
+     './src/octotree.js',
      './src/view.help.js',
      './src/view.error.js',
      './src/view.tree.js',
@@ -75,36 +64,39 @@ gulp.task('js', ['template'], function() {
      './src/util.location.js',
      './src/util.module.js',
      './src/adapter.github.js',
-     './src/main.suffix.js'
-    ], [concat('inject.js')], './tmp'
+     './src/octotree.suffix.js'
+    ], [concat('octotree.js')], './tmp'
   )
 })
 
 gulp.task('chrome', function() {
   return es.merge(
     pipe('./icons/**/*', './tmp/chrome/icons'),
-    pipe(['./tmp/inject.js', './tmp/inject.css', './src/chrome/**/*'], './tmp/chrome/')
+    pipe(['./libs/**/*', './tmp/octotree.*', './src/chrome/**/*'], './tmp/chrome/')
   )
 })
 
 gulp.task('opera', function() {
   return es.merge(
     pipe('./icons/**/*', './tmp/opera/icons'),
-    pipe(['./tmp/inject.js', './tmp/inject.css', './src/chrome/**/*'], './tmp/opera/')
+    pipe(['./libs/**/*', './tmp/octotree.js', './tmp/octotree.css', 
+          './src/chrome/**/*'], './tmp/opera/')
   )
 })
 
 gulp.task('safari', function() {
   return es.merge(
     pipe('./icons/**/*', './tmp/safari/octotree.safariextension/icons'),
-    pipe(['./tmp/inject.js', './tmp/inject.css', './src/safari/**/*'], './tmp/safari/octotree.safariextension/')
+    pipe(['./libs/**/*', './tmp/octotree.js', './tmp/octotree.css', 
+          './src/safari/**/*'], './tmp/safari/octotree.safariextension/')
   )
 })
 
 gulp.task('firefox', function() {
+  // Mozilla store doesn't allow libraries to be bundled, so have to deviate
   return es.merge(
     pipe('./icons/**/*', './tmp/firefox/data/icons'),
-    pipe(['./tmp/inject.js', './tmp/inject.css'], './tmp/firefox/data'),
+    pipe(['./libs/**/*', './tmp/octotree.js', './tmp/octotree.css'], './tmp/firefox/data'),
     pipe('./src/firefox/**.js', './tmp/firefox/lib'),
     pipe('./src/firefox/package.json', './tmp/firefox')
   )

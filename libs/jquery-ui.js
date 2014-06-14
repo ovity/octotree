@@ -1,4 +1,4 @@
-/*! jQuery UI - v1.10.4 - 2014-05-18
+/*! jQuery UI - v1.10.4 - 2014-06-13
 * http://jqueryui.com
 * Includes: jquery.ui.core.js, jquery.ui.widget.js, jquery.ui.mouse.js, jquery.ui.resizable.js
 * Copyright 2014 jQuery Foundation and other contributors; Licensed MIT */

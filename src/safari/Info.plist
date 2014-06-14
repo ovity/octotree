@@ -24,12 +24,18 @@
 		<dict>
 			<key>Start</key>
 			<array>
-				<string>inject.js</string>
+				<string>jquery.js</string>
+        <string>jquery-ui.js</string>
+        <string>jquery.pjax.js</string>
+        <string>jstree.js</string>
+        <string>keymaster.js</string>
+        <string>octotree.js</string>
 			</array>
 		</dict>
 		<key>Stylesheets</key>
 		<array>
-			<string>inject.css</string>
+      <string>jstree.css</string>
+			<string>octotree.css</string>
 		</array>
     <key>Whitelist</key>
     <array>
