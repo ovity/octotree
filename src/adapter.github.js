@@ -3,7 +3,8 @@ const
       'settings', 'orgs', 'organizations',
       'site', 'blog', 'about', 'explore',
       'styleguide', 'showcases', 'trending',
-      'stars', 'dashboard', 'notifications'
+      'stars', 'dashboard', 'notifications',
+      'search'
     ]
   , RESERVED_REPO_NAMES = ['followers', 'following']
   , GH_BRANCH_SEL       = '*[data-master-branch]'
