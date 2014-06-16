@@ -64,6 +64,7 @@ gulp.task('js', ['template'], function() {
      './src/util.location.js',
      './src/util.module.js',
      './src/adapter.github.js',
+     './src/adapter.gitlab.js',
      './src/octotree.suffix.js'
     ], [concat('octotree.js')], './tmp'
   )

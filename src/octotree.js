@@ -6,7 +6,7 @@
     , $toggler  = $sidebar.find('.octotree_toggle')
     , $views    = $sidebar.find('.octotree_view')
     , store     = new Storage()
-    , adapter   = new GitHub()
+    , adapter   = new GitLab()
     , helpPopup = new HelpPopup($dom, store)
     , treeView  = new TreeView($dom, store, adapter)
     , errorView = new ErrorView($dom, store)
@@ -75,6 +75,7 @@
     function tryLoadRepo(reload) {
       var repo = adapter.getRepoFromPath()
         , repoChanged = JSON.stringify(repo) !== JSON.stringify(currRepo)
+
       if (repo) {
         helpPopup.show()
         $toggler.show()
