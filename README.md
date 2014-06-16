@@ -1,26 +1,22 @@
 ## Octotree
-Browser extensions (Chrome, Firefox and Safari) to display GitHub code in tree format. Useful for developers who frequently read source in GitHub and do not want to download or checkout too many repositories. Features:
+Browser extensions (Chrome, Firefox, Safari and Opera) to display GitHub code in tree format. Useful for developers who frequently read source in GitHub and do not want to download or checkout too many repositories. Features:
 
 * Easy-to-navigate code tree like IDEs
 * Fast browsing with pjax
+* Customizable hotkey
 * Support private repositories (require [personal access token](#github-api-rate-limit))
 
 ## Install on Chrome
 * Download and install [Octotree](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc) from the Chrome store
 * Navigate to any GitHub project (or just refresh this page as an example)
-* The code tree should show as follows:
+* The code tree should show on the left-hand side of the screen
 
-![When extension is active](https://raw.githubusercontent.com/buunguyen/octotree/master/docs/chrome.png)
-
-## Install on Firefox and Safari
-Submitting to Mozilla and Safari stores is quite a tedious process. Octotree 1.0 (not even 1.1) was submitted to Mozilla store and is still being reviewed. Safari store requires even more work and time (that I don't have). 
-
-Alternatively, you can just install the prebuilt extensions located in the [dist](https://github.com/buunguyen/octotree/tree/master/dist) folder. For security reason, be sure to install from this location only. 
+## Install on Firefox, Safari and Opera
+You can just install the prebuilt extensions located in the [dist](https://github.com/buunguyen/octotree/tree/master/dist) folder. For security reason, be sure to install from this location only.
 
 * Firefox: drag `octotree.xpi` to the browser and follow the instructions
 * Safari: drag `octotree.safariextz` to the browser and follow the instructions
-
-Note: you can also pack extensions from source by executing the Gulp script that generates extension structures for Chrome, Firefox and Safari. Refer to the documentation of [Firefox](https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Getting_started) and [Safari](https://developer.apple.com/library/safari/documentation/tools/conceptual/safariextensionguide/UsingExtensionBuilder/UsingExtensionBuilder.html#//apple_ref/doc/uid/TP40009977-CH2-SW1) to learn how to package extensions.
+* Opera: drag `octotree.nex` to the browser and follow the instructions
 
 ## GitHub API Rate Limit
 Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve repository metadata. By default, it makes unauthenticated requests to the GitHub API. However, there are two situations when requests must be authenticated:
@@ -28,9 +24,9 @@ Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve reposit
 * You access a private repository
 * You exceed the [rate limit of unauthenticated requests](https://developer.github.com/v3/#rate-limiting)
 
-When that happens, Octotree shows the screen below to ask for your [GitHub personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use). If you don't already have one, [create one](https://github.com/settings/tokens/new), then copy and paste it into the textbox.
+When that happens, Octotree shows the screen below to ask for your [GitHub personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use). If you don't already have one, [create one](https://github.com/settings/tokens/new), then copy and paste it into the textbox. Note that the minimal scopes that should be granted are `public_repo` and `repo` (if you need access to private repositories).
 
-![Enter personal access token](https://raw.githubusercontent.com/buunguyen/octotree/master/docs/token.png)
+![Enter personal access token](docs/token.png)
 
 Alternatively, you can manually enter or update the token by following these steps:
 
@@ -42,14 +38,33 @@ localStorage.setItem('octotree.github_access_token', 'REPLACE WITH TOKEN')
 ```
 
 ## Changelog
-### v1.1
-* New UI that blends better with GitHub! [#43](https://github.com/buunguyen/octotree/pull/43)
-* Hide Octotree on non-code pages [#44](https://github.com/buunguyen/octotree/pull/44), [#42](https://github.com/buunguyen/octotree/pull/42), [#52](https://github.com/buunguyen/octotree/pull/52)
-* When asking for token, show more detailed message and not fly out automatically [96ff6](https://github.com/buunguyen/octotree/commit/96ff6196bb99aa36ae8bf08c345354fcd4db79a1)
-* Extend pjax timeout to work better with big files [4d5f5](https://github.com/buunguyen/octotree/commit/4d5f526a719191d7f756443c60f471f1c775f8c8)
-* Sanitize file and folder names before displaying [a1e8a](https://github.com/buunguyen/octotree/commit/a1e8a63ca894d4ecc58ba722727ca8b3c1a2128d)
-* Fix error when a branch name contains slashes [#12](https://github.com/buunguyen/octotree/pull/12)
-* Gulp script to build for Chrome, Firefox and Safari [c485b](https://github.com/buunguyen/octotree/commit/c485b144a3d6a9114148e7ca8e2fe4ce0d74b1c4), [61a9e](https://github.com/buunguyen/octotree/commit/61a9e8af864365df4ece208f213a3d49d241de0e)
+### [v1.3](https://github.com/buunguyen/octotree/issues?labels=&milestone=3&page=1&state=closed)
+* Setting panel allowing:
+ * Changing access token
+ * Changing hotkeys
+ * Changing sidebar default visibility
+ * Changing folder collapsing option
+* Sidebar appears better in large monitors
+* More responsive in big repositories
+* And bug fixes
+
+### [v1.2](https://github.com/buunguyen/octotree/issues?labels=&milestone=1&page=1&state=closed)
+* Hide sidebar by default (upon many user requests)
+* Hotkey (`cmd+b`, `ctrl+b`) to toggle sidebar
+* Sidebar is now resizable
+* Support rendering submodules
+* Reflect GitHub selection to Octotree
+* New sidebar header and progress indicator
+* And bug fixes
+
+### [v1.1](https://github.com/buunguyen/octotree/issues?labels=&milestone=2&page=1&state=closed)
+* New UI that blends better with GitHub!
+* Hide Octotree on non-code pages
+* When asking for token, show more detailed message and not fly out automatically
+* Extend pjax timeout to work better with big files
+* Sanitize file and folder names before displaying
+* Fix error when a branch name contains slashes
+* Gulp script to build for Chrome, Firefox and Safari
 * And some other minor changes
 
 
