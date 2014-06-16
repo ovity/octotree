@@ -6,20 +6,21 @@
     , $toggler  = $sidebar.find('.octotree_toggle')
     , $views    = $sidebar.find('.octotree_view')
     , store     = new Storage()
-    , adapter   = new GitLab()
+    , adapter   = false
     , helpPopup = new HelpPopup($dom, store)
-    , treeView  = new TreeView($dom, store, adapter)
+    , treeView  = false
     , errorView = new ErrorView($dom, store)
     , optsView  = new OptionsView($dom, store)
     , currRepo  = false
     , hasError  = false
 
   $document.ready(function() {
-    $sidebar
-      .appendTo($('body'))
-      .width(store.get(STORE.WIDTH) || 250)
-      .resizable({ handles: 'e', minWidth: 200 })
-      .resize(layoutChanged)
+    adapter = AdapterManager.getAdapter();
+    if(adapter == null)
+      return;
+    treeView = new TreeView($dom, store, adapter);
+    
+    injectOctotreeSidebar();
 
     $(window).resize(function(event) { // handle zoom
       if (event.target === window) layoutChanged()
@@ -76,6 +77,10 @@
       var repo = adapter.getRepoFromPath()
         , repoChanged = JSON.stringify(repo) !== JSON.stringify(currRepo)
 
+       if(adapter.requiresReinject()) {
+          injectOctotreeSidebar();
+       }
+
       if (repo) {
         helpPopup.show()
         $toggler.show()
@@ -123,6 +128,16 @@
       var width = $sidebar.width()
       adapter.updateLayout($html.hasClass(PREFIX), width)
       store.set(STORE.WIDTH, width)
+    }
+
+    function injectOctotreeSidebar()
+    {
+      $(".octotree_content").remove();
+      $sidebar
+        .appendTo($('body'))
+        .width(store.get(STORE.WIDTH) || 250)
+        .resizable({ handles: 'e', minWidth: 200 })
+        .resize(layoutChanged)
     }
   })
 })()

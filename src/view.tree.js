@@ -97,12 +97,14 @@ TreeView.prototype.syncSelection = function() {
 
   if (!tree) return
   tree.deselect_all()
-
+  
   // e.g. converts /buunguyen/octotree/type/branch/path to path
   var match = path.match(/(?:[^\/]+\/){4}(.*)/)
-    , nodeId
+    , nodeId;
+
   if (match) {
     nodeId = PREFIX + decodeURIComponent(match[1])
+
     tree.select_node(nodeId)
     tree.open_node(nodeId)
   }
