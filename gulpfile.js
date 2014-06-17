@@ -74,6 +74,7 @@ gulp.task('js', ['template'], function() {
 gulp.task('chrome', function() {
   return es.merge(
     pipe('./icons/**/*', './tmp/chrome/icons'),
+    pipe('./octicons/**/*', './tmp/chrome/octicons'),
     pipe(['./libs/**/*', './tmp/octotree.*', './src/chrome/**/*'], './tmp/chrome/')
   )
 })
@@ -81,6 +82,7 @@ gulp.task('chrome', function() {
 gulp.task('opera', function() {
   return es.merge(
     pipe('./icons/**/*', './tmp/opera/icons'),
+    pipe('./octicons/**/*', './tmp/opera/octicons'),
     pipe(['./libs/**/*', './tmp/octotree.js', './tmp/octotree.css', 
           './src/chrome/**/*'], './tmp/opera/')
   )
@@ -89,6 +91,7 @@ gulp.task('opera', function() {
 gulp.task('safari', function() {
   return es.merge(
     pipe('./icons/**/*', './tmp/safari/octotree.safariextension/icons'),
+    pipe('./octicons/**/*', './tmp/safari/octotree.safariextension/octicons'),
     pipe(['./libs/**/*', './tmp/octotree.js', './tmp/octotree.css', 
           './src/safari/**/*'], './tmp/safari/octotree.safariextension/')
   )
@@ -98,6 +101,7 @@ gulp.task('firefox', function() {
   // Mozilla store doesn't allow libraries to be bundled, so have to deviate
   return es.merge(
     pipe('./icons/**/*', './tmp/firefox/data/icons'),
+    pipe('./octicons/**/*', './tmp/firefox/data/octicons'),
     pipe(['./libs/**/*', './tmp/octotree.js', './tmp/octotree.css'], './tmp/firefox/data'),
     pipe('./src/firefox/**.js', './tmp/firefox/lib'),
     pipe('./src/firefox/package.json', './tmp/firefox')

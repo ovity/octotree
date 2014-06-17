@@ -14,6 +14,9 @@
     "http://*/*",
     "https://*/*"
   ],
+  "web_accessible_resources": [
+    "octicons/octicons.ttf"
+  ],
   "content_scripts": [
     {
       "matches": [
@@ -21,6 +24,7 @@
         "https://*/*"
       ],
       "css": [
+        "octicons/octicons.css",
         "jstree.css",
         "octotree.css"
       ],

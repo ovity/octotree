@@ -132,6 +132,17 @@
 
     function injectOctotreeSidebar()
     {
+      if(chrome)
+      {
+        var $font = $("<style/>").text("@font-face {\
+            font-family: 'octicons';\
+            src: url('"+ chrome.extension.getURL('octicons/octicons.ttf') +"') format('truetype');\
+            font-weight: normal;\
+            font-style: normal;\
+          }");
+        $font.appendTo($('body'));
+      }
+      
       $(".octotree_content").remove();
       $sidebar
         .appendTo($('body'))
