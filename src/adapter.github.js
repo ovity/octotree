@@ -133,7 +133,6 @@ GitHub.prototype.fetchData = function(opts, cb) {
           name  = $dummyDiv.text(path.substring(index + 1)).html() // sanitizes, closes #9
 
           item.id   = PREFIX + path
-          console.log(item.id);
           item.text = name
           item.icon = type // use `type` as class name for tree node
 

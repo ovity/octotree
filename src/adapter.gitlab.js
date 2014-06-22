@@ -118,9 +118,6 @@ GitLab.prototype.fetchData = function(opts, cb) {
 			success: function(data){
 				for(var i in data)
 				{		
-					// if(data[i].type == "submodule")
-					// 	data[i].href = 
-
 					var tmp = {
 						"id" : PREFIX + $path + data[i].name,
 						"a_attr": {
@@ -134,7 +131,7 @@ GitLab.prototype.fetchData = function(opts, cb) {
 						"type": data[i].type,
 						"url": ""
 					};
-					// console.log(tmp);
+
 					if(dataArray)
 						dataArray.push(tmp);
 					else
