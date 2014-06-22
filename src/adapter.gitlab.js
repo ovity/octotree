@@ -69,6 +69,7 @@ GitLab.prototype.fetchData = function(opts, cb) {
 		"base_url" : location.href.match(/(https?).+/)[1] + "://" + location.host,
 		"user" : opts.repo.username,
 		"repo" : opts.repo.reponame, 
+		"branch" : opts.repo.branch,
 		"private_token" : opts.token
 	};
 	var oldTreeName = store.get("git_lab_repo_hash");
@@ -76,7 +77,7 @@ GitLab.prototype.fetchData = function(opts, cb) {
 	var oldTreeCommit = store.get("git_lab_repo_commit");
 	var $lastCommit = $(".last-commit");
 
-	if(oldTree && oldTreeName == opts.repo.username + "/" + opts.repo.reponame)
+	if(oldTree && oldTreeName == opts.repo.username + "/" + opts.repo.reponame + "/" + opts.repo.branch)
 	{
 		if($lastCommit.length == 0 || ($lastCommit.length > 0 && $lastCommit.find("a").text == oldTreeCommit))
 		{
@@ -97,7 +98,7 @@ GitLab.prototype.fetchData = function(opts, cb) {
 		getTree(function(err, data){
 	      if(err) return onApiError(err);
 
-	      store.set("git_lab_repo_hash",opts.repo.username + "/" + opts.repo.reponame);
+	      store.set("git_lab_repo_hash",opts.repo.username + "/" + opts.repo.reponame + "/" + opts.repo.branch);
 	      store.set("git_lab_repo",JSON.stringify(data));
 	      store.set("git_lab_repo_commit", $(".last-commit").find("a").text());
 	      cb(null, data)  
@@ -113,14 +114,14 @@ GitLab.prototype.fetchData = function(opts, cb) {
 
 		$path = $path || "/";
 		$.ajax({
-			url: options.base_url + "/api/v3/projects/"+options.user+"%2F"+options.repo+"/repository/tree?private_token=" + options.private_token + "&path=" + $path,
+			url: options.base_url + "/api/v3/projects/"+options.user+"%2F"+options.repo+"/repository/tree?private_token=" + options.private_token + "&ref_name="+options.branch+"&path=" + $path,
 			success: function(data){
 				for(var i in data)
 				{		
 					var tmp = {
-						// "id" : PREFIX + $path, // not yet working, dunno why
+						"id" : PREFIX + $path + data[i].name,
 						"a_attr": {
-							"href" : (data[i].type == "tree" ? "#" : options.user + "/"+options.repo+"/blob/master/" + $path + data[i].name)
+							"href" : (data[i].type == "tree" ? "#" : options.user + "/"+options.repo+"/blob/"+options.branch+"/" + $path + data[i].name)
 						},
 						"icon": data[i].type,
 						"mode": data[i].mode,
@@ -130,7 +131,6 @@ GitLab.prototype.fetchData = function(opts, cb) {
 						"type": data[i].type,
 						"url": ""
 					};
-
 					if(dataArray)
 						dataArray.push(tmp);
 					else
@@ -146,12 +146,14 @@ GitLab.prototype.fetchData = function(opts, cb) {
 					}
 				}
 				remainingRequests--;
-				if(remainingRequests == 0)
+				if(remainingRequests == 0){
 					cb(null, _data);
+					console.log(_data);
+				}
 			},
 			error: function(xhr, status)
 			{
-				cb({"error" : 401}, null);
+				cb({"error" : xhr.status}, null);
 			}
 		});
 	}
@@ -160,24 +162,35 @@ GitLab.prototype.fetchData = function(opts, cb) {
 	{
 		var error
           , message
-          , needAuth;
+          , needAuth,
+          shouldShowSidebar;
 		switch(err.error)
 		{
 			case 0:
 	            error = 'Connection error'
 	            message = 'Cannot connect to GitHub. If your network connection to GitHub is fine, maybe there is an outage of the GitHub API. Please try again later.'
 	            needAuth = false
+	            shouldShowSidebar = true
+	            break
+            case 404:
+	            error = 'Repository not found'
+	            message = 'Cannot find the requested repository. Check if you have access'
+	            needAuth = false
+	            shouldShowSidebar = false
 	            break
 	          case 401:
 	            error = 'Invalid token'
 	            message = 'The token is invalid. Follow <a href="'+location.origin+'/profile/account" target="_blank">this link</a> to create a new token and paste it below.'
 	            needAuth = true
+	            shouldShowSidebar = true
 	            break
 	    }
+	    console.log(cb);
 	    cb({
           error    : 'Error: ' + error,
           message  : message,
-          needAuth : needAuth
+          needAuth : needAuth,
+          shouldShowSidebar: shouldShowSidebar
         })
 	}
 }

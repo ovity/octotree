@@ -91,7 +91,16 @@
           treeView.showHeader(repo)
           adapter.fetchData({ repo: repo, token: store.get(STORE.TOKEN) }, function(err, tree) {
             hasError = !!err
-            if (err) errorView.show(err)
+
+            if (err && err.shouldShowSidebar == true)
+            {
+                errorView.show(err)
+            }
+            else if(err && err.shouldShowSidebar == false)
+            {
+                $toggler.hide()
+                toggleSidebar(false)
+            }
             else treeView.show(repo, tree)
           })
         }
