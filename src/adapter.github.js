@@ -6,7 +6,7 @@ const
       'stars', 'dashboard', 'notifications',
       'search'
     ]
-  , RESERVED_REPO_NAMES = ['followers', 'following']
+  , RESERVED_REPO_NAMES = ['followers', 'following', 'repositories']
   , GH_BRANCH_SEL       = '*[data-master-branch]'
   , GH_BRANCH_BTN_SEL   = '*[data-master-branch] > .js-select-button'
   , GH_404_SEL          = '#parallax_wrapper'
