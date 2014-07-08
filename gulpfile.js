@@ -52,8 +52,7 @@ gulp.task('template', function() {
 
 gulp.task('js', ['template'], function() {
   return pipe(
-    ['./src/octotree.prefix.js',
-     './tmp/template.js',
+    ['./tmp/template.js',
      './src/constants.js',
      './src/octotree.js',
      './src/view.help.js',
@@ -63,8 +62,7 @@ gulp.task('js', ['template'], function() {
      './src/util.storage.js',
      './src/util.location.js',
      './src/util.module.js',
-     './src/adapter.github.js',
-     './src/octotree.suffix.js'
+     './src/adapter.github.js'
     ], [concat('octotree.js')], './tmp'
   )
 })
@@ -93,7 +91,6 @@ gulp.task('safari', function() {
 })
 
 gulp.task('firefox', function() {
-  // Mozilla store doesn't allow libraries to be bundled, so have to deviate
   return es.merge(
     pipe('./icons/**/*', './tmp/firefox/data/icons'),
     pipe(['./libs/**/*', './tmp/octotree.js', './tmp/octotree.css'], './tmp/firefox/data'),
