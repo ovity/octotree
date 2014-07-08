@@ -12,7 +12,7 @@ function TreeView($dom, store, adapter) {
     })
     .on('click', function(event) {
       var $target = $(event.target)
-      if (!$target.is('a.jstree-anchor') || event.which !== 1) return
+      if (!$target.is('a.jstree-anchor')) return
 
       var href  = $target.attr('href')
         , $icon = $target.children().length
