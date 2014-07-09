@@ -6,20 +6,21 @@
     , $toggler  = $sidebar.find('.octotree_toggle')
     , $views    = $sidebar.find('.octotree_view')
     , store     = new Storage()
-    , adapter   = new GitHub()
+    , adapter   = false
     , helpPopup = new HelpPopup($dom, store)
-    , treeView  = new TreeView($dom, store, adapter)
+    , treeView  = false
     , errorView = new ErrorView($dom, store)
     , optsView  = new OptionsView($dom, store)
     , currRepo  = false
     , hasError  = false
 
   $document.ready(function() {
-    $sidebar
-      .appendTo($('body'))
-      .width(store.get(STORE.WIDTH) || 250)
-      .resizable({ handles: 'e', minWidth: 200 })
-      .resize(layoutChanged)
+    adapter = AdapterManager.getAdapter();
+    if(adapter == null)
+      return;
+    treeView = new TreeView($dom, store, adapter);
+    
+    injectOctotreeSidebar();
 
     $(window).resize(function(event) { // handle zoom
       if (event.target === window) layoutChanged()
@@ -75,6 +76,11 @@
     function tryLoadRepo(reload) {
       var repo = adapter.getRepoFromPath()
         , repoChanged = JSON.stringify(repo) !== JSON.stringify(currRepo)
+
+       if(adapter.requiresReinject()) {
+          injectOctotreeSidebar();
+       }
+
       if (repo) {
         helpPopup.show()
         $toggler.show()
@@ -85,7 +91,16 @@
           treeView.showHeader(repo)
           adapter.fetchData({ repo: repo, token: store.get(STORE.TOKEN) }, function(err, tree) {
             hasError = !!err
-            if (err) errorView.show(err)
+
+            if (err && err.shouldShowSidebar == true)
+            {
+                errorView.show(err)
+            }
+            else if(err && err.shouldShowSidebar == false)
+            {
+                $toggler.hide()
+                toggleSidebar(false)
+            }
             else treeView.show(repo, tree)
           })
         }
@@ -122,6 +137,27 @@
       var width = $sidebar.width()
       adapter.updateLayout($html.hasClass(PREFIX), width)
       store.set(STORE.WIDTH, width)
+    }
+
+    function injectOctotreeSidebar()
+    {
+      if(chrome)
+      {
+        var $font = $("<style/>").text("@font-face {\
+            font-family: 'octicons';\
+            src: url('"+ chrome.extension.getURL('octicons/octicons.ttf') +"') format('truetype');\
+            font-weight: normal;\
+            font-style: normal;\
+          }");
+        $font.appendTo($('body'));
+      }
+      
+      $(".octotree_content").remove();
+      $sidebar
+        .appendTo($('body'))
+        .width(store.get(STORE.WIDTH) || 250)
+        .resizable({ handles: 'e', minWidth: 200 })
+        .resize(layoutChanged)
     }
   })
 })()

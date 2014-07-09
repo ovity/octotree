@@ -17,6 +17,14 @@ const
 function GitHub() {}
 
 /**
+ * Returns if you should reinject the sidebar
+ */
+
+GitHub.prototype.requiresReinject = function() {
+  return false;
+}
+
+/**
  * Selects a submodule.
  */
 GitHub.prototype.selectSubmodule = function(path) {
@@ -234,6 +242,7 @@ GitHub.prototype.fetchData = function(opts, cb) {
           error    : 'Error: ' + error,
           message  : message,
           needAuth : needAuth,
+          shouldShowSidebar : true
         })
       })
   }

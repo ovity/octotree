@@ -11,14 +11,20 @@
     "128": "icons/icon128.png"
   },
   "permissions": [
-    "https://github.com/"
+    "http://*/*",
+    "https://*/*"
+  ],
+  "web_accessible_resources": [
+    "octicons/octicons.ttf"
   ],
   "content_scripts": [
     {
       "matches": [
-        "https://github.com/*"
+        "http://*/*",
+        "https://*/*"
       ],
       "css": [
+        "octicons/octicons.css",
         "jstree.css",
         "octotree.css"
       ],
