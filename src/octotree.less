@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 .octotree_sidebar {
   position: fixed !important;
   padding-top: 41px;
@@ -25,7 +29,7 @@
 
 .octotree {
   .octotree_sidebar {
-      transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
   }
   a.octotree_toggle {
     right: 5px;
@@ -195,6 +199,10 @@
       input[type=text], textarea {
         width: 100%;
         max-width: 350px;
+      }
+      textarea {
+        resize: vertical;
+        height: 100px;
       }
     }
   }

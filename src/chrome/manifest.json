@@ -11,26 +11,46 @@
     "128": "icons/icon128.png"
   },
   "permissions": [
-    "https://github.com/"
+    "https://github.com/*",
+    "tabs",
+    "storage"
   ],
-  "content_scripts": [
-    {
-      "matches": [
-        "https://github.com/*"
-      ],
-      "css": [
-        "jstree.css",
-        "octotree.css"
-      ],
-      "js": [
-        "jquery.js",
-        "jquery-ui.js",
-        "jquery.pjax.js",
-        "jstree.js",
-        "keymaster.js",
-        "octotree.js"
-      ],
-      "run_at": "document_start"
-    }
-  ]
+  "optional_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "scripts": [
+      "async.js",
+      "background.js"
+    ],
+    "persistent": true
+  },
+  // "content_scripts": [
+  //   {
+  //     "matches": [
+  //       "https://github.com/*"
+  //     ],
+  //     "css": [
+  //       "jstree.css",
+  //       "octotree.css"
+  //     ],
+  //     "js": [
+  //       "jquery.js",
+  //       "jquery-ui.js",
+  //       "jquery.pjax.js",
+  //       "jstree.js",
+  //       "keymaster.js",
+  //       "octotree.js"
+  //     ],
+  //     "run_at": "document_start"
+  //   }
+  // ],
+  "browser_action": {
+    "default_icon": {
+      "19": "icons/icon19.png",
+      "38": "icons/icon38.png"
+    },
+    "default_title": "Octotree",
+    "default_popup": "popup.html"
+  }
 }

@@ -43,27 +43,29 @@ TreeView.prototype.showHeader = function(repo) {
     )
     .on('click', 'a[data-pjax]', function(event) {
       event.preventDefault()
-      adapter.selectPath(this.href)
+      adapter.selectPath($(this).attr('href') /* a.href always return absolute URL, don't want that */)
     })
 }
 
 TreeView.prototype.show = function(repo, treeData) {
   var self = this
-    , $view = this.$view
-    , store = this.store
-    , treeContainer = $view.find('.octotree_view_body')
-    , tree = treeContainer.jstree(true)
 
-  treeData = sort(treeData)
-  if (store.get(STORE.COLLAPSE)) treeData = collapse(treeData)
-  tree.settings.core.data = treeData
-  tree.settings.state.key = PREFIX + '.' + repo.username + '/' + repo.reponame
+  self.store.get(STORE.COLLAPSE, function(collapseTree) {
+    var treeContainer = self.$view.find('.octotree_view_body')
+      , tree = treeContainer.jstree(true)
 
-  treeContainer.one('refresh.jstree', function() {
-    self.syncSelection()
-    $(self).trigger(EVENT.VIEW_READY)
+    treeData = sort(treeData)
+    if (collapseTree) treeData = collapse(treeData)
+    tree.settings.core.data = treeData
+    tree.settings.state.key = PREFIX + '.' + repo.username + '/' + repo.reponame
+
+    treeContainer.one('refresh.jstree', function() {
+      self.syncSelection()
+      $(self).trigger(EVENT.VIEW_READY)
+    })
+
+    tree.refresh(true)
   })
-  tree.refresh(true)
 
   function sort(folder) {
     folder.sort(function(a, b) {

@@ -12,7 +12,6 @@ const
   , GH_404_SEL          = '#parallax_wrapper'
   , GH_PJAX_SEL         = '#js-repo-pjax-container'
   , GH_CONTAINERS       = 'body > .container, .header > .container, .site > .container, .repohead > .container'
-  , SIDEBAR_SPACE       = 10
 
 function GitHub() {}
 
@@ -35,7 +34,7 @@ GitHub.prototype.selectPath = function(path) {
       container : container
     })
   }
-  else window.location.href = path // falls back
+  else window.location.href = path // falls back if no container (i.e. GitHub DOM has changed)
 }
 
 /**
@@ -43,19 +42,20 @@ GitHub.prototype.selectPath = function(path) {
  */
 GitHub.prototype.updateLayout = function(sidebarVisible, sidebarWidth) {
   var $containers = $(GH_CONTAINERS)
+    , space = location.host === 'github.com' ? 10 : 0
     , autoMarginLeft
     , shouldPushLeft
 
   if ($containers.length === 4) {
     autoMarginLeft = ($('body').width() - $containers.width()) / 2
-    shouldPushLeft = sidebarVisible && (autoMarginLeft <= sidebarWidth + SIDEBAR_SPACE)
+    shouldPushLeft = sidebarVisible && (autoMarginLeft <= sidebarWidth + space)
     $containers.css('margin-left', shouldPushLeft
-      ? sidebarWidth + SIDEBAR_SPACE
+      ? sidebarWidth + space
       : autoMarginLeft)
   }
 
   // falls-back if GitHub DOM has been updated
-  else $('html').css('margin-left', sidebarVisible ? sidebarWidth - SIDEBAR_SPACE : 0)
+  else $('html').css('margin-left', sidebarVisible ? sidebarWidth - space : 0)
 }
 
 /**
@@ -186,15 +186,18 @@ GitHub.prototype.fetchData = function(opts, cb) {
 
   function get(path, cb) {
     var token = opts.token
-      , base  = (opts.apiUrl || 'https://api.github.com') + '/repos/' + repo.username + '/' + repo.reponame
+      , host  = (location.host === 'github.com' ? 'api.github.com' : (location.host + '/api/v3'))
+      , base  = location.protocol + '//' + host + '/repos/' + repo.username + '/' + repo.reponame
       , cfg   = { method: 'GET', url: base + path }
+
     if (token) cfg.headers = { Authorization: 'token ' + token }
     $.ajax(cfg)
       .done(function(data) {
         cb(null, data)
       })
       .fail(function(jqXHR) {
-        var error
+        var createTokenUrl = location.protocol + '//' + location.host + '/settings/tokens/new'
+          , error
           , message
           , needAuth
 
@@ -206,7 +209,7 @@ GitHub.prototype.fetchData = function(opts, cb) {
             break
           case 401:
             error = 'Invalid token'
-            message = 'The token is invalid. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create a new token and paste it below.'
+            message = 'The token is invalid. Follow <a href="' + createTokenUrl + '" target="_blank">this link</a> to create a new token and paste it below.'
             needAuth = true
             break
           case 409:
@@ -215,13 +218,13 @@ GitHub.prototype.fetchData = function(opts, cb) {
             break
           case 404:
             error = 'Private repository'
-            message = 'Accessing private repositories requires a GitHub access token. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it below.'
+            message = 'Accessing private repositories requires a GitHub access token. Follow <a href="' + createTokenUrl + '" target="_blank">this link</a> to create one and paste it below.'
             needAuth = true
             break
           case 403:
             if (~jqXHR.getAllResponseHeaders().indexOf('X-RateLimit-Remaining: 0')) {
               error = 'API limit exceeded'
-              message = 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="https://github.com/settings/tokens/new" target="_blank">this link</a> to create one and paste it below.'
+              message = 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="' + createTokenUrl + '" target="_blank">this link</a> to create one and paste it below.'
               needAuth = true
               break
             }

@@ -1,58 +1,79 @@
-;(function() {
-  var $html     = $('html')
-    , $document = $(document)
-    , $dom      = $(TEMPLATE)
-    , $sidebar  = $dom.find('.octotree_sidebar')
-    , $toggler  = $sidebar.find('.octotree_toggle')
-    , $views    = $sidebar.find('.octotree_view')
-    , store     = new Storage()
-    , adapter   = new GitHub()
-    , helpPopup = new HelpPopup($dom, store)
-    , treeView  = new TreeView($dom, store, adapter)
-    , errorView = new ErrorView($dom, store)
-    , optsView  = new OptionsView($dom, store)
-    , currRepo  = false
-    , hasError  = false
+$(document).ready(function() {
+  var store    = new Storage()
+    , defaults = {}
 
-  $document.ready(function() {
-    $sidebar
-      .appendTo($('body'))
-      .width(store.get(STORE.WIDTH) || 250)
-      .resizable({ handles: 'e', minWidth: 200 })
-      .resize(layoutChanged)
+  defaults[STORE.COLLAPSE] = false
+  defaults[STORE.REMEMBER] = false
+  defaults[STORE.HOTKEYS]  = '⌘+⌥+b, ⌃+⌥+b'
+  defaults[STORE.WIDTH]    = 250
+  async.each(Object.keys(defaults), setDefault, loadExtension)
 
-    $(window).resize(function(event) { // handle zoom
-      if (event.target === window) layoutChanged()
+  function setDefault(key, cb) {
+    store.get(key, function(val) {
+      if (val != null) return cb()
+      store.set(key, defaults[key], function() { cb() })
     })
+  }
 
-    $toggler.click(toggleSidebarAndSave)
-    key.filter = function() { return $toggler.is(':visible') }
-    key(store.get(STORE.HOTKEYS), toggleSidebarAndSave)
+  function loadExtension() {
+    var $html     = $('html')
+      , $document = $(document)
+      , $dom      = $(TEMPLATE)
+      , $sidebar  = $dom.find('.octotree_sidebar')
+      , $toggler  = $sidebar.find('.octotree_toggle')
+      , $views    = $sidebar.find('.octotree_view')
+      , adapter   = new GitHub()
+      , optsView  = new OptionsView($dom, store)
+      , helpPopup = new HelpPopup($dom, store)
+      , treeView  = new TreeView($dom, store, adapter)
+      , errorView = new ErrorView($dom, store)
+      , currRepo  = false
+      , hasError  = false
 
-    ;[treeView, errorView, optsView].forEach(function(view) {
-      $(view)
-        .on(EVENT.VIEW_READY, function(event) {
-          if (this !== optsView) $document.trigger(EVENT.REQ_END)
-          showView(this.$view)
+    store.get(STORE.WIDTH, function(width) {
+      $sidebar
+        .appendTo($('body'))
+        .width(width)
+        .resizable({ handles: 'e', minWidth: 200 })
+        .resize(layoutChanged)
+
+      $(window).resize(function(event) { // handle zoom
+        if (event.target === window) layoutChanged()
+      })
+
+      $toggler.click(toggleSidebarAndSave)
+      key.filter = function() { return $toggler.is(':visible') }
+      store.get(STORE.HOTKEYS, function(hotkeys) {
+        key(hotkeys, toggleSidebarAndSave)
+      })
+
+      ;[treeView, errorView, optsView].forEach(function(view) {
+        $(view)
+          .on(EVENT.VIEW_READY, function(event) {
+            if (this !== optsView) $document.trigger(EVENT.REQ_END)
+            showView(this.$view)
+          })
+          .on(EVENT.VIEW_CLOSE, function() {
+            showView(hasError ? errorView.$view : treeView.$view)
+          })
+          .on(EVENT.OPTS_CHANGE, optionsChanged)
+      })
+
+      $document
+        .on('pjax:send ' + EVENT.REQ_START, function() {
+          $toggler.addClass('loading')
         })
-        .on(EVENT.VIEW_CLOSE, function() {
-          showView(hasError ? errorView.$view : treeView.$view)
+        .on('pjax:end ' + EVENT.REQ_END, function() {
+          $toggler.removeClass('loading')
         })
-        .on(EVENT.OPTS_CHANGE, optionsChanged)
+        .on('pjax:timeout', function(event) {
+          event.preventDefault()
+        })
+        .on(EVENT.LOC_CHANGE, tryLoadRepo)
+        .on(EVENT.TOGGLE, layoutChanged)
+
+      tryLoadRepo()
     })
-
-    $document
-      .on('pjax:send ' + EVENT.REQ_START, function() {
-        $toggler.addClass('loading')
-      })
-      .on('pjax:end ' + EVENT.REQ_END, function() {
-        $toggler.removeClass('loading')
-      })
-      .on('pjax:timeout', function(event) {
-        event.preventDefault()
-      })
-      .on(EVENT.LOC_CHANGE, tryLoadRepo)
-      .on(EVENT.TOGGLE, layoutChanged)
 
     function optionsChanged(event, changes) {
       var reload = false
@@ -74,22 +95,28 @@
 
     function tryLoadRepo(reload) {
       var repo = adapter.getRepoFromPath()
-        , repoChanged = JSON.stringify(repo) !== JSON.stringify(currRepo)
       if (repo) {
         helpPopup.show()
         $toggler.show()
-        if (store.get(STORE.REMEMBER) && store.get(STORE.SHOWN)) toggleSidebar(true)
-        if (repoChanged || reload === true) {
-          $document.trigger(EVENT.REQ_START)
-          currRepo = repo
-          treeView.showHeader(repo)
-          adapter.fetchData({ repo: repo, token: store.get(STORE.TOKEN) }, function(err, tree) {
-            hasError = !!err
-            if (err) errorView.show(err)
-            else treeView.show(repo, tree)
+        store.get(STORE.REMEMBER, function(remember) {
+          store.get(STORE.SHOWN, function(shown) {
+            var repoChanged = JSON.stringify(repo) !== JSON.stringify(currRepo)
+            if (remember && shown) toggleSidebar(true)
+            if (repoChanged || reload === true) {
+              $document.trigger(EVENT.REQ_START)
+              currRepo = repo
+              treeView.showHeader(repo)
+              store.get(STORE.TOKEN, true, function(token) {
+                adapter.fetchData({ repo: repo, token: token }, function(err, tree) {
+                  hasError = !!err
+                  if (err) errorView.show(err)
+                  else treeView.show(repo, tree)
+                })
+              })
+            }
+            else treeView.syncSelection()
           })
-        }
-        else treeView.syncSelection()
+        })
       }
       else {
         $toggler.hide()
@@ -103,8 +130,7 @@
     }
 
     function toggleSidebarAndSave() {
-      toggleSidebar()
-      store.set(STORE.SHOWN, $html.hasClass(PREFIX))
+      store.set(STORE.SHOWN, !$html.hasClass(PREFIX), toggleSidebar)
     }
 
     function toggleSidebar(visibility) {
@@ -123,5 +149,5 @@
       adapter.updateLayout($html.hasClass(PREFIX), width)
       store.set(STORE.WIDTH, width)
     }
-  })
-})()
+  }
+})

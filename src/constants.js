@@ -6,6 +6,7 @@ const
     COLLAPSE : 'octotree.collapse',
     REMEMBER : 'octotree.remember',
     HOTKEYS  : 'octotree.hotkeys',
+    GHEURLS  : 'octotree.gheurls',
     WIDTH    : 'octotree.sidebar_width',
     POPUP    : 'octotree.popup_shown',
     SHOWN    : 'octotree.sidebar_shown',

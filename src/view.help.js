@@ -8,14 +8,17 @@ HelpPopup.prototype.show = function() {
     , $sidebar = this.$sidebar
     , store = this.store
 
-  if (!store.get(STORE.POPUP)) {
+  store.get(STORE.POPUP, function(shown) {
+    if (shown) return
+
     $view.css('display', 'block').appendTo($('body'))
 
     setTimeout(function() {
-      store.set(STORE.POPUP, true)
-      $view.addClass('show').click(hide)
-      setTimeout(hide, 12000)
-      $(document).one(EVENT.TOGGLE, hide)
+      store.set(STORE.POPUP, true, function() {
+        $view.addClass('show').click(hide)
+        setTimeout(hide, 12000)
+        $(document).one(EVENT.TOGGLE, hide)
+      })
     }, 500)
 
     function hide() {
@@ -23,5 +26,5 @@ HelpPopup.prototype.show = function() {
         $view.removeClass('show').one('transitionend', function() { $view.remove() })
       }
     }
-  }
+  })
 }
