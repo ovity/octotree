@@ -1,13 +1,8 @@
 var gulp   = require('gulp')
-  , gutil  = require('gulp-util')
-  , less   = require('gulp-less')
-  , clean  = require('gulp-clean')
-  , concat = require('gulp-concat')
   , merge  = require('event-stream').merge
   , series = require('stream-series')
   , map    = require('map-stream')
-  , prefix = require('gulp-autoprefixer')
-  , rseq   = require('gulp-run-sequence')
+  , $      = require('gulp-load-plugins')()
 
 function pipe(src, transforms, dest) {
   if (typeof transforms === 'string') {
@@ -26,7 +21,7 @@ function html2js(template) {
   return map(escape)
 
   function escape(file, cb) {
-    var path = gutil.replaceExtension(file.path, '.js')
+    var path = $.util.replaceExtension(file.path, '.js')
       , content = file.contents.toString()
       , escaped = content.replace(/\\/g, "\\\\")
                          .replace(/'/g, "\\'")
@@ -38,19 +33,7 @@ function html2js(template) {
   }
 }
 
-gulp.task('clean', function() {
-  return pipe('./tmp', [clean()])
-})
-
-gulp.task('css', function() {
-  return pipe('./src/octotree.less', [less(), prefix({ cascade: true })], './tmp')
-})
-
-gulp.task('template', function() {
-  return pipe('./src/template.html', [html2js('const TEMPLATE = \'$$\'')], './tmp')
-})
-
-function buildMainScript(additions) {
+function buildJs(additions, ctx) {
   var src = additions.concat([
     './src/adapter.github.js',
     './src/view.help.js',
@@ -63,27 +46,65 @@ function buildMainScript(additions) {
     './src/constants.js',
     './src/octotree.js',
   ])
-  return pipe(src, [concat('octotree.js')], './tmp')
+  return pipe(src, [
+    $.concat('octotree.js'),
+    $.preprocess({ context: ctx })
+  ], './tmp')
 }
 
-gulp.task('chrome:octotree', function() {
-  return buildMainScript(['./src/chrome/storage.js'])
+function buildTemplate(ctx) {
+  return pipe('./src/template.html', [
+    $.preprocess({ context: ctx }),
+    html2js('const TEMPLATE = \'$$\'')
+  ], './tmp')
+}
+
+gulp.task('clean', function() {
+  return pipe('./tmp', [$.clean()])
 })
-gulp.task('chrome', ['chrome:octotree'], function() {
+
+gulp.task('css', function() {
+  return pipe('./src/octotree.less', [$.less(), $.autoprefixer({ cascade: true })], './tmp')
+})
+
+
+gulp.task('default', function(cb) {
+  $.runSequence('clean', 'css', 'chrome', 'opera', 'safari', 'firefox', cb)
+  gulp.watch(['./src/**/*'], ['default'])
+})
+
+
+// Chrome
+gulp.task('chrome:template', function() {
+  return buildTemplate({ CHROME: true })
+})
+
+gulp.task('chrome:js', ['chrome:template'], function() {
+  return buildJs(['./src/chrome/storage.js'], { CHROME: true })
+})
+
+gulp.task('chrome', ['chrome:js'], function() {
   return merge(
     pipe('./icons/**/*', './tmp/chrome/icons'),
     pipe(['./libs/**/*', './tmp/octotree.*', './src/chrome/**/*', '!./src/chrome/storage.js'], './tmp/chrome/')
   )
 })
 
+// Opera
 gulp.task('opera', ['chrome'], function() {
   return pipe('./tmp/chrome/**/*', './tmp/opera')
 })
 
-gulp.task('safari:octotree', function() {
-  return buildMainScript(['./src/safari/storage.js'])
+// Safari
+gulp.task('safari:template', function() {
+  return buildTemplate({ SAFARI: true })
 })
-gulp.task('safari', ['safari:octotree'], function() {
+
+gulp.task('safari:js', ['safari:template'], function() {
+  return buildJs(['./src/safari/storage.js'], { SAFARI: true })
+})
+
+gulp.task('safari', ['safari:js'], function() {
   return merge(
     pipe('./icons/**/*', './tmp/safari/octotree.safariextension/icons'),
     pipe(['./libs/**/*', './tmp/octotree.js', './tmp/octotree.css', 
@@ -91,19 +112,20 @@ gulp.task('safari', ['safari:octotree'], function() {
   )
 })
 
-gulp.task('firefox:octotree', function() {
-  return buildMainScript(['./src/firefox/storage.js'])
+// Firefox
+gulp.task('firefox:template', function() {
+  return buildTemplate({ FIREFOX: true })
 })
-gulp.task('firefox', ['firefox:octotree'], function() {
+
+gulp.task('firefox:js', ['firefox:template'], function() {
+  return buildJs(['./src/firefox/storage.js'], { FIREFOX: true })
+})
+
+gulp.task('firefox', ['firefox:js'], function() {
   return merge(
     pipe('./icons/**/*', './tmp/firefox/data/icons'),
     pipe(['./libs/**/*', './tmp/octotree.js', './tmp/octotree.css'], './tmp/firefox/data'),
     pipe(['./src/firefox/firefox.js'], './tmp/firefox/lib'),
     pipe('./src/firefox/package.json', './tmp/firefox')
   )
-})
-
-gulp.task('default', function(cb) {
-  rseq('clean', ['css', 'template'], 'chrome', 'opera', 'safari', 'firefox', cb)
-  gulp.watch(['./src/**/*'], ['default'])
 })

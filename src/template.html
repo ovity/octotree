@@ -44,9 +44,17 @@
           <div>
             <label><input type="checkbox" data-store="COLLAPSE"> Collapse folders with single sub-folder</label>
           </div>
+          <!-- @ifdef CHROME -->
+          <div>
+            <div>
+              <label>GitHub Enterprise URLs</label>
+            </div>
+            <textarea data-store="GHEURLS" placeholder="https://github.my.org/"></textarea>
+          </div>
           <div>
             <button type="submit" class="button">Save</button>
           </div>
+          <!-- @endif -->
         </form>
       </div>
     </div>

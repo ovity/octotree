@@ -37,6 +37,14 @@ function OptionsView($dom, store) {
 
   function save(event) {
     event.preventDefault()
+
+    // @ifdef CHROME
+    var $ta  = $view.find('[data-store=GHEURLS]')
+      , urls = $ta.val().split(/\n/)
+    chrome.runtime.sendMessage({ type: 'perms', urls: urls })
+    // TODO: if denied, reset $ta to old value
+    // @endif
+
     var changes = {}
     eachOption(
       function($elm, key, local, value, cb) {

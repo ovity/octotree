@@ -26,6 +26,8 @@
     "map-stream": "*",
     "gulp-util": "^2.2.20",
     "stream-series": "*",
-    "gulp-concat": "*"
+    "gulp-concat": "*",
+    "gulp-preprocess": "^1.1.1",
+    "gulp-load-plugins": "^0.5.3"
   }
 }
