@@ -4,7 +4,7 @@ $(document).ready(function() {
 
   defaults[STORE.COLLAPSE] = false
   defaults[STORE.REMEMBER] = false
-  defaults[STORE.HOTKEYS]  = '⌘+⌥+b, ⌃+⌥+b'
+  defaults[STORE.HOTKEYS]  = '⌘+⇧+a, ⌃+⇧+b'
   defaults[STORE.WIDTH]    = 250
   async.each(Object.keys(defaults), setDefault, loadExtension)
 
