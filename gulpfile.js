@@ -42,6 +42,7 @@ function buildJs(additions, ctx) {
     './src/view.options.js',
     './src/util.location.js',
     './src/util.module.js',
+    './src/util.async.js',
     './tmp/template.js',
     './src/constants.js',
     './src/octotree.js',

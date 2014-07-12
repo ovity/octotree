@@ -1,45 +1,13 @@
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-  if (changeInfo.status === 'loading') {
-    chrome.tabs.executeScript(tabId, {
-      code  : 'chrome.runtime.sendMessage({ loaded: window.octotreeLoaded, tabId: ' + tabId + ' })',
-      runAt : 'document_start'
-    })
-  }
-})
+  if (changeInfo.status !== 'loading') return
 
-chrome.runtime.onMessage.addListener(function(req) {
-  if (req.type === 'perms') {
-    var urls = req.urls
-    if (urls.length === 0) { // TODO: remove only
-
-    }
-    else {
-      console.log(1, urls)
-      urls = urls.map(function(url) {
-        if (url.slice(-1) !== '/') url += '/'
-        url += '*'
-        return url
-      })
-      console.log(2, urls)
-      chrome.permissions.request({ origins: urls }, function() {
-        chrome.permissions.getAll(function(permissions) {
-          var allUrls = permissions.origins
-            , toRemove = []
-          console.log('all', allUrls)
-          allUrls.forEach(function(url) {
-            if (url !== 'https://github.com/*' && !~urls.indexOf(url)) toRemove.push(url)
-          })
-          console.log('remove: ' + toRemove)
-          if (toRemove.length) chrome.permissions.remove({ origins: toRemove })
-        })
-      })
-    }
-  }
-  else {
-    var loaded = req.loaded
-      , tabId  = req.tabId
-
-    if (loaded) return
+  chrome.tabs.executeScript(tabId, {
+    code  : 'var injected = window.octotreeInjected; window.octotreeInjected = true; injected;',
+    runAt : 'document_start'
+  }, function(res) {
+    if (chrome.runtime.lastError || // don't continue if error (i.e. page isn't in permission list)
+        res[0]) // value of `injected` above: don't inject twice
+      return
 
     var cssFiles = [
       'jstree.css',
@@ -56,21 +24,73 @@ chrome.runtime.onMessage.addListener(function(req) {
       'octotree.js'
     ]
 
-    async.series([
+    eachTask([
       function(cb) {
-        async.eachSeries(cssFiles, inject('insertCSS'), cb)
+        eachItem(cssFiles, inject('insertCSS'), cb)
       },
       function(cb) {
-        async.eachSeries(jsFiles, inject('executeScript'), cb)
+        eachItem(jsFiles, inject('executeScript'), cb)
       }
-    ], function() {
-      chrome.tabs.executeScript(tabId, { code: 'var octotreeLoaded = true', runAt: 'document_start' })
-    })
+    ])
 
     function inject(fn) {
       return function(file, cb) {
-        chrome.tabs[fn](tabId, { file: file, runAt: 'document_start' }, function() { cb() })
+        chrome.tabs[fn](tabId, { file: file, runAt: 'document_start' }, cb)
+      }
+    }
+  })
+})
+
+chrome.runtime.onMessage.addListener(function(req, sender, sendRes) {
+  var handler = {
+    requestPermissions: function() {
+      var urls = (req.urls || [])
+        .filter(function(url) { return url.trim() !== '' })
+        .map(function(url) {
+          if (url.slice(-2) === '/*') return url
+          if (url.slice(-1) === '/') return url + '*'
+          return url + '/*'
+        })
+
+      if (urls.length === 0) {
+        sendRes(true)
+        removeUnnecessaryPermissions()
+      }
+      else {
+        chrome.permissions.request({ origins: urls }, function(granted) {
+          sendRes(granted)
+          removeUnnecessaryPermissions()
+        })
+      }
+      return true
+
+      function removeUnnecessaryPermissions() {
+        chrome.permissions.getAll(function(permissions) {
+          var toBeRemovedUrls = permissions.origins.filter(function(url) {
+            return url !== 'https://github.com/*' && !~urls.indexOf(url)
+          })
+          if (toBeRemovedUrls.length) chrome.permissions.remove({ origins: toBeRemovedUrls })
+        })
       }
     }
   }
+
+  return handler[req.type]()
 })
+
+function eachTask(tasks, done) {
+  next(0)
+  function next(index) {
+    if (index === tasks.length) done && done()
+    else tasks[index](function() { next(index + 1) })
+  }
+}
+
+function eachItem(arr, iter, done) {
+  var tasks = arr.map(function(item) {
+    return function(next) {
+      iter(item, next)
+    }
+  })
+  return eachTask(tasks, done)
+}

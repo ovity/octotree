@@ -4,14 +4,14 @@ $(document).ready(function() {
 
   defaults[STORE.COLLAPSE] = false
   defaults[STORE.REMEMBER] = false
-  defaults[STORE.HOTKEYS]  = '⌘+⇧+a, ⌃+⇧+b'
+  defaults[STORE.HOTKEYS]  = '⌘+⇧+a, ⌃+⇧+a'
   defaults[STORE.WIDTH]    = 250
-  async.each(Object.keys(defaults), setDefault, loadExtension)
+  parallel(Object.keys(defaults), setDefault, loadExtension)
 
   function setDefault(key, cb) {
     store.get(key, function(val) {
       if (val != null) return cb()
-      store.set(key, defaults[key], function() { cb() })
+      store.set(key, defaults[key], cb)
     })
   }
 

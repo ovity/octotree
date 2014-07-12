@@ -1,12 +1,12 @@
 const
-    RESERVED_USER_NAMES = [
+    GH_RESERVED_USER_NAMES = [
       'settings', 'orgs', 'organizations',
       'site', 'blog', 'about', 'explore',
       'styleguide', 'showcases', 'trending',
       'stars', 'dashboard', 'notifications',
       'search', 'developer'
     ]
-  , RESERVED_REPO_NAMES = ['followers', 'following', 'repositories']
+  , GH_RESERVED_REPO_NAMES = ['followers', 'following', 'repositories']
   , GH_BRANCH_SEL       = '*[data-master-branch]'
   , GH_BRANCH_BTN_SEL   = '*[data-master-branch] > .js-select-button'
   , GH_404_SEL          = '#parallax_wrapper'
@@ -34,7 +34,7 @@ GitHub.prototype.selectPath = function(path) {
       container : container
     })
   }
-  else window.location.href = path // falls back if no container (i.e. GitHub DOM has changed)
+  else window.location.href = path // falls back if no container (i.e. GitHub DOM has changed or is not yet available)
 }
 
 /**
@@ -70,8 +70,8 @@ GitHub.prototype.getRepoFromPath = function() {
   if (!match) return false
 
   // not a repository, skip
-  if (~RESERVED_USER_NAMES.indexOf(match[1])) return false
-  if (~RESERVED_REPO_NAMES.indexOf(match[2])) return false
+  if (~GH_RESERVED_USER_NAMES.indexOf(match[1])) return false
+  if (~GH_RESERVED_REPO_NAMES.indexOf(match[2])) return false
 
   // not a code page, skip
   if (match[3] && !~['tree', 'blob'].indexOf(match[3])) return false

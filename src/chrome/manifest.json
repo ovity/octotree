@@ -12,17 +12,13 @@
   },
   "permissions": [
     "https://github.com/*",
-    "tabs",
     "storage"
   ],
   "optional_permissions": [
     "<all_urls>"
   ],
   "background": {
-    "scripts": [
-      "async.js",
-      "background.js"
-    ],
-    "persistent": true
+    "scripts": [ "background.js" ],
+    "persistent": false
   }
 }

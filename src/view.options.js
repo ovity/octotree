@@ -6,8 +6,8 @@ function OptionsView($dom, store) {
 
   this.$view = $view
 
+  // hide options view when sidebar is hidden
   $(document).on(EVENT.TOGGLE, function(event, visible) {
-    // hide options view when sidebar is hidden
     if (!visible) toggle(false)
   })
 
@@ -38,30 +38,48 @@ function OptionsView($dom, store) {
   function save(event) {
     event.preventDefault()
 
+    /*
+     * Certainly not a good place to put this logic but Chrome requires
+     * permissions to be requested only in response of user input. So...
+     */
     // @ifdef CHROME
     var $ta  = $view.find('[data-store=GHEURLS]')
       , urls = $ta.val().split(/\n/)
-    chrome.runtime.sendMessage({ type: 'perms', urls: urls })
-    // TODO: if denied, reset $ta to old value
+    chrome.runtime.sendMessage({ type: 'requestPermissions', urls: urls }, function(granted) {
+      if (granted) saveOptions()
+      else {
+        // permissions not granted, reset value
+        store.get(STORE.GHEURLS, function(val) {
+          $ta.val(val)
+          saveOptions()
+        })
+      }
+    })
     // @endif
 
-    var changes = {}
-    eachOption(
-      function($elm, key, local, value, cb) {
-        var newValue = $elm.is(':checkbox') ? $elm.is(':checked') : $elm.val()
-        if (value === newValue) return cb()
-        changes[key] = [value, newValue]
-        store.set(key, newValue, local, cb)
-      },
-      function() {
-        toggle(false)
-        if (Object.keys(changes).length) $(self).trigger(EVENT.OPTS_CHANGE, changes)
-      }
-    )
+    // @ifndef CHROME
+    saveOptions()
+    // @endif
+
+    function saveOptions() {
+      var changes = {}
+      eachOption(
+        function($elm, key, local, value, cb) {
+          var newValue = $elm.is(':checkbox') ? $elm.is(':checked') : $elm.val()
+          if (value === newValue) return cb()
+          changes[key] = [value, newValue]
+          store.set(key, newValue, local, cb)
+        },
+        function() {
+          toggle(false)
+          if (Object.keys(changes).length) $(self).trigger(EVENT.OPTS_CHANGE, changes)
+        }
+      )
+    }
   }
 
   function eachOption(processFn, completeFn) {
-    async.each(elements,
+    parallel(elements,
       function(elm, cb) {
         var $elm  = $(elm)
           , key   = STORE[$elm.data('store')]

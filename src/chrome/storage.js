@@ -5,6 +5,9 @@ Storage.prototype.set = function(key, val, local, cb) {
     cb = local
     local = false
   }
+
+  cb = cb || function() {}
+
   if (local) {
     localStorage.setItem(key, JSON.stringify(val))
     cb()
@@ -21,6 +24,9 @@ Storage.prototype.get = function(key, local, cb) {
     cb = local
     local = false
   }
+
+  cb = cb || function() {}
+
   if (local) cb(parse(localStorage.getItem(key)))
   else chrome.storage.local.get(key, function(item) {
     cb(item[key])
