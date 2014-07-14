@@ -4,8 +4,14 @@ $(document).ready(function() {
 
   defaults[STORE.COLLAPSE] = false
   defaults[STORE.REMEMBER] = false
-  defaults[STORE.HOTKEYS]  = '⌘+⇧+a, ⌃+⇧+a'
   defaults[STORE.WIDTH]    = 250
+  // @ifdef SAFARI
+  defaults[STORE.HOTKEYS]  = '⌘+b, ⌃+b'
+  // @endif
+  // @ifndef SAFARI
+  defaults[STORE.HOTKEYS]  = '⌘+⇧+s, ⌃+⇧+s'
+  // @endif
+
   parallel(Object.keys(defaults), setDefault, loadExtension)
 
   function setDefault(key, cb) {

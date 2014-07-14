@@ -48,7 +48,7 @@ function OptionsView($dom, store) {
     chrome.runtime.sendMessage({ type: 'requestPermissions', urls: urls }, function(granted) {
       if (granted) saveOptions()
       else {
-        // permissions not granted, reset value
+        // permissions not granted (by user or error), reset value
         store.get(STORE.GHEURLS, function(val) {
           $ta.val(val)
           saveOptions()
