@@ -35,6 +35,8 @@ function html2js(template) {
 
 function buildJs(additions, ctx) {
   var src = additions.concat([
+    './tmp/template.js',
+    './src/constants.js',
     './src/adapter.github.js',
     './src/view.help.js',
     './src/view.error.js',
@@ -43,8 +45,6 @@ function buildJs(additions, ctx) {
     './src/util.location.js',
     './src/util.module.js',
     './src/util.async.js',
-    './tmp/template.js',
-    './src/constants.js',
     './src/octotree.js',
   ])
   return pipe(src, [
