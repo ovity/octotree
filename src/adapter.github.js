@@ -228,6 +228,12 @@ GitHub.prototype.fetchData = function(opts, cb) {
               needAuth = true
               break
             }
+            else {
+              error = 'Forbidden'
+              message = 'You are not allowed to access the API. You might need to provide an access token. Follow <a href="' + createTokenUrl + '" target="_blank">this link</a> to create one and paste it below.'
+              needAuth = true
+              break
+            }
           default:
             error = message = jqXHR.statusText
             needAuth = false
