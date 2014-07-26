@@ -12,11 +12,11 @@ Browser extensions (Chrome, Firefox, Safari and Opera) to display GitHub code in
 * Navigate to any GitHub repository (or just refresh this page as an example)
 * The code tree should show on the left-hand side of the screen
 
-## Install on Firefox, Safari and Opera
+## Install on Safari and Opera
 You can install the prebuilt extensions located in the [dist](https://github.com/buunguyen/octotree/tree/master/dist) folder. For security reason, only download Octotree from this location.
 
-* Safari: drag `octotree.safariextz` to the browser and follow the instructions
-* Opera: drag `octotree.nex` to the browser and follow the instructions
+* Safari: drag `safari.safariextz` to the browser and follow the instructions
+* Opera: drag `opera.nex` to the browser and follow the instructions
 
 ## GitHub access token
 Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve repository metadata. By default, it makes unauthenticated requests to the GitHub API. However, there are two situations when requests must be authenticated:
@@ -35,15 +35,15 @@ Alternatively, you can manually enter or update the token by following these ste
 localStorage.setItem('octotree.github_access_token', 'REPLACE WITH TOKEN')
 ```
 
-Note: if you use GitHub Enterprise, each site will need a separate access token. Therefore, Octotree access token setting is per-site basis.
+Note: if you use GitHub Enterprise, each site will need its own access token. Therefore, Octotree stores access token on a per-site basis.
 
 
 ## GitHub Enterprise
-By default, Octotree only works on `github.com`. To support GitHub Enterprise on Chrome or Opera, you must allow Octotoree to inject code into your GitHub Enterprise deployment. Follow these steps to do so:
+By default, Octotree only works on `github.com`. To support GitHub Enterprise on Chrome or Opera, you must grant Octotoree sufficient permissions. Follow these steps to do so:
 
-* Navigate to any GitHub repository
+* Navigate to any GitHub repository on `github.com`
 * Open Octotree's setting panel
-* Fill in the GitHub Enterprise URLs textbox, one base URL per line
+* Fill in the GitHub Enterprise URLs textbox, one site URL per line
 * Click Save and accept any permission prompt
 * Navigate to your GitHub Enterprise site (or refresh if you're already in one)
 * You might be asked to create an [access token](#github-access-token)
