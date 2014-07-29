@@ -12,6 +12,10 @@ function TreeView($dom, store, adapter) {
     })
     .on('click', function(event) {
       var $target = $(event.target)
+
+      // handle icon click, fix #122
+      if ($target.is('i.jstree-icon')) $target = $target.parent()
+
       if (!$target.is('a.jstree-anchor')) return
 
       var href  = $target.attr('href')
