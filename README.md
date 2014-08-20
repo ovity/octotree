@@ -93,7 +93,7 @@ By default, Octotree only works on `github.com`. To support GitHub Enterprise on
 ## Donating
 Support this project and others via [Gittip](https://www.gittip.com/buunguyen/).
 
-[![Support via Gittip](https://rawgithub.com/twolfson/gittip-badge/0.2.0/dist/gittip.png)
+[![Support via Gittip](https://rawgithub.com/twolfson/gittip-badge/0.2.0/dist/gittip.png)](https://www.gittip.com/buunguyen/)
 
 
 ## Credit
