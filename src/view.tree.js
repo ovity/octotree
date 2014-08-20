@@ -28,7 +28,7 @@ function TreeView($dom, store, adapter) {
     })
     .jstree({
       core    : { multiple: false, themes : { responsive : false } },
-      plugins : ['wholerow', 'state']
+      plugins : ['wholerow']
     })
 }
 
@@ -61,7 +61,6 @@ TreeView.prototype.show = function(repo, treeData) {
     treeData = sort(treeData)
     if (collapseTree) treeData = collapse(treeData)
     tree.settings.core.data = treeData
-    tree.settings.state.key = PREFIX + '.' + repo.username + '/' + repo.reponame
 
     treeContainer.one('refresh.jstree', function() {
       self.syncSelection()
