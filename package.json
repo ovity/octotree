@@ -28,6 +28,10 @@
     "stream-series": "*",
     "gulp-concat": "*",
     "gulp-preprocess": "^1.1.1",
-    "gulp-load-plugins": "^0.5.3"
+    "gulp-load-plugins": "^0.5.3",
+    "gulp-run": "^1.6.4",
+    "gulp-zip": "^2.0.1",
+    "crx": "^0.4.4",
+    "gulp-rename": "^1.2.0"
   }
 }

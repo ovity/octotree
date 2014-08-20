@@ -50,6 +50,11 @@ By default, Octotree only works on `github.com`. To support GitHub Enterprise on
 
 
 ## Changelog
+
+### [v1.4.1](https://github.com/buunguyen/octotree/issues?q=milestone%3A1.4.1+is%3Aclosed)
+* New header to match new GitHub design
+* Bug fixes
+
 ### [v1.4](https://github.com/buunguyen/octotree/issues?labels=&milestone=4&page=1&state=closed)
 * Support GitHub enterprise
 * Change default hotkey (`cmd+b` for Safari and `cmd+shift+s` for all other browsers)
@@ -84,8 +89,12 @@ By default, Octotree only works on `github.com`. To support GitHub Enterprise on
 * Gulp script to build for Chrome, Firefox and Safari
 * And some other minor changes
 
-## Support Octotree
-Octotree started out as a weekend project to [scratch my own itch](https://news.ycombinator.com/item?id=7740226). Since then, I have spent a lot of time adding features, fixing bugs and handling pull requests. If you find Octotree useful or want to support its development, please consider [donating a small amount](https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=buunguyen@gmail.com&currency_code=USD&amount=&return=https://github.com/buunguyen/octotree&item_name=Support+Octotree).
+
+## Donating
+Support this project and others via [Gittip](https://www.gittip.com/buunguyen/).
+
+[![Support via Gittip](https://rawgithub.com/twolfson/gittip-badge/0.2.0/dist/gittip.png)
+
 
 ## Credit
 * Many thanks to all contributors who submit pull requests, report bugs and suggest ideas
