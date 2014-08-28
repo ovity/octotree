@@ -20,7 +20,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
       'jquery.pjax.js',
       'jstree.js',
       'keymaster.js',
-      'async.js',
       'octotree.js'
     ]
 
