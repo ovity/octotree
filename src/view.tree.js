@@ -23,7 +23,7 @@ function TreeView($dom, store, adapter) {
           ? $target.children(':first')
           : $target.siblings(':first') // handles child links in submodule
 
-      if (event.ctrlKey) window.open(href)
+      if (event.ctrlKey || event.which === 2) window.open(href)
       else if ($icon.hasClass('commit')) adapter.selectSubmodule(href)
       else if ($icon.hasClass('blob')) adapter.selectPath(href)
     })
