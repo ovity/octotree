@@ -4,6 +4,7 @@ $(document).ready(function() {
 
   defaults[STORE.COLLAPSE] = false
   defaults[STORE.REMEMBER] = false
+  defaults[STORE.LAZYLOAD] = false
   defaults[STORE.WIDTH]    = 250
   // @ifdef SAFARI
   defaults[STORE.HOTKEYS]  = '⌘+b, ⌃+b'
@@ -106,21 +107,25 @@ $(document).ready(function() {
         $toggler.show()
         store.get(STORE.REMEMBER, function(remember) {
           store.get(STORE.SHOWN, function(shown) {
-            var repoChanged = JSON.stringify(repo) !== JSON.stringify(currRepo)
-            if (remember && shown) toggleSidebar(true)
-            if (repoChanged || reload === true) {
-              $document.trigger(EVENT.REQ_START)
-              currRepo = repo
-              treeView.showHeader(repo)
-              store.get(STORE.TOKEN, true, function(token) {
-                adapter.fetchData({ repo: repo, token: token }, function(err, tree) {
-                  hasError = !!err
-                  if (err) errorView.show(err)
-                  else treeView.show(repo, tree)
-                })
-              })
-            }
-            else treeView.syncSelection()
+            store.get(STORE.LAZYLOAD, function(lazyload) {
+              if (remember && shown) toggleSidebar(true)
+              if (!lazyload || isSidebarVisible()) {
+                var repoChanged = JSON.stringify(repo) !== JSON.stringify(currRepo)
+                if (repoChanged || reload === true) {
+                  $document.trigger(EVENT.REQ_START)
+                  currRepo = repo
+                  treeView.showHeader(repo)
+                  store.get(STORE.TOKEN, true, function(token) {
+                    adapter.fetchData({ repo: repo, token: token }, function(err, tree) {
+                      hasError = !!err
+                      if (err) errorView.show(err)
+                      else treeView.show(repo, tree)
+                    })
+                  })
+                }
+                else treeView.syncSelection()
+              }
+            })
           })
         })
       }
@@ -136,24 +141,33 @@ $(document).ready(function() {
     }
 
     function toggleSidebarAndSave() {
-      store.set(STORE.SHOWN, !$html.hasClass(PREFIX), toggleSidebar)
+      store.set(STORE.SHOWN, !isSidebarVisible(), function() {
+        toggleSidebar()
+        if (isSidebarVisible()) {
+          tryLoadRepo()
+        }
+      })
     }
 
     function toggleSidebar(visibility) {
       if (visibility !== undefined) {
-        if ($html.hasClass(PREFIX) === visibility) return
+        if (isSidebarVisible() === visibility) return
         toggleSidebar()
       }
       else {
         $html.toggleClass(PREFIX)
-        $document.trigger(EVENT.TOGGLE, $html.hasClass(PREFIX))
+        $document.trigger(EVENT.TOGGLE, isSidebarVisible())
       }
     }
 
     function layoutChanged() {
       var width = $sidebar.width()
-      adapter.updateLayout($html.hasClass(PREFIX), width)
+      adapter.updateLayout(isSidebarVisible(), width)
       store.set(STORE.WIDTH, width)
+    }
+
+    function isSidebarVisible() {
+      return $html.hasClass(PREFIX)
     }
   }
 })
