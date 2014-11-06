@@ -1,7 +1,6 @@
 var data = require('sdk/self').data
   , pageMod = require('sdk/page-mod')
 
-console.log("HERE")
 pageMod.PageMod({
   include: '*.github.com',
   contentScriptFile : [data.url('jquery.js'),
