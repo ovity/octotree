@@ -5,6 +5,7 @@ const
     TOKEN    : 'octotree.github_access_token',
     COLLAPSE : 'octotree.collapse',
     REMEMBER : 'octotree.remember',
+    LAZYLOAD : 'octotree.lazyload',
     HOTKEYS  : 'octotree.hotkeys',
     GHEURLS  : 'octotree.gheurls',
     WIDTH    : 'octotree.sidebar_width',
