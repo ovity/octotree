@@ -91,9 +91,9 @@ By default, Octotree only works on `github.com`. To support GitHub Enterprise on
 
 
 ## Donating
-Support this project and others via [Gittip](https://www.gittip.com/buunguyen/).
+Support this project and others via [Gratipay](https://www.gratipay.com/buunguyen/).
 
-[![Support via Gittip](https://rawgithub.com/twolfson/gittip-badge/0.2.0/dist/gittip.png)](https://www.gittip.com/buunguyen/)
+[![Support via Gratipay](https://rawgithub.com/gratipay/gratipay-badge/2.3.0/dist/gratipay.png)](https://www.gratipay.com/buunguyen/)
 
 
 ## Credit
