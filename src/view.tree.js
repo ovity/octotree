@@ -24,7 +24,7 @@ function TreeView($dom, store, adapter) {
           : $target.siblings(':first') // handles child links in submodule
 
       if ($icon.hasClass('commit')) adapter.selectSubmodule(href)
-      else if ($icon.hasClass('blob')) adapter.selectPath(href)
+      else if ($icon.hasClass('blob')) adapter.selectPath(href, store.get(STORE.TABSIZE))
     })
     .jstree({
       core    : { multiple: false, themes : { responsive : false } },

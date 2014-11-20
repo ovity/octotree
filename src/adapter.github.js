@@ -25,16 +25,18 @@ GitHub.prototype.selectSubmodule = function(path) {
 /**
  * Selects a path.
  */
-GitHub.prototype.selectPath = function(path) {
+GitHub.prototype.selectPath = function(path, tabSize) {
   var container = $(GH_PJAX_SEL)
+    , qs = tabSize ? ('?ts=' + tabSize) : ''
+
   if (container.length) {
     $.pjax({
       // needs full path for pjax to work with Firefox as per cross-domain-content setting
-      url : location.protocol + '//' + location.host + path,
+      url : location.protocol + '//' + location.host + path + qs,
       container : container
     })
   }
-  else window.location.href = path // falls back if no container (i.e. GitHub DOM has changed or is not yet available)
+  else window.location.href = path + qs // falls back if no container (i.e. GitHub DOM has changed or is not yet available)
 }
 
 /**
