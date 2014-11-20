@@ -42,20 +42,20 @@ GitHub.prototype.selectPath = function(path) {
  */
 GitHub.prototype.updateLayout = function(sidebarVisible, sidebarWidth) {
   var $containers = $(GH_CONTAINERS)
-    , space = location.host === 'github.com' ? 10 : 0
+    , spacing = 10
     , autoMarginLeft
     , shouldPushLeft
 
   if ($containers.length === 4) {
     autoMarginLeft = ($('body').width() - $containers.width()) / 2
-    shouldPushLeft = sidebarVisible && (autoMarginLeft <= sidebarWidth + space)
+    shouldPushLeft = sidebarVisible && (autoMarginLeft <= sidebarWidth + spacing)
     $containers.css('margin-left', shouldPushLeft
-      ? sidebarWidth + space
+      ? sidebarWidth + spacing
       : autoMarginLeft)
   }
 
   // falls-back if GitHub DOM has been updated
-  else $('html').css('margin-left', sidebarVisible ? sidebarWidth - space : 0)
+  else $('html').css('margin-left', sidebarVisible ? sidebarWidth - spacing : 0)
 }
 
 /**
