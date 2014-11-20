@@ -4,6 +4,7 @@ const
   , STORE = {
     TOKEN    : 'octotree.github_access_token',
     COLLAPSE : 'octotree.collapse',
+    TABSIZE  : 'octotree.tabsize',
     REMEMBER : 'octotree.remember',
     LAZYLOAD : 'octotree.lazyload',
     HOTKEYS  : 'octotree.hotkeys',
@@ -11,6 +12,24 @@ const
     WIDTH    : 'octotree.sidebar_width',
     POPUP    : 'octotree.popup_shown',
     SHOWN    : 'octotree.sidebar_shown',
+  }
+
+  , DEFAULTS = {
+    TOKEN    : '',
+    COLLAPSE : false,
+    TABSIZE  : '',
+    REMEMBER : false,
+    LAZYLOAD : false,
+    // @ifdef SAFARI
+    HOTKEYS  : '⌘+b, ⌃+b',
+    // @endif
+    // @ifndef SAFARI
+    HOTKEYS  : '⌘+⇧+s, ⌃+⇧+s',
+    // @endif
+    GHEURLS  : '',
+    WIDTH    : 250,
+    POPUP    : false,
+    SHOWN    : false,
   }
 
   , EVENT = {

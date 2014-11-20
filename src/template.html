@@ -7,6 +7,7 @@
         <div class="octotree_view_header"></div>
         <div class="octotree_view_body"></div>
       </div>
+
       <div class="octotree_view octotree_errorview">
         <div class="octotree_view_header"></div>
         <form class="octotree_view_body">
@@ -21,6 +22,7 @@
           <div class="error"></div>
         </form>
       </div>
+
       <div class="octotree_view octotree_optsview">
         <div class="octotree_view_header">Settings</div>
         <form class="octotree_view_body">
@@ -31,22 +33,6 @@
             </div>
             <input type="text" data-store="TOKEN" data-perhost="true">
           </div>
-          <div>
-            <div>
-              <label>Hotkeys</label>
-              <a href="https://github.com/madrobby/keymaster#defining-shortcuts" target="_blank" tabIndex="-1">supported keys</a>
-            </div>
-            <input type="text" data-store="HOTKEYS">
-          </div>
-          <div>
-            <label><input type="checkbox" data-store="REMEMBER"> Show sidebar if previously shown</label>
-          </div>
-          <div>
-            <label><input type="checkbox" data-store="LAZYLOAD"> Only load tree when sidebar is open</label>
-          </div>
-          <div>
-            <label><input type="checkbox" data-store="COLLAPSE"> Collapse folders with single sub-folder</label>
-          </div>
           <!-- @ifdef CHROME -->
           <div>
             <div>
@@ -56,6 +42,30 @@
             </textarea>
           </div>
           <!-- @endif -->
+          <hr />
+          <div>
+            <label><input type="checkbox" data-store="REMEMBER"> Show sidebar if previously shown</label>
+          </div>
+          <div>
+            <label><input type="checkbox" data-store="LAZYLOAD"> Only load tree when sidebar is open</label>
+          </div>
+          <div>
+            <label><input type="checkbox" data-store="COLLAPSE"> Collapse folders with single sub-folder</label>
+          </div>
+          <div>
+            <div>
+              <label>Hotkeys</label>
+              <a href="https://github.com/madrobby/keymaster#defining-shortcuts" target="_blank" tabIndex="-1">supported keys</a>
+            </div>
+            <input type="text" data-store="HOTKEYS">
+          </div>
+          <div>
+            <div>
+              <label>Tab size</label>
+              <a href="https://github.com/tiimgreen/github-cheat-sheet#adjust-tab-space" target="_blank" tabIndex="-1">what's this?</a>
+            </div>
+            <input type="text" data-store="TABSIZE">
+          </div>
           <div>
             <button type="submit" class="button">Save</button>
           </div>
@@ -63,6 +73,7 @@
       </div>
     </div>
   </nav>
+
   <div class="octotree_popup">
     <div class="arrow"></div>
     <div class="content">

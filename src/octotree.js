@@ -1,24 +1,14 @@
 $(document).ready(function() {
   var store    = new Storage()
-    , defaults = {}
 
-  defaults[STORE.COLLAPSE] = false
-  defaults[STORE.REMEMBER] = false
-  defaults[STORE.LAZYLOAD] = false
-  defaults[STORE.WIDTH]    = 250
-  // @ifdef SAFARI
-  defaults[STORE.HOTKEYS]  = '⌘+b, ⌃+b'
-  // @endif
-  // @ifndef SAFARI
-  defaults[STORE.HOTKEYS]  = '⌘+⇧+s, ⌃+⇧+s'
-  // @endif
-
-  parallel(Object.keys(defaults), setDefault, loadExtension)
+  parallel(Object.keys(STORE), setDefault, loadExtension)
 
   function setDefault(key, cb) {
-    store.get(key, function(val) {
-      if (val != null) return cb()
-      store.set(key, defaults[key], cb)
+    var storeKey = STORE[key]
+    var local = storeKey === STORE.TOKEN
+    store.get(storeKey, local, function(val) {
+      val = (typeof val === undefined) ? DEFAULTS[key] : val
+      store.set(storeKey, val, local, cb)
     })
   }
 
@@ -37,50 +27,46 @@ $(document).ready(function() {
       , currRepo  = false
       , hasError  = false
 
-    store.get(STORE.WIDTH, function(width) {
-      $sidebar
-        .appendTo($('body'))
-        .width(width)
-        .resizable({ handles: 'e', minWidth: 200 })
-        .resize(layoutChanged)
+    $sidebar
+      .appendTo($('body'))
+      .width(store.get(STORE.WIDTH))
+      .resizable({ handles: 'e', minWidth: 200 })
+      .resize(layoutChanged)
 
-      $(window).resize(function(event) { // handle zoom
-        if (event.target === window) layoutChanged()
-      })
-
-      $toggler.click(toggleSidebarAndSave)
-      key.filter = function() { return $toggler.is(':visible') }
-      store.get(STORE.HOTKEYS, function(hotkeys) {
-        key(hotkeys, toggleSidebarAndSave)
-      })
-
-      ;[treeView, errorView, optsView].forEach(function(view) {
-        $(view)
-          .on(EVENT.VIEW_READY, function(event) {
-            if (this !== optsView) $document.trigger(EVENT.REQ_END)
-            showView(this.$view)
-          })
-          .on(EVENT.VIEW_CLOSE, function() {
-            showView(hasError ? errorView.$view : treeView.$view)
-          })
-          .on(EVENT.OPTS_CHANGE, optionsChanged)
-      })
-
-      $document
-        .on('pjax:send ' + EVENT.REQ_START, function() {
-          $toggler.addClass('loading')
-        })
-        .on('pjax:end ' + EVENT.REQ_END, function() {
-          $toggler.removeClass('loading')
-        })
-        .on('pjax:timeout', function(event) {
-          event.preventDefault()
-        })
-        .on(EVENT.LOC_CHANGE, tryLoadRepo)
-        .on(EVENT.TOGGLE, layoutChanged)
-
-      tryLoadRepo()
+    $(window).resize(function(event) { // handle zoom
+      if (event.target === window) layoutChanged()
     })
+
+    $toggler.click(toggleSidebarAndSave)
+    key.filter = function() { return $toggler.is(':visible') }
+    key(store.get(STORE.HOTKEYS), toggleSidebarAndSave)
+
+    ;[treeView, errorView, optsView].forEach(function(view) {
+      $(view)
+        .on(EVENT.VIEW_READY, function(event) {
+          if (this !== optsView) $document.trigger(EVENT.REQ_END)
+          showView(this.$view)
+        })
+        .on(EVENT.VIEW_CLOSE, function() {
+          showView(hasError ? errorView.$view : treeView.$view)
+        })
+        .on(EVENT.OPTS_CHANGE, optionsChanged)
+    })
+
+    $document
+      .on('pjax:send ' + EVENT.REQ_START, function() {
+        $toggler.addClass('loading')
+      })
+      .on('pjax:end ' + EVENT.REQ_END, function() {
+        $toggler.removeClass('loading')
+      })
+      .on('pjax:timeout', function(event) {
+        event.preventDefault()
+      })
+      .on(EVENT.LOC_CHANGE, tryLoadRepo)
+      .on(EVENT.TOGGLE, layoutChanged)
+
+    tryLoadRepo()
 
     function optionsChanged(event, changes) {
       var reload = false
@@ -102,32 +88,31 @@ $(document).ready(function() {
 
     function tryLoadRepo(reload) {
       var repo = adapter.getRepoFromPath()
+        , remember = store.get(STORE.REMEMBER)
+        , shown = store.get(STORE.SHOWN)
+        , lazyload = store.get(STORE.LAZYLOAD)
+        , token = store.get(STORE.TOKEN)
+
       if (repo) {
         helpPopup.show()
         $toggler.show()
-        store.get(STORE.REMEMBER, function(remember) {
-          store.get(STORE.SHOWN, function(shown) {
-            store.get(STORE.LAZYLOAD, function(lazyload) {
-              if (remember && shown) toggleSidebar(true)
-              if (!lazyload || isSidebarVisible()) {
-                var repoChanged = JSON.stringify(repo) !== JSON.stringify(currRepo)
-                if (repoChanged || reload === true) {
-                  $document.trigger(EVENT.REQ_START)
-                  currRepo = repo
-                  treeView.showHeader(repo)
-                  store.get(STORE.TOKEN, true, function(token) {
-                    adapter.fetchData({ repo: repo, token: token }, function(err, tree) {
-                      hasError = !!err
-                      if (err) errorView.show(err)
-                      else treeView.show(repo, tree)
-                    })
-                  })
-                }
-                else treeView.syncSelection()
-              }
+        if (remember && shown) toggleSidebar(true)
+
+        if (!lazyload || isSidebarVisible()) {
+          var repoChanged = JSON.stringify(repo) !== JSON.stringify(currRepo)
+          if (repoChanged || reload === true) {
+            $document.trigger(EVENT.REQ_START)
+            currRepo = repo
+            treeView.showHeader(repo)
+
+            adapter.fetchData({ repo: repo, token: token }, function(err, tree) {
+              hasError = !!err
+              if (err) errorView.show(err)
+              else treeView.show(repo, tree)
             })
-          })
-        })
+          }
+          else treeView.syncSelection()
+        }
       }
       else {
         $toggler.hide()

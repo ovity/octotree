@@ -49,10 +49,8 @@ function OptionsView($dom, store) {
       if (granted) saveOptions()
       else {
         // permissions not granted (by user or error), reset value
-        store.get(STORE.GHEURLS, function(val) {
-          $ta.val(val)
-          saveOptions()
-        })
+        $ta.val(store.get(STORE.GHEURLS))
+        saveOptions()
       }
     })
     // @endif

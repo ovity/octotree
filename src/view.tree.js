@@ -53,22 +53,20 @@ TreeView.prototype.showHeader = function(repo) {
 
 TreeView.prototype.show = function(repo, treeData) {
   var self = this
+    , treeContainer = self.$view.find('.octotree_view_body')
+    , tree = treeContainer.jstree(true)
+    , collapseTree = self.store.get(STORE.COLLAPSE)
 
-  self.store.get(STORE.COLLAPSE, function(collapseTree) {
-    var treeContainer = self.$view.find('.octotree_view_body')
-      , tree = treeContainer.jstree(true)
+  treeData = sort(treeData)
+  if (collapseTree) treeData = collapse(treeData)
+  tree.settings.core.data = treeData
 
-    treeData = sort(treeData)
-    if (collapseTree) treeData = collapse(treeData)
-    tree.settings.core.data = treeData
-
-    treeContainer.one('refresh.jstree', function() {
-      self.syncSelection()
-      $(self).trigger(EVENT.VIEW_READY)
-    })
-
-    tree.refresh(true)
+  treeContainer.one('refresh.jstree', function() {
+    self.syncSelection()
+    $(self).trigger(EVENT.VIEW_READY)
   })
+
+  tree.refresh(true)
 
   function sort(folder) {
     folder.sort(function(a, b) {
