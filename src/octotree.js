@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  var store    = new Storage()
+  var store = new Storage()
 
   parallel(Object.keys(STORE), setDefault, loadExtension)
 
@@ -7,8 +7,7 @@ $(document).ready(function() {
     var storeKey = STORE[key]
     var local = storeKey === STORE.TOKEN
     store.get(storeKey, local, function(val) {
-      val = (typeof val === undefined) ? DEFAULTS[key] : val
-      store.set(storeKey, val, local, cb)
+      store.set(storeKey, val === undefined ? DEFAULTS[key] : val, local, cb)
     })
   }
 
@@ -29,7 +28,7 @@ $(document).ready(function() {
 
     $sidebar
       .appendTo($('body'))
-      .width(store.get(STORE.WIDTH))
+      .width(parseFloat(store.get(STORE.WIDTH)))
       .resizable({ handles: 'e', minWidth: 200 })
       .resize(layoutChanged)
 
@@ -37,6 +36,7 @@ $(document).ready(function() {
       if (event.target === window) layoutChanged()
     })
 
+    helpPopup.show()
     $toggler.click(toggleSidebarAndSave)
     key.filter = function() { return $toggler.is(':visible') }
     key(store.get(STORE.HOTKEYS), toggleSidebarAndSave)
@@ -94,7 +94,6 @@ $(document).ready(function() {
         , token = store.get(STORE.TOKEN)
 
       if (repo) {
-        helpPopup.show()
         $toggler.show()
         if (remember && shown) toggleSidebar(true)
 
