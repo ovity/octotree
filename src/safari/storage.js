@@ -1,26 +1,18 @@
 function Storage() {}
 
 Storage.prototype.set = function(key, val, local, cb) {
-  if (typeof local === 'function') {
-    cb = local
-    local = false
-  }
-
-  cb = cb || function() {}
+  if (typeof local === 'function') cb = local
 
   localStorage.setItem(key, JSON.stringify(val))
-  cb()
+  if (cb) cb()
 }
 
 Storage.prototype.get = function(key, local, cb) {
-  if (typeof local === 'function') {
-    cb = local
-    local = false
-  }
+  if (typeof local === 'function') cb = local
 
-  cb = cb || function() {}
-
-  cb(parse(localStorage.getItem(key)))
+  var val = parse(localStorage.getItem(key))
+  if (cb) cb(val)
+  else return val
 
   function parse(val) {
     try {
