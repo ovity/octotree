@@ -36,7 +36,6 @@ ErrorView.prototype.show = function(err) {
     $submit.show()
     $token.show()
     $help.show()
-    console.log('here', token)
     if (token) $token.val(token)
   }
   else {

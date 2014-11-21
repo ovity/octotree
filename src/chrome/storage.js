@@ -1,7 +1,7 @@
 function Storage() {
   var cache = this.cache = {}
   chrome.storage.onChanged.addListener(function(changes) {
-    for (key in changes) cache[key] = changes[key].newValue
+    for (var key in changes) cache[key] = changes[key].newValue
   })
 }
 
