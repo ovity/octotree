@@ -7,7 +7,7 @@ $(document).ready(function() {
     var storeKey = STORE[key]
     var local = storeKey === STORE.TOKEN
     store.get(storeKey, local, function(val) {
-      store.set(storeKey, val === undefined ? DEFAULTS[key] : val, local, cb)
+      store.set(storeKey, val == null ? DEFAULTS[key] : val, local, cb)
     })
   }
 
@@ -66,7 +66,7 @@ $(document).ready(function() {
       .on(EVENT.LOC_CHANGE, tryLoadRepo)
       .on(EVENT.TOGGLE, layoutChanged)
 
-    tryLoadRepo()
+    return tryLoadRepo()
 
     function optionsChanged(event, changes) {
       var reload = false
@@ -105,7 +105,6 @@ $(document).ready(function() {
             treeView.showHeader(repo)
 
             adapter.fetchData({ repo: repo, token: token }, function(err, tree) {
-              hasError = !!err
               if (err) errorView.show(err)
               else treeView.show(repo, tree)
             })
