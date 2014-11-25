@@ -51,6 +51,11 @@ By default, Octotree only works on `github.com`. To support GitHub Enterprise on
 
 ## Changelog
 
+### [v1.5](https://github.com/buunguyen/octotree/issues?q=milestone%3A1.5+is%3Aclosed)
+* Option to show in non-code pages
+* Option to configure tab size
+* Bug fixes
+
 ### [v1.4.1](https://github.com/buunguyen/octotree/issues?q=milestone%3A1.4.1+is%3Aclosed)
 * New header to match new GitHub design
 * Bug fixes

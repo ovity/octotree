@@ -63,7 +63,7 @@ GitHub.prototype.updateLayout = function(sidebarVisible, sidebarWidth) {
 /**
  * Returns the repository information if user is at a repository URL. Returns `null` otherwise.
  */
-GitHub.prototype.getRepoFromPath = function() {
+GitHub.prototype.getRepoFromPath = function(showInNonCodePage, currentRepo) {
   // 404 page, skip
   if ($(GH_404_SEL).length) return false
 
@@ -75,12 +75,15 @@ GitHub.prototype.getRepoFromPath = function() {
   if (~GH_RESERVED_USER_NAMES.indexOf(match[1])) return false
   if (~GH_RESERVED_REPO_NAMES.indexOf(match[2])) return false
 
-  // not a code page, skip
-  if (match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
+  // skip non-code page or not
+  if (!showInNonCodePage && match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
 
-  // can actually check if *[data-master-branch] exists and remove all the checks above
-  // but the current approach is less fragile in case of GitHub DOM changes
-  var branch = $(GH_BRANCH_SEL).data('ref') || $(GH_BRANCH_BTN_SEL).text() || 'master'
+  // use selected branch, or previously selected branch, or master
+  var branch = $(GH_BRANCH_SEL).data('ref') ||
+    ((currentRepo.username === match[1] && currentRepo.reponame === match[2] && currentRepo.branch)
+      ? currentRepo.branch
+      : 'master')
+
   return {
     username : match[1],
     reponame : match[2],
@@ -190,7 +193,7 @@ GitHub.prototype.fetchData = function(opts, cb) {
     var token = opts.token
       , host  = (location.host === 'github.com' ? 'api.github.com' : (location.host + '/api/v3'))
       , base  = location.protocol + '//' + host + '/repos/' + repo.username + '/' + repo.reponame
-      , cfg   = { method: 'GET', url: base + path }
+      , cfg   = { method: 'GET', url: base + path, cache: false }
 
     if (token) cfg.headers = { Authorization: 'token ' + token }
     $.ajax(cfg)

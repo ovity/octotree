@@ -5,7 +5,6 @@ function HelpPopup($dom, store) {
 
 HelpPopup.prototype.show = function() {
   var $view = this.$view
-    , $sidebar = this.$sidebar
     , store = this.store
     , popupShown = store.get(STORE.POPUP)
 

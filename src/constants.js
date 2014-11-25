@@ -12,6 +12,7 @@ const
     WIDTH    : 'octotree.sidebar_width',
     POPUP    : 'octotree.popup_shown',
     SHOWN    : 'octotree.sidebar_shown',
+    NONCODE  : 'octotree.noncode_shown',
   }
 
   , DEFAULTS = {
@@ -30,6 +31,7 @@ const
     WIDTH    : 250,
     POPUP    : false,
     SHOWN    : false,
+    NONCODE    : false,
   }
 
   , EVENT = {

@@ -87,11 +87,12 @@ $(document).ready(function() {
     }
 
     function tryLoadRepo(reload) {
-      var repo = adapter.getRepoFromPath()
-        , remember = store.get(STORE.REMEMBER)
+      var remember = store.get(STORE.REMEMBER)
+        , showInNonCodePage = store.get(STORE.NONCODE)
         , shown = store.get(STORE.SHOWN)
         , lazyload = store.get(STORE.LAZYLOAD)
         , token = store.get(STORE.TOKEN)
+        , repo = adapter.getRepoFromPath(showInNonCodePage, currRepo)
 
       if (repo) {
         $toggler.show()
