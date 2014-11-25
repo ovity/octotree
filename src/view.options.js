@@ -44,22 +44,25 @@ function OptionsView($dom, store) {
      */
     // @ifdef CHROME
     var $ta  = $view.find('[data-store=GHEURLS]')
-      , urls = $ta.val().split(/\n/)
-    chrome.runtime.sendMessage({ type: 'requestPermissions', urls: urls }, function(granted) {
-      if (granted) saveOptions()
-      else {
-        // permissions not granted (by user or error), reset value
-        $ta.val(store.get(STORE.GHEURLS))
-        saveOptions()
-      }
-    })
+      , urls = $ta.val().split(/\n/).filter(function (url) { return url !== '' })
+
+    if (urls.length > 0) {
+      chrome.runtime.sendMessage({type: 'requestPermissions', urls: urls}, function (granted) {
+        if (granted) saveOptions()
+        else {
+          // permissions not granted (by user or error), reset value
+          $ta.val(store.get(STORE.GHEURLS))
+          saveOptions()
+        }
+      })
+      return
+    }
     // @endif
 
-    // @ifndef CHROME
-    saveOptions()
-    // @endif
+    return saveOptions()
 
     function saveOptions() {
+      console.log('save')
       var changes = {}
       eachOption(
         function($elm, key, local, value, cb) {

@@ -31,7 +31,7 @@ const
     WIDTH    : 250,
     POPUP    : false,
     SHOWN    : false,
-    NONCODE    : false,
+    NONCODE  : false,
   }
 
   , EVENT = {

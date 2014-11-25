@@ -12,11 +12,11 @@ HelpPopup.prototype.show = function() {
 
   $view.css('display', 'block').appendTo($('body'))
 
+  $(document).one(EVENT.TOGGLE, hide)
   setTimeout(function() {
     store.set(STORE.POPUP, true)
     $view.addClass('show').click(hide)
-    $(document).one(EVENT.TOGGLE, hide)
-    setTimeout(hide, 5000)
+    setTimeout(hide, 12000)
   }, 500)
 
   function hide() {

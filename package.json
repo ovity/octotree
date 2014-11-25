@@ -32,6 +32,16 @@
     "gulp-run": "^1.6.4",
     "gulp-zip": "^2.0.1",
     "crx": "^0.4.4",
-    "gulp-rename": "^1.2.0"
+    "gulp-rename": "^1.2.0",
+    "mocha": "^2.0.1",
+    "selenium-webdriver": "^2.44.0",
+    "gulp-mocha": "^2.0.0",
+    "gulp-exit": "0.0.2",
+    "starx": "~0.1.7",
+    "request": "~2.48.0",
+    "underscore": "~1.7.0",
+    "underscore.string": "~2.4.0",
+    "firefox-profile": "~0.3.6",
+    "async": "~0.9.0"
   }
 }
