@@ -36,7 +36,6 @@ $(document).ready(function() {
       if (event.target === window) layoutChanged()
     })
 
-    helpPopup.show()
     $toggler.click(toggleSidebarAndSave)
     key.filter = function() { return $toggler.is(':visible') }
     key(store.get(STORE.HOTKEYS), toggleSidebarAndSave)
@@ -96,6 +95,8 @@ $(document).ready(function() {
 
       if (repo) {
         $toggler.show()
+        helpPopup.show()
+
         if (remember && shown) toggleSidebar(true)
 
         if (!lazyload || isSidebarVisible()) {

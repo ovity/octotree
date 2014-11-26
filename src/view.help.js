@@ -15,8 +15,8 @@ HelpPopup.prototype.show = function() {
   setTimeout(function() {
     store.set(STORE.POPUP, true)
     $view.addClass('show').click(hide)
-    setTimeout(hide, 12000)
     $(document).one(EVENT.TOGGLE, hide)
+    setTimeout(hide, 5000)
   }, 500)
 
   function hide() {
