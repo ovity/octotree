@@ -51,6 +51,9 @@ By default, Octotree only works on `github.com`. To support GitHub Enterprise on
 
 ## Changelog
 
+### [v1.5.2](https://github.com/buunguyen/octotree/issues?q=milestone%3A1.5.2+is%3Aclosed)
+* Fix bug https://github.com/buunguyen/octotree/issues/147
+
 ### [v1.5](https://github.com/buunguyen/octotree/issues?q=milestone%3A1.5+is%3Aclosed)
 * Option to show in non-code pages
 * Option to load tree only when sidebar is visible
