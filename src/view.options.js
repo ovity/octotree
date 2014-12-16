@@ -62,7 +62,6 @@ function OptionsView($dom, store) {
     return saveOptions()
 
     function saveOptions() {
-      console.log('save')
       var changes = {}
       eachOption(
         function($elm, key, local, value, cb) {
