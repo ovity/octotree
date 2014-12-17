@@ -185,7 +185,7 @@ GitHub.prototype.fetchData = function(opts, cb) {
   function getBlob(sha, cb) {
     get('/git/blobs/' + sha, function(err, res) {
       if (err) return cb(err)
-      cb(null, atob(res.content))
+      cb(null, atob(res.content.replace(/\n/g,'')))
     })
   }
 
