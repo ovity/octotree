@@ -20,12 +20,12 @@ exports.firefoxDriver = function (cb) {
   profile.addExtension(FIREFOX_XPI_PATH, function () {
     profile.encoded(function (profile) {
       var capabilities = webdriver.Capabilities.firefox()
-      capabilities.set('firefox_profile', profile);
+      capabilities.set('firefox_profile', profile)
+
       var driver = new webdriver.Builder()
         .usingServer(server.address())
         .withCapabilities(capabilities)
         .build()
-      driver.server = server
       cb(null, driver)
     })
   })

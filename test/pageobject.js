@@ -31,7 +31,6 @@ PageObject.prototype = {
   },
 
   close: function *() {
-    if (this.driver.server) this.driver.server.close()
     yield this.driver.quit()
   },
 
@@ -74,12 +73,17 @@ PageObject.prototype = {
     return this.one($id('octotree' + path))
   },
 
+  clickNode: function (node) {
+    // Firefox driver can't click li, has to click li a instead.
+    return node.findElement($css('a')).click()
+  },
+
   childrenOfNode: function (node) {
     return node.findElements($css('.jstree-children li'))
   },
 
-  isNodeSelected: function *(node) {
-    return yield node.findElement($css('.jstree-wholerow-clicked')).isDisplayed()
+  isNodeSelected: function (node) {
+    return node.findElement($css('.jstree-wholerow-clicked')).isDisplayed()
   },
 
   isNodeOpen: function *(node) {

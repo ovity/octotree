@@ -13,7 +13,7 @@ before(function (cb) {
   })
 })
 
-;['chrome'/*, 'firefox'*/].forEach(runTest)
+;['chrome', 'firefox'].forEach(runTest)
 
 function runTest(browser) {
   var driver, po
@@ -98,7 +98,8 @@ function runTest(browser) {
             seen.push(someFile)
 
             var node = po.nodeFor(someFile.path)
-            yield node.click()
+            //yield node.click()
+            yield po.clickNode(node)
             assert.ok(yield po.isNodeSelected(node))
             assert.equal(yield po.getUrl(), 'https://github.com/buunguyen/octotree/blob/master/' + someFile.path)
             yield sleep(200) // pjax
@@ -117,7 +118,8 @@ function runTest(browser) {
               return file.path.indexOf(someDir.path) === 0 && _s.count(file.path, '/') === 1
             })
 
-            yield po.nodeFor(someDir.path).click()
+            var node = yield po.nodeFor(someDir.path)
+            yield po.clickNode(node)
             yield sleep(50) // tree expand transition
             assert.ok(yield po.isNodeOpen(po.nodeFor(someDir.path)))
             assert.equal((yield po.childrenOfNode(po.nodeFor(someDir.path))).length, someDirChildren.length)
@@ -244,9 +246,11 @@ function runTest(browser) {
 
           })
 
-          describe('ghe', function () {
+          if (browser === 'chrome') {
+            describe('ghe', function () {
 
-          })
+            })
+          }
         })
       })
     })
