@@ -117,6 +117,7 @@ $(document).ready(function() {
       else {
         $toggler.hide()
         toggleSidebar(false)
+        $(GH_CONTAINERS).removeAttr('style') // reset added style
       }
     }
 
