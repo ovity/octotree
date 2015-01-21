@@ -4,7 +4,7 @@ const
       'site', 'blog', 'about', 'explore',
       'styleguide', 'showcases', 'trending',
       'stars', 'dashboard', 'notifications',
-      'search', 'developer'
+      'search', 'developer', 'account'
     ]
   , GH_RESERVED_REPO_NAMES = ['followers', 'following', 'repositories']
   , GH_BRANCH_SEL       = '*[data-master-branch]'
