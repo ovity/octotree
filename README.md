@@ -51,6 +51,10 @@ By default, Octotree only works on `github.com`. To support GitHub Enterprise on
 
 ## Changelog
 
+### [v1.5.3](https://github.com/buunguyen/octotree/issues?q=milestone%3A1.5.3+is%3Aclosed)
+* Fix bug https://github.com/buunguyen/octotree/issues/151
+* Fix bug https://github.com/buunguyen/octotree/issues/155
+
 ### [v1.5.2](https://github.com/buunguyen/octotree/issues?q=milestone%3A1.5.2+is%3Aclosed)
 * Fix bug https://github.com/buunguyen/octotree/issues/147
 
