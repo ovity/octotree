@@ -53,7 +53,7 @@ GitHub.prototype.updateLayout = function(sidebarVisible, sidebarWidth) {
     shouldPushLeft = sidebarVisible && (autoMarginLeft <= sidebarWidth + spacing)
     $containers.css('margin-left', shouldPushLeft
       ? sidebarWidth + spacing
-      : autoMarginLeft)
+      : sidebarVisible ? autoMarginLeft : '')
   }
 
   // falls-back if GitHub DOM has been updated
