@@ -13,7 +13,26 @@ const
   , GH_PJAX_SEL         = '#js-repo-pjax-container'
   , GH_CONTAINERS       = 'body > .container, .header > .container, .site > .container, .repohead > .container'
 
-function GitHub() {}
+function GitHub() {
+  // Fix #151 by detecting when page layout is updated.
+  // In this case, split-diff page has a wider layout, so need to recompute margin.
+  // In addition, can't do this in response to URL change, since new DOM might not be ready.
+  var observer = new MutationObserver(function(mutations) {
+    for (var i = 0, len = mutations.length; i < len; i++) {
+      var mutation = mutations[i]
+      if (~mutation.oldValue.indexOf('split-diff') ||
+          ~mutation.target.className.indexOf('split-diff')) {
+        return $(document).trigger(EVENT.LAYOUT_CHANGE)
+      }
+    }
+  })
+
+  observer.observe(document.body, {
+    attributes: true,
+    attributeFilter: ['class'],
+    attributeOldValue: true
+  })
+}
 
 /**
  * Selects a submodule.
@@ -44,16 +63,24 @@ GitHub.prototype.selectPath = function(path, tabSize) {
  */
 GitHub.prototype.updateLayout = function(sidebarVisible, sidebarWidth) {
   var $containers = $(GH_CONTAINERS)
+    , isSplitView = $(document.body).hasClass('split-diff')
     , spacing = 10
     , autoMarginLeft
     , shouldPushLeft
 
   if ($containers.length === 4) {
     autoMarginLeft = ($('body').width() - $containers.width()) / 2
-    shouldPushLeft = sidebarVisible && (autoMarginLeft <= sidebarWidth + spacing)
-    $containers.css('margin-left', shouldPushLeft
-      ? sidebarWidth + spacing
-      : autoMarginLeft)
+
+    if (isSplitView) {
+      $containers.css('margin-left', 'auto')
+      if (sidebarVisible) $containers.css('padding-left', sidebarWidth + spacing)
+      else $containers.css('padding-left', 30)
+    }
+    else {
+      $containers.css('padding-left', 0)
+      if (sidebarVisible) $containers.css('margin-left', sidebarWidth + spacing)
+      else $containers.css('margin-left', 'auto')
+    }
   }
 
   // falls-back if GitHub DOM has been updated
