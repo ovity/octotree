@@ -4,7 +4,7 @@ const
       'site', 'blog', 'about', 'explore',
       'styleguide', 'showcases', 'trending',
       'stars', 'dashboard', 'notifications',
-      'search', 'developer'
+      'search', 'developer', 'account'
     ]
   , GH_RESERVED_REPO_NAMES = ['followers', 'following', 'repositories']
   , GH_BRANCH_SEL       = '*[data-master-branch]'
@@ -49,15 +49,17 @@ GitHub.prototype.updateLayout = function(sidebarVisible, sidebarWidth) {
     , shouldPushLeft
 
   if ($containers.length === 4) {
+    var basePadding = parseInt($containers.css('padding-right'), 10);
+    $containers.css('padding-left', basePadding);
     autoMarginLeft = ($('body').width() - $containers.width()) / 2
     shouldPushLeft = sidebarVisible && (autoMarginLeft <= sidebarWidth + spacing)
-    $containers.css('margin-left', shouldPushLeft
-      ? sidebarWidth + spacing
-      : autoMarginLeft)
+    shouldPushLeft && $containers.css('padding-left', sidebarWidth + spacing);
   }
 
   // falls-back if GitHub DOM has been updated
-  else $('html').css('margin-left', sidebarVisible ? sidebarWidth - spacing : 0)
+  else {
+    $('html').css('padding-left', sidebarVisible ? sidebarWidth - spacing : 0)
+  }
 }
 
 /**

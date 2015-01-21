@@ -65,6 +65,23 @@ $(document).ready(function() {
       .on(EVENT.LOC_CHANGE, tryLoadRepo)
       .on(EVENT.TOGGLE, layoutChanged)
 
+    var MutationObserver = window.MutationObserver;
+    var observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (((mutation.oldValue.indexOf('split-diff') === -1) ^ (mutation.target.className.indexOf('split-diff') === -1)) === 1) {
+            layoutChanged();
+        }
+      });
+    });
+
+    var config = {
+      attributes: true,
+      attributeFilter: ['class'],
+      attributeOldValue: true
+    };
+
+    observer.observe(document.body, config);
+
     return tryLoadRepo()
 
     function optionsChanged(event, changes) {
