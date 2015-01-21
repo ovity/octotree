@@ -63,7 +63,6 @@ $(document).ready(function() {
         event.preventDefault()
       })
       .on(EVENT.LOC_CHANGE, tryLoadRepo)
-      .on(EVENT.LAYOUT_CHANGE, layoutChanged)
       .on(EVENT.TOGGLE, layoutChanged)
 
     return tryLoadRepo()

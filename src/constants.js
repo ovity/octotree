@@ -37,7 +37,6 @@ const
   , EVENT = {
     TOGGLE        : 'octotree:toggle',
     LOC_CHANGE    : 'octotree:location',
-    LAYOUT_CHANGE : 'octotree:layout',
     REQ_START     : 'octotree:start',
     REQ_END       : 'octotree:end',
     OPTS_CHANGE   : 'octotree:change',
