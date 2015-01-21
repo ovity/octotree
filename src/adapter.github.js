@@ -13,7 +13,28 @@ const
   , GH_PJAX_SEL         = '#js-repo-pjax-container'
   , GH_CONTAINERS       = 'body > .container, .header > .container, .site > .container, .repohead > .container'
 
-function GitHub() {}
+function GitHub() {
+  if (!window.MutationObserver) return
+
+  // Fix #151 by detecting when page layout is updated.
+  // In this case, split-diff page has a wider layout, so need to recompute margin.
+  // Note that couldn't do this in response to URL change, since new DOM via pjax might not be ready.
+  var observer = new window.MutationObserver(function(mutations) {
+    for (var i = 0, len = mutations.length; i < len; i++) {
+      var mutation = mutations[i]
+      if (~mutation.oldValue.indexOf('split-diff') ||
+          ~mutation.target.className.indexOf('split-diff')) {
+        return $(document).trigger(EVENT.LAYOUT_CHANGE)
+      }
+    }
+  })
+
+  observer.observe(document.body, {
+    attributes: true,
+    attributeFilter: ['class'],
+    attributeOldValue: true
+  })
+}
 
 /**
  * Selects a submodule.
@@ -49,17 +70,13 @@ GitHub.prototype.updateLayout = function(sidebarVisible, sidebarWidth) {
     , shouldPushLeft
 
   if ($containers.length === 4) {
-    var basePadding = parseInt($containers.css('padding-right'), 10);
-    $containers.css('padding-left', basePadding);
     autoMarginLeft = ($('body').width() - $containers.width()) / 2
     shouldPushLeft = sidebarVisible && (autoMarginLeft <= sidebarWidth + spacing)
-    shouldPushLeft && $containers.css('padding-left', sidebarWidth + spacing);
+    $containers.css('margin-left', shouldPushLeft ? sidebarWidth + spacing : '')
   }
 
   // falls-back if GitHub DOM has been updated
-  else {
-    $('html').css('padding-left', sidebarVisible ? sidebarWidth - spacing : 0)
-  }
+  else $('html').css('margin-left', sidebarVisible ? sidebarWidth - spacing : '')
 }
 
 /**
