@@ -176,9 +176,9 @@
 
       if (keys.length > 1) {
         mods = getMods(keys);
-        key = keys[keys.length - 1];
       }
 
+      key = keys[keys.length - 1];
       key = code(key);
 
       if (scope === undefined) {
