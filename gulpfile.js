@@ -24,7 +24,7 @@ gulp.task('dist', ['build'], function (cb) {
   $.runSequence('firefox:xpi', 'chrome:zip', 'chrome:crx', 'opera:nex', cb)
 })
 
-gulp.task('test', function (cb) {
+gulp.task('test', ['build'], function (cb) {
   var ps = spawn(
     './node_modules/.bin/mocha',
     ['--harmony', '--reporter', 'spec', '--bail', '--recursive', '--timeout', '-1']
