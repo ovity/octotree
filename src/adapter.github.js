@@ -98,7 +98,7 @@ GitHub.prototype.getRepoFromPath = function(showInNonCodePage, currentRepo) {
   if (!showInNonCodePage && match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
 
   // use selected branch, or previously selected branch, or master
-  var branch = $(GH_BRANCH_SEL).data('ref') ||
+  var branch = $(GH_BRANCH_SEL).data('ref') || $(GH_BRANCH_BTN_SEL).text() ||
     ((currentRepo.username === match[1] && currentRepo.reponame === match[2] && currentRepo.branch)
       ? currentRepo.branch
       : 'master')
