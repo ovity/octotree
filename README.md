@@ -51,7 +51,14 @@ By default, Octotree only works on `github.com`. To support GitHub Enterprise on
 
 ## Changelog
 
+### [v1.6](https://github.com/buunguyen/octotree/issues?q=milestone%3A1.5.4+is%3Aclosed)
+* Update all dependencies to latest version
+* Allow navigating to commit trees https://github.com/buunguyen/octotree/issues/157
+* Support keyboard navigation https://github.com/buunguyen/octotree/issues/158
+* Fix bug handling back tick in paths https://github.com/buunguyen/octotree/issues/160
+
 ### [v1.5.3](https://github.com/buunguyen/octotree/issues?q=milestone%3A1.5.3+is%3Aclosed)
+* Fix bug https://github.com/buunguyen/octotree/pull/149
 * Fix bug https://github.com/buunguyen/octotree/issues/151
 * Fix bug https://github.com/buunguyen/octotree/issues/155
 
