@@ -17,7 +17,7 @@ gulp.task('build', function (cb) {
 })
 
 gulp.task('default', ['build'], function () {
-  gulp.watch(['./src/**/*'], ['default'])
+  gulp.watch(['./libs/**/*', './src/**/*'], ['default'])
 })
 
 gulp.task('dist', ['build'], function (cb) {
