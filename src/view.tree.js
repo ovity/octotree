@@ -23,6 +23,11 @@ function TreeView($dom, store, adapter) {
           ? $target.children(':first')
           : $target.siblings(':first') // handles child links in submodule
 
+      // refocus after complete so that keyboard navigation works, fix #158
+      $(document).one('pjax:success', function () {
+        $.jstree.reference(this).get_container().focus()
+      }.bind(this))
+
       if ($icon.hasClass('commit')) adapter.selectSubmodule(href)
       else if ($icon.hasClass('blob')) adapter.selectPath(href, store.get(STORE.TABSIZE))
     })
