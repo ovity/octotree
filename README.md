@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/buunguyen/octotree.svg?branch=master)](https://travis-ci.org/buunguyen/octotree)
+
 ## Octotree
 Browser extensions (Chrome, Firefox, Safari and Opera) to display GitHub code in tree format. Useful for developers who frequently read source in GitHub and do not want to download or checkout too many repositories. Features:
 
