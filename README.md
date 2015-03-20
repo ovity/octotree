@@ -51,6 +51,9 @@ By default, Octotree only works on `github.com`. To support GitHub Enterprise on
 
 ## Changelog
 
+### v1.6.1
+* Update buttons' style to match GitHub new button style
+
 ### [v1.6](https://github.com/buunguyen/octotree/issues?q=milestone%3A1.6+is%3Aclosed)
 * Update all dependencies to latest version
 * Allow navigating to commit trees https://github.com/buunguyen/octotree/issues/157
