@@ -1,6 +1,6 @@
 {
   "name": "Octotree",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "manifest_version": 2,
   "author": "Buu Nguyen",
   "description": "Display GitHub code in tree format",
