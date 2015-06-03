@@ -51,6 +51,9 @@ By default, Octotree only works on `github.com`. To support GitHub Enterprise on
 
 ## Changelog
 
+### v1.6.2
+* Fix branch selection no longer works due to GitHub change
+
 ### v1.6.1
 * Update buttons' style to match GitHub new button style
 

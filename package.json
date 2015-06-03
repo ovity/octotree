@@ -1,6 +1,6 @@
 {
   "name": "octotree",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Display GitHub code in tree format",
   "main": "inject.js",
   "scripts": {
