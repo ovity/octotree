@@ -98,9 +98,11 @@ GitHub.prototype.getRepoFromPath = function(showInNonCodePage, currentRepo) {
   if (!showInNonCodePage && match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
 
   // get branch from location path or inspect page
-  var branch = (~['tree', 'blob'].indexOf(match[3]) && match[4])
-    ? match[4]
-    : ($(GH_BRANCH_SEL).text() || 'master')
+  var branch =
+    (~['tree', 'blob'].indexOf(match[3]) && match[4]) ||
+    $(GH_BRANCH_SEL).text() ||
+    (currentRepo.username === match[1] && currentRepo.reponame === match[2] && currentRepo.branch) ||
+    'master'
 
   return {
     username : match[1],
