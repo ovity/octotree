@@ -55,6 +55,13 @@ function runTest(browser) {
         yield po.toggleSidebar()
         assert.ok(yield po.isSidebarHidden())
       })
+
+      yit('should match branches', function *() {
+        assert.equal(yield po.branchLabel.getText(), 'master')
+
+        yield po.setUrl('https://github.com/buunguyen/octotree/tree/v1.6.2')
+        assert.equal(yield po.branchLabel.getText(), 'v1.6.2')
+      })
     })
 
     describe('main', function () {
@@ -98,7 +105,6 @@ function runTest(browser) {
             seen.push(someFile)
 
             var node = po.nodeFor(someFile.path)
-            //yield node.click()
             yield po.clickNode(node)
             assert.ok(yield po.isNodeSelected(node))
             assert.equal(yield po.getUrl(), 'https://github.com/buunguyen/octotree/blob/master/' + someFile.path)
@@ -124,10 +130,6 @@ function runTest(browser) {
             assert.ok(yield po.isNodeOpen(po.nodeFor(someDir.path)))
             assert.equal((yield po.childrenOfNode(po.nodeFor(someDir.path))).length, someDirChildren.length)
           }
-        })
-
-        xit('should match branch', function () {
-
         })
       })
 

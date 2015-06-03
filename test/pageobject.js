@@ -100,6 +100,7 @@ var controls = {
   helpPopup       : '.octotree_popup',
   toggleButton    : '.octotree_toggle',
   sidebar         : '.octotree_sidebar',
+  branchLabel     : '.octotree_header_branch',
 
   treeView        : '.octotree_treeview',
   treeHeaderLinks : '.octotree_header_repo a',
@@ -111,7 +112,7 @@ var controls = {
   hotkeysInput    : '//input[@data-store="HOTKEYS"]',
   rememberCheck   : '//input[@data-store="REMEMBER"]',
   nonCodeCheck    : '//input[@data-store="NONCODE"]',
-  saveButton      : '.octotree_optsview .button',
+  saveButton      : '.octotree_optsview .btn',
 
   errorView       : '.octotree_errorview',
   errorViewHeader : '.octotree_errorview .octotree_view_header'
