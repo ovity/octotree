@@ -7,8 +7,7 @@ const
       'search', 'developer', 'account'
     ]
   , GH_RESERVED_REPO_NAMES = ['followers', 'following', 'repositories']
-  , GH_BRANCH_SEL       = '*[data-master-branch]'
-  , GH_BRANCH_BTN_SEL   = '*[data-master-branch] > .js-select-button'
+  , GH_BRANCH_SEL       = '.octicon-git-branch ~ .js-select-button'
   , GH_404_SEL          = '#parallax_wrapper'
   , GH_PJAX_SEL         = '#js-repo-pjax-container'
   , GH_CONTAINERS       = 'body > .container, .header > .container, .site > .container, .repohead > .container'
@@ -47,6 +46,7 @@ GitHub.prototype.selectSubmodule = function(path) {
  * Selects a path.
  */
 GitHub.prototype.selectPath = function(path, tabSize) {
+  console.log(path)
   var container = $(GH_PJAX_SEL)
     , qs = tabSize ? ('?ts=' + tabSize) : ''
 
@@ -86,22 +86,21 @@ GitHub.prototype.getRepoFromPath = function(showInNonCodePage, currentRepo) {
   // 404 page, skip
   if ($(GH_404_SEL).length) return false
 
-  // (username)/(reponame)[/(subpart)]
-  var match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/)
+  // (username)/(reponame)[/(type)/(branch)]
+  var match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?(?:\/([^\/]+))?/)
   if (!match) return false
 
   // not a repository, skip
   if (~GH_RESERVED_USER_NAMES.indexOf(match[1])) return false
   if (~GH_RESERVED_REPO_NAMES.indexOf(match[2])) return false
 
-  // skip non-code page or not
+  // skip non-code page unless showInNonCodePage is true
   if (!showInNonCodePage && match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
 
-  // use selected branch, or previously selected branch, or master
-  var branch = $(GH_BRANCH_SEL).data('ref') || $(GH_BRANCH_BTN_SEL).text() ||
-    ((currentRepo.username === match[1] && currentRepo.reponame === match[2] && currentRepo.branch)
-      ? currentRepo.branch
-      : 'master')
+  // get branch from location path or inspect page
+  var branch = (~['tree', 'blob'].indexOf(match[3]) && match[4])
+    ? match[4]
+    : ($(GH_BRANCH_SEL).text() || 'master')
 
   return {
     username : match[1],
