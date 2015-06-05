@@ -7,7 +7,7 @@ const
       'search', 'developer', 'account'
     ]
   , GH_RESERVED_REPO_NAMES = ['followers', 'following', 'repositories']
-  , GH_BRANCH_SEL       = '.octicon-git-branch ~ .js-select-button'
+  , GH_BRANCH_ICON_SEL  = '.octicon-git-branch'
   , GH_404_SEL          = '#parallax_wrapper'
   , GH_PJAX_SEL         = '#js-repo-pjax-container'
   , GH_CONTAINERS       = 'body > .container, .header > .container, .site > .container, .repohead > .container'
@@ -46,7 +46,6 @@ GitHub.prototype.selectSubmodule = function(path) {
  * Selects a path.
  */
 GitHub.prototype.selectPath = function(path, tabSize) {
-  console.log(path)
   var container = $(GH_PJAX_SEL)
     , qs = tabSize ? ('?ts=' + tabSize) : ''
 
@@ -86,8 +85,8 @@ GitHub.prototype.getRepoFromPath = function(showInNonCodePage, currentRepo) {
   // 404 page, skip
   if ($(GH_404_SEL).length) return false
 
-  // (username)/(reponame)[/(type)/(branch)]
-  var match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?(?:\/([^\/]+))?/)
+  // (username)/(reponame)[/(type)]
+  var match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/)
   if (!match) return false
 
   // not a repository, skip
@@ -97,10 +96,10 @@ GitHub.prototype.getRepoFromPath = function(showInNonCodePage, currentRepo) {
   // skip non-code page unless showInNonCodePage is true
   if (!showInNonCodePage && match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
 
-  // get branch from location path or inspect page
+  // get branch by inspecting page, quite fragile so provide multiple fallbacks
   var branch =
-    (~['tree', 'blob'].indexOf(match[3]) && match[4]) ||
-    $(GH_BRANCH_SEL).text() ||
+    $(GH_BRANCH_ICON_SEL).parent('[aria-label="Switch branches or tags"]').data('ref') ||
+    $(GH_BRANCH_ICON_SEL).siblings('.js-select-button').text() ||
     (currentRepo.username === match[1] && currentRepo.reponame === match[2] && currentRepo.branch) ||
     'master'
 
