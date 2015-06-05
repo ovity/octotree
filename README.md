@@ -51,6 +51,9 @@ By default, Octotree only works on `github.com`. To support GitHub Enterprise on
 
 ## Changelog
 
+### v1.6.3
+* Fix bug when switching to branches with slashes in their names
+
 ### v1.6.2
 * Fix branch selection no longer works due to GitHub change
 
