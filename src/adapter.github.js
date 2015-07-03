@@ -7,7 +7,7 @@ const
       'search', 'developer', 'account'
     ]
   , GH_RESERVED_REPO_NAMES = ['followers', 'following', 'repositories']
-  , GH_BRANCH_ICON_SEL  = '.octicon-git-branch'
+  , GH_BRANCH_ICON_SEL  = '.octicon-git-branch, .octicon-tag'
   , GH_404_SEL          = '#parallax_wrapper'
   , GH_PJAX_SEL         = '#js-repo-pjax-container'
   , GH_CONTAINERS       = 'body > .container, .header > .container, .site > .container, .repohead > .container'
