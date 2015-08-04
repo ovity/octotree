@@ -99,7 +99,7 @@ GitHub.prototype.getRepoFromPath = function(showInNonCodePage, currentRepo) {
   // get branch by inspecting page, quite fragile so provide multiple fallbacks
   var branch =
     $(GH_BRANCH_SEL).data('ref') ||
-    $(GH_BRANCH_SEL).siblings('.js-select-button').text() ||
+    $(GH_BRANCH_SEL).children('.js-select-button').text() ||
     (currentRepo.username === match[1] && currentRepo.reponame === match[2] && currentRepo.branch) ||
     'master'
 
