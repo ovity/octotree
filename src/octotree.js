@@ -109,7 +109,7 @@ $(document).ready(function() {
 
             adapter.fetchData({ repo: repo, token: token }, function(err, tree) {
               if (err) errorView.show(err)
-              else treeView.show(repo, tree)
+              else treeView.show(repo, token, tree)
             })
           }
           else treeView.syncSelection()

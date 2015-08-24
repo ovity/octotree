@@ -74,7 +74,7 @@ TreeView.prototype.showHeader = function(repo) {
     })
 }
 
-TreeView.prototype.show = function(repo, treeData) {
+TreeView.prototype.show = function(repo, token, treeData) {
   var self = this
     , treeContainer = self.$view.find('.octotree_view_body')
     , tree = treeContainer.jstree(true)
@@ -82,7 +82,21 @@ TreeView.prototype.show = function(repo, treeData) {
 
   treeData = sort(treeData)
   if (collapseTree) treeData = collapse(treeData)
-  tree.settings.core.data = treeData
+
+  tree.settings.core.data = function (node, cb) {
+    if (node.id === "#")
+      cb(treeData)
+    else
+      self.adapter.fetchData({ repo: repo, token: token, path: node.original.path }, function(err, treeData) {
+        if (err)
+          console.log(err)
+        else {
+          treeData = sort(treeData)
+          if (collapseTree) treeData = collapse(treeData)
+          cb(treeData)
+        }
+      })
+  }
 
   treeContainer.one('refresh.jstree', function() {
     self.syncSelection()
@@ -97,7 +111,9 @@ TreeView.prototype.show = function(repo, treeData) {
       return a.type === 'blob' ? 1 : -1
     })
     folder.forEach(function(item) {
-      if (item.type === 'tree') sort(item.children)
+      if (item.type === 'tree') {
+        item.children = true
+      }
     })
     return folder
   }
@@ -117,19 +133,48 @@ TreeView.prototype.show = function(repo, treeData) {
   }
 }
 
-TreeView.prototype.syncSelection = function() {
-  var tree = this.$view.find('.octotree_view_body').jstree(true)
-    , path = location.pathname
+TreeView.prototype.syncSelection = function(currentPath) {
+  var self = this
+    , tree = this.$view.find('.octotree_view_body').jstree(true)
+    , path = decodeURIComponent(location.pathname)
 
   if (!tree) return
-  tree.deselect_all()
 
-  // e.g. converts /buunguyen/octotree/type/branch/path to path
-  var match = path.match(/(?:[^\/]+\/){4}(.*)/)
-    , nodeId
-  if (match) {
-    nodeId = PREFIX + decodeURIComponent(match[1])
-    tree.select_node(nodeId)
-    tree.open_node(nodeId)
+  var nodeId
+    , paths = []
+  
+  if (currentPath){
+    paths = currentPath.split('/')
   }
+  else{
+    // e.g. converts /buunguyen/octotree/type/branch/path/path1/path2 to path/path1/path2
+    var match = path.match(/(?:[^\/]+\/){4}(.*)/)
+    if (match)
+      paths = match[1].split('/')
+    else 
+      return
+  }
+
+  // includes parent path to child e.g. lib/controllers to ["lib", "lib/controllers"]
+  var fullPath = ''
+  var optimizedPaths = []
+  paths.forEach(function(path){
+    optimizedPaths.push(fullPath + path)
+    fullPath = fullPath + path + '/'
+  })
+
+  optimizedPaths.forEach(function(path){
+    nodeId = PREFIX + path
+    if (tree.get_node(nodeId)){
+      tree.deselect_all()
+      tree.select_node(nodeId)
+      tree.open_node(nodeId)
+    }
+    else
+      // 300ms seems enough to fetch new items
+      // it will repeat if there is no node found
+      setTimeout(function(){
+        self.syncSelection(path)
+      }, 300)
+  })
 }

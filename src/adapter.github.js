@@ -128,11 +128,12 @@ GitHub.prototype.getRepoFromPath = function(showInNonCodePage, currentRepo) {
 GitHub.prototype.fetchData = function(opts, cb) {
   var self = this
     , repo = opts.repo
-    , folders = { '': [] }
+    , list = []
     , encodedBranch = encodeURIComponent(decodeURIComponent(repo.branch))
     , $dummyDiv = $('<div/>')
+    , path = opts.path || ''
 
-  getTree(encodedBranch + '?recursive=true', function(err, tree) {
+  getTree(encodedBranch, path, function(err, tree) {
     if (err) return cb(err)
 
     fetchSubmodules(function(err, submodules) {
@@ -151,21 +152,27 @@ GitHub.prototype.fetchData = function(opts, cb) {
           item = tree[baseIndex + i]
 
           // we're done
-          if (item === undefined) return cb(null, folders[''])
+          if (item === undefined) return cb(null, list)
 
+          if (item.type === 'file')
+            item.type = 'blob'
+          if (item.type === 'dir')
+            item.type = 'tree'
+
+          console.log(item.path)
           path  = item.path
           type  = item.type
           index = path.lastIndexOf('/')
           name  = $dummyDiv.text(path.substring(index + 1)).html() // sanitizes, closes #9
 
+
           item.id   = PREFIX + path
           item.text = name
           item.icon = type // use `type` as class name for tree node
 
-          folders[path.substring(0, index)].push(item)
+          list.push(item)
 
           if (type === 'tree') {
-            folders[item.path] = item.children = []
             item.a_attr = { href: '#' }
           }
           else if (type === 'blob') {
@@ -205,10 +212,10 @@ GitHub.prototype.fetchData = function(opts, cb) {
     }
   })
 
-  function getTree(tree, cb) {
-   get('/git/trees/' + tree, function(err, res) {
+  function getTree(branch, path, cb) {
+   get('/contents/' + path + '?ref=' + branch, function(err, res) {
       if (err) return cb(err)
-      cb(null, res.tree)
+      cb(null, res)
     })
   }
 
