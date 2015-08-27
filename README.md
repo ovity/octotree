@@ -51,6 +51,12 @@ By default, Octotree only works on `github.com`. To support GitHub Enterprise on
 
 ## Changelog
 
+### v1.7.0
+* Support direct downloading when hovering a file
+
+### v1.6.4
+* Fix bug detecting branch/tag due to GitHub DOM change
+
 ### v1.6.3
 * Fix bug when switching to branches with slashes in their names
 
@@ -60,36 +66,36 @@ By default, Octotree only works on `github.com`. To support GitHub Enterprise on
 ### v1.6.1
 * Update buttons' style to match GitHub new button style
 
-### [v1.6](https://github.com/buunguyen/octotree/issues?q=milestone%3A1.6+is%3Aclosed)
+### v1.6
 * Update all dependencies to latest version
 * Allow navigating to commit trees https://github.com/buunguyen/octotree/issues/157
 * Support keyboard navigation https://github.com/buunguyen/octotree/issues/158
 * Fix bug handling back tick in paths https://github.com/buunguyen/octotree/issues/160
 
-### [v1.5.3](https://github.com/buunguyen/octotree/issues?q=milestone%3A1.5.3+is%3Aclosed)
+### v1.5.3
 * Fix bug https://github.com/buunguyen/octotree/pull/149
 * Fix bug https://github.com/buunguyen/octotree/issues/151
 * Fix bug https://github.com/buunguyen/octotree/issues/155
 
-### [v1.5.2](https://github.com/buunguyen/octotree/issues?q=milestone%3A1.5.2+is%3Aclosed)
+### v1.5.2
 * Fix bug https://github.com/buunguyen/octotree/issues/147
 
-### [v1.5](https://github.com/buunguyen/octotree/issues?q=milestone%3A1.5+is%3Aclosed)
+### v1.5
 * Option to show in non-code pages
 * Option to load tree only when sidebar is visible
 * Option to configure tab size
 * Bug fixes
 
-### [v1.4.1](https://github.com/buunguyen/octotree/issues?q=milestone%3A1.4.1+is%3Aclosed)
+### v1.4.1
 * New header to match new GitHub design
 * Bug fixes
 
-### [v1.4](https://github.com/buunguyen/octotree/issues?labels=&milestone=4&page=1&state=closed)
+### v1.4
 * Support GitHub enterprise
 * Change default hotkey (`cmd+b` for Safari and `cmd+shift+s` for all other browsers)
 * Some other minor changes
 
-### [v1.3](https://github.com/buunguyen/octotree/issues?labels=&milestone=3&page=1&state=closed)
+### v1.3
 * Setting panel allowing:
  * Changing access token
  * Changing hotkeys
@@ -99,7 +105,7 @@ By default, Octotree only works on `github.com`. To support GitHub Enterprise on
 * More responsive in big repositories
 * And bug fixes
 
-### [v1.2](https://github.com/buunguyen/octotree/issues?labels=&milestone=1&page=1&state=closed)
+### v1.2
 * Hide sidebar by default (upon many user requests)
 * Hotkey (`cmd+b`, `ctrl+b`) to toggle sidebar
 * Sidebar is now resizable
@@ -108,7 +114,7 @@ By default, Octotree only works on `github.com`. To support GitHub Enterprise on
 * New sidebar header and progress indicator
 * And bug fixes
 
-### [v1.1](https://github.com/buunguyen/octotree/issues?labels=&milestone=2&page=1&state=closed)
+### v1.1
 * New UI that blends better with GitHub!
 * Hide Octotree on non-code pages
 * When asking for token, show more detailed message and not fly out automatically

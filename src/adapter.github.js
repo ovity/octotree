@@ -43,9 +43,19 @@ GitHub.prototype.selectSubmodule = function(path) {
 }
 
 /**
+ * Downloads the file at the given
+ */
+GitHub.prototype.downloadFile = function(path, fileName) {
+  var link = document.createElement('a')
+  link.setAttribute('href', path.replace(/\/blob\//, '/raw/'))
+  link.setAttribute('download', fileName)
+  link.click()
+}
+
+/**
  * Selects a path.
  */
-GitHub.prototype.selectPath = function(path, tabSize) {
+GitHub.prototype.selectFile = function(path, tabSize) {
   var container = $(GH_PJAX_SEL)
     , qs = tabSize ? ('?ts=' + tabSize) : ''
 

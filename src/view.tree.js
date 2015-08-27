@@ -12,9 +12,14 @@ function TreeView($dom, store, adapter) {
     })
     .on('click', function(event) {
       var $target = $(event.target)
+      var self = this
+      var download = false
 
       // handle icon click, fix #122
-      if ($target.is('i.jstree-icon')) $target = $target.parent()
+      if ($target.is('i.jstree-icon')) {
+        $target = $target.parent()
+        download = true
+      }
 
       if (!$target.is('a.jstree-anchor')) return
 
@@ -23,13 +28,26 @@ function TreeView($dom, store, adapter) {
           ? $target.children(':first')
           : $target.siblings(':first') // handles child links in submodule
 
-      // refocus after complete so that keyboard navigation works, fix #158
-      $(document).one('pjax:success', function () {
-        $.jstree.reference(this).get_container().focus()
-      }.bind(this))
+      if ($icon.hasClass('commit')) {
+        refocusAfterCompletion()
+        adapter.selectSubmodule(href)
+      }
+      else if ($icon.hasClass('blob')) {
+        if (download) {
+          adapter.downloadFile(href, $target.text())
+        }
+        else {
+          refocusAfterCompletion()
+          adapter.selectFile(href, store.get(STORE.TABSIZE))
+        }
+      }
 
-      if ($icon.hasClass('commit')) adapter.selectSubmodule(href)
-      else if ($icon.hasClass('blob')) adapter.selectPath(href, store.get(STORE.TABSIZE))
+      // refocus after complete so that keyboard navigation works, fix #158
+      function refocusAfterCompletion() {
+        $(document).one('pjax:success', function () {
+          $.jstree.reference(self).get_container().focus()
+        })
+      }
     })
     .jstree({
       core    : { multiple: false, themes : { responsive : false } },
@@ -52,7 +70,7 @@ TreeView.prototype.showHeader = function(repo) {
     )
     .on('click', 'a[data-pjax]', function(event) {
       event.preventDefault()
-      adapter.selectPath($(this).attr('href') /* a.href always return absolute URL, don't want that */)
+      adapter.selectFile($(this).attr('href') /* a.href always return absolute URL, don't want that */)
     })
 }
 
