@@ -105,11 +105,18 @@ $(document).ready(function() {
           if (repoChanged || reload === true) {
             $document.trigger(EVENT.REQ_START)
             currRepo = repo
+            function fetchData (sha, success) {
+              adapter.fetchData({ repo: repo, token: token, sha: sha }, function(err, tree) {
+                if (err) errorView.show(err)
+                else success(tree)
+              })
+            }
+            treeView.fetchData = fetchData
             treeView.showHeader(repo)
 
-            adapter.fetchData({ repo: repo, token: token }, function(err, tree) {
-              if (err) errorView.show(err)
-              else treeView.show(repo, token, tree)
+            // First load doesn't need SHA string
+            fetchData(null, function(treeData){
+              treeView.show(repo, token, treeData)
             })
           }
           else treeView.syncSelection()

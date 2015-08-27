@@ -131,9 +131,9 @@ GitHub.prototype.fetchData = function(opts, cb) {
     , list = []
     , encodedBranch = encodeURIComponent(decodeURIComponent(repo.branch))
     , $dummyDiv = $('<div/>')
-    , path = opts.path || ''
+    , sha = opts.sha || ''
 
-  getTree(encodedBranch, path, function(err, tree) {
+  getTree(encodedBranch, sha, function(err, tree) {
     if (err) return cb(err)
 
     fetchSubmodules(function(err, submodules) {
@@ -154,12 +154,6 @@ GitHub.prototype.fetchData = function(opts, cb) {
           // we're done
           if (item === undefined) return cb(null, list)
 
-          if (item.type === 'file')
-            item.type = 'blob'
-          if (item.type === 'dir')
-            item.type = 'tree'
-
-          console.log(item.path)
           path  = item.path
           type  = item.type
           index = path.lastIndexOf('/')
@@ -212,10 +206,11 @@ GitHub.prototype.fetchData = function(opts, cb) {
     }
   })
 
-  function getTree(branch, path, cb) {
-   get('/contents/' + path + '?ref=' + branch, function(err, res) {
+  function getTree(branch, sha, cb) {
+    var shaParam = (sha || branch)
+    get('/git/trees/' + shaParam, function(err, res) {
       if (err) return cb(err)
-      cb(null, res)
+      cb(null, res.tree)
     })
   }
 

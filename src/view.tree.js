@@ -87,15 +87,11 @@ TreeView.prototype.show = function(repo, token, treeData) {
     if (node.id === "#")
       cb(treeData)
     else
-      self.adapter.fetchData({ repo: repo, token: token, path: node.original.path }, function(err, treeData) {
-        if (err)
-          console.log(err)
-        else {
-          treeData = sort(treeData)
-          if (collapseTree) treeData = collapse(treeData)
-          cb(treeData)
-        }
-      })
+      self.fetchData(node.original.sha, function(treeData){
+        treeData = sort(treeData)
+        if (collapseTree) treeData = collapse(treeData)
+        cb(treeData)
+    })
   }
 
   treeContainer.one('refresh.jstree', function() {
@@ -131,6 +127,10 @@ TreeView.prototype.show = function(repo, token, treeData) {
       return item
     })
   }
+}
+
+TreeView.prototype.fetchData = function(success) {
+  // Dummy func
 }
 
 TreeView.prototype.syncSelection = function(currentPath) {
