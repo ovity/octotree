@@ -2,8 +2,9 @@ function TreeView($dom, store, adapter) {
   this.$view = $dom.find('.octotree_treeview')
   this.store = store
   this.adapter = adapter
-  this.$view
-    .find('.octotree_view_body')
+  this.$search = $dom.find('.octotree_view_footer input')
+  this.$tree = this.$view.find('.octotree_view_body')
+  this.$tree
     .on('click.jstree', '.jstree-open>a', function() {
       $.jstree.reference(this).close_node(this)
     })
@@ -51,8 +52,13 @@ function TreeView($dom, store, adapter) {
     })
     .jstree({
       core    : { multiple: false, themes : { responsive : false } },
-      plugins : ['wholerow']
+      plugins : ['wholerow', 'search']
     })
+
+  var $tree = this.$tree;
+  this.$search.on('input', function() {
+    $tree.jstree(true).search(this.value);
+  })
 }
 
 TreeView.prototype.showHeader = function(repo) {

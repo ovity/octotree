@@ -39,7 +39,7 @@
 }
 
 .octotree_views {
-  height: 100%;
+  height: ~'calc(100% - 45px)';
   overflow: auto;
 
   .octotree_view {
@@ -61,6 +61,28 @@
       margin: 0;
       text-shadow: 0 1px 0 #fff;
       border-bottom: 1px solid #e5e5e5;
+    }
+    .octotree_view_footer {
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 45px;
+      font-size: 16px;
+      background-color: #f3f3f3;
+      background-image: linear-gradient(#f9f9f9, #f3f3f3);
+      background-repeat: repeat-x;
+      border-top: 1px solid #e5e5e5;
+
+      input {
+        width: 94%;
+        height: 30px;
+        border-radius: 3px;
+        padding: 2px 7px;
+        margin: 6px 8px;
+        border: 1px solid #CCC;
+        box-sizing: border-box;
+      }
     }
   }
 
