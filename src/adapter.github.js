@@ -10,7 +10,7 @@ const
   , GH_BRANCH_SEL  = '[aria-label="Switch branches or tags"]'
   , GH_404_SEL          = '#parallax_wrapper'
   , GH_PJAX_SEL         = '#js-repo-pjax-container'
-  , GH_CONTAINERS       = 'body > .container, .header > .container, .site > .container, .repohead > .container'
+  , GH_CONTAINERS       = '.container'
 
 function GitHub() {
   if (!window.MutationObserver) return
