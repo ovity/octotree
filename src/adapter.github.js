@@ -85,7 +85,7 @@ GitHub.prototype.updateLayout = function(sidebarVisible, sidebarWidth) {
   }
 
   // falls-back if GitHub DOM has been updated
-  else $('html').css('margin-left', sidebarVisible ? sidebarWidth - spacing : '')
+  else $('html').css('margin-left', sidebarVisible ? sidebarWidth + spacing : '')
 }
 
 /**
