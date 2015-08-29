@@ -51,6 +51,9 @@ By default, Octotree only works on `github.com`. To support GitHub Enterprise on
 
 ## Changelog
 
+### v1.7.1
+* Fix space between tree and GitHub contents due to GitHub DOM change
+
 ### v1.7.0
 * Support direct downloading when hovering a file
 
