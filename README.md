@@ -7,6 +7,8 @@ Browser extensions (Chrome, Firefox, Safari and Opera) to display GitHub code in
 * Support private repositories (see [instructions](#github-access-token))
 * Support GitHub Enterprise (Chrome and Opera only, see [instructions](#github-enterprise))
 
+![screenshot](screenshot.jpg)
+
 ## Install on Chrome and Firefox
 * Download and install Octotree from [Chrome Web Store](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc) or [Mozilla Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/octotree/)
 * Navigate to any GitHub repository (or just refresh this page as an example)
