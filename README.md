@@ -28,7 +28,7 @@ When that happens, Octotree will ask for your [GitHub personal access token](htt
 Alternatively, you can manually enter or update the token by following these steps:
 
 * Navigate to any GitHub repository
-* Open the Chrome (or Safari, Firefox) developer console
+* Open the developer console of your browser
 * Execute the following line:
 ```javascript
 localStorage.setItem('octotree.github_access_token', 'REPLACE WITH TOKEN')
@@ -38,13 +38,13 @@ Note: if you use GitHub Enterprise, each site will need its own access token. Th
 
 
 ## GitHub Enterprise
-By default, Octotree only works on `github.com`. To support GitHub Enterprise on Chrome or Opera, you must grant Octotoree sufficient permissions. Follow these steps to do so:
+By default, Octotree only works on `github.com`. To support GitHub Enterprise on Chrome and Opera, you must grant Octotree sufficient permissions. Follow these steps to do so:
 
 * Navigate to any GitHub repository on `github.com`
-* Open Octotree's setting panel
-* Fill in the GitHub Enterprise URLs textbox, one site URL per line
+* Open Octotree's settings panel
+* Fill in the GitHub Enterprise URLs textbox, one URL per line
 * Click Save and accept any permission prompt
-* Navigate to your GitHub Enterprise site (or refresh if you're already in one)
+* Navigate to your GitHub Enterprise site
 * You might be asked to create an [access token](#github-access-token)
 
 
