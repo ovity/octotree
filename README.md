@@ -1,5 +1,5 @@
 ## Octotree
-Browser extensions (Chrome, Firefox, Safari and Opera) to display GitHub code in tree format. Useful for developers who frequently read source in GitHub and do not want to download or checkout too many repositories. Features:
+Browser extensions (Chrome, Firefox, Opera and Safari) to display GitHub code in tree format. Useful for developers who frequently read source in GitHub and do not want to download or checkout too many repositories. Features:
 
 * Easy-to-navigate code tree like IDEs
 * Fast browsing with pjax
@@ -8,15 +8,14 @@ Browser extensions (Chrome, Firefox, Safari and Opera) to display GitHub code in
 * Support GitHub Enterprise (Chrome and Opera only, see [instructions](#github-enterprise))
 
 ## Install on Chrome and Firefox
-* Download and install Octotree from [Chrome Web Store](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc) or [Mozilla Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/octotree/)
+* Install Octotree from [Chrome Web Store](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc), [Mozilla Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/octotree/), or [Opera Add-ons Store](https://addons.opera.com/en/extensions/details/octotree/)
 * Navigate to any GitHub repository (or just refresh this page as an example)
 * The code tree should show on the left-hand side of the screen
 
-## Install on Safari and Opera
-You can install the prebuilt extensions located in the [dist](https://github.com/buunguyen/octotree/tree/master/dist) folder. For security reason, only download Octotree from this location.
+## Install on Safari
+The prebuilt packages for all extensions are located in the  [dist](https://github.com/buunguyen/octotree/tree/master/dist) folder. For security reason, only download Octotree from this location.
 
-* Safari: drag `safari.safariextz` to the browser and follow the instructions
-* Opera: drag `opera.nex` to the browser and follow the instructions
+* Safari: drag `safari.safariextz` to the browser and follow on-screen the instructions
 
 ## GitHub access token
 Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve repository metadata. By default, it makes unauthenticated requests to the GitHub API. However, there are two situations when requests must be authenticated:
