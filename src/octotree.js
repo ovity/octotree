@@ -91,6 +91,7 @@ $(document).ready(function() {
         , showInNonCodePage = store.get(STORE.NONCODE)
         , shown = store.get(STORE.SHOWN)
         , lazyload = store.get(STORE.LAZYLOAD)
+        , recursive = store.get(STORE.RECURSIVE)
         , token = store.get(STORE.TOKEN)
         , repo = adapter.getRepoFromPath(showInNonCodePage, currRepo)
 
@@ -105,12 +106,14 @@ $(document).ready(function() {
           if (repoChanged || reload === true) {
             $document.trigger(EVENT.REQ_START)
             currRepo = repo
-            function fetchData (sha, success) {
-              adapter.fetchData({ repo: repo, token: token, sha: sha }, function(err, tree) {
+
+            function fetchData (shaString, success) {
+              adapter.fetchData({ repo: repo, token: token, sha: shaString, recursive: recursive }, function(err, tree) {
                 if (err) errorView.show(err)
                 else success(tree)
               })
             }
+
             treeView.fetchData = fetchData
             treeView.showHeader(repo)
 
