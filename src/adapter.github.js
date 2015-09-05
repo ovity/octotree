@@ -122,7 +122,7 @@ GitHub.prototype.getRepoFromPath = function(showInNonCodePage, currentRepo) {
 
 /**
  * Fetches data of a particular repository.
- * @param opts: { repo: repository, recursive: opt-in lazy load, sha(optional): SHA String, token (optional): user access token, apiUrl (optional): base API URL }
+ * @param opts: { repo: repository, recursive: opt-in lazy load, original(optional): selected node (null for resursively loading), token (optional): user access token, apiUrl (optional): base API URL }
  * @param cb(err: error, tree: array (of arrays) of items)
  */
 GitHub.prototype.fetchData = function(opts, cb) {
@@ -141,6 +141,14 @@ GitHub.prototype.fetchData = function(opts, cb) {
       if (err) return cb(err)
       submodules = submodules || {}
 
+      function convertPath(path){
+        if (opts.original)
+        {
+          return opts.original.path + '/' + path
+        }
+        return path
+      }
+
       // split work in chunks to prevent blocking UI on large repos
       nextChunk(0)
       function nextChunk(iteration) {
@@ -155,6 +163,7 @@ GitHub.prototype.fetchData = function(opts, cb) {
           // we're done
           if (item === undefined) return cb(null, folders[''])
 
+          item.path = convertPath(item.path)
           path  = item.path
           type  = item.type
           index = path.lastIndexOf('/')
@@ -163,8 +172,10 @@ GitHub.prototype.fetchData = function(opts, cb) {
           item.id   = PREFIX + path
           item.text = name
           item.icon = type // use `type` as class name for tree node
-
-          folders[path.substring(0, index)].push(item)
+          if (opts.recursive)
+            folders[path.substring(0, index)].push(item)
+          else
+            folders[''].push(item)
 
           if (type === 'tree') {
             folders[item.path] = item.children = []
@@ -208,7 +219,8 @@ GitHub.prototype.fetchData = function(opts, cb) {
   })
 
   function getTree(opts, cb) {
-    var shaParam = (opts.sha || opts.branch)
+    var sha = (opts.original ? opts.original.sha : null)
+    var shaParam = (sha || opts.branch)
     var recursiveParam = opts.recursive ? '?recursive=1' : ''
     get('/git/trees/' + shaParam + recursiveParam, function(err, res) {
       if (err) return cb(err)

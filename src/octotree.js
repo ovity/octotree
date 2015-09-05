@@ -107,8 +107,8 @@ $(document).ready(function() {
             $document.trigger(EVENT.REQ_START)
             currRepo = repo
 
-            function fetchData (shaString, success) {
-              adapter.fetchData({ repo: repo, token: token, sha: shaString, recursive: recursive }, function(err, tree) {
+            function fetchData (original, success) {
+              adapter.fetchData({ repo: repo, token: token, original: original, recursive: recursive }, function(err, tree) {
                 if (err) errorView.show(err)
                 else success(tree)
               })

@@ -84,10 +84,10 @@ TreeView.prototype.show = function(repo, token, treeData) {
   if (collapseTree) treeData = collapse(treeData)
 
   tree.settings.core.data = function (node, cb) {
-    if (node.id === "#")
+    if (node.id === "#") // Root node
       cb(treeData)
     else
-      self.fetchData(node.original.sha, function(treeData){
+      self.fetchData(node.original, function(treeData){
         treeData = sort(treeData)
         if (collapseTree) treeData = collapse(treeData)
         cb(treeData)
@@ -133,6 +133,7 @@ TreeView.prototype.show = function(repo, token, treeData) {
 
 TreeView.prototype.fetchData = function(opts, success) {
   // Dummy func
+  throw "It must be implemented from caller when initializing this object"
 }
 
 TreeView.prototype.syncSelection = function(currentPath) {
