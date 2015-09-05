@@ -118,7 +118,7 @@ $(document).ready(function() {
             treeView.showHeader(repo)
 
             // First load doesn't need SHA string
-            fetchData(null, function(treeData){
+            fetchData(null, function(treeData) {
               treeView.show(repo, token, treeData)
             })
           }

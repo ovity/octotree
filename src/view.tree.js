@@ -175,7 +175,7 @@ TreeView.prototype.syncSelection = function(currentPath) {
     }
     else
       // 300ms seems enough to fetch new items
-      // it will repeat if there is no node found
+      // repeats if there is no new node fetched
       setTimeout(function(){
         self.syncSelection(path)
       }, 300)

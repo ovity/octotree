@@ -141,11 +141,9 @@ GitHub.prototype.fetchData = function(opts, cb) {
       if (err) return cb(err)
       submodules = submodules || {}
 
-      function convertPath(path){
-        if (opts.original)
-        {
-          return opts.original.path + '/' + path
-        }
+      function convertPath(path) {
+        // Concats child path to parent's
+        if (opts.original) return opts.original.path + '/' + path
         return path
       }
 
@@ -174,7 +172,7 @@ GitHub.prototype.fetchData = function(opts, cb) {
           item.icon = type // use `type` as class name for tree node
           if (opts.recursive)
             folders[path.substring(0, index)].push(item)
-          else
+          else // no hierarchy in lazy loading
             folders[''].push(item)
 
           if (type === 'tree') {
