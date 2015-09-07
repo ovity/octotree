@@ -74,15 +74,27 @@ TreeView.prototype.showHeader = function(repo) {
     })
 }
 
-TreeView.prototype.show = function(repo, treeData) {
+TreeView.prototype.show = function(repo, token) {
   var self = this
     , treeContainer = self.$view.find('.octotree_view_body')
     , tree = treeContainer.jstree(true)
     , collapseTree = self.store.get(STORE.COLLAPSE)
+    , recursiveLoad = self.store.get(STORE.RECURSIVE)
 
-  treeData = sort(treeData)
-  if (collapseTree) treeData = collapse(treeData)
-  tree.settings.core.data = treeData
+  fetchData = function(node, success) {
+    self.adapter.fetchData({ repo: repo, token: token, parentNode: node, recursive: recursiveLoad }, function(err, treeData) {
+      if (err) $(self).trigger(EVENT.FETCH_ERROR, [err])
+      else success(treeData)
+    })
+  }
+
+  tree.settings.core.data = function (node, cb) {
+    fetchData(node.id === "#" ? null : node.original, function(treeData) {
+      treeData = sort(treeData)
+      if (collapseTree) collapse(node, treeData, cb)
+      else cb(treeData)
+    })
+  }
 
   treeContainer.one('refresh.jstree', function() {
     self.syncSelection()
@@ -97,39 +109,95 @@ TreeView.prototype.show = function(repo, treeData) {
       return a.type === 'blob' ? 1 : -1
     })
     folder.forEach(function(item) {
-      if (item.type === 'tree') sort(item.children)
+      if (item.type === 'tree')
+        if (item.children.length > 0)
+          sort(item.children)
+        else // marks to load children later
+          item.children = true
     })
     return folder
   }
 
-  function collapse(folder) {
-    return folder.map(function(item) {
-      if (item.type === 'tree') {
-        item.children = collapse(item.children)
-        if (item.children.length === 1 && item.children[0].type === 'tree') {
-          var onlyChild = item.children[0]
-          onlyChild.text = item.text + '/' + onlyChild.text
-          return onlyChild
+  function collapse(parentNode, folder, cb) {
+
+    function recursiveCollapse(folder) {
+      return folder.map(function(item) {
+        if (item.type === 'tree') {
+          item.children = recursiveCollapse(item.children)
+          if (item.children.length === 1 && item.children[0].type === 'tree') {
+            var onlyChild = item.children[0]
+            onlyChild.text = item.text + '/' + onlyChild.text
+            return onlyChild
+          }
         }
-      }
-      return item
-    })
+        return item
+      })
+    }
+
+    function lazyLoadCollapse(parentNode, children, cb) {
+      if (children.length === 1 && children[0].type === 'tree') {
+        var onlyChild = children[0]
+        onlyChild.text = parentNode.text + '/' + onlyChild.text
+        // Detected empty folder, auto fetchs new data
+        fetchData(onlyChild, function(treeData) {
+          treeData = sort(treeData)
+          lazyLoadCollapse(onlyChild, treeData, function(children){
+            // Now parent node will have a long text with many slashes
+            parentNode.text = onlyChild.text
+            cb(children)
+          })
+        })
+      } 
+      else cb(children)
+    }
+
+    if (recursiveLoad) {
+      cb(recursiveCollapse(folder))
+    }
+    else {
+      lazyLoadCollapse(parentNode, folder, cb)
+    }
   }
 }
 
-TreeView.prototype.syncSelection = function() {
-  var tree = this.$view.find('.octotree_view_body').jstree(true)
-    , path = location.pathname
+TreeView.prototype.syncSelection = function(currentPath) {
+  var self = this
+    , tree = this.$view.find('.octotree_view_body').jstree(true)
+    , path = decodeURIComponent(location.pathname)
 
   if (!tree) return
-  tree.deselect_all()
+  
+  if (!currentPath) {
+    // e.g. converts /buunguyen/octotree/type/branch/path/path1/path2 to path/path1/path2
+    var match = path.match(/(?:[^\/]+\/){4}(.*)/)
+    if (match)
+      currentPath = match[1]
+    else 
+      return
+  }
 
-  // e.g. converts /buunguyen/octotree/type/branch/path to path
-  var match = path.match(/(?:[^\/]+\/){4}(.*)/)
-    , nodeId
-  if (match) {
-    nodeId = PREFIX + decodeURIComponent(match[1])
-    tree.select_node(nodeId)
-    tree.open_node(nodeId)
+  var nodeId
+  var paths = currentPath.split('/')
+  var nextPath = ''
+
+  for (var i = 0; i < paths.length; i++) {
+    // Convert single paths to hierarchy 
+    // e.g. ["lib", "controllers"] becomes ["lib", "lib/controllers"]
+    nextPath += paths[i]
+    nodeId = PREFIX + nextPath
+    if (tree.get_node(nodeId)) {
+      tree.deselect_all()
+      tree.select_node(nodeId)
+      tree.open_node(nodeId)
+      nextPath += '/'
+    }
+    else {
+      // 300ms seems enough to fetch new items
+      // repeats if there is no new node fetched
+      setTimeout(function() {
+        self.syncSelection(currentPath)
+      }, 300)
+      break
+    }
   }
 }
