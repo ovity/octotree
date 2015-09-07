@@ -50,6 +50,9 @@ $(document).ready(function() {
           showView(hasError ? errorView.$view : treeView.$view)
         })
         .on(EVENT.OPTS_CHANGE, optionsChanged)
+        .on(EVENT.FETCH_ERROR, function(event, err) {
+          errorView.show(err)
+        })
     })
 
     $document
@@ -81,6 +84,9 @@ $(document).ready(function() {
             key.unbind(value[0])
             key(value[1], toggleSidebar)
             break
+          case STORE.RECURSIVE:
+            reload = true
+            break
         }
       })
       if (reload) tryLoadRepo(true)
@@ -107,20 +113,8 @@ $(document).ready(function() {
             $document.trigger(EVENT.REQ_START)
             currRepo = repo
 
-            function fetchData (original, success) {
-              adapter.fetchData({ repo: repo, token: token, original: original, recursive: recursive }, function(err, tree) {
-                if (err) errorView.show(err)
-                else success(tree)
-              })
-            }
-
-            treeView.fetchData = fetchData
             treeView.showHeader(repo)
-
-            // First load doesn't need SHA string
-            fetchData(null, function(treeData) {
-              treeView.show(repo, token, treeData)
-            })
+            treeView.show(repo, token)
           }
           else treeView.syncSelection()
         }

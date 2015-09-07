@@ -122,7 +122,7 @@ GitHub.prototype.getRepoFromPath = function(showInNonCodePage, currentRepo) {
 
 /**
  * Fetches data of a particular repository.
- * @param opts: { repo: repository, recursive: opt-in lazy load, original(optional): selected node (null for resursively loading), token (optional): user access token, apiUrl (optional): base API URL }
+ * @param opts: { repo: repository, recursive: opt-in lazy load, node(optional): selected node (null for resursively loading), token (optional): user access token, apiUrl (optional): base API URL }
  * @param cb(err: error, tree: array (of arrays) of items)
  */
 GitHub.prototype.fetchData = function(opts, cb) {
@@ -133,8 +133,10 @@ GitHub.prototype.fetchData = function(opts, cb) {
     , $dummyDiv = $('<div/>')
 
   $.extend(opts, {branch: encodedBranch})
-
-  getTree(opts, function(err, tree) {
+  var param = ((opts.node && opts.node.sha) || opts.branch) 
+  param += (opts.recursive ? '?recursive=1' : '')
+  
+  getTree(param, function(err, tree) {
     if (err) return cb(err)
 
     fetchSubmodules(function(err, submodules) {
@@ -143,7 +145,7 @@ GitHub.prototype.fetchData = function(opts, cb) {
 
       function convertPath(path) {
         // Concats child path to parent's
-        if (opts.original) return opts.original.path + '/' + path
+        if (opts.node) return opts.node.path + '/' + path
         return path
       }
 
@@ -216,11 +218,8 @@ GitHub.prototype.fetchData = function(opts, cb) {
     }
   })
 
-  function getTree(opts, cb) {
-    var sha = (opts.original ? opts.original.sha : null)
-    var shaParam = (sha || opts.branch)
-    var recursiveParam = opts.recursive ? '?recursive=1' : ''
-    get('/git/trees/' + shaParam + recursiveParam, function(err, res) {
+  function getTree(param, cb) {
+    get('/git/trees/' + param, function(err, res) {
       if (err) return cb(err)
       cb(null, res.tree)
     })
