@@ -122,7 +122,7 @@ GitHub.prototype.getRepoFromPath = function(showInNonCodePage, currentRepo) {
 
 /**
  * Fetches data of a particular repository.
- * @param opts: { repo: repository, token (optional): user access token, apiUrl (optional): base API URL }
+ * @param opts: { repo: repository, recursive: opt-in lazy load, node(optional): selected node (null for resursively loading), token (optional): user access token, apiUrl (optional): base API URL }
  * @param cb(err: error, tree: array (of arrays) of items)
  */
 GitHub.prototype.fetchData = function(opts, cb) {
@@ -132,12 +132,22 @@ GitHub.prototype.fetchData = function(opts, cb) {
     , encodedBranch = encodeURIComponent(decodeURIComponent(repo.branch))
     , $dummyDiv = $('<div/>')
 
-  getTree(encodedBranch + '?recursive=true', function(err, tree) {
+  $.extend(opts, {branch: encodedBranch})
+  var param = ((opts.node && opts.node.sha) || opts.branch) 
+  param += (opts.recursive ? '?recursive=1' : '')
+  
+  getTree(param, function(err, tree) {
     if (err) return cb(err)
 
     fetchSubmodules(function(err, submodules) {
       if (err) return cb(err)
       submodules = submodules || {}
+
+      function convertPath(path) {
+        // Concats child path to parent's
+        if (opts.node) return opts.node.path + '/' + path
+        return path
+      }
 
       // split work in chunks to prevent blocking UI on large repos
       nextChunk(0)
@@ -153,6 +163,7 @@ GitHub.prototype.fetchData = function(opts, cb) {
           // we're done
           if (item === undefined) return cb(null, folders[''])
 
+          item.path = convertPath(item.path)
           path  = item.path
           type  = item.type
           index = path.lastIndexOf('/')
@@ -161,8 +172,10 @@ GitHub.prototype.fetchData = function(opts, cb) {
           item.id   = PREFIX + path
           item.text = name
           item.icon = type // use `type` as class name for tree node
-
-          folders[path.substring(0, index)].push(item)
+          if (opts.recursive)
+            folders[path.substring(0, index)].push(item)
+          else // no hierarchy in lazy loading
+            folders[''].push(item)
 
           if (type === 'tree') {
             folders[item.path] = item.children = []
@@ -205,8 +218,8 @@ GitHub.prototype.fetchData = function(opts, cb) {
     }
   })
 
-  function getTree(tree, cb) {
-   get('/git/trees/' + tree, function(err, res) {
+  function getTree(param, cb) {
+    get('/git/trees/' + param, function(err, res) {
       if (err) return cb(err)
       cb(null, res.tree)
     })
