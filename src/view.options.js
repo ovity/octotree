@@ -23,7 +23,20 @@ function OptionsView($dom, store) {
     else {
       eachOption(
         function($elm, key, local, value, cb) {
-          if ($elm.is(':checkbox')) $elm.prop('checked', value)
+          if ($elm.is(':checkbox')) {
+            // triggers to disable all checkboxs have data-trigger-disable
+            triggerChange = function(checkbox) {
+              var store              = $(checkbox).data('store') 
+                , checkboxs = $view.find('[data-trigger-disable=' + store + ']')
+              checkboxs.prop('disabled', !checkbox.checked).closest('label').toggleClass('disabled', !checkbox.checked)
+            }
+
+            $elm.change(function(event) {
+              triggerChange(event.target)
+            })
+            $elm.prop('checked', value)
+            triggerChange($elm[0])
+          } 
           else $elm.val(value)
           cb()
         },
