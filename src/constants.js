@@ -2,17 +2,18 @@ const
     PREFIX = 'octotree'
 
   , STORE = {
-    TOKEN    : 'octotree.github_access_token',
-    COLLAPSE : 'octotree.collapse',
-    TABSIZE  : 'octotree.tabsize',
-    REMEMBER : 'octotree.remember',
-    LAZYLOAD : 'octotree.lazyload',
-    HOTKEYS  : 'octotree.hotkeys',
-    GHEURLS  : 'octotree.gheurls',
-    WIDTH    : 'octotree.sidebar_width',
-    POPUP    : 'octotree.popup_shown',
-    SHOWN    : 'octotree.sidebar_shown',
-    NONCODE  : 'octotree.noncode_shown',
+    TOKEN     : 'octotree.github_access_token',
+    COLLAPSE  : 'octotree.collapse',
+    TABSIZE   : 'octotree.tabsize',
+    REMEMBER  : 'octotree.remember',
+    LAZYLOAD  : 'octotree.lazyload',
+    RECURSIVE : 'octotree.recursive',
+    HOTKEYS   : 'octotree.hotkeys',
+    GHEURLS   : 'octotree.gheurls',
+    WIDTH     : 'octotree.sidebar_width',
+    POPUP     : 'octotree.popup_shown',
+    SHOWN     : 'octotree.sidebar_shown',
+    NONCODE   : 'octotree.noncode_shown',
   }
 
   , DEFAULTS = {
@@ -21,6 +22,7 @@ const
     TABSIZE  : '',
     REMEMBER : false,
     LAZYLOAD : false,
+    RECURSIVE: true,
     // @ifdef SAFARI
     HOTKEYS  : '⌘+b, ⌃+b',
     // @endif
@@ -43,4 +45,5 @@ const
     OPTS_CHANGE   : 'octotree:change',
     VIEW_READY    : 'octotree:ready',
     VIEW_CLOSE    : 'octotree:close',
+    FETCH_ERROR   : 'octotree:error'
   }
