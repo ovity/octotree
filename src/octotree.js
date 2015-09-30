@@ -92,33 +92,37 @@ $(document).ready(function() {
         , shown = store.get(STORE.SHOWN)
         , lazyload = store.get(STORE.LAZYLOAD)
         , token = store.get(STORE.TOKEN)
-        , repo = adapter.getRepoFromPath(showInNonCodePage, currRepo)
 
-      if (repo) {
-        $toggler.show()
-        helpPopup.show()
-
-        if (remember && shown) toggleSidebar(true)
-
-        if (!lazyload || isSidebarVisible()) {
-          var repoChanged = JSON.stringify(repo) !== JSON.stringify(currRepo)
-          if (repoChanged || reload === true) {
-            $document.trigger(EVENT.REQ_START)
-            currRepo = repo
-            treeView.showHeader(repo)
-
-            adapter.fetchData({ repo: repo, token: token }, function(err, tree) {
-              if (err) errorView.show(err)
-              else treeView.show(repo, tree)
-            })
-          }
-          else treeView.syncSelection()
+      adapter.getRepoFromPath(showInNonCodePage, currRepo, token, function(err, repo) {
+        if (err) {
+          errorView.show(err)
         }
-      }
-      else {
-        $toggler.hide()
-        toggleSidebar(false)
-      }
+        else if (repo) {
+          $toggler.show()
+          helpPopup.show()
+
+          if (remember && shown) toggleSidebar(true)
+
+          if (!lazyload || isSidebarVisible()) {
+            var repoChanged = JSON.stringify(repo) !== JSON.stringify(currRepo)
+            if (repoChanged || reload === true) {
+              $document.trigger(EVENT.REQ_START)
+              currRepo = repo
+              treeView.showHeader(repo)
+
+              adapter.getCodeTree(repo, token, function(err, tree) {
+                if (err) errorView.show(err)
+                else treeView.show(repo, tree)
+              })
+            }
+            else treeView.syncSelection()
+          }
+        }
+        else {
+          $toggler.hide()
+          toggleSidebar(false)
+        }
+      })
     }
 
     function showView(view) {
