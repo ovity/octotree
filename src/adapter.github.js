@@ -104,22 +104,31 @@ GitHub.prototype.updateLayout = function(sidebarVisible, sidebarWidth) {
  * @param {Function} cb - the callback function.
  */
 GitHub.prototype.getRepoFromPath = function(showInNonCodePage, currentRepo, token, cb) {
+
   // 404 page, skip
-  if ($(GH_404_SEL).length) return false
+  if ($(GH_404_SEL).length) {
+    return cb()
+  }
 
   // (username)/(reponame)[/(type)]
   var match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/)
-  if (!match) return false
+  if (!match) {
+    return cb()
+  }
 
   var username = match[1]
   var reponame = match[2]
 
   // not a repository, skip
-  if (~GH_RESERVED_USER_NAMES.indexOf(username)) return false
-  if (~GH_RESERVED_REPO_NAMES.indexOf(reponame)) return false
+  if (~GH_RESERVED_USER_NAMES.indexOf(username) ||
+      ~GH_RESERVED_REPO_NAMES.indexOf(reponame)) {
+    return cb()
+  }
 
   // skip non-code page unless showInNonCodePage is true
-  if (!showInNonCodePage && match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
+  if (!showInNonCodePage && match[3] && !~['tree', 'blob'].indexOf(match[3])) {
+    return cb()
+  }
 
   // get branch by inspecting page, quite fragile so provide multiple fallbacks
   var GH_BRANCH_SEL_1 = '[aria-label="Switch branches or tags"]'
