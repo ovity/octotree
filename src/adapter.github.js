@@ -161,17 +161,19 @@ GitHub.prototype.getRepoFromPath = function(showInNonCodePage, currentRepo, toke
 
 /**
  * Retrieves the code tree of a repository.
- * @param {Object} repo - the repo whose code tree is to be retrieved.
- * @param {String} token - the access token.
+ * @param {Object} opts: { repo: repository, node(optional): selected node (null for resursively loading), token (optional): user access token, apiUrl (optional): base API URL }
  * @param {Function} cb(err: error, tree: array (of arrays) of items)
  */
-GitHub.prototype.getCodeTree = function(repo, token, cb) {
-  var self = this
-    , folders = { '': [] }
+GitHub.prototype.getCodeTree = function(opts, cb) {
+  var self          = this
+    , folders       = { '': [] }
+    , repo          = opts.repo
+    , token         = opts.token
     , encodedBranch = encodeURIComponent(decodeURIComponent(repo.branch))
-    , $dummyDiv = $('<div/>')
+    , $dummyDiv     = $('<div/>')
 
-  getTree(encodedBranch + '?recursive=true', function(err, tree) {
+  var treePath = (opts.node && (opts.node.sha || encodedBranch)) || (encodedBranch + '?recursive=1')
+  getTree(treePath, function(err, tree) {
     if (err) return cb(err)
 
     fetchSubmodules(function(err, submodules) {
@@ -192,6 +194,10 @@ GitHub.prototype.getCodeTree = function(repo, token, cb) {
           // we're done
           if (item === undefined) return cb(null, folders[''])
 
+          // includes parent path
+          if (opts.node && opts.node.path)
+            item.path = opts.node.path + '/' + item.path
+
           path  = item.path
           type  = item.type
           index = path.lastIndexOf('/')
@@ -201,10 +207,16 @@ GitHub.prototype.getCodeTree = function(repo, token, cb) {
           item.text = name
           item.icon = type // use `type` as class name for tree node
 
-          folders[path.substring(0, index)].push(item)
+          if (opts.node) {
+            // no hierarchy in lazy loading
+            folders[''].push(item)
+          }
+          else
+            folders[path.substring(0, index)].push(item)
 
           if (type === 'tree') {
-            folders[item.path] = item.children = []
+            if (opts.node) item.children = true
+            else folders[item.path] = item.children = []
             item.a_attr = { href: '#' }
           }
           else if (type === 'blob') {

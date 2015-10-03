@@ -50,6 +50,9 @@ $(document).ready(function() {
           showView(hasError ? errorView.$view : treeView.$view)
         })
         .on(EVENT.OPTS_CHANGE, optionsChanged)
+        .on(EVENT.FETCH_ERROR, function(event, err) {
+          errorView.show(err)
+        })
     })
 
     $document
@@ -81,6 +84,9 @@ $(document).ready(function() {
             key.unbind(value[0])
             key(value[1], toggleSidebar)
             break
+          case STORE.RECURSIVE:
+            reload = true
+            break
         }
       })
       if (reload) tryLoadRepo(true)
@@ -108,12 +114,9 @@ $(document).ready(function() {
             if (repoChanged || reload === true) {
               $document.trigger(EVENT.REQ_START)
               currRepo = repo
+              
               treeView.showHeader(repo)
-
-              adapter.getCodeTree(repo, token, function(err, tree) {
-                if (err) errorView.show(err)
-                else treeView.show(repo, tree)
-              })
+              treeView.show(repo, token)
             }
             else treeView.syncSelection()
           }
