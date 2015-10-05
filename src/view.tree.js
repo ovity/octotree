@@ -23,7 +23,7 @@ function TreeView($dom, store, adapter) {
 
       if (!$target.is('a.jstree-anchor')) return
 
-      var href  = $target.attr('href')
+      var href = $target.attr('href')
         , $icon = $target.children().length
           ? $target.children(':first')
           : $target.siblings(':first') // handles child links in submodule
@@ -55,7 +55,7 @@ function TreeView($dom, store, adapter) {
     })
 }
 
-TreeView.prototype.showHeader = function(repo) {
+TreeView.prototype._showHeader = function(repo) {
   var adapter = this.adapter
   this.$view.find('.octotree_view_header')
     .html(
@@ -79,22 +79,14 @@ TreeView.prototype.show = function(repo, token) {
     , treeContainer = self.$view.find('.octotree_view_body')
     , tree = treeContainer.jstree(true)
     , collapseTree = self.store.get(STORE.COLLAPSE)
-    , recursiveLoad = self.store.get(STORE.RECURSIVE)
-
-  function fetchData(node, success) {
-    var selectedNode = node.original
-    if (node.id === '#') selectedNode = {path: ''}
-    self.adapter.getCodeTree({ repo: repo, token: token, node: recursiveLoad ? null : selectedNode}, function(err, treeData) {
-      if (err) $(self).trigger(EVENT.FETCH_ERROR, [err])
-      else success(treeData)
-    })
-  }
+    , loadAll = self.store.get(STORE.RECURSIVE)
 
   tree.settings.core.data = function (node, cb) {
     fetchData(node, function(treeData) {
-      treeData = sort(treeData)
-      if (collapseTree && recursiveLoad)
+      var treeData = sort(treeData)
+      if (collapseTree && loadAll) {
         treeData = collapse(treeData)
+      }
       cb(treeData)
     })
   }
@@ -104,7 +96,19 @@ TreeView.prototype.show = function(repo, token) {
     $(self).trigger(EVENT.VIEW_READY)
   })
 
+  self._showHeader(repo)
   tree.refresh(true)
+
+  function fetchData(node, success) {
+    var selectedNode = loadAll
+      ? null
+      : (node.id === '#' ? {path: ''} : node.original)
+
+    self.adapter.getCodeTree({ repo: repo, token: token, node: selectedNode}, function(err, treeData) {
+      if (err) $(self).trigger(EVENT.FETCH_ERROR, [err])
+      else success(treeData)
+    })
+  }
 
   function sort(folder) {
     folder.sort(function(a, b) {
@@ -134,41 +138,38 @@ TreeView.prototype.show = function(repo, token) {
 
 TreeView.prototype.syncSelection = function() {
   var tree = this.$view.find('.octotree_view_body').jstree(true)
-    , path = decodeURIComponent(location.pathname)
-    , recursiveLoad = this.store.get(STORE.RECURSIVE)
 
   if (!tree) return
 
-  // e.g. converts /buunguyen/octotree/type/branch/path to path
-  var match = path.match(/(?:[^\/]+\/){4}(.*)/)
+  // converts /username/reponame/object_type/branch/path to path
+  var path = decodeURIComponent(location.pathname)
+    , match = path.match(/(?:[^\/]+\/){4}(.*)/)
+
   if (!match) return
 
-  currentPath = match[1]
+  var currentPath = match[1]
+    , loadAll = this.store.get(STORE.RECURSIVE)
 
-  // e.g. converts ["lib/controllers"] to ["lib", "lib/controllers"]
-  function createPaths(fullPath) {
-    var paths = fullPath.split("/")
-      , arrResult = [paths[0]]
+  selectPath(loadAll ? [currentPath] : breakPath(currentPath), 0)
 
-    paths.reduce(function(lastPath, curPath) {
-      var path = (lastPath + "/" + curPath)
-      arrResult.push(path)
-      return path
-    })
-    return arrResult
+  // converts ['a/b'] to ['a', 'a/b']
+  function breakPath(fullPath) {
+    return fullPath.split('/').reduce(function (res, path, idx) {
+      res.push(idx === 0 ? path : (res[idx-1] + '/' + path))
+      return res
+    }, [])
   }
 
-  function openPathAtIndex (paths, index) {
-    nodeId = PREFIX + paths[index]
+  function selectPath(paths, index) {
+    var nodeId = PREFIX + paths[index]
     if (tree.get_node(nodeId)) {
       tree.deselect_all()
       tree.select_node(nodeId)
-      tree.open_node(nodeId, function(node){
-        if (index < paths.length - 1) openPathAtIndex(paths, index + 1)
+      tree.open_node(nodeId, function() {
+        if (++index < paths.length) {
+          selectPath(paths, index)
+        }
       })
     }
   }
-
-  var paths = recursiveLoad ? [currentPath] : createPaths(currentPath)
-  openPathAtIndex(paths, 0)
 }

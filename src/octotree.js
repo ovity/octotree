@@ -78,14 +78,12 @@ $(document).ready(function() {
         switch (storeKey) {
           case STORE.COLLAPSE:
           case STORE.TOKEN:
+          case STORE.RECURSIVE:
             reload = true
             break
           case STORE.HOTKEYS:
             key.unbind(value[0])
             key(value[1], toggleSidebar)
-            break
-          case STORE.RECURSIVE:
-            reload = true
             break
         }
       })
@@ -114,8 +112,6 @@ $(document).ready(function() {
             if (repoChanged || reload === true) {
               $document.trigger(EVENT.REQ_START)
               currRepo = repo
-              
-              treeView.showHeader(repo)
               treeView.show(repo, token)
             }
             else treeView.syncSelection()

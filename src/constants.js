@@ -3,26 +3,27 @@ const
 
   , STORE = {
     TOKEN     : 'octotree.github_access_token',
-    COLLAPSE  : 'octotree.collapse',
     TABSIZE   : 'octotree.tabsize',
     REMEMBER  : 'octotree.remember',
+    NONCODE   : 'octotree.noncode_shown',
     LAZYLOAD  : 'octotree.lazyload',
     RECURSIVE : 'octotree.recursive',
+    COLLAPSE  : 'octotree.collapse',
     HOTKEYS   : 'octotree.hotkeys',
     GHEURLS   : 'octotree.gheurls',
     WIDTH     : 'octotree.sidebar_width',
     POPUP     : 'octotree.popup_shown',
-    SHOWN     : 'octotree.sidebar_shown',
-    NONCODE   : 'octotree.noncode_shown',
+    SHOWN     : 'octotree.sidebar_shown'
   }
 
   , DEFAULTS = {
     TOKEN    : '',
-    COLLAPSE : false,
     TABSIZE  : '',
-    REMEMBER : false,
-    LAZYLOAD : false,
+    REMEMBER : true,
+    NONCODE  : true,
+    LAZYLOAD : true,
     RECURSIVE: true,
+    COLLAPSE : true,
     // @ifdef SAFARI
     HOTKEYS  : '⌘+b, ⌃+b',
     // @endif
@@ -32,8 +33,7 @@ const
     GHEURLS  : '',
     WIDTH    : 250,
     POPUP    : false,
-    SHOWN    : false,
-    NONCODE  : false,
+    SHOWN    : false
   }
 
   , EVENT = {
