@@ -6,6 +6,23 @@ function OptionsView($dom, store) {
 
   this.$view = $view
 
+  $(document).ready(function() {
+    function triggerChange(checkbox) {
+      var store     = $(checkbox).data('store')
+        , checkboxs = $view.find('[data-trigger-disable=' + store + ']')
+      checkboxs.prop('disabled', !checkbox.checked).closest('label').toggleClass('disabled', !checkbox.checked)
+    }
+
+    eachOption(
+      function($elm) {
+        // triggers to disable all checkboxs having data-trigger-disable
+        $elm.change(function(event) {
+          triggerChange(event.target)
+        })
+      }
+    )
+  })
+
   // hide options view when sidebar is hidden
   $(document).on(EVENT.TOGGLE, function(event, visible) {
     if (!visible) toggle(false)
@@ -23,7 +40,8 @@ function OptionsView($dom, store) {
     else {
       eachOption(
         function($elm, key, local, value, cb) {
-          if ($elm.is(':checkbox')) $elm.prop('checked', value)
+          // Original jQuery prop function doesn't trigger change event
+          if ($elm.is(':checkbox')) $elm.prop('checked', value).trigger("change")
           else $elm.val(value)
           cb()
         },

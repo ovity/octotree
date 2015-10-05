@@ -7,12 +7,13 @@ const
       'search', 'developer', 'account'
     ]
   , GH_RESERVED_REPO_NAMES = ['followers', 'following', 'repositories']
-  , GH_BRANCH_SEL  = '[aria-label="Switch branches or tags"]'
-  , GH_404_SEL          = '#parallax_wrapper'
-  , GH_PJAX_SEL         = '#js-repo-pjax-container'
-  , GH_CONTAINERS       = '.container'
+  , GH_404_SEL = '#parallax_wrapper'
+  , GH_PJAX_SEL = '#js-repo-pjax-container'
+  , GH_CONTAINERS = '.container'
 
 function GitHub() {
+  this._defaultBranch = {}
+
   if (!window.MutationObserver) return
 
   // Fix #151 by detecting when page layout is updated.
@@ -36,24 +37,9 @@ function GitHub() {
 }
 
 /**
- * Selects a submodule.
- */
-GitHub.prototype.selectSubmodule = function(path) {
-  window.location.href = path
-}
-
-/**
- * Downloads the file at the given
- */
-GitHub.prototype.downloadFile = function(path, fileName) {
-  var link = document.createElement('a')
-  link.setAttribute('href', path.replace(/\/blob\//, '/raw/'))
-  link.setAttribute('download', fileName)
-  link.click()
-}
-
-/**
- * Selects a path.
+ * Selects a file.
+ * @param {String} path - the file path.
+ * @param {Number} tabSize - the tab size to use.
  */
 GitHub.prototype.selectFile = function(path, tabSize) {
   var container = $(GH_PJAX_SEL)
@@ -70,7 +56,29 @@ GitHub.prototype.selectFile = function(path, tabSize) {
 }
 
 /**
+ * Downloads a file
+ * @param {String} path - the file path.
+ * @param {String} fileName - the file name.
+ */
+GitHub.prototype.downloadFile = function(path, fileName) {
+  var link = document.createElement('a')
+  link.setAttribute('href', path.replace(/\/blob\//, '/raw/'))
+  link.setAttribute('download', fileName)
+  link.click()
+}
+
+/**
+ * Selects a submodule
+ * @param {String} path - the submodule path.
+ */
+GitHub.prototype.selectSubmodule = function(path) {
+  window.location.href = path
+}
+
+/**
  * Updates page layout based on visibility status and width of the Octotree sidebar.
+ * @param {Boolean} sidebarVisible - current visibility of the sidebar.
+ * @param {Number} sidebarWidth - current width of the sidebar.
  */
 GitHub.prototype.updateLayout = function(sidebarVisible, sidebarWidth) {
   var $containers = $(GH_CONTAINERS)
@@ -89,50 +97,83 @@ GitHub.prototype.updateLayout = function(sidebarVisible, sidebarWidth) {
 }
 
 /**
- * Returns the repository information if user is at a repository URL. Returns `null` otherwise.
+ * Retrieves the repository info at the current location.
+ * @param {Boolean} showInNonCodePage - if false, should not return data in non-code pages.
+ * @param {Object} currentRepo - current repo being shown by Octotree.
+ * @param {String} token - the personal access token.
+ * @param {Function} cb - the callback function.
  */
-GitHub.prototype.getRepoFromPath = function(showInNonCodePage, currentRepo) {
+GitHub.prototype.getRepoFromPath = function(showInNonCodePage, currentRepo, token, cb) {
+
   // 404 page, skip
-  if ($(GH_404_SEL).length) return false
+  if ($(GH_404_SEL).length) {
+    return cb()
+  }
 
   // (username)/(reponame)[/(type)]
   var match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/)
-  if (!match) return false
+  if (!match) {
+    return cb()
+  }
+
+  var username = match[1]
+  var reponame = match[2]
 
   // not a repository, skip
-  if (~GH_RESERVED_USER_NAMES.indexOf(match[1])) return false
-  if (~GH_RESERVED_REPO_NAMES.indexOf(match[2])) return false
+  if (~GH_RESERVED_USER_NAMES.indexOf(username) ||
+      ~GH_RESERVED_REPO_NAMES.indexOf(reponame)) {
+    return cb()
+  }
 
   // skip non-code page unless showInNonCodePage is true
-  if (!showInNonCodePage && match[3] && !~['tree', 'blob'].indexOf(match[3])) return false
+  if (!showInNonCodePage && match[3] && !~['tree', 'blob'].indexOf(match[3])) {
+    return cb()
+  }
 
   // get branch by inspecting page, quite fragile so provide multiple fallbacks
-  var branch =
-    $(GH_BRANCH_SEL).data('ref') ||
-    $(GH_BRANCH_SEL).children('.js-select-button').text() ||
-    (currentRepo.username === match[1] && currentRepo.reponame === match[2] && currentRepo.branch) ||
-    'master'
+  var GH_BRANCH_SEL_1 = '[aria-label="Switch branches or tags"]'
+  var GH_BRANCH_SEL_2 = '.repo-root a[data-branch]'
+  var GH_BRANCH_SEL_3 = '.repository-sidebar a[aria-label="Code"]'
 
-  return {
-    username : match[1],
-    reponame : match[2],
-    branch   : branch
+  var branch =
+    // Code page
+    $(GH_BRANCH_SEL_1).attr('title') || $(GH_BRANCH_SEL_2).data('branch') ||
+    // Non-code page
+    ($(GH_BRANCH_SEL_3).attr('href') || '').match(/([^\/]+)/g)[3] ||
+    // Assume same with previously
+    (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch) ||
+    // Default from cache
+    this._defaultBranch[username + '/' + reponame]
+
+  var repo = {username: username, reponame: reponame, branch: branch}
+
+  if (repo.branch) {
+    cb(null, repo)
+  }
+  else {
+    this._get(repo, null, token, function (err, data) {
+      if (err) return cb(err)
+      repo.branch = this._defaultBranch[username + '/' + reponame] = data.default_branch || 'master'
+      cb(null, repo)
+    }.bind(this))
   }
 }
 
 /**
- * Fetches data of a particular repository.
- * @param opts: { repo: repository, token (optional): user access token, apiUrl (optional): base API URL }
- * @param cb(err: error, tree: array (of arrays) of items)
+ * Retrieves the code tree of a repository.
+ * @param {Object} opts: { repo: repository, node(optional): selected node (null for resursively loading), token (optional): user access token, apiUrl (optional): base API URL }
+ * @param {Function} cb(err: error, tree: array (of arrays) of items)
  */
-GitHub.prototype.fetchData = function(opts, cb) {
-  var self = this
-    , repo = opts.repo
-    , folders = { '': [] }
+GitHub.prototype.getCodeTree = function(opts, cb) {
+  var self          = this
+    , folders       = { '': [] }
+    , repo          = opts.repo
+    , token         = opts.token
     , encodedBranch = encodeURIComponent(decodeURIComponent(repo.branch))
-    , $dummyDiv = $('<div/>')
+    , $dummyDiv     = $('<div/>')
 
-  getTree(encodedBranch + '?recursive=true', function(err, tree) {
+  var treePath = (opts.node && (opts.node.sha || encodedBranch)) || (encodedBranch + '?recursive=1')
+  getTree(treePath, function(err, tree) {
     if (err) return cb(err)
 
     fetchSubmodules(function(err, submodules) {
@@ -153,6 +194,10 @@ GitHub.prototype.fetchData = function(opts, cb) {
           // we're done
           if (item === undefined) return cb(null, folders[''])
 
+          // includes parent path
+          if (opts.node && opts.node.path)
+            item.path = opts.node.path + '/' + item.path
+
           path  = item.path
           type  = item.type
           index = path.lastIndexOf('/')
@@ -162,10 +207,16 @@ GitHub.prototype.fetchData = function(opts, cb) {
           item.text = name
           item.icon = type // use `type` as class name for tree node
 
-          folders[path.substring(0, index)].push(item)
+          if (opts.node) {
+            // no hierarchy in lazy loading
+            folders[''].push(item)
+          }
+          else
+            folders[path.substring(0, index)].push(item)
 
           if (type === 'tree') {
-            folders[item.path] = item.children = []
+            if (opts.node) item.children = true
+            else folders[item.path] = item.children = []
             item.a_attr = { href: '#' }
           }
           else if (type === 'blob') {
@@ -206,79 +257,81 @@ GitHub.prototype.fetchData = function(opts, cb) {
   })
 
   function getTree(tree, cb) {
-   get('/git/trees/' + tree, function(err, res) {
+    self._get(repo, '/git/trees/' + tree, token, function(err, res) {
       if (err) return cb(err)
       cb(null, res.tree)
     })
   }
 
   function getBlob(sha, cb) {
-    get('/git/blobs/' + sha, function(err, res) {
+    self._get(repo, '/git/blobs/' + sha, token, function(err, res) {
       if (err) return cb(err)
       cb(null, atob(res.content.replace(/\n/g,'')))
     })
   }
+}
 
-  function get(path, cb) {
-    var token = opts.token
-      , host  = (location.host === 'github.com' ? 'api.github.com' : (location.host + '/api/v3'))
-      , base  = location.protocol + '//' + host + '/repos/' + repo.username + '/' + repo.reponame
-      , cfg   = { method: 'GET', url: base + path, cache: false }
+GitHub.prototype._get = function(repo, path, token, cb) {
+  var host  = (location.host === 'github.com' ? 'api.github.com' : (location.host + '/api/v3'))
+    , base  = location.protocol + '//' + host + '/repos/' + repo.username + '/' + repo.reponame
+    , cfg   = { method: 'GET', url: base + (path || ''), cache: false }
 
-    if (token) cfg.headers = { Authorization: 'token ' + token }
-    $.ajax(cfg)
-      .done(function(data) {
-        cb(null, data)
-      })
-      .fail(function(jqXHR) {
-        var createTokenUrl = location.protocol + '//' + location.host + '/settings/tokens/new'
-          , error
-          , message
-          , needAuth
-
-        switch (jqXHR.status) {
-          case 0:
-            error = 'Connection error'
-            message = 'Cannot connect to GitHub. If your network connection to GitHub is fine, maybe there is an outage of the GitHub API. Please try again later.'
-            needAuth = false
-            break
-          case 401:
-            error = 'Invalid token'
-            message = 'The token is invalid. Follow <a href="' + createTokenUrl + '" target="_blank">this link</a> to create a new token and paste it below.'
-            needAuth = true
-            break
-          case 409:
-            error = 'Empty repository'
-            message = 'This repository is empty.'
-            break
-          case 404:
-            error = 'Private repository'
-            message = 'Accessing private repositories requires a GitHub access token. Follow <a href="' + createTokenUrl + '" target="_blank">this link</a> to create one and paste it below.'
-            needAuth = true
-            break
-          case 403:
-            if (~jqXHR.getAllResponseHeaders().indexOf('X-RateLimit-Remaining: 0')) {
-              error = 'API limit exceeded'
-              message = 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="' + createTokenUrl + '" target="_blank">this link</a> to create one and paste it below.'
-              needAuth = true
-              break
-            }
-            else {
-              error = 'Forbidden'
-              message = 'You are not allowed to access the API. You might need to provide an access token. Follow <a href="' + createTokenUrl + '" target="_blank">this link</a> to create one and paste it below.'
-              needAuth = true
-              break
-            }
-          default:
-            error = message = jqXHR.statusText
-            needAuth = false
-            break
-        }
-        cb({
-          error    : 'Error: ' + error,
-          message  : message,
-          needAuth : needAuth,
-        })
-      })
+  if (token) {
+    cfg.headers = { Authorization: 'token ' + token }
   }
+
+  $.ajax(cfg)
+    .done(function(data) {
+      cb(null, data)
+    })
+    .fail(function(jqXHR) {
+      var createTokenUrl = location.protocol + '//' + location.host + '/settings/tokens/new'
+        , error
+        , message
+        , needAuth
+
+      switch (jqXHR.status) {
+        case 0:
+          error = 'Connection error'
+          message = 'Cannot connect to GitHub. If your network connection to GitHub is fine, maybe there is an outage of the GitHub API. Please try again later.'
+          needAuth = false
+          break
+        case 401:
+          error = 'Invalid token'
+          message = 'The token is invalid. Follow <a href="' + createTokenUrl + '" target="_blank">this link</a> to create a new token and paste it below.'
+          needAuth = true
+          break
+        case 409:
+          error = 'Empty repository'
+          message = 'This repository is empty.'
+          break
+        case 404:
+          error = 'Private repository'
+          message = 'Accessing private repositories requires a GitHub access token. Follow <a href="' + createTokenUrl + '" target="_blank">this link</a> to create one and paste it below.'
+          needAuth = true
+          break
+        case 403:
+          if (~jqXHR.getAllResponseHeaders().indexOf('X-RateLimit-Remaining: 0')) {
+            error = 'API limit exceeded'
+            message = 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="' + createTokenUrl + '" target="_blank">this link</a> to create one and paste it below.'
+            needAuth = true
+            break
+          }
+          else {
+            error = 'Forbidden'
+            message = 'You are not allowed to access the API. You might need to provide an access token. Follow <a href="' + createTokenUrl + '" target="_blank">this link</a> to create one and paste it below.'
+            needAuth = true
+            break
+          }
+        default:
+          error = message = jqXHR.statusText
+          needAuth = false
+          break
+      }
+      cb({
+        error    : 'Error: ' + error,
+        message  : message,
+        needAuth : needAuth,
+      })
+    })
 }

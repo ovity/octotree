@@ -74,15 +74,30 @@ TreeView.prototype.showHeader = function(repo) {
     })
 }
 
-TreeView.prototype.show = function(repo, treeData) {
+TreeView.prototype.show = function(repo, token) {
   var self = this
     , treeContainer = self.$view.find('.octotree_view_body')
     , tree = treeContainer.jstree(true)
     , collapseTree = self.store.get(STORE.COLLAPSE)
+    , recursiveLoad = self.store.get(STORE.RECURSIVE)
 
-  treeData = sort(treeData)
-  if (collapseTree) treeData = collapse(treeData)
-  tree.settings.core.data = treeData
+  function fetchData(node, success) {
+    var selectedNode = node.original
+    if (node.id === '#') selectedNode = {path: ''}
+    self.adapter.getCodeTree({ repo: repo, token: token, node: recursiveLoad ? null : selectedNode}, function(err, treeData) {
+      if (err) $(self).trigger(EVENT.FETCH_ERROR, [err])
+      else success(treeData)
+    })
+  }
+
+  tree.settings.core.data = function (node, cb) {
+    fetchData(node, function(treeData) {
+      treeData = sort(treeData)
+      if (collapseTree && recursiveLoad)
+        treeData = collapse(treeData)
+      cb(treeData)
+    })
+  }
 
   treeContainer.one('refresh.jstree', function() {
     self.syncSelection()
@@ -97,7 +112,7 @@ TreeView.prototype.show = function(repo, treeData) {
       return a.type === 'blob' ? 1 : -1
     })
     folder.forEach(function(item) {
-      if (item.type === 'tree') sort(item.children)
+      if (item.type === 'tree' && item.children !== true && item.children.length > 0) sort(item.children)
     })
     return folder
   }
@@ -119,17 +134,41 @@ TreeView.prototype.show = function(repo, treeData) {
 
 TreeView.prototype.syncSelection = function() {
   var tree = this.$view.find('.octotree_view_body').jstree(true)
-    , path = location.pathname
+    , path = decodeURIComponent(location.pathname)
+    , recursiveLoad = this.store.get(STORE.RECURSIVE)
 
   if (!tree) return
-  tree.deselect_all()
 
   // e.g. converts /buunguyen/octotree/type/branch/path to path
   var match = path.match(/(?:[^\/]+\/){4}(.*)/)
-    , nodeId
-  if (match) {
-    nodeId = PREFIX + decodeURIComponent(match[1])
-    tree.select_node(nodeId)
-    tree.open_node(nodeId)
+  if (!match) return
+
+  currentPath = match[1]
+
+  // e.g. converts ["lib/controllers"] to ["lib", "lib/controllers"]
+  function createPaths(fullPath) {
+    var paths = fullPath.split("/")
+      , arrResult = [paths[0]]
+
+    paths.reduce(function(lastPath, curPath) {
+      var path = (lastPath + "/" + curPath)
+      arrResult.push(path)
+      return path
+    })
+    return arrResult
   }
+
+  function openPathAtIndex (paths, index) {
+    nodeId = PREFIX + paths[index]
+    if (tree.get_node(nodeId)) {
+      tree.deselect_all()
+      tree.select_node(nodeId)
+      tree.open_node(nodeId, function(node){
+        if (index < paths.length - 1) openPathAtIndex(paths, index + 1)
+      })
+    }
+  }
+
+  var paths = recursiveLoad ? [currentPath] : createPaths(currentPath)
+  openPathAtIndex(paths, 0)
 }
