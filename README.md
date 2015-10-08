@@ -17,6 +17,8 @@ The prebuilt packages for all extensions are located in the  [dist](https://gith
 
 * Safari: drag `safari.safariextz` to the browser and follow on-screen the instructions
 
+__Note__: the Safari build is out of date with the main line because Apple wants to be the only company who forces open-source developers to [pay](http://gizmodo.com/apples-great-new-developer-program-screws-over-safari-d-1710539882) for the privillege of creating free extensions for their little-used browser.
+
 ## GitHub access token
 Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve repository metadata. By default, it makes unauthenticated requests to the GitHub API. However, there are two situations when requests must be authenticated:
 
