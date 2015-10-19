@@ -22,6 +22,7 @@ function runTest(browser) {
     before(function (cb) {
       starx(function *() {
         var driver = yield factory[browser + 'Driver']
+        yield sleep(5000) // wait for browser to start up
         po = new PageObject(driver, 'https://github.com/buunguyen/octotree')
       })(cb)
     })
@@ -45,6 +46,7 @@ function runTest(browser) {
       })
 
       yit('should display help popup', function *() {
+        yield sleep(100) // animation
         assert.ok(yield po.helpPopup.isDisplayed())
       })
 
@@ -57,9 +59,11 @@ function runTest(browser) {
       })
 
       yit('should match branches', function *() {
+        yield po.toggleSidebar()
         assert.equal(yield po.branchLabel.getText(), 'master')
 
         yield po.setUrl('https://github.com/buunguyen/octotree/tree/v1.6.2')
+        yield po.toggleSidebar()
         assert.equal(yield po.branchLabel.getText(), 'v1.6.2')
       })
     })
