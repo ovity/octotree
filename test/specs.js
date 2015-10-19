@@ -16,12 +16,12 @@ before(function (cb) {
 ;['chrome', 'firefox'].forEach(runTest)
 
 function runTest(browser) {
-  var driver, po
+  var po
 
   describe(browser, function () {
     before(function (cb) {
       starx(function *() {
-        driver = yield factory[browser + 'Driver']
+        var driver = yield factory[browser + 'Driver']
         po = new PageObject(driver, 'https://github.com/buunguyen/octotree')
       })(cb)
     })

@@ -13,17 +13,12 @@ exports.chromeDriver = function (cb) {
 }
 
 exports.firefoxDriver = function (cb) {
-  var server = new SeleniumServer(SELENIUM_SERVER_PATH, {port: 4444})
-  server.start()
-
   var profile = new FirefoxProfile();
   profile.addExtension(FIREFOX_XPI_PATH, function () {
-    profile.encoded(function (profile) {
+    profile.encoded(function (encodedProfile) {
       var capabilities = webdriver.Capabilities.firefox()
-      capabilities.set('firefox_profile', profile)
-
+      capabilities.set('firefox_profile', encodedProfile)
       var driver = new webdriver.Builder()
-        .usingServer(server.address())
         .withCapabilities(capabilities)
         .build()
       cb(null, driver)
