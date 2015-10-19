@@ -23,7 +23,6 @@ exports.firefoxDriver = function (cb) {
       capabilities.set('firefox_profile', profile)
 
       var driver = new webdriver.Builder()
-        .usingServer(server.address())
         .withCapabilities(capabilities)
         .build()
       cb(null, driver)
