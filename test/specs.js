@@ -22,6 +22,7 @@ function runTest(browser) {
     before(function (cb) {
       starx(function *() {
         driver = yield factory[browser + 'Driver']
+        yield sleep(5000) // wait for browser starting up
         po = new PageObject(driver, 'https://github.com/buunguyen/octotree')
       })(cb)
     })
