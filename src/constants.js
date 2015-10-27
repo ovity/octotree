@@ -17,7 +17,7 @@ const
 
   , DEFAULTS = {
     TOKEN    : '',
-    COLLAPSE : false,
+    COLLAPSE : true,
     TABSIZE  : '',
     REMEMBER : false,
     LAZYLOAD : false,
