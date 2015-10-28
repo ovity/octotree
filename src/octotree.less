@@ -36,6 +36,9 @@
       content: '\f0a4';
     }
   }
+  body.split-diff .container {
+    padding-left: 0;
+  }
 }
 
 .octotree_views {
@@ -108,6 +111,11 @@
       content: '\f011';
       color: #777;
     }
+    .jstree-node.jstree-leaf:hover {
+      .jstree-icon.blob:before {
+        content: '\f00b';
+      }
+    }
     .jstree-icon.commit:before {
       content: '\f017';
       color: #777;
@@ -117,7 +125,7 @@
       text-decoration: none;
       outline: none;
       & > span {
-          color: black;
+        color: black;
       }
     }
     .jstree-anchor:hover {
@@ -125,21 +133,21 @@
     }
     .jstree-default {
       .jstree-wholerow {
-          height: auto;
+        height: auto;
       }
       .jstree-wholerow-hovered {
-          background: #eee;
+        background: #eee;
       }
       .jstree-wholerow-clicked {
-          background: #dbeeff;
+        background: #dbeeff;
       }
       .jstree-node {
-          line-height: 24px;
-          margin-left: 12px;
+        line-height: 24px;
+        margin-left: 12px;
       }
       .jstree-icon.jstree-ocl {
-          margin-right: -6px;
-          margin-top: -1px;
+        margin-right: -6px;
+        margin-top: -1px;
       }
     }
 
