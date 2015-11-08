@@ -34,11 +34,18 @@
             <input type="text" data-store="TOKEN" data-perhost="true">
           </div>
           <!-- @ifdef CHROME -->
-          <div>
+          <div class="octotree_gitlab_hidden">
             <div>
               <label>GitHub Enterprise URLs</label>
             </div>
-            <textarea data-store="GHEURLS" placeholder="https://github.mysite1.com/                                        https://github.mysite2.com/">
+            <textarea data-store="GHEURLS" data-key="EURLS" placeholder="https://github.mysite1.com/                                        https://github.mysite2.com/">
+            </textarea>
+          </div>
+          <div class="octotree_github_hidden">
+            <div>
+              <label>GitLab Enterprise URLs</label>
+            </div>
+            <textarea data-store="GLEURLS" data-key="EURLS" placeholder="https://gitlab.mysite1.com/                                        https://gitlab.mysite2.com/">
             </textarea>
           </div>
           <!-- @endif -->
@@ -52,10 +59,10 @@
           <div>
             <label><input type="checkbox" data-store="LAZYLOAD"> Only load tree when sidebar is open</label>
           </div>
-          <div>
+          <div class="octotree_gitlab_hidden">
             <label><input type="checkbox" data-store="RECURSIVE"> Load entire tree at once</label>
           </div>
-          <div>
+          <div class="octotree_gitlab_hidden">
             <label><input type="checkbox" data-store="COLLAPSE" data-trigger-disable="RECURSIVE"> Collapse folders with single sub-folder</label>
           </div>
           <div>
@@ -65,7 +72,7 @@
             </div>
             <input type="text" data-store="HOTKEYS">
           </div>
-          <div>
+          <div class="octotree_gitlab_hidden">
             <div>
               <label>Tab size</label>
               <a href="https://github.com/tiimgreen/github-cheat-sheet#adjust-tab-space" target="_blank" tabIndex="-1">what's this?</a>

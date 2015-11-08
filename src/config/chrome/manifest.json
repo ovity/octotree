@@ -12,6 +12,7 @@
   },
   "permissions": [
     "https://github.com/*",
+    "https://gitlab.com/*",
     "storage"
   ],
   "optional_permissions": [

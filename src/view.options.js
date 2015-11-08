@@ -1,4 +1,5 @@
-function OptionsView($dom, store) {
+function OptionsView($dom, adapter, store) {
+  adapter.filterOption($dom)
   var self     = this
     , $view    = $dom.find('.octotree_optsview').submit(save)
     , $toggler = $dom.find('.octotree_opts').click(toggle)
@@ -30,6 +31,7 @@ function OptionsView($dom, store) {
 
   function toggle(visibility) {
     if (visibility !== undefined) {
+      $('.octotree_view_body button[type="submit"]').prop('disabled', false).removeClass('disabled')
       if ($view.hasClass('current') === visibility) return
       return toggle()
     }
@@ -61,15 +63,16 @@ function OptionsView($dom, store) {
      * permissions to be requested only in response of user input. So...
      */
     // @ifdef CHROME
-    var $ta  = $view.find('[data-store=GHEURLS]')
-      , urls = $ta.val().split(/\n/).filter(function (url) { return url !== '' })
+    var $ta = $view.find('[data-key=EURLS]')
+      , storeKey = $ta.data('store')
+      , urls  = $ta.val().split(/\n/).filter(function (url) { return url !== '' })
 
     if (urls.length > 0) {
       chrome.runtime.sendMessage({type: 'requestPermissions', urls: urls}, function (granted) {
         if (granted) saveOptions()
         else {
           // permissions not granted (by user or error), reset value
-          $ta.val(store.get(STORE.GHEURLS))
+          $ta.val(store.get(STORE[storeKey]))
           saveOptions()
         }
       })
@@ -84,6 +87,7 @@ function OptionsView($dom, store) {
       eachOption(
         function($elm, key, local, value, cb) {
           var newValue = $elm.is(':checkbox') ? $elm.is(':checked') : $elm.val()
+
           if (value === newValue) return cb()
           changes[key] = [value, newValue]
           store.set(key, newValue, local, cb)

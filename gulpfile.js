@@ -38,7 +38,7 @@ gulp.task('test', ['build'], function (cb) {
  * Private tasks
  */
 gulp.task('css', function () {
-  return pipe('./src/octotree.less', [$.less(), $.autoprefixer({cascade: true})], './tmp')
+  return pipe('./src/css/octotree.less', [$.less(), $.autoprefixer({cascade: true})], './tmp')
 })
 
 // Chrome
@@ -47,13 +47,13 @@ gulp.task('chrome:template', function () {
 })
 
 gulp.task('chrome:js', ['chrome:template'], function () {
-  return buildJs(['./src/chrome/storage.js'], {CHROME: true})
+  return buildJs(['./src/config/chrome/storage.js'], {CHROME: true})
 })
 
 gulp.task('chrome', ['chrome:js'], function () {
   return merge(
     pipe('./icons/**/*', './tmp/chrome/icons'),
-    pipe(['./libs/**/*', './tmp/octotree.*', './src/chrome/**/*', '!./src/chrome/storage.js'], './tmp/chrome/')
+    pipe(['./libs/**/*', './tmp/octotree.*', './src/config/chrome/**/*', '!./src/config/chrome/storage.js'], './tmp/chrome/')
   )
 })
 
@@ -87,14 +87,14 @@ gulp.task('safari:template', function () {
 })
 
 gulp.task('safari:js', ['safari:template'], function () {
-  return buildJs(['./src/safari/storage.js'], {SAFARI: true})
+  return buildJs(['./src/config/safari/storage.js'], {SAFARI: true})
 })
 
 gulp.task('safari', ['safari:js'], function () {
   return merge(
     pipe('./icons/**/*', './tmp/safari/octotree.safariextension/icons'),
     pipe(['./libs/**/*', './tmp/octotree.js', './tmp/octotree.css',
-      './src/safari/**/*', '!./src/safari/storage.js'], './tmp/safari/octotree.safariextension/')
+      './src/config/safari/**/*', '!./src/config/safari/storage.js'], './tmp/safari/octotree.safariextension/')
   )
 })
 
@@ -104,15 +104,15 @@ gulp.task('firefox:template', function () {
 })
 
 gulp.task('firefox:js', ['firefox:template'], function () {
-  return buildJs(['./src/firefox/storage.js'], {FIREFOX: true})
+  return buildJs(['./src/config/firefox/storage.js'], {FIREFOX: true})
 })
 
 gulp.task('firefox', ['firefox:js'], function () {
   return merge(
     pipe('./icons/**/*', './tmp/firefox/data/icons'),
     pipe(['./libs/**/*', './tmp/octotree.js', './tmp/octotree.css'], './tmp/firefox/data'),
-    pipe(['./src/firefox/firefox.js'], './tmp/firefox/lib'),
-    pipe('./src/firefox/package.json', './tmp/firefox')
+    pipe(['./src/config/firefox/firefox.js'], './tmp/firefox/lib'),
+    pipe('./src/config/firefox/package.json', './tmp/firefox')
   )
 })
 
@@ -156,7 +156,9 @@ function buildJs(additions, ctx) {
   var src = additions.concat([
     './tmp/template.js',
     './src/constants.js',
-    './src/adapter.github.js',
+    './src/adapters/adapter.js',
+    './src/adapters/adapter.github.js',
+    './src/adapters/adapter.gitlab.js',
     './src/view.help.js',
     './src/view.error.js',
     './src/view.tree.js',
