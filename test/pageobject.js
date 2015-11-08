@@ -28,6 +28,7 @@ PageObject.prototype = {
         return url === _url
       })
     }, 5000)
+    yield sleep(1000) // since 1.7.2, Octotree uses longer timeout for loc change
   },
 
   close: function *() {
@@ -45,7 +46,7 @@ PageObject.prototype = {
 
   toggleSidebar: function *() {
     yield this.toggleButton.click()
-    yield sleep(100) // transition
+    yield sleep(200) // transition
   },
 
   toggleOptsView: function *() {

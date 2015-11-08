@@ -5,6 +5,9 @@ const
       'styleguide', 'showcases', 'trending',
       'stars', 'dashboard', 'notifications',
       'search', 'developer', 'account'
+      'pulls', 'issues', 'features', 'contact',
+      'security', 'join', 'login', 'watching',
+      'new', 'integrations'
     ]
   , GH_RESERVED_REPO_NAMES = ['followers', 'following', 'repositories']
   , GH_404_SEL = '#parallax_wrapper'
