@@ -14,12 +14,12 @@ $(document).ready(function() {
   function loadExtension() {
     var $html     = $('html')
       , $document = $(document)
+      , adapter   = initAdapter(store)
       , $dom      = $(TEMPLATE)
       , $sidebar  = $dom.find('.octotree_sidebar')
       , $toggler  = $sidebar.find('.octotree_toggle')
       , $views    = $sidebar.find('.octotree_view')
-      , adapter   = new GitHub()
-      , optsView  = new OptionsView($dom, store)
+      , optsView  = new OptionsView($dom, adapter, store)
       , helpPopup = new HelpPopup($dom, store)
       , treeView  = new TreeView($dom, store, adapter)
       , errorView = new ErrorView($dom, store)
@@ -27,10 +27,12 @@ $(document).ready(function() {
       , hasError  = false
 
     $sidebar
-      .appendTo($('body'))
       .width(parseFloat(store.get(STORE.WIDTH)))
       .resizable({ handles: 'e', minWidth: 200 })
       .resize(layoutChanged)
+
+    adapter.appendSidebar($sidebar)
+    layoutChanged()
 
     $(window).resize(function(event) { // handle zoom
       if (event.target === window) layoutChanged()
@@ -57,15 +59,19 @@ $(document).ready(function() {
 
     $document
       .on('pjax:send ' + EVENT.REQ_START, function() {
-        $toggler.addClass('loading')
+        $toggler.addClass('octotree_loading')
       })
       .on('pjax:end ' + EVENT.REQ_END, function() {
-        $toggler.removeClass('loading')
+        $toggler.removeClass('octotree_loading')
       })
       .on('pjax:timeout', function(event) {
         event.preventDefault()
       })
-      .on(EVENT.LOC_CHANGE, tryLoadRepo)
+      .on(EVENT.LOC_CHANGE, function() {
+        adapter.appendSidebar($sidebar)
+        layoutChanged()
+        tryLoadRepo()
+      })
       .on(EVENT.LAYOUT_CHANGE, layoutChanged)
       .on(EVENT.TOGGLE, layoutChanged)
 
