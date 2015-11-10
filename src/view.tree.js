@@ -14,11 +14,16 @@ function TreeView($dom, store, adapter) {
       var $target = $(event.target)
       var self = this
       var download = false
+      var enableDownloading = store.get(STORE.DOWNLOAD)
 
       // handle icon click, fix #122
       if ($target.is('i.jstree-icon')) {
         $target = $target.parent()
-        download = true
+        if (enableDownloading) {
+          download = true
+        } else {
+          download = false
+        }
       }
 
       if (!$target.is('a.jstree-anchor')) return
@@ -87,9 +92,17 @@ TreeView.prototype.show = function(repo, treeData) {
   treeContainer.one('refresh.jstree', function() {
     self.syncSelection()
     $(self).trigger(EVENT.VIEW_READY)
+    toggleDownloadIcon()
   })
 
   tree.refresh(true)
+
+  function toggleDownloadIcon() {
+    var enableDownloading = self.store.get(STORE.DOWNLOAD)
+    if (!enableDownloading) {
+      $('.jstree-icon.blob').addClass('downloading_disabled')
+    }
+  }
 
   function sort(folder) {
     folder.sort(function(a, b) {

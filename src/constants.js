@@ -13,6 +13,7 @@ const
     POPUP    : 'octotree.popup_shown',
     SHOWN    : 'octotree.sidebar_shown',
     NONCODE  : 'octotree.noncode_shown',
+    DOWNLOAD : 'octotree.download'
   }
 
   , DEFAULTS = {
