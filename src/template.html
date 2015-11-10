@@ -17,7 +17,8 @@
           </div>
           <div>
             <button type="submit" class="btn">Save</button>
-            <a href="https://github.com/buunguyen/octotree#github-access-token" target="_blank" tabIndex="-1">Why is this required?</a>
+            <a class="octotree_gitlab_hidden" href="https://github.com/buunguyen/octotree#github-access-token" target="_blank" tabIndex="-1">Why is this required?</a>
+            <a class="octotree_github_hidden" href="https://github.com/buunguyen/octotree#gitlab-access-token" target="_blank" tabIndex="-1">Why is this required?</a>
           </div>
           <div class="error"></div>
         </form>
@@ -29,7 +30,8 @@
           <div>
             <div>
               <label>Site access token</label>
-              <a href="https://github.com/buunguyen/octotree#github-access-token" target="_blank" tabIndex="-1">what's this?</a>
+              <a class="octotree_gitlab_hidden" href="https://github.com/buunguyen/octotree#github-access-token" target="_blank" tabIndex="-1">what's this?</a>
+              <a class="octotree_github_hidden" href="https://github.com/buunguyen/octotree#gitlab-access-token" target="_blank" tabIndex="-1">what's this?</a>
             </div>
             <input type="text" data-store="TOKEN" data-perhost="true">
           </div>
@@ -38,14 +40,14 @@
             <div>
               <label>GitHub Enterprise URLs</label>
             </div>
-            <textarea data-store="GHEURLS" data-key="EURLS" placeholder="https://github.mysite1.com/                                        https://github.mysite2.com/">
+            <textarea data-store="GHEURLS" placeholder="https://github.mysite1.com/                                        https://github.mysite2.com/">
             </textarea>
           </div>
           <div class="octotree_github_hidden">
             <div>
               <label>GitLab Enterprise URLs</label>
             </div>
-            <textarea data-store="GLEURLS" data-key="EURLS" placeholder="https://gitlab.mysite1.com/                                        https://gitlab.mysite2.com/">
+            <textarea data-store="GLEURLS" placeholder="https://gitlab.mysite1.com/                                        https://gitlab.mysite2.com/">
             </textarea>
           </div>
           <!-- @endif -->
@@ -62,22 +64,12 @@
           <div class="octotree_gitlab_hidden">
             <label><input type="checkbox" data-store="RECURSIVE"> Load entire tree at once</label>
           </div>
-          <div class="octotree_gitlab_hidden">
-            <label><input type="checkbox" data-store="COLLAPSE" data-trigger-disable="RECURSIVE"> Collapse folders with single sub-folder</label>
-          </div>
           <div>
             <div>
               <label>Hotkeys</label>
               <a href="https://github.com/madrobby/keymaster#defining-shortcuts" target="_blank" tabIndex="-1">supported keys</a>
             </div>
             <input type="text" data-store="HOTKEYS">
-          </div>
-          <div class="octotree_gitlab_hidden">
-            <div>
-              <label>Tab size</label>
-              <a href="https://github.com/tiimgreen/github-cheat-sheet#adjust-tab-space" target="_blank" tabIndex="-1">what's this?</a>
-            </div>
-            <input type="text" data-store="TABSIZE">
           </div>
           <div>
             <button type="submit" class="btn">Save</button>
@@ -90,7 +82,7 @@
   <div class="octotree_popup">
     <div class="arrow"></div>
     <div class="content">
-      Octotree is enabled on GitHub pages. Click this button or press
+      Octotree is enabled on this page. Click this button or press
       <!-- @ifdef SAFARI -->
       <kbd>cmd b</kbd> (or <kbd>ctrl b</kbd>)
       <!-- @endif -->

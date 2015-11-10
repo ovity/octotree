@@ -1,9 +1,8 @@
 .octotree {
   .octotree_github_sidebar {
-    transform: translate3d(0, 0, 0);
     a.octotree_toggle {
       right: 5px;
-      & > span:after {
+      &:not(.octotree_loading) > span:after {
         content: '\f0a4';
       }
     }
@@ -14,67 +13,32 @@
 }
 
 .octotree_github_sidebar {
+  padding-top: 49px;
   .octotree_views {
-    height: 100%;
-    overflow: auto;
-
     .octotree_view {
-      display: none;
-      &.current {
-        display: block;
-      }
       .octotree_view_header {
-        width: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
         height: 49px;
-        font-size: 16px;
         line-height: 2.7;
         background-color: #f3f3f3;
-        background-image: linear-gradient(#f9f9f9, #f3f3f3);
-        background-repeat: repeat-x;
-        margin: 0;
-        text-shadow: 0 1px 0 #fff;
         border-bottom: 1px solid #e5e5e5;
       }
     }
 
     .octotree_treeview {
-      .octotree_view_header {
-        padding-left: 13px;
-      }
       .octotree_header_repo {
         font-size: 13px;
-        font-weight: bold;
-        width: 100%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        padding-right: 55px;
       }
       .octotree_header_repo:before {
         font-family: octicons;
         content: '\f001';
-        color: #bbb;
-        margin-right: 6px;
-        line-height: 28px;
       }
       .octotree_header_branch {
-        line-height: 1;
-        margin-top: -10px;
-        margin-bottom: 5px;
-        margin-left: -1px;
-        font-size: 12px;
-        margin-top: -6px;
         font-size: 11px;
       }
       .octotree_header_branch:before {
         font-family: octicons;
         content: '\f020';
         color: #bbb;
-        margin-right: 8px;
-        margin-left: 3px;
       }
       .jstree-icon.tree:before {
         content: '\f016';
@@ -95,123 +59,34 @@
       }
       .jstree-anchor {
         color: #4183c4 !important;
-        text-decoration: none;
-        outline: none;
         & > span {
           color: black;
         }
       }
-      .jstree-anchor:hover {
-        text-decoration: none !important;
-      }
       .jstree-default {
-        .jstree-wholerow {
-          height: auto;
-        }
         .jstree-wholerow-hovered {
           background: #eee;
         }
         .jstree-wholerow-clicked {
           background: #dbeeff;
         }
-        .jstree-node {
-          line-height: 24px;
-          margin-left: 12px;
-        }
-        .jstree-icon.jstree-ocl {
-          margin-right: -6px;
-          margin-top: -1px;
-        }
       }
 
       .jstree-icon.tree, .jstree-icon.blob, .jstree-icon.commit {
         font: normal normal 16px octicons;
-        display: inline-block;
-        margin-right: 3px;
-        text-decoration: none;
-        font-smoothing: antialiased;
-      }
-      .jstree-default .jstree-icon, .jstree-default .jstree-icon:empty, .jstree-default .jstree-anchor {
-        line-height: 24px;
-      }
-    }
-
-    .octotree_errorview {
-      .octotree_view_header {
-        padding-left: 5px;
-        padding-top: 5px;
-      }
-      & > form {
-        div {
-          margin: 6px;
-        }
-        input {
-          width: 100%;
-        }
-        .error {
-          color: #900;
-        }
-        .button {
-          margin-right: 5px;
-        }
-      }
-    }
-
-    .octotree_optsview {
-      .octotree_view_header {
-        padding-left: 5px;
-        padding-top: 5px;
-      }
-      & > form {
-        margin: 6px;
-        & > div {
-          padding-top: 5px;
-          padding-bottom: 12px;
-          a {
-            display: inline-block;
-            float: right;
-          }
-        }
-        label {
-          font-weight: normal !important;
-        }
-
-        label.disabled {
-          color: gray;
-        }
-
-        input[type=text], textarea {
-          width: 100%;
-        }
-        textarea {
-          resize: vertical;
-          height: 100px;
-        }
       }
     }
   }
 
   a.octotree_toggle, a.octotree_opts {
-    position: absolute !important;
-    text-align: center;
-    line-height: 1;
-    z-index: 92;
-    cursor: pointer;
     color: black !important;
 
-    & > span {
-      line-height: 1;
-      display: inline-block;
-      text-decoration: none;
-    }
     &:hover, &.selected {
       color: #4183C4 !important;
     }
   }
 
   a.octotree_opts {
-    width: 15px;
-    height: 15px;
     top: 18px;
     right: 42px;
 
@@ -223,35 +98,14 @@
     }
   }
   a.octotree_toggle {
-    width: 30px;
-    height: 30px;
-    padding: 6px 6px !important;
     top: 9px;
     right: -35px;
 
     & > span {
       font: normal normal 16px octicons;
     }
-    & > span:after {
+    &:not(.octotree_loading) > span:after {
       content: '\f078';
-    }
-    &.octotree_loading {
-      & > span:after {
-          content: '';
-      }
-      .loader {
-        border-radius: 50%;
-        border: 2px solid #000;
-        border-top: 2px solid rgba(0,0,0,0);
-        border-left: 2px solid rgba(0,0,0,0);
-        width: 16px;
-        height: 16px;
-        animation: loading .5s infinite linear;
-      }
-    }
-    @keyframes loading {
-      0%   { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
     }
   }
 }

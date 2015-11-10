@@ -29,10 +29,10 @@ Adapter.prototype.observe = function () {
  * @return value for unchangable value or null for changable value.
  */
 Adapter.prototype.getValue = function(key) {
-  var item = this.unchangableKeys.find(function(item) {
-    return (item.key === key)
-  })
-  if (item) return item.value
+  for(var i = 0; i < this.unchangableKeys.length; i++) {
+    var item = this.unchangableKeys[i]
+    if (item.key === key) return item.value
+  }
   return this.store.get(key)
 }
 
@@ -192,14 +192,14 @@ Adapter.prototype.handleErrorStatus = function(jqXHR, cb) {
       break
     case 404:
       error = 'Private repository'
-      message = 'Accessing private repositories requires a access token. Follow <a href="' + createTokenUrl + '" target="_blank">this link</a> to create one and paste it below.'
+      message = 'Accessing private repositories requires a access token. Follow <a href="' + this.createTokenUrl + '" target="_blank">this link</a> to create one and paste it below.'
       needAuth = true
       break
     case 403:
       if (~jqXHR.getAllResponseHeaders().indexOf('X-RateLimit-Remaining: 0')) {
         // It's kinda specific for GitHub
         error = 'API limit exceeded'
-        message = 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="' + createTokenUrl + '" target="_blank">this link</a> to create one and paste it below.'
+        message = 'You have exceeded the GitHub API hourly limit and need GitHub access token to make extra requests. Follow <a href="' + this.createTokenUrl + '" target="_blank">this link</a> to create one and paste it below.'
         needAuth = true
         break
       }
@@ -219,15 +219,4 @@ Adapter.prototype.handleErrorStatus = function(jqXHR, cb) {
     message  : message,
     needAuth : needAuth,
   })
-}
-
-/**
- * Pick corresponding Adapter basing on current domain.
- * @param {Object} store - object to get/set value from storage.
- * @return New adapter object, can be GitHub or GitLab.
- */
-function initAdapter(store) {
-  if (detectRepoHost(store) == REPOS.GITHUB)
-    return new GitHub(store)
-  return new GitLab(store)
 }

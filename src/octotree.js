@@ -14,7 +14,7 @@ $(document).ready(function() {
   function loadExtension() {
     var $html     = $('html')
       , $document = $(document)
-      , adapter   = initAdapter(store)
+      , adapter   = initAdapter()
       , $dom      = $(TEMPLATE)
       , $sidebar  = $dom.find('.octotree_sidebar')
       , $toggler  = $sidebar.find('.octotree_toggle')
@@ -33,6 +33,8 @@ $(document).ready(function() {
 
     adapter.appendSidebar($sidebar)
     layoutChanged()
+    if (detectRepoHost() == REPOS.GITLAB)
+      fixGLSubmitButton()
 
     $(window).resize(function(event) { // handle zoom
       if (event.target === window) layoutChanged()
@@ -163,6 +165,39 @@ $(document).ready(function() {
 
     function isSidebarVisible() {
       return $html.hasClass(PREFIX)
+    }
+
+    // @HACK GL disables submit buttons after form submits
+    function fixGLSubmitButton() {
+      var submitButtons = $('.octotree_view_body button[type="submit"]')
+      submitButtons.click(function(event) {
+        setTimeout(function() {
+          $(event.target).prop('disabled', false).removeClass('disabled')
+        }, 30)
+      })
+    }
+
+    /**
+     * Pick corresponding Adapter basing on current domain.
+     * @param {Object} store - object to get/set value from storage.
+     * @return New adapter object, can be GitHub or GitLab.
+     */
+    function initAdapter() {
+      if (detectRepoHost() == REPOS.GITHUB)
+        return new GitHub(store)
+      return new GitLab(store)
+    }
+
+    function detectRepoHost() {
+      var urls  = store.get(STORE.GHEURLS).split(/\n/)
+        , isGitHub = false
+
+      urls.push(DOMAINS.GITHUB)
+      urls.forEach(function(url) {
+        if (location.origin === url)
+          isGitHub = true
+      })
+      return isGitHub ? REPOS.GITHUB : REPOS.GITLAB
     }
   }
 })

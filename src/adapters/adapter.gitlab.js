@@ -4,8 +4,9 @@ const
       'explore', 'profile', 'public', 'groups', 'abuse_reports'
     ]
   , GL_RESERVED_REPO_NAMES = []
-  , GL_CONTAINERS = '.content-wrapper, .sidebar-wrapper, .toggle-nav-collapse'
+  , GL_CONTAINERS = '.sidebar-wrapper, .toggle-nav-collapse'
   , GL_HEADER = '.navbar-gitlab'
+  , GL_SIDEBAR = '.sidebar-wrapper'
   , GL_SHIFTED = 'h1.title'
   , GL_PROJECT_ID = '#project_id'
 
@@ -22,6 +23,8 @@ function GitLab(store) {
   ]
   this.createTokenUrl = location.protocol + '//' + location.host + '/profile/account'
   this.observe()
+  // HACK GL enterprise still uses legacy design so we need someway to detect that
+  this.newGitLabDesign = $('.navbar-gitlab.header-collapsed, .navbar-gitlab.header-expanded').length > 0
 
   $('.toggle-nav-collapse').click(function() {
     setTimeout(function () {
@@ -46,18 +49,29 @@ GitLab.prototype.appendSidebar = function(sidebar) {
  * @param {Number} sidebarWidth - current width of the sidebar.
  */
 GitLab.prototype.updateLayout = function(sidebarVisible, sidebarWidth) {
-  var $container = $(GL_CONTAINERS)
+  var $containers = $(GL_CONTAINERS)
 
   $(GL_HEADER).css('z-index', 3)
 
-  if ($container.length === 3) {
+  if ($containers.length === 2) {
     var glSidebarExpanded = $('.page-with-sidebar').hasClass('page-sidebar-expanded')
       , glSidebarWidth = glSidebarExpanded ? 230 : 62
-    $container.css('margin-left', sidebarVisible ? sidebarWidth : '')
-    $(GL_HEADER).css('padding-left', sidebarVisible ? sidebarWidth : '')
-    $(GL_SHIFTED).css('margin-left', 36)
 
-    $('.octotree_toggle').css('right', sidebarVisible ? '' : -(glSidebarWidth + 50))
+    if (this.newGitLabDesign) {
+      $(GL_SHIFTED).css('margin-left', 36)
+      $('.octotree_toggle').css('right', sidebarVisible ? '' : -(glSidebarWidth + 50))
+    } else {
+      glSidebarWidth = glSidebarExpanded ? 230 : 52
+      $(GL_HEADER).css('z-index', 3)
+      $(GL_SIDEBAR).css('z-index', 1)
+      $(GL_SHIFTED).css('margin-left', 56)
+      $('.octotree_toggle').css('right', sidebarVisible ? '' : -102)
+      $('.octotree_toggle').css('top', sidebarVisible ? '' : 8)
+    }
+
+    $containers.css('margin-left', sidebarVisible ? sidebarWidth : '')
+    $(GL_HEADER).css('padding-left', sidebarVisible ? sidebarWidth : '')
+    $('.page-with-sidebar').css('padding-left', sidebarVisible ? glSidebarWidth + sidebarWidth : '')
   }
   // falls-back if GitLab DOM has been updated (not really sure what it will change)
   else $('html').css('margin-left', sidebarVisible ? sidebarWidth : '')

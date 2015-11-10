@@ -4,7 +4,10 @@ const
       'site', 'blog', 'about', 'explore',
       'styleguide', 'showcases', 'trending',
       'stars', 'dashboard', 'notifications',
-      'search', 'developer', 'account'
+      'search', 'developer', 'account',
+      'pulls', 'issues', 'features', 'contact',
+      'security', 'join', 'login', 'watching',
+      'new', 'integrations'
     ]
   , GH_RESERVED_REPO_NAMES = ['followers', 'following', 'repositories']
   , GH_404_SEL = '#parallax_wrapper'
@@ -18,7 +21,9 @@ GitHub.prototype.super = Adapter.prototype
 function GitHub(store) {
   this.store = store
   this._defaultBranch = {}
-  this.unchangableKeys = []
+  this.unchangableKeys = [
+    {key: STORE.COLLAPSE, value: true}
+  ]
   this.createTokenUrl = location.protocol + '//' + location.host + '/settings/tokens/new'
   this.observe()
 }

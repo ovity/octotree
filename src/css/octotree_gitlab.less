@@ -12,7 +12,7 @@
   .octotree_gitlab_sidebar {
     a.octotree_toggle {
       right: 5px;
-      & > span:after {
+      &:not(.octotree_loading) > span:after {
         content: '\f104';
       }
     }
@@ -41,78 +41,35 @@ html:not(.octotree) {
   }
 }
 
-.octotree {
-  .octotree_gitlab_sidebar {
-    transform: translate3d(0, 0, 0);
-  }
-}
-
 .octotree_gitlab_sidebar {
   transition-duration: .3s;
   padding-top: 58px;
 
   .octotree_views {
-    height: 100%;
-    overflow: auto;
-
     .octotree_view {
-      display: none;
-      &.current {
-        display: block;
-      }
       .octotree_view_header {
-        width: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
         height: 58px;
-        font-size: 16px;
         line-height: 3;
         background-color: #f7f8fa;
-        background-image: linear-gradient(#f9f9f9, #f3f3f3);
-        background-repeat: repeat-x;
-        margin: 0;
-        text-shadow: 0 1px 0 #fff;
         border-bottom: 1px solid #dce0e6;
         border-top: 1px solid #dce0e6;
       }
     }
 
     .octotree_treeview {
-      .octotree_view_header {
-        padding-left: 13px;
-      }
       .octotree_header_repo {
         font-size: 15px;
-        font-weight: bold;
-        width: 100%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        padding-right: 55px;
       }
       .octotree_header_repo:before {
         font-family: FontAwesome;
         content: '\f015';
-        color: #bbb;
-        margin-right: 6px;
-        line-height: 28px;
       }
       .octotree_header_branch {
-        line-height: 1;
-        margin-top: -10px;
-        margin-bottom: 5px;
-        margin-left: -1px;
-        font-size: 12px;
-        margin-top: -6px;
         font-size: 13px;
       }
       .octotree_header_branch:before {
         font-family: FontAwesome;
         content: '\f126';
-        color: #bbb;
-        margin-right: 8px;
-        margin-left: 3px;
       }
       .jstree-icon.tree:before {
         content: '\f07b';
@@ -134,115 +91,30 @@ html:not(.octotree) {
       }
       .jstree-anchor {
         color: #333c48 !important;
-        text-decoration: none;
-        outline: none;
         & > span {
             color: black;
         }
       }
-      .jstree-anchor:hover {
-        text-decoration: none !important;
-      }
       .jstree-default {
-        .jstree-wholerow {
-            height: auto;
-        }
         .jstree-wholerow-hovered {
-            background: #fffaf1;
+          background: #fffaf1;
         }
         .jstree-wholerow-clicked {
-            background: #e7e9ed;
-        }
-        .jstree-node {
-            line-height: 24px;
-            margin-left: 12px;
-        }
-        .jstree-icon.jstree-ocl {
-            margin-right: -6px;
-            margin-top: -1px;
+          background: #e7e9ed;
         }
       }
 
       .jstree-icon.tree, .jstree-icon.blob, .jstree-icon.commit {
         font: normal normal 16px FontAwesome;
-        display: inline-block;
-        margin-right: 3px;
-        text-decoration: none;
-        font-smoothing: antialiased;
-      }
-      .jstree-default .jstree-icon, .jstree-default .jstree-icon:empty, .jstree-default .jstree-anchor {
-        line-height: 24px;
-      }
-    }
-
-    .octotree_errorview {
-      .octotree_view_header {
-        padding-left: 5px;
-        padding-top: 5px;
-      }
-      & > form {
-        div {
-          margin: 6px;
-        }
-        input {
-          width: 100%;
-        }
-        .error {
-          color: #900;
-        }
-        .button {
-          margin-right: 5px;
-        }
-      }
-    }
-
-    .octotree_optsview {
-      .octotree_view_header {
-        padding-left: 5px;
-        padding-top: 5px;
-      }
-      & > form {
-        margin: 6px;
-        & > div {
-          padding-top: 5px;
-          padding-bottom: 12px;
-          a {
-            display: inline-block;
-            float: right;
-          }
-        }
-        label {
-          font-weight: normal !important;
-        }
-        input[type=text], textarea {
-          width: 100%;
-        }
-        textarea {
-          resize: vertical;
-          height: 100px;
-        }
       }
     }
   }
 
   a.octotree_toggle, a.octotree_opts {
-    position: absolute !important;
-    text-align: center;
-    line-height: 1;
-    z-index: 92;
-    cursor: pointer;
     color: #313236 !important;
-
-    & > span {
-      line-height: 1;
-      display: inline-block;
-      text-decoration: none;
-    }
   }
 
   a.octotree_opts {
-    width: 15px;
-    height: 15px;
     top: 22px;
     right: 42px;
 
@@ -257,86 +129,14 @@ html:not(.octotree) {
     }
   }
   a.octotree_toggle {
-    width: 30px;
-    height: 30px;
-    padding: 6px 6px !important;
     top: 14px;
 
     & > span {
       font: normal normal 16px FontAwesome;
       font-weight: bold;
     }
-    & > span:after {
+    &:not(.octotree_loading) > span:after {
       content: '\f105';
-    }
-    &.octotree_loading {
-      & > span:after {
-          content: '';
-      }
-      .loader {
-        border-radius: 50%;
-        border: 2px solid #000;
-        border-top: 2px solid rgba(0,0,0,0);
-        border-left: 2px solid rgba(0,0,0,0);
-        width: 16px;
-        height: 16px;
-        animation: loading .5s infinite linear;
-      }
-    }
-    @keyframes loading {
-      0%   { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-  }
-
-  .octotree_popup {
-    position: fixed;
-    cursor: pointer;
-    display: none;
-    opacity: 0;
-    top: 40px;
-    left: 5px;
-    z-index: 93;
-    width: 260px;
-    text-align: left;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,0.15);
-    border-radius: 5px;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.25);
-    white-space: normal;
-    transition: opacity .3s linear;
-
-    &.show {
-      opacity: 1;
-    }
-    & > .arrow, & > .arrow:after {
-      position: absolute;
-      display: block;
-      width: 0;
-      height: 0;
-      border-color: transparent;
-      border-style: solid;
-    }
-    & > .arrow {
-      left: 15px;
-      top: -6px;
-      border-width: 6px;
-      margin-left: -6px;
-      border-top-width: 0;
-      border-bottom-color: rgba(0, 0, 0, .25);
-    }
-    & > .arrow:after {
-      border-width: 5px;
-      content: '';
-      top: 1px;
-      margin-left: -5px;
-      border-top-width: 0;
-      border-bottom-color: #fff;
-    }
-    & > .content {
-      padding: 9px 14px;
-      font-size: 13px;
     }
   }
 }

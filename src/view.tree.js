@@ -125,7 +125,7 @@ TreeView.prototype.show = function(repo, token) {
     return folder.map(function(item) {
       if (item.type === 'tree') {
         item.children = collapse(item.children)
-        if (item.children.length && item.children[0].type === 'tree') {
+        if (item.children.length === 1 && item.children[0].type === 'tree') {
           var onlyChild = item.children[0]
           onlyChild.text = item.text + '/' + onlyChild.text
           return onlyChild

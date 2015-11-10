@@ -31,7 +31,6 @@ function OptionsView($dom, adapter, store) {
 
   function toggle(visibility) {
     if (visibility !== undefined) {
-      $('.octotree_view_body button[type="submit"]').prop('disabled', false).removeClass('disabled')
       if ($view.hasClass('current') === visibility) return
       return toggle()
     }
@@ -63,7 +62,7 @@ function OptionsView($dom, adapter, store) {
      * permissions to be requested only in response of user input. So...
      */
     // @ifdef CHROME
-    var $ta = $view.find('[data-key=EURLS]')
+    var $ta = $view.find('[data-store$=EURLS]')
       , storeKey = $ta.data('store')
       , urls  = $ta.val().split(/\n/).filter(function (url) { return url !== '' })
 
@@ -87,7 +86,6 @@ function OptionsView($dom, adapter, store) {
       eachOption(
         function($elm, key, local, value, cb) {
           var newValue = $elm.is(':checkbox') ? $elm.is(':checked') : $elm.val()
-
           if (value === newValue) return cb()
           changes[key] = [value, newValue]
           store.set(key, newValue, local, cb)
