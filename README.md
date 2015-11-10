@@ -33,10 +33,24 @@ Alternatively, you can manually enter or update the token by following these ste
 * Open the developer console of your browser
 * Execute the following line:
 ```javascript
-localStorage.setItem('octotree.github_access_token', 'REPLACE WITH TOKEN')
+localStorage.setItem('octotree.access_token', 'REPLACE WITH TOKEN')
 ```
 
 Note: if you use GitHub Enterprise, each site will need its own access token. Therefore, Octotree stores access token on a per-site basis.
+
+## GitLab access token
+Octotree uses [GitLab API](http://doc.gitlab.com/ce/api/) to retrieve repository metadata. `private_token` must be passed to all requests to GitLab API. When find out it missing,  Octotree will ask for your GitLab private token. If you don't already have one, create one in [your account](https://gitlab.com/profile/account), then copy and paste it into the textbox.
+
+Alternatively, you can manually enter or update the token by following these steps:
+
+* Navigate to any GitLab repository
+* Open the developer console of your browser
+* Execute the following line:
+```javascript
+localStorage.setItem('octotree.access_token', 'REPLACE WITH TOKEN')
+```
+
+Note: if you use GitLab Enterprise, each site will need its own access token. Therefore, Octotree stores access token on a per-site basis.
 
 
 ## GitHub Enterprise

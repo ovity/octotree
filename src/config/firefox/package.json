@@ -13,6 +13,6 @@
   "license": "MIT",
   "version": "2.0.0",
   "permissions": {
-    "cross-domain-content": ["https://api.github.com", "https://github.com"]
+    "cross-domain-content": ["https://api.github.com", "https://github.com", "https://gitlab.com"]
   }
 }

@@ -4,7 +4,6 @@
 
 .octotree_sidebar {
   position: fixed !important;
-  padding-top: 49px;
   overflow: visible;
   top: 0;
   right: 0;
@@ -26,21 +25,6 @@
   }
 }
 
-.octotree {
-  .octotree_sidebar {
-    transform: translate3d(0, 0, 0);
-  }
-  a.octotree_toggle {
-    right: 5px;
-    & > span:after {
-      content: '\f0a4';
-    }
-  }
-  body.split-diff .container {
-    padding-left: 0;
-  }
-}
-
 .octotree_views {
   height: 100%;
   overflow: auto;
@@ -55,15 +39,11 @@
       position: absolute;
       top: 0;
       left: 0;
-      height: 49px;
       font-size: 16px;
-      line-height: 2.7;
-      background-color: #f3f3f3;
       background-image: linear-gradient(#f9f9f9, #f3f3f3);
       background-repeat: repeat-x;
       margin: 0;
       text-shadow: 0 1px 0 #fff;
-      border-bottom: 1px solid #e5e5e5;
     }
   }
 
@@ -72,7 +52,6 @@
       padding-left: 13px;
     }
     .octotree_header_repo {
-      font-size: 13px;
       font-weight: bold;
       width: 100%;
       white-space: nowrap;
@@ -81,8 +60,6 @@
       padding-right: 55px;
     }
     .octotree_header_repo:before {
-      font-family: octicons;
-      content: '\f001';
       color: #bbb;
       margin-right: 6px;
       line-height: 28px;
@@ -94,39 +71,15 @@
       margin-left: -1px;
       font-size: 12px;
       margin-top: -6px;
-      font-size: 11px;
+      font-size: 13px;
     }
     .octotree_header_branch:before {
-      font-family: octicons;
-      content: '\f020';
-      color: #bbb;
       margin-right: 8px;
       margin-left: 3px;
     }
-    .jstree-icon.tree:before {
-      content: '\f016';
-      color: #80a6cd;
-    }
-    .jstree-icon.blob:before {
-      content: '\f011';
-      color: #777;
-    }
-    .jstree-node.jstree-leaf:hover {
-      .jstree-icon.blob:before {
-        content: '\f00b';
-      }
-    }
-    .jstree-icon.commit:before {
-      content: '\f017';
-      color: #777;
-    }
     .jstree-anchor {
-      color: #4183c4 !important;
       text-decoration: none;
       outline: none;
-      & > span {
-        color: black;
-      }
     }
     .jstree-anchor:hover {
       text-decoration: none !important;
@@ -134,12 +87,6 @@
     .jstree-default {
       .jstree-wholerow {
         height: auto;
-      }
-      .jstree-wholerow-hovered {
-        background: #eee;
-      }
-      .jstree-wholerow-clicked {
-        background: #dbeeff;
       }
       .jstree-node {
         line-height: 24px;
@@ -152,14 +99,13 @@
     }
 
     .jstree-icon.tree, .jstree-icon.blob, .jstree-icon.commit {
-      font: normal normal 16px octicons;
       display: inline-block;
       margin-right: 3px;
       text-decoration: none;
       font-smoothing: antialiased;
     }
     .jstree-default .jstree-icon, .jstree-default .jstree-icon:empty, .jstree-default .jstree-anchor {
-      line-height: 24px;
+      line-height: 24px !important;
     }
   }
 
@@ -202,11 +148,9 @@
       label {
         font-weight: normal !important;
       }
-
       label.disabled {
-        color: gray;
-      } 
-
+          color: gray;
+        }
       input[type=text], textarea {
         width: 100%;
       }
@@ -218,54 +162,41 @@
   }
 }
 
+.octotree {
+  .octotree_sidebar {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 a.octotree_toggle, a.octotree_opts {
   position: absolute !important;
   text-align: center;
   line-height: 1;
   z-index: 92;
   cursor: pointer;
-  color: black !important;
 
   & > span {
     line-height: 1;
     display: inline-block;
     text-decoration: none;
   }
-  &:hover, &.selected {
-    color: #4183C4 !important;
-  }
 }
 
 a.octotree_opts {
   width: 15px;
   height: 15px;
-  top: 18px;
-  right: 42px;
-
-  & > span {
-    font: normal normal 12px octicons;
-  }
-  & > span:before {
-    content: '\f031';
-  }
 }
+
 a.octotree_toggle {
   width: 30px;
   height: 30px;
   padding: 6px 6px !important;
-  top: 9px;
-  right: -35px;
 
-  & > span {
-    font: normal normal 16px octicons;
-  }
-  & > span:after {
-    content: '\f078';
-  }
-  &.loading {
+  &.octotree_loading {
     & > span:after {
         content: '';
     }
+
     .loader {
       border-radius: 50%;
       border: 2px solid #000;
@@ -332,3 +263,5 @@ a.octotree_toggle {
     font-size: 13px;
   }
 }
+@import "octotree_github";
+@import "octotree_gitlab";

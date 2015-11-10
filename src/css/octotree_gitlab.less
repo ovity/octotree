@@ -1,0 +1,142 @@
+.octotree {
+  .page-sidebar-expanded {
+    .octotree_gitlab_sidebar {
+      left: 249px;
+    }
+  }
+  .page-sidebar-collapsed {
+    .octotree_gitlab_sidebar {
+      left: 79px;
+    }
+  }
+  .octotree_gitlab_sidebar {
+    a.octotree_toggle {
+      right: 5px;
+      &:not(.octotree_loading) > span:after {
+        content: '\f104';
+      }
+    }
+  }
+
+  .content-wrapper {
+    transition-duration: 0.3s;
+  }
+}
+
+html:not(.octotree) {
+  .page-sidebar-expanded {
+    .octotree_gitlab_sidebar {
+      a.octotree_toggle {
+        right: -294px;
+      }
+    }
+  }
+
+  .page-sidebar-collapsed {
+    .octotree_gitlab_sidebar {
+      a.octotree_toggle {
+        right: -110px;
+      }
+    }
+  }
+}
+
+.octotree_gitlab_sidebar {
+  transition-duration: .3s;
+  padding-top: 58px;
+
+  .octotree_views {
+    .octotree_view {
+      .octotree_view_header {
+        height: 58px;
+        line-height: 3;
+        background-color: #f7f8fa;
+        border-bottom: 1px solid #dce0e6;
+        border-top: 1px solid #dce0e6;
+      }
+    }
+
+    .octotree_treeview {
+      .octotree_header_repo {
+        font-size: 15px;
+      }
+      .octotree_header_repo:before {
+        font-family: FontAwesome;
+        content: '\f015';
+      }
+      .octotree_header_branch {
+        font-size: 13px;
+      }
+      .octotree_header_branch:before {
+        font-family: FontAwesome;
+        content: '\f126';
+      }
+      .jstree-icon.tree:before {
+        content: '\f07b';
+        color: #333c48;
+      }
+      .jstree-icon.blob:before {
+        content: '\f0f6';
+        color: #777;
+      }
+      .jstree-node.jstree-leaf:hover {
+        .jstree-icon.blob:before {
+          content: '\f019';
+          color: #7f8fa4;
+        }
+      }
+      .jstree-icon.commit:before {
+        content: '\f187';
+        color: #777;
+      }
+      .jstree-anchor {
+        color: #333c48 !important;
+        & > span {
+            color: black;
+        }
+      }
+      .jstree-default {
+        .jstree-wholerow-hovered {
+          background: #fffaf1;
+        }
+        .jstree-wholerow-clicked {
+          background: #e7e9ed;
+        }
+      }
+
+      .jstree-icon.tree, .jstree-icon.blob, .jstree-icon.commit {
+        font: normal normal 16px FontAwesome;
+      }
+    }
+  }
+
+  a.octotree_toggle, a.octotree_opts {
+    color: #313236 !important;
+  }
+
+  a.octotree_opts {
+    top: 22px;
+    right: 42px;
+
+    & > span {
+      font: normal normal 16px FontAwesome;
+    }
+    & > span:before {
+      content: '\f0ad';
+    }
+    &:hover, &.selected {
+      color: #4183C4 !important;
+    }
+  }
+  a.octotree_toggle {
+    top: 14px;
+
+    & > span {
+      font: normal normal 16px FontAwesome;
+      font-weight: bold;
+    }
+    &:not(.octotree_loading) > span:after {
+      content: '\f105';
+    }
+  }
+}

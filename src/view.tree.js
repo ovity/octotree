@@ -78,8 +78,8 @@ TreeView.prototype.show = function(repo, token) {
   var self = this
     , treeContainer = self.$view.find('.octotree_view_body')
     , tree = treeContainer.jstree(true)
-    , collapseTree = self.store.get(STORE.COLLAPSE)
-    , loadAll = self.store.get(STORE.RECURSIVE)
+    , collapseTree = this.adapter.getValue(STORE.COLLAPSE)
+    , loadAll = this.adapter.getValue(STORE.RECURSIVE)
 
   tree.settings.core.data = function (node, cb) {
     fetchData(node, function(treeData) {
@@ -148,7 +148,7 @@ TreeView.prototype.syncSelection = function() {
   if (!match) return
 
   var currentPath = match[1]
-    , loadAll = this.store.get(STORE.RECURSIVE)
+    , loadAll = this.adapter.getValue(STORE.RECURSIVE)
 
   selectPath(loadAll ? [currentPath] : breakPath(currentPath), 0)
 

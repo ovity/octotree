@@ -1,8 +1,17 @@
 const
     PREFIX = 'octotree'
+  , DOMAINS = {
+    GITHUB   : 'https://github.com',
+    GITLAB   : 'https://gitlab.com'
+  }
+
+  , REPOS = {
+    GITHUB : 'github',
+    GITLAB : 'gitlab'
+  }
 
   , STORE = {
-    TOKEN     : 'octotree.github_access_token',
+    TOKEN     : 'octotree.access_token',
     TABSIZE   : 'octotree.tabsize',
     REMEMBER  : 'octotree.remember',
     NONCODE   : 'octotree.noncode_shown',
@@ -11,29 +20,31 @@ const
     COLLAPSE  : 'octotree.collapse',
     HOTKEYS   : 'octotree.hotkeys',
     GHEURLS   : 'octotree.gheurls',
+    GLEURLS   : 'octotree.gleurls',
     WIDTH     : 'octotree.sidebar_width',
     POPUP     : 'octotree.popup_shown',
     SHOWN     : 'octotree.sidebar_shown'
   }
 
   , DEFAULTS = {
-    TOKEN    : '',
-    TABSIZE  : '',
-    REMEMBER : true,
-    NONCODE  : true,
-    LAZYLOAD : true,
-    RECURSIVE: true,
-    COLLAPSE : true,
+    TOKEN     : '',
+    TABSIZE   : '',
+    REMEMBER  : true,
+    NONCODE   : true,
+    LAZYLOAD  : true,
+    RECURSIVE : true,
+    COLLAPSE  : true,
     // @ifdef SAFARI
-    HOTKEYS  : '⌘+b, ⌃+b',
+    HOTKEYS   : '⌘+b, ⌃+b',
     // @endif
     // @ifndef SAFARI
-    HOTKEYS  : '⌘+⇧+s, ⌃+⇧+s',
+    HOTKEYS   : '⌘+⇧+s, ⌃+⇧+s',
     // @endif
-    GHEURLS  : '',
-    WIDTH    : 250,
-    POPUP    : false,
-    SHOWN    : false
+    GHEURLS   : '',
+    GLEURLS   : '',
+    WIDTH     : 250,
+    POPUP     : false,
+    SHOWN     : false
   }
 
   , EVENT = {

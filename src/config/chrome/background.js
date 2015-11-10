@@ -66,7 +66,7 @@ chrome.runtime.onMessage.addListener(function(req, sender, sendRes) {
       function removeUnnecessaryPermissions() {
         chrome.permissions.getAll(function(permissions) {
           var toBeRemovedUrls = permissions.origins.filter(function(url) {
-            return url !== 'https://github.com/*' && !~urls.indexOf(url)
+            return (url !== 'https://github.com/*' || url !== 'https://gitlab.com/*') && !~urls.indexOf(url)
           })
           if (toBeRemovedUrls.length) chrome.permissions.remove({ origins: toBeRemovedUrls })
         })

@@ -1,4 +1,5 @@
-function OptionsView($dom, store) {
+function OptionsView($dom, adapter, store) {
+  adapter.filterOption($dom)
   var self     = this
     , $view    = $dom.find('.octotree_optsview').submit(save)
     , $toggler = $dom.find('.octotree_opts').click(toggle)
@@ -61,15 +62,16 @@ function OptionsView($dom, store) {
      * permissions to be requested only in response of user input. So...
      */
     // @ifdef CHROME
-    var $ta  = $view.find('[data-store=GHEURLS]')
-      , urls = $ta.val().split(/\n/).filter(function (url) { return url !== '' })
+    var $ta = $view.find('[data-store$=EURLS]')
+      , storeKey = $ta.data('store')
+      , urls  = $ta.val().split(/\n/).filter(function (url) { return url !== '' })
 
     if (urls.length > 0) {
       chrome.runtime.sendMessage({type: 'requestPermissions', urls: urls}, function (granted) {
         if (granted) saveOptions()
         else {
           // permissions not granted (by user or error), reset value
-          $ta.val(store.get(STORE.GHEURLS))
+          $ta.val(store.get(STORE[storeKey]))
           saveOptions()
         }
       })

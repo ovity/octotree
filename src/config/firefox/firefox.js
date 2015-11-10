@@ -2,7 +2,7 @@ var data = require('sdk/self').data
   , pageMod = require('sdk/page-mod')
 
 pageMod.PageMod({
-  include: 'https://github.com/*',
+  include: ['https://github.com/*', 'https://gitlab.com/*'],
   contentScriptFile : [data.url('jquery.js'),
                        data.url('jquery-ui.js'),
                        data.url('jquery.pjax.js'),
