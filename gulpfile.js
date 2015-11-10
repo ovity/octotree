@@ -5,15 +5,13 @@ var gulp  = require('gulp')
   , spawn = require('child_process').spawn
   , $     = require('gulp-load-plugins')()
 
-/**
- * Public tasks
- */
+// Tasks
 gulp.task('clean', function () {
   return pipe('./tmp', [$.clean()])
 })
 
 gulp.task('build', function (cb) {
-  $.runSequence('clean', 'css', 'chrome', 'opera', 'safari', 'firefox', cb)
+  $.runSequence('clean', 'styles', 'chrome', 'opera', 'safari', 'firefox', cb)
 })
 
 gulp.task('default', ['build'], function () {
@@ -34,11 +32,10 @@ gulp.task('test', ['build'], function (cb) {
   ps.on('close', cb)
 })
 
-/**
- * Private tasks
- */
-gulp.task('css', function () {
-  return pipe('./src/css/octotree.less', [$.less(), $.autoprefixer({cascade: true})], './tmp')
+gulp.task('styles', function () {
+  return pipe('./src/styles/octotree.less',
+    [$.less(), $.autoprefixer({cascade: true})],
+    './tmp')
 })
 
 // Chrome
@@ -120,9 +117,7 @@ gulp.task('firefox:xpi', function (cb) {
   $.run('cd ./tmp/firefox && cfx xpi --output-file=../../dist/firefox.xpi').exec(cb)
 })
 
-/**
- * Helpers
- */
+// Helpers
 function pipe(src, transforms, dest) {
   if (typeof transforms === 'string') {
     dest = transforms
@@ -157,8 +152,8 @@ function buildJs(additions, ctx) {
     './tmp/template.js',
     './src/constants.js',
     './src/adapters/adapter.js',
-    './src/adapters/adapter.github.js',
-    './src/adapters/adapter.gitlab.js',
+    './src/adapters/github.js',
+    './src/adapters/gitlab.js',
     './src/view.help.js',
     './src/view.error.js',
     './src/view.tree.js',

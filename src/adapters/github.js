@@ -14,7 +14,7 @@ const
   , GH_PJAX_SEL = '#js-repo-pjax-container'
   , GH_CONTAINERS = '.container'
 
-GitHub.prototype = new Adapter()
+GitHub.prototype = Object.create(Adapter.prototype)
 GitHub.prototype.constructor = GitHub
 GitHub.prototype.super = Adapter.prototype
 

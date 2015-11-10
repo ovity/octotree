@@ -10,7 +10,7 @@ const
   , GL_SHIFTED = 'h1.title'
   , GL_PROJECT_ID = '#project_id'
 
-GitLab.prototype = new Adapter()
+GitLab.prototype = Object.create(Adapter.prototype)
 GitLab.prototype.constructor = GitLab
 GitLab.prototype.super = Adapter.prototype
 
@@ -78,7 +78,7 @@ GitLab.prototype.updateLayout = function(sidebarVisible, sidebarWidth) {
 }
 
 /**
- * Filter particular options for current adapter.
+ * Filters particular options for current adapter.
  * @param {DOM Object} dom - the template which needs to be filtered.
  */
 GitLab.prototype.filterOption = function(dom) {
