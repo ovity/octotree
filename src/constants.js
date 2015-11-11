@@ -33,6 +33,7 @@ const
     POPUP    : false,
     SHOWN    : false,
     NONCODE  : false,
+    DOWNLOAD : true
   }
 
   , EVENT = {
