@@ -1,4 +1,5 @@
 function TreeView($dom, store, adapter) {
+  var self = this;
   this.$view = $dom.find('.octotree_treeview')
   this.store = store
   this.adapter = adapter
@@ -9,16 +10,22 @@ function TreeView($dom, store, adapter) {
     })
     .on('click.jstree', '.jstree-closed>a', function() {
       $.jstree.reference(this).open_node(this)
+      self.toggleDownloadIcon()
     })
     .on('click', function(event) {
       var $target = $(event.target)
       var self = this
       var download = false
+      var enableDownloading = store.get(STORE.DOWNLOAD)
 
       // handle icon click, fix #122
       if ($target.is('i.jstree-icon')) {
         $target = $target.parent()
-        download = true
+        if (enableDownloading) {
+          download = true
+        } else {
+          download = false
+        }
       }
 
       if (!$target.is('a.jstree-anchor')) return
@@ -87,6 +94,7 @@ TreeView.prototype.show = function(repo, treeData) {
   treeContainer.one('refresh.jstree', function() {
     self.syncSelection()
     $(self).trigger(EVENT.VIEW_READY)
+    self.toggleDownloadIcon()
   })
 
   tree.refresh(true)
@@ -114,6 +122,13 @@ TreeView.prototype.show = function(repo, treeData) {
       }
       return item
     })
+  }
+}
+
+TreeView.prototype.toggleDownloadIcon = function () {
+  var enableDownloading = this.store.get(STORE.DOWNLOAD)
+  if (!enableDownloading) {
+    this.$view.find('.jstree-icon.blob').addClass('downloading_disabled')
   }
 }
 

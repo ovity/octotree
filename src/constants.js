@@ -13,6 +13,7 @@ const
     POPUP    : 'octotree.popup_shown',
     SHOWN    : 'octotree.sidebar_shown',
     NONCODE  : 'octotree.noncode_shown',
+    DOWNLOAD : 'octotree.download'
   }
 
   , DEFAULTS = {
@@ -32,6 +33,7 @@ const
     POPUP    : false,
     SHOWN    : false,
     NONCODE  : false,
+    DOWNLOAD : true
   }
 
   , EVENT = {

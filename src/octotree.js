@@ -81,6 +81,14 @@ $(document).ready(function() {
             key.unbind(value[0])
             key(value[1], toggleSidebar)
             break
+          case STORE.DOWNLOAD:
+            var $blobIcon = $('.jstree-icon.blob')
+            if (value[1]) {
+              $blobIcon.removeClass('downloading_disabled')
+            } else {
+              $blobIcon.addClass('downloading_disabled')
+            }
+            break
         }
       })
       if (reload) tryLoadRepo(true)
