@@ -17,8 +17,7 @@
           </div>
           <div>
             <button type="submit" class="btn">Save</button>
-            <a class="octotree_gitlab_hidden" href="https://github.com/buunguyen/octotree#github-access-token" target="_blank" tabIndex="-1">Why is this required?</a>
-            <a class="octotree_github_hidden" href="https://github.com/buunguyen/octotree#gitlab-access-token" target="_blank" tabIndex="-1">Why is this required?</a>
+            <a href="https://github.com/buunguyen/octotree#access-token" target="_blank" tabIndex="-1">Why is this required?</a>
           </div>
           <div class="error"></div>
         </form>
@@ -28,22 +27,20 @@
         <div class="octotree_view_header">Settings</div>
         <form class="octotree_view_body">
           <div>
-            <div>
-              <label>Site access token</label>
-              <a class="octotree_gitlab_hidden" href="https://github.com/buunguyen/octotree#github-access-token" target="_blank" tabIndex="-1">what's this?</a>
-              <a class="octotree_github_hidden" href="https://github.com/buunguyen/octotree#gitlab-access-token" target="_blank" tabIndex="-1">what's this?</a>
-            </div>
+            <label>Site access token</label>
+            <a href="https://github.com/buunguyen/octotree#access-token" target="_blank" tabIndex="-1">what's this?</a>
             <input type="text" data-store="TOKEN" data-perhost="true">
           </div>
+
           <!-- @ifdef CHROME -->
-          <div class="octotree_gitlab_hidden">
+          <div class="octotree_github_only">
             <div>
               <label>GitHub Enterprise URLs</label>
             </div>
             <textarea data-store="GHEURLS" placeholder="https://github.mysite1.com/                                        https://github.mysite2.com/">
             </textarea>
           </div>
-          <div class="octotree_github_hidden">
+          <div class="octotree_gitlab_only">
             <div>
               <label>GitLab Enterprise URLs</label>
             </div>
@@ -51,18 +48,17 @@
             </textarea>
           </div>
           <!-- @endif -->
+
           <hr />
+
           <div>
-            <label><input type="checkbox" data-store="REMEMBER"> Show sidebar if previously shown</label>
+            <label><input type="checkbox" data-store="REMEMBER"> Remember sidebar visibility</label>
           </div>
           <div>
             <label><input type="checkbox" data-store="NONCODE"> Show in non-code pages</label>
           </div>
-          <div>
-            <label><input type="checkbox" data-store="LAZYLOAD"> Only load tree when sidebar is open</label>
-          </div>
-          <div class="octotree_gitlab_hidden">
-            <label><input type="checkbox" data-store="RECURSIVE"> Load entire tree at once</label>
+          <div class="octotree_github_only">
+            <label><input type="checkbox" data-store="LOADALL"> Load entire tree at once</label>
           </div>
           <div>
             <div>

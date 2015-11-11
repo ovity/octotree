@@ -41,9 +41,17 @@ html:not(.octotree) {
   }
 }
 
+.octotree_gitlab_only {
+  display: none;
+}
+
 .octotree_gitlab_sidebar {
   transition-duration: .3s;
   padding-top: 58px;
+
+  .octotree_gitlab_only {
+    display: block;
+  }
 
   .octotree_views {
     .octotree_view {

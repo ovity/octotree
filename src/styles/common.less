@@ -51,13 +51,15 @@
     .octotree_view_header {
       padding-left: 13px;
     }
+    .octotree_header_repo, .octotree_header_branch {
+      width: 100%;
+      padding-right: 55px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
     .octotree_header_repo {
       font-weight: bold;
-      width: 100%;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      padding-right: 55px;
     }
     .octotree_header_repo:before {
       color: #bbb;
@@ -80,6 +82,7 @@
     .jstree-anchor {
       text-decoration: none;
       outline: none;
+      padding-right: 0;
     }
     .jstree-anchor:hover {
       text-decoration: none !important;
@@ -156,7 +159,7 @@
       }
       textarea {
         resize: vertical;
-        height: 100px;
+        height: 60px;
       }
     }
   }

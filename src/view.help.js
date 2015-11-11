@@ -1,27 +1,30 @@
-function HelpPopup($dom, store) {
-  this.$view = $dom.find('.octotree_popup')
-  this.store = store
-}
+class HelpPopup {
+  constructor($dom, store) {
+    this.$view = $dom.find('.octotree_popup')
+    this.store = store
+  }
 
-HelpPopup.prototype.show = function() {
-  var $view = this.$view
-    , store = this.store
-    , popupShown = store.get(STORE.POPUP)
+  show() {
+    const $view = this.$view
+    const store = this.store
+    const popupShown = store.get(STORE.POPUP)
 
-  if (popupShown) return
+    if (popupShown) return
 
-  $view.css('display', 'block').appendTo($('body'))
+    $view.css('display', 'block').appendTo($('body'))
 
-  $(document).one(EVENT.TOGGLE, hide)
-  setTimeout(function() {
-    store.set(STORE.POPUP, true)
-    $view.addClass('show').click(hide)
-    setTimeout(hide, 6000)
-  }, 500)
+    $(document).one(EVENT.TOGGLE, hide)
 
-  function hide() {
-    if ($view.hasClass('show')) {
-      $view.removeClass('show').one('transitionend', function() { $view.remove() })
+    setTimeout(() => {
+      store.set(STORE.POPUP, true)
+      $view.addClass('show').click(hide)
+      setTimeout(hide, 6000)
+    }, 500)
+
+    function hide() {
+      if ($view.hasClass('show')) {
+        $view.removeClass('show').one('transitionend', () => $view.remove())
+      }
     }
   }
 }

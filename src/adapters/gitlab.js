@@ -1,209 +1,188 @@
-const
-    GL_RESERVED_USER_NAMES = [
-      'u', 'dashboard', 'projects', 'users', 'help',
-      'explore', 'profile', 'public', 'groups', 'abuse_reports'
-    ]
-  , GL_RESERVED_REPO_NAMES = []
-  , GL_CONTAINERS = '.sidebar-wrapper, .toggle-nav-collapse'
-  , GL_HEADER = '.navbar-gitlab'
-  , GL_SIDEBAR = '.sidebar-wrapper'
-  , GL_SHIFTED = 'h1.title'
-  , GL_PROJECT_ID = '#project_id'
+const GL_RESERVED_USER_NAMES = [
+  'u', 'dashboard', 'projects', 'users', 'help',
+  'explore', 'profile', 'public', 'groups', 'abuse_reports'
+]
+const GL_RESERVED_REPO_NAMES = []
+const GL_CONTAINERS = '.sidebar-wrapper, .toggle-nav-collapse'
+const GL_HEADER = '.navbar-gitlab'
+const GL_SIDEBAR = '.sidebar-wrapper'
+const GL_SHIFTED = 'h1.title'
+const GL_PROJECT_ID = '#project_id'
 
-GitLab.prototype = Object.create(Adapter.prototype)
-GitLab.prototype.constructor = GitLab
-GitLab.prototype.super = Adapter.prototype
+class GitLab extends Adapter {
+  constructor(store) {
+    super(store)
 
-function GitLab(store) {
-  this.store = store
-  this._defaultBranch = {}
-  this.unchangableKeys = [
-    {key: STORE.RECURSIVE, value: false},
-    {key: STORE.COLLAPSE, value: false}
-  ]
-  this.createTokenUrl = location.protocol + '//' + location.host + '/profile/account'
-  this.observe()
-  // HACK GL enterprise still uses legacy design so we need someway to detect that
-  this.newGitLabDesign = $('.navbar-gitlab.header-collapsed, .navbar-gitlab.header-expanded').length > 0
-
-  $('.toggle-nav-collapse').click(function() {
-    setTimeout(function () {
-      $(document).trigger(EVENT.LAYOUT_CHANGE)
-    }, 10)
-  })
-}
-
-/**
- * Appends sidebar to corresponding place.
- * @param {DOM Object} sidebar - Octotree sidebar.
- */
-GitLab.prototype.appendSidebar = function(sidebar) {
-  sidebar
-    .addClass('octotree_gitlab_sidebar')
-    .appendTo($('body'))
-}
-
-/**
- * Updates page layout based on visibility status and width of the Octotree sidebar.
- * @param {Boolean} sidebarVisible - current visibility of the sidebar.
- * @param {Number} sidebarWidth - current width of the sidebar.
- */
-GitLab.prototype.updateLayout = function(sidebarVisible, sidebarWidth) {
-  var $containers = $(GL_CONTAINERS)
-
-  $(GL_HEADER).css('z-index', 3)
-
-  if ($containers.length === 2) {
-    var glSidebarExpanded = $('.page-with-sidebar').hasClass('page-sidebar-expanded')
-      , glSidebarWidth = glSidebarExpanded ? 230 : 62
-
-    if (this.newGitLabDesign) {
-      $(GL_SHIFTED).css('margin-left', 36)
-      $('.octotree_toggle').css('right', sidebarVisible ? '' : -(glSidebarWidth + 50))
-    } else {
-      glSidebarWidth = glSidebarExpanded ? 230 : 52
-      $(GL_HEADER).css('z-index', 3)
-      $(GL_SIDEBAR).css('z-index', 1)
-      $(GL_SHIFTED).css('margin-left', 56)
-      $('.octotree_toggle').css('right', sidebarVisible ? '' : -102)
-      $('.octotree_toggle').css('top', sidebarVisible ? '' : 8)
+    // GitLab (for now) embeds access token in the page.
+    // Use it to set the token if one isn't available.
+    let token = store.get(STORE.TOKEN)
+    if (!token) {
+      token = $('head').text().match(/gon.api_token\s*=\s*"(.*?)"/m)[1]
+      if (token) {
+        store.set(STORE.TOKEN, token, true)
+      }
     }
 
-    $containers.css('margin-left', sidebarVisible ? sidebarWidth : '')
-    $(GL_HEADER).css('padding-left', sidebarVisible ? sidebarWidth : '')
-    $('.page-with-sidebar').css('padding-left', sidebarVisible ? glSidebarWidth + sidebarWidth : '')
-  }
-  // falls-back if GitLab DOM has been updated (not really sure what it will change)
-  else $('html').css('margin-left', sidebarVisible ? sidebarWidth : '')
-}
+    $('.toggle-nav-collapse').click(() => {
+      setTimeout(() => {
+        $(document).trigger(EVENT.LAYOUT_CHANGE)
+      }, 10)
+    })
 
-/**
- * Filters particular options for current adapter.
- * @param {DOM Object} dom - the template which needs to be filtered.
- */
-GitLab.prototype.filterOption = function(dom) {
-  dom.find('.octotree_gitlab_hidden').remove()
-}
-
-/**
- * Retrieves the repository info at the current location.
- * @param {Boolean} showInNonCodePage - if false, should not return data in non-code pages.
- * @param {Object} currentRepo - current repo being shown by Octotree.
- * @param {String} token - the personal access token.
- * @param {Function} cb - the callback function.
- */
-GitLab.prototype.getRepoFromPath = function(showInNonCodePage, currentRepo, token, cb) {
-
-  // 404 page, skip - GitLab doesn't have specific element for Not Found page
-  if ($(document).find("title").text() === 'The page you\'re looking for could not be found (404)') {
-    return cb()
+    // GL disables our submit buttons, reenable them
+    const btns = $('.octotree_view_body button[type="submit"]')
+    btns.click((event) => {
+      setTimeout(() => {
+        $(event.target).prop('disabled', false).removeClass('disabled')
+      }, 30)
+    })
   }
 
-  // No project id no way to fetch project files
-  if (!$(GL_PROJECT_ID).length) {
-    return cb()
+  getCssClass() {
+    return 'octotree_gitlab_sidebar'
   }
 
-  // (username)/(reponame)[/(type)]
-  var match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/)
-  if (!match) {
-    return cb()
+  canLoadEntireTree() {
+    return false
   }
 
-  var username = match[1]
-    , reponame = match[2]
-
-
-  // not a repository, skip
-  if (~GL_RESERVED_USER_NAMES.indexOf(username) ||
-      ~GL_RESERVED_REPO_NAMES.indexOf(reponame)) {
-    return cb()
+  getCreateTokenUrl() {
+    return `${location.protocol}//${location.host}/profile/account`
   }
 
-  // skip non-code page unless showInNonCodePage is true
-  // with GitLab /username/repo is non-code page
-  if (!showInNonCodePage &&
-    (!match[3] || (match[3] && !~['tree', 'blob'].indexOf(match[3])))) {
-    return cb()
+  updateLayout(sidebarVisible, sidebarWidth) {
+    var $containers = $(GL_CONTAINERS)
+
+    $(GL_HEADER).css('z-index', 3)
+
+    if ($containers.length === 2) {
+      const useNewDesign = $('.navbar-gitlab.header-collapsed, .navbar-gitlab.header-expanded').length > 0
+      const glSidebarExpanded = $('.page-with-sidebar').hasClass('page-sidebar-expanded')
+      let glSidebarWidth = glSidebarExpanded ? 230 : 62
+
+      if (useNewDesign) {
+        $(GL_SHIFTED).css('margin-left', 36)
+        $('.octotree_toggle').css('right', sidebarVisible ? '' : -(glSidebarWidth + 50))
+      }
+      else {
+        glSidebarWidth = glSidebarExpanded ? 230 : 52
+        $(GL_HEADER).css('z-index', 3)
+        $(GL_SIDEBAR).css('z-index', 1)
+        $(GL_SHIFTED).css('margin-left', 56)
+        $('.octotree_toggle').css('right', sidebarVisible ? '' : -102)
+        $('.octotree_toggle').css('top', sidebarVisible ? '' : 8)
+      }
+
+      $containers.css('margin-left', sidebarVisible ? sidebarWidth : '')
+      $(GL_HEADER).css('padding-left', sidebarVisible ? sidebarWidth : '')
+      $('.page-with-sidebar').css('padding-left', sidebarVisible ? glSidebarWidth + sidebarWidth : '')
+    }
+    else $('html').css('margin-left', sidebarVisible ? sidebarWidth : '')
   }
 
-  // get branch by inspecting page, quite fragile so provide multiple fallbacks
-  var GL_BRANCH_SEL_1 = '#repository_ref'
-  var GL_BRANCH_SEL_2 = '.select2-container.project-refs-select.select2 .select2-chosen'
-  var GL_BRANCH_SEL_3 = '.nav.nav-sidebar .shortcuts-tree'
+  getRepoFromPath(showInNonCodePage, currentRepo, token, cb) {
 
-  var branch =
-    // Code page
-    $(GL_BRANCH_SEL_1).val() || $(GL_BRANCH_SEL_2).text() ||
-    // Non-code page
-    ($(GL_BRANCH_SEL_3).attr('href') || '').match(/([^\/]+)/g)[3] ||
-    // Assume same with previously
-    (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch) ||
-    // Default from cache
-    this._defaultBranch[username + '/' + reponame]
+    // 404 page, skip - GitLab doesn't have specific element for Not Found page
+    if ($(document).find("title").text() === 'The page you\'re looking for could not be found (404)') {
+      return cb()
+    }
 
-  var repo = {username: username, reponame: reponame, branch: branch}
+    // No project id no way to fetch project files
+    if (!$(GL_PROJECT_ID).length) {
+      return cb()
+    }
 
-  if (repo.branch) {
-    cb(null, repo)
-  }
-  else {
-    this._get(repo, null, token, function (err, data) {
-      if (err) return cb(err)
-      repo.branch = this._defaultBranch[username + '/' + reponame] = data.default_branch || 'master'
+    // (username)/(reponame)[/(type)]
+    const match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/)
+    if (!match) {
+      return cb()
+    }
+
+    const username = match[1]
+    const reponame = match[2]
+
+
+    // not a repository, skip
+    if (~GL_RESERVED_USER_NAMES.indexOf(username) ||
+        ~GL_RESERVED_REPO_NAMES.indexOf(reponame)) {
+      return cb()
+    }
+
+    // skip non-code page unless showInNonCodePage is true
+    // with GitLab /username/repo is non-code page
+    if (!showInNonCodePage &&
+      (!match[3] || (match[3] && !~['tree', 'blob'].indexOf(match[3])))) {
+      return cb()
+    }
+
+    // get branch by inspecting page, quite fragile so provide multiple fallbacks
+    const GL_BRANCH_SEL_1 = '#repository_ref'
+    const GL_BRANCH_SEL_2 = '.select2-container.project-refs-select.select2 .select2-chosen'
+    const GL_BRANCH_SEL_3 = '.nav.nav-sidebar .shortcuts-tree'
+
+    const branch =
+      // Code page
+      $(GL_BRANCH_SEL_1).val() || $(GL_BRANCH_SEL_2).text() ||
+      // Non-code page
+      ($(GL_BRANCH_SEL_3).attr('href') || '').match(/([^\/]+)/g)[3] ||
+      // Assume same with previously
+      (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch) ||
+      // Default from cache
+      this._defaultBranch[username + '/' + reponame]
+
+    const repo = {username: username, reponame: reponame, branch: branch}
+
+    if (repo.branch) {
       cb(null, repo)
-    }.bind(this))
+    }
+    else {
+      this.get(repo, null, token, (err, data) => {
+        if (err) return cb(err)
+        repo.branch = this._defaultBranch[username + '/' + reponame] = data.default_branch || 'master'
+        cb(null, repo)
+      })
+    }
   }
-}
 
-/**
- * Retrieves the code tree of a repository.
- * @param {Object} opts: { repo: repository, node(optional): selected node (null for resursively loading), token (optional): user access token, apiUrl (optional): base API URL }
- * @param {Function} cb(err: error, tree: array (of arrays) of items)
- */
-GitLab.prototype.getCodeTree = function(opts, cb) {
-  opts.treePath = opts.node.path
-  this._getCodeTree(opts, function(item) {
-    item.sha = item.id // jstree and gitlab use the same id property
-    item.path = item.name
-  }, cb)
-}
+  selectFile(path) {
+    // TODO: pjax possible?
+    window.location.href = path
+  }
 
-GitLab.prototype.fetchSubmodules = function(tree, cb) {
-  var item = tree.filter(function(item) { return /^\.gitmodules$/i.test(item.name) })[0]
-  if (!item) return cb()
-  this.getBlob(encodedBranch, item.name, function(err, data) {
-    if (err || !data) return cb(err)
-    parseGitmodules(data, cb)
-  })
-}
+  loadCodeTree(opts, cb) {
+    opts.treePath = opts.node.path
+    super.loadCodeTree(opts, (item) => {
+      item.sha = item.id
+      item.path = item.name
+    }, cb)
+  }
 
-GitLab.prototype.getTree = function(tree, cb) {
-  this._get(this.repo, '/repository/tree' + '?path=' + tree + '&ref_name=' + this.encodedBranch, this.token, function(err, res) {
-    if (err) return cb(err)
-    cb(null, res)
-  })
-}
+  getSubmodules(tree, cb) {
+    const item = tree.filter((item) => /^\.gitmodules$/i.test(item.name))[0]
+    if (!item) return cb()
 
-GitLab.prototype.getBlob = function(sha, path, cb) {
-  this._get(this.repo, '/repository/blobs/' + sha + '?filepath=' + path, this.token, function(err, res) {
-    if (err) return cb(err)
-    cb(null, res)
-  })
-}
-
-GitLab.prototype._get = function(repo, path, token, cb) {
-  var host      = location.host + '/api/v3'
-    , projectID = $(GL_PROJECT_ID).val()
-    , base      = location.protocol + '//' + host + '/projects/' + projectID + path + '&private_token=' + token
-    , cfg       = { method: 'GET', url: base, cache: false }
-    , self      = this
-
-  $.ajax(cfg)
-    .done(function(data) {
-      cb(null, data)
+    this.getBlob(this.encodedBranch, item.name, (err, data) => {
+      if (err || !data) return cb(err)
+      parseGitmodules(data, cb)
     })
-    .fail(function(jqXHR) {
-      self.handleErrorStatus(jqXHR, cb)
-    })
+  }
+
+  getTree(tree, cb) {
+    this.get(this.repo, `tree?path=${tree}&ref_name=${this.encodedBranch}`, this.token, cb)
+  }
+
+  getBlob(sha, path, cb) {
+    this.get(this.repo, `blobs/${sha}?filepath=${path}`, this.token, cb)
+  }
+
+  get(repo, path, token, cb) {
+    const host = `${location.host}/api/v3`
+    const projectId = $(GL_PROJECT_ID).val()
+    const url = `${location.protocol}//${host}/projects/${projectId}/repository/${path}&private_token=${token}`
+    const cfg = { method: 'GET', url, cache: false }
+
+    $.ajax(cfg)
+      .done((data) => cb(null, data))
+      .fail((jqXHR) => this.handleError(jqXHR, cb))
+  }
 }

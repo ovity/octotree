@@ -164,8 +164,9 @@ function buildJs(additions, ctx) {
     './src/octotree.js',
   ])
   return pipe(src, [
+    $.babel({presets: ['es2015']}),
     $.concat('octotree.js'),
-    $.preprocess({context: ctx})
+    $.preprocess({context: ctx}),
   ], './tmp')
 }
 

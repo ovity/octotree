@@ -1,16 +1,18 @@
 ## Octotree
-Browser extensions (Chrome, Firefox, Opera and Safari) to display GitHub code in tree format. Useful for developers who frequently read source in GitHub and do not want to download or checkout too many repositories. Features:
+Browser extensions (Chrome, Firefox, Opera and Safari) to display GitHub and GitLab code in tree format. Useful for developers who frequently read source and do not want to download or checkout too many repositories. Features:
 
 * Easy-to-navigate code tree like IDEs
 * Fast browsing with pjax
 * Customizable hotkey
-* Support private repositories (see [instructions](#github-access-token))
-* Support GitHub Enterprise (Chrome and Opera only, see [instructions](#github-enterprise))
+* Support private repositories (see [instructions](#access-token))
+* Support GitHub and GitLab Enterprise (Chrome and Opera only, see [instructions](#enterprise-deployment))
+
 
 ## Install on Chrome, Firefox and Opera
 * Install Octotree from [Chrome Web Store](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc), [Mozilla Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/octotree/) or [Opera Add-ons Store](https://addons.opera.com/en/extensions/details/octotree/)
 * Navigate to any GitHub repository (or just refresh this page as an example)
 * The code tree should show on the left-hand side of the screen
+
 
 ## Install on Safari
 The prebuilt packages for all extensions are located in the  [dist](https://github.com/buunguyen/octotree/tree/master/dist) folder. For security reason, only download Octotree from this location.
@@ -19,7 +21,9 @@ The prebuilt packages for all extensions are located in the  [dist](https://gith
 
 __Note__: the Safari build is out of date with the main line because Apple wants to be the only company who forces open-source developers to [pay](http://gizmodo.com/apples-great-new-developer-program-screws-over-safari-d-1710539882) for the privillege of creating free extensions for their little-used browser.
 
-## GitHub access token
+
+## Access token
+### GitHub
 Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve repository metadata. By default, it makes unauthenticated requests to the GitHub API. However, there are two situations when requests must be authenticated:
 
 * You access a private repository
@@ -27,44 +31,27 @@ Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve reposit
 
 When that happens, Octotree will ask for your [GitHub personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use). If you don't already have one, [create one](https://github.com/settings/tokens/new), then copy and paste it into the textbox. Note that the minimal scopes that should be granted are `public_repo` and `repo` (if you need access to private repositories).
 
-Alternatively, you can manually enter or update the token by following these steps:
-
-* Navigate to any GitHub repository
-* Open the developer console of your browser
-* Execute the following line:
-```javascript
-localStorage.setItem('octotree.access_token', 'REPLACE WITH TOKEN')
-```
-
-Note: if you use GitHub Enterprise, each site will need its own access token. Therefore, Octotree stores access token on a per-site basis.
-
-## GitLab access token
-Octotree uses [GitLab API](http://doc.gitlab.com/ce/api/) to retrieve repository metadata. `private_token` must be passed to all requests to GitLab API. When find out it missing,  Octotree will ask for your GitLab private token. If you don't already have one, create one in [your account](https://gitlab.com/profile/account), then copy and paste it into the textbox.
-
-Alternatively, you can manually enter or update the token by following these steps:
-
-* Navigate to any GitLab repository
-* Open the developer console of your browser
-* Execute the following line:
-```javascript
-localStorage.setItem('octotree.access_token', 'REPLACE WITH TOKEN')
-```
-
-Note: if you use GitLab Enterprise, each site will need its own access token. Therefore, Octotree stores access token on a per-site basis.
+### GitLab
+Octotree uses [GitLab API](http://doc.gitlab.com/ce/api/) to retrieve repository metadata. By default, Octotree attempts to retrieve the access token embedded in the GitLab DOM and use the token to authenticate against the GitLab API. If Octotree cannot retrieve the token, it will prompt you to [create one](https://gitlab.com/profile/account).
 
 
-## GitHub Enterprise
-By default, Octotree only works on `github.com`. To support GitHub Enterprise on Chrome and Opera, you must grant Octotree sufficient permissions. Follow these steps to do so:
+## Enterprise deployment
+By default, Octotree only works on `github.com` and `gitlab.com`. To support enterprise version on Chrome and Opera, you must grant Octotree sufficient permissions. Follow these steps to do so:
 
-* Navigate to any GitHub repository on `github.com`
+* Navigate to any GitHub or GitLab repository
 * Open Octotree's settings panel
-* Fill in the GitHub Enterprise URLs textbox, one URL per line
+* Fill in the Enterprise URLs textbox, one URL per line
 * Click Save and accept any permission prompt
-* Navigate to your GitHub Enterprise site
-* You might be asked to create an [access token](#github-access-token)
+* Navigate to your GitHub or GitLab Enterprise site
+* You might be asked to create an [access token](#access-token)
 
 
 ## Changelog
+
+### v2.0.0
+* Support GitLab
+* Modify Octotree options
+* Support lazy-load individual folder (GitHub)
 
 ### v1.7.2
 * Fix bug long branches are not loaded correctly due to GitHub DOM change
@@ -145,6 +132,9 @@ By default, Octotree only works on `github.com`. To support GitHub Enterprise on
 * Gulp script to build for Chrome, Firefox and Safari
 * And some other minor changes
 
-## Credit
-* Many thanks to all contributors who submit pull requests, report bugs and suggest ideas
-* [Extension icon](https://github.com/pstadler/octofolders) by [pstadler](https://github.com/pstadler)
+## Credits
+* @crashbell for the work on GitLab
+* @Ephemera for many bug fixes
+* @athaeryn and @letunglam for the UI design
+* @pstadler for the [extension icon](https://github.com/pstadler/octofolders)
+* And many other people who submit bug fixes and reports

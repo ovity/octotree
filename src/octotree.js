@@ -1,92 +1,93 @@
 $(document).ready(function() {
-  var store = new Storage()
+  const store = new Storage()
 
   parallel(Object.keys(STORE), setDefault, loadExtension)
 
   function setDefault(key, cb) {
-    var storeKey = STORE[key]
-    var local = storeKey === STORE.TOKEN
-    store.get(storeKey, local, function(val) {
+    const storeKey = STORE[key]
+    const local = storeKey === STORE.TOKEN
+
+    store.get(storeKey, local, (val) => {
       store.set(storeKey, val == null ? DEFAULTS[key] : val, local, cb)
     })
   }
 
+  function createAdapter() {
+    var githubUrls = store.get(STORE.GHEURLS).split(/\n/).concat('github.com')
+
+    return ~githubUrls.indexOf(location.host)
+      ? new GitHub(store)
+      : new GitLab(store)
+  }
+
   function loadExtension() {
-    var $html     = $('html')
-      , $document = $(document)
-      , adapter   = initAdapter()
-      , $dom      = $(TEMPLATE)
-      , $sidebar  = $dom.find('.octotree_sidebar')
-      , $toggler  = $sidebar.find('.octotree_toggle')
-      , $views    = $sidebar.find('.octotree_view')
-      , optsView  = new OptionsView($dom, adapter, store)
-      , helpPopup = new HelpPopup($dom, store)
-      , treeView  = new TreeView($dom, store, adapter)
-      , errorView = new ErrorView($dom, store)
-      , currRepo  = false
-      , hasError  = false
+    const $html = $('html')
+    const $document = $(document)
+    const $dom = $(TEMPLATE)
+    const $sidebar = $dom.find('.octotree_sidebar')
+    const $toggler = $sidebar.find('.octotree_toggle')
+    const $views = $sidebar.find('.octotree_view')
+    const adapter = createAdapter()
+    const treeView = new TreeView($dom, store, adapter)
+    const optsView = new OptionsView($dom, store)
+    const helpPopup = new HelpPopup($dom, store)
+    const errorView = new ErrorView($dom, store)
+    let currRepo = false
+    let hasError = false
 
     $sidebar
       .width(parseFloat(store.get(STORE.WIDTH)))
       .resizable({ handles: 'e', minWidth: 200 })
       .resize(layoutChanged)
+      .addClass(adapter.getCssClass())
+      .appendTo($('body'))
 
-    adapter.appendSidebar($sidebar)
     layoutChanged()
-    if (detectRepoHost() == REPOS.GITLAB)
-      fixGLSubmitButton()
 
-    $(window).resize(function(event) { // handle zoom
+    $(window).resize((event) => { // handle zoom
       if (event.target === window) layoutChanged()
     })
 
     $toggler.click(toggleSidebarAndSave)
-    key.filter = function() { return $toggler.is(':visible') }
+    key.filter = () => $toggler.is(':visible')
     key(store.get(STORE.HOTKEYS), toggleSidebarAndSave)
 
-    ;[treeView, errorView, optsView].forEach(function(view) {
+    ;[treeView, errorView, optsView].forEach((view) => {
       $(view)
-        .on(EVENT.VIEW_READY, function(event) {
-          if (this !== optsView) $document.trigger(EVENT.REQ_END)
+        .on(EVENT.VIEW_READY, function (event) {
+          if (this !== optsView) {
+            $document.trigger(EVENT.REQ_END)
+          }
           showView(this.$view)
         })
-        .on(EVENT.VIEW_CLOSE, function() {
-          showView(hasError ? errorView.$view : treeView.$view)
-        })
+        .on(EVENT.VIEW_CLOSE, () => showView(hasError ? errorView.$view : treeView.$view))
         .on(EVENT.OPTS_CHANGE, optionsChanged)
-        .on(EVENT.FETCH_ERROR, function(event, err) {
-          errorView.show(err)
-        })
+        .on(EVENT.FETCH_ERROR, (event, err) => showError(err))
     })
 
     $document
-      .on('pjax:send ' + EVENT.REQ_START, function() {
-        $toggler.addClass('octotree_loading')
-      })
-      .on('pjax:end ' + EVENT.REQ_END, function() {
-        $toggler.removeClass('octotree_loading')
-      })
-      .on('pjax:timeout', function(event) {
-        event.preventDefault()
-      })
-      .on(EVENT.LOC_CHANGE, function() {
-        adapter.appendSidebar($sidebar)
+      .on('pjax:send ' + EVENT.REQ_START, () => $toggler.addClass('octotree_loading'))
+      .on('pjax:end ' + EVENT.REQ_END, () => $toggler.removeClass('octotree_loading'))
+      .on('pjax:timeout', (event) => event.preventDefault())
+      .on(EVENT.LAYOUT_CHANGE, layoutChanged)
+      .on(EVENT.TOGGLE, layoutChanged)
+      .on(EVENT.LOC_CHANGE, () => {
+        // adapter.initSidebar($sidebar) // TODO: why need this?
         layoutChanged()
         tryLoadRepo()
       })
-      .on(EVENT.LAYOUT_CHANGE, layoutChanged)
-      .on(EVENT.TOGGLE, layoutChanged)
 
     return tryLoadRepo()
 
     function optionsChanged(event, changes) {
-      var reload = false
-      Object.keys(changes).forEach(function(storeKey) {
-        var value = changes[storeKey]
+      let reload = false
+
+      Object.keys(changes).forEach((storeKey) => {
+        const value = changes[storeKey]
+
         switch (storeKey) {
-          case STORE.COLLAPSE:
           case STORE.TOKEN:
-          case STORE.RECURSIVE:
+          case STORE.LOADALL:
             reload = true
             break
           case STORE.HOTKEYS:
@@ -95,28 +96,34 @@ $(document).ready(function() {
             break
         }
       })
-      if (reload) tryLoadRepo(true)
+
+      if (reload) {
+        tryLoadRepo(true)
+      }
     }
 
     function tryLoadRepo(reload) {
-      var remember = store.get(STORE.REMEMBER)
-        , showInNonCodePage = store.get(STORE.NONCODE)
-        , shown = store.get(STORE.SHOWN)
-        , lazyload = store.get(STORE.LAZYLOAD)
-        , token = store.get(STORE.TOKEN)
+      hasError = false
+      const remember = store.get(STORE.REMEMBER)
+      const showInNonCodePage = store.get(STORE.NONCODE)
+      const shown = store.get(STORE.SHOWN)
+      const token = store.get(STORE.TOKEN)
 
-      adapter.getRepoFromPath(showInNonCodePage, currRepo, token, function(err, repo) {
+      adapter.getRepoFromPath(showInNonCodePage, currRepo, token, (err, repo) => {
         if (err) {
-          errorView.show(err)
+          showError(err)
         }
         else if (repo) {
           $toggler.show()
           helpPopup.show()
 
-          if (remember && shown) toggleSidebar(true)
+          if (remember && shown) {
+            toggleSidebar(true)
+          }
 
-          if (!lazyload || isSidebarVisible()) {
-            var repoChanged = JSON.stringify(repo) !== JSON.stringify(currRepo)
+          if (isSidebarVisible()) {
+            const repoChanged = JSON.stringify(repo) !== JSON.stringify(currRepo)
+
             if (repoChanged || reload === true) {
               $document.trigger(EVENT.REQ_START)
               currRepo = repo
@@ -137,8 +144,13 @@ $(document).ready(function() {
       view.addClass('current')
     }
 
+    function showError(err) {
+      hasError = true
+      errorView.show(err)
+    }
+
     function toggleSidebarAndSave() {
-      store.set(STORE.SHOWN, !isSidebarVisible(), function() {
+      store.set(STORE.SHOWN, !isSidebarVisible(), () => {
         toggleSidebar()
         if (isSidebarVisible()) {
           tryLoadRepo()
@@ -158,46 +170,13 @@ $(document).ready(function() {
     }
 
     function layoutChanged() {
-      var width = $sidebar.width()
+      const width = $sidebar.width()
       adapter.updateLayout(isSidebarVisible(), width)
       store.set(STORE.WIDTH, width)
     }
 
     function isSidebarVisible() {
       return $html.hasClass(PREFIX)
-    }
-
-    // @HACK GL disables submit buttons after form submits
-    function fixGLSubmitButton() {
-      var submitButtons = $('.octotree_view_body button[type="submit"]')
-      submitButtons.click(function(event) {
-        setTimeout(function() {
-          $(event.target).prop('disabled', false).removeClass('disabled')
-        }, 30)
-      })
-    }
-
-    /**
-     * Pick corresponding Adapter basing on current domain.
-     * @param {Object} store - object to get/set value from storage.
-     * @return New adapter object, can be GitHub or GitLab.
-     */
-    function initAdapter() {
-      if (detectRepoHost() == REPOS.GITHUB)
-        return new GitHub(store)
-      return new GitLab(store)
-    }
-
-    function detectRepoHost() {
-      var urls  = store.get(STORE.GHEURLS).split(/\n/)
-        , isGitHub = false
-
-      urls.push(DOMAINS.GITHUB)
-      urls.forEach(function(url) {
-        if (location.origin === url)
-          isGitHub = true
-      })
-      return isGitHub ? REPOS.GITHUB : REPOS.GITLAB
     }
   }
 })

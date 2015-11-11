@@ -1,60 +1,46 @@
-function OptionsView($dom, adapter, store) {
-  adapter.filterOption($dom)
-  var self     = this
-    , $view    = $dom.find('.octotree_optsview').submit(save)
-    , $toggler = $dom.find('.octotree_opts').click(toggle)
-    , elements = $view.find('[data-store]').toArray()
+class OptionsView {
+  constructor($dom, store) {
+    this.store = store
+    this.$view = $dom.find('.octotree_optsview').submit(this._save.bind(this))
+    this.$toggler = $dom.find('.octotree_opts').click(this._toggle.bind(this))
+    this.elements = this.$view.find('[data-store]').toArray()
 
-  this.$view = $view
+    // hide options view when sidebar is hidden
+    $(document).on(EVENT.TOGGLE, (event, visible) => {
+      if (!visible) this._toggle(false)
+    })
+  }
 
-  $(document).ready(function() {
-    function triggerChange(checkbox) {
-      var store     = $(checkbox).data('store')
-        , checkboxs = $view.find('[data-trigger-disable=' + store + ']')
-      checkboxs.prop('disabled', !checkbox.checked).closest('label').toggleClass('disabled', !checkbox.checked)
-    }
-
-    eachOption(
-      function($elm) {
-        // triggers to disable all checkboxs having data-trigger-disable
-        $elm.change(function(event) {
-          triggerChange(event.target)
-        })
-      }
-    )
-  })
-
-  // hide options view when sidebar is hidden
-  $(document).on(EVENT.TOGGLE, function(event, visible) {
-    if (!visible) toggle(false)
-  })
-
-  function toggle(visibility) {
+  _toggle(visibility) {
     if (visibility !== undefined) {
-      if ($view.hasClass('current') === visibility) return
-      return toggle()
+      if (this.$view.hasClass('current') === visibility) return
+      return this._toggle()
     }
-    if ($toggler.hasClass('selected')) {
-      $toggler.removeClass('selected')
-      $(self).trigger(EVENT.VIEW_CLOSE)
+
+    if (this.$toggler.hasClass('selected')) {
+      this.$toggler.removeClass('selected')
+      $(this).trigger(EVENT.VIEW_CLOSE)
     }
     else {
-      eachOption(
-        function($elm, key, local, value, cb) {
-          // Original jQuery prop function doesn't trigger change event
-          if ($elm.is(':checkbox')) $elm.prop('checked', value).trigger("change")
-          else $elm.val(value)
-          cb()
-        },
-        function() {
-          $toggler.addClass('selected')
-          $(self).trigger(EVENT.VIEW_READY)
-        }
-      )
+      this._load()
     }
   }
 
-  function save(event) {
+  _load() {
+    this._eachOption(
+      ($elm, key, local, value, cb) => {
+        if ($elm.is(':checkbox')) $elm.prop('checked', value)
+        else $elm.val(value)
+        cb()
+      },
+      () => {
+        this.$toggler.addClass('selected')
+        $(this).trigger(EVENT.VIEW_READY)
+      }
+    )
+  }
+
+  _save(event) {
     event.preventDefault()
 
     /*
@@ -62,50 +48,52 @@ function OptionsView($dom, adapter, store) {
      * permissions to be requested only in response of user input. So...
      */
     // @ifdef CHROME
-    var $ta = $view.find('[data-store$=EURLS]')
-      , storeKey = $ta.data('store')
-      , urls  = $ta.val().split(/\n/).filter(function (url) { return url !== '' })
+    const $ta = this.$view.find('[data-store$=EURLS]')
+    const storeKey = $ta.data('store')
+    const urls = $ta.val().split(/\n/).filter((url) => url !== '')
 
     if (urls.length > 0) {
-      chrome.runtime.sendMessage({type: 'requestPermissions', urls: urls}, function (granted) {
-        if (granted) saveOptions()
-        else {
+      chrome.runtime.sendMessage({type: 'requestPermissions', urls: urls}, (granted) => {
+        if (!granted) {
           // permissions not granted (by user or error), reset value
-          $ta.val(store.get(STORE[storeKey]))
-          saveOptions()
+          $ta.val(this.store.get(STORE[storeKey]))
         }
+        this._saveOptions()
       })
       return
     }
     // @endif
 
-    return saveOptions()
-
-    function saveOptions() {
-      var changes = {}
-      eachOption(
-        function($elm, key, local, value, cb) {
-          var newValue = $elm.is(':checkbox') ? $elm.is(':checked') : $elm.val()
-          if (value === newValue) return cb()
-          changes[key] = [value, newValue]
-          store.set(key, newValue, local, cb)
-        },
-        function() {
-          toggle(false)
-          if (Object.keys(changes).length) $(self).trigger(EVENT.OPTS_CHANGE, changes)
-        }
-      )
-    }
+    return this._saveOptions()
   }
 
-  function eachOption(processFn, completeFn) {
-    parallel(elements,
-      function(elm, cb) {
-        var $elm  = $(elm)
-          , key   = STORE[$elm.data('store')]
-          , local = !!$elm.data('perhost')
-        store.get(key, local, function(value) {
-          processFn($elm, key, local, value, function() { cb() })
+  _saveOptions() {
+    const changes = {}
+    this._eachOption(
+      ($elm, key, local, value, cb) => {
+        const newValue = $elm.is(':checkbox') ? $elm.is(':checked') : $elm.val()
+        if (value === newValue) return cb()
+        changes[key] = [value, newValue]
+        this.store.set(key, newValue, local, cb)
+      },
+      () => {
+        this._toggle(false)
+        if (Object.keys(changes).length) {
+          $(this).trigger(EVENT.OPTS_CHANGE, changes)
+        }
+      }
+    )
+  }
+
+  _eachOption(processFn, completeFn) {
+    parallel(this.elements,
+      (elm, cb) => {
+        const $elm = $(elm)
+        const key = STORE[$elm.data('store')]
+        const local = !!$elm.data('perhost')
+
+        this.store.get(key, local, (value) => {
+          processFn($elm, key, local, value, () => cb())
         })
       },
       completeFn

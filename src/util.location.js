@@ -1,7 +1,7 @@
-$(document).ready(function() {
+$(document).ready(() => {
   // When navigating from non-code pages (i.e. Pulls, Issues) to code page
   // GitHub/GitLab doesn't reload the page but uses pjax. Need to detect and load Octotree.
-  var firstLoad = true, href, hash
+  let firstLoad = true, href, hash
 
   function detectLocationChange() {
     if (location.href !== href || location.hash !== hash) {
@@ -14,7 +14,7 @@ $(document).ready(function() {
         firstLoad = false
       }
       else {
-        setTimeout(function () {
+        setTimeout(() => {
           $(document).trigger(EVENT.LOC_CHANGE, href, hash)
         }, 200) // Waits a bit for pjax DOM change
       }
