@@ -11,7 +11,7 @@ const GL_PROJECT_ID = '#project_id'
 
 class GitLab extends Adapter {
   constructor(store) {
-    super(store)
+    super()
 
     // GitLab (for now) embeds access token in the page.
     // Use it to set the token if one isn't available.
@@ -23,33 +23,32 @@ class GitLab extends Adapter {
       }
     }
 
+    // Triggers layout when the GL sidebar is toggled
     $('.toggle-nav-collapse').click(() => {
       setTimeout(() => {
         $(document).trigger(EVENT.LAYOUT_CHANGE)
       }, 10)
     })
 
-    // GL disables our submit buttons, reenable them
-    const btns = $('.octotree_view_body button[type="submit"]')
-    btns.click((event) => {
+    // GL disables our submit buttons, re-enable them
+    $('.octotree_view_body button[type="submit"]').click((event) => {
       setTimeout(() => {
         $(event.target).prop('disabled', false).removeClass('disabled')
       }, 30)
     })
   }
 
+  // @override
   getCssClass() {
     return 'octotree_gitlab_sidebar'
   }
 
-  canLoadEntireTree() {
-    return false
-  }
-
+  // @override
   getCreateTokenUrl() {
     return `${location.protocol}//${location.host}/profile/account`
   }
 
+  // @override
   updateLayout(sidebarVisible, sidebarWidth) {
     var $containers = $(GL_CONTAINERS)
 
@@ -80,14 +79,15 @@ class GitLab extends Adapter {
     else $('html').css('margin-left', sidebarVisible ? sidebarWidth : '')
   }
 
+  // @override
   getRepoFromPath(showInNonCodePage, currentRepo, token, cb) {
 
     // 404 page, skip - GitLab doesn't have specific element for Not Found page
-    if ($(document).find("title").text() === 'The page you\'re looking for could not be found (404)') {
+    if ($(document).find('title').text() === 'The page you\'re looking for could not be found (404)') {
       return cb()
     }
 
-    // No project id no way to fetch project files
+    // We need project ID
     if (!$(GL_PROJECT_ID).length) {
       return cb()
     }
@@ -100,7 +100,6 @@ class GitLab extends Adapter {
 
     const username = match[1]
     const reponame = match[2]
-
 
     // not a repository, skip
     if (~GL_RESERVED_USER_NAMES.indexOf(username) ||
@@ -136,7 +135,7 @@ class GitLab extends Adapter {
       cb(null, repo)
     }
     else {
-      this.get(repo, null, token, (err, data) => {
+      this._get(null, {token}, (err, data) => {
         if (err) return cb(err)
         repo.branch = this._defaultBranch[username + '/' + reponame] = data.default_branch || 'master'
         cb(null, repo)
@@ -144,45 +143,39 @@ class GitLab extends Adapter {
     }
   }
 
-  selectFile(path) {
-    // TODO: pjax possible?
-    window.location.href = path
-  }
-
+  // @override
   loadCodeTree(opts, cb) {
-    opts.treePath = opts.node.path
-    super.loadCodeTree(opts, (item) => {
+    opts.path = opts.node.path
+    this._loadCodeTree(opts, (item) => {
       item.sha = item.id
       item.path = item.name
     }, cb)
   }
 
-  getSubmodules(tree, cb) {
+  // @override
+  _getTree(path, opts, cb) {
+    this._get(`/tree?path=${path}&ref_name=${opts.encodedBranch}`, opts, cb)
+  }
+
+  // @override
+  _getSubmodules(tree, opts, cb) {
     const item = tree.filter((item) => /^\.gitmodules$/i.test(item.name))[0]
     if (!item) return cb()
 
-    this.getBlob(this.encodedBranch, item.name, (err, data) => {
-      if (err || !data) return cb(err)
-      parseGitmodules(data, cb)
+    this._get(`/blobs/${opts.encodedBranch}?filepath=${item.name}`, opts, (err, data) => {
+      if (err) return cb(err)
+      cb(null, parseGitmodules(data))
     })
   }
 
-  getTree(tree, cb) {
-    this.get(this.repo, `tree?path=${tree}&ref_name=${this.encodedBranch}`, this.token, cb)
-  }
-
-  getBlob(sha, path, cb) {
-    this.get(this.repo, `blobs/${sha}?filepath=${path}`, this.token, cb)
-  }
-
-  get(repo, path, token, cb) {
-    const host = `${location.host}/api/v3`
+  _get(path, opts, cb) {
     const projectId = $(GL_PROJECT_ID).val()
-    const url = `${location.protocol}//${host}/projects/${projectId}/repository/${path}&private_token=${token}`
-    const cfg = { method: 'GET', url, cache: false }
+    const host = `${location.protocol}//${location.host}/api/v3`
+    const url = `${host}/projects/${projectId}/repository${path}&private_token=${opts.token}`
+    const cfg = { url, method: 'GET', cache: false }
 
     $.ajax(cfg)
       .done((data) => cb(null, data))
-      .fail((jqXHR) => this.handleError(jqXHR, cb))
+      .fail((jqXHR) => this._handleError(jqXHR, cb))
   }
 }

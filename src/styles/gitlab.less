@@ -1,14 +1,20 @@
 .octotree {
+  .octotree_gitlab_only {
+    display: none;
+  }
+
   .page-sidebar-expanded {
     .octotree_gitlab_sidebar {
       left: 249px;
     }
   }
+
   .page-sidebar-collapsed {
     .octotree_gitlab_sidebar {
       left: 79px;
     }
   }
+
   .octotree_gitlab_sidebar {
     a.octotree_toggle {
       right: 5px;
@@ -41,10 +47,6 @@ html:not(.octotree) {
   }
 }
 
-.octotree_gitlab_only {
-  display: none;
-}
-
 .octotree_gitlab_sidebar {
   transition-duration: .3s;
   padding-top: 58px;
@@ -71,6 +73,7 @@ html:not(.octotree) {
       .octotree_header_repo:before {
         font-family: FontAwesome;
         content: '\f015';
+        color: #333c48;
       }
       .octotree_header_branch {
         font-size: 13px;
@@ -85,22 +88,22 @@ html:not(.octotree) {
       }
       .jstree-icon.blob:before {
         content: '\f0f6';
-        color: #777;
+        color: #333c48;
       }
       .jstree-node.jstree-leaf:hover {
         .jstree-icon.blob:before {
           content: '\f019';
-          color: #7f8fa4;
+          color: #333c48;
         }
       }
       .jstree-icon.commit:before {
         content: '\f187';
-        color: #777;
+        color: #333c48;
       }
       .jstree-anchor {
         color: #333c48 !important;
         & > span {
-            color: black;
+          color: black;
         }
       }
       .jstree-default {
@@ -111,7 +114,6 @@ html:not(.octotree) {
           background: #e7e9ed;
         }
       }
-
       .jstree-icon.tree, .jstree-icon.blob, .jstree-icon.commit {
         font: normal normal 16px FontAwesome;
       }
@@ -136,6 +138,7 @@ html:not(.octotree) {
       color: #4183C4 !important;
     }
   }
+
   a.octotree_toggle {
     top: 14px;
 

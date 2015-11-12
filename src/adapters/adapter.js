@@ -1,11 +1,10 @@
 class Adapter {
-  constructor(store) {
-    this.store = store
+  constructor() {
     this._defaultBranch = {}
-    this.observe()
+    this._observe()
   }
 
-  observe() {
+  _observe() {
     if (!window.MutationObserver) return
 
     // Fix #151 by detecting when page layout is updated.
@@ -27,42 +26,28 @@ class Adapter {
     })
   }
 
-  selectSubmodule(path) {
-    window.location.href = path
-  }
-
-  downloadFile(path, fileName) {
-    const link = document.createElement('a')
-    link.setAttribute('href', path.replace(/\/blob\//, '/raw/'))
-    link.setAttribute('download', fileName)
-    link.click()
-  }
-
   /**
    * Loads the code tree of a repository.
    * @param {Object} opts: {
-   *                  repo: repository,
-   *                  node(optional): selected node (null to load entire tree),
-   *                  token (optional): user access token,
-   *                  apiUrl (optional): base API URL
+   *                  path: the starting path to load the tree,
+   *                  repo: the current repository,
+   *                  node (optional): the selected node (null to load entire tree),
+   *                  token (optional): the personal access token
    *                 }
    * @param {Function} transform(item)
-   * @param {Function} cb(err: error, tree: array (of arrays) of items)
-   * @api protected
+   * @param {Function} cb(err: error, tree: Array[Array|item])
    */
-  loadCodeTree(opts, transform, cb) {
+  _loadCodeTree(opts, transform, cb) {
     const folders = { '': [] }
     const $dummyDiv = $('<div/>')
+    const {path, repo, node} = opts
 
-    this.repo = opts.repo
-    this.token = opts.token
-    this.treePath = opts.treePath
-    this.encodedBranch = encodeURIComponent(decodeURIComponent(this.repo.branch))
+    opts.encodedBranch = opts.encodedBranch || encodeURIComponent(decodeURIComponent(repo.branch))
 
-    this.getTree(this.treePath, (err, tree) => {
+    this._getTree(path, opts, (err, tree) => {
       if (err) return cb(err)
 
-      this.getSubmodules(tree, (err, submodules) => {
+      this._getSubmodules(tree, opts, (err, submodules) => {
         if (err) return cb(err)
 
         submodules = submodules || {}
@@ -84,8 +69,8 @@ class Adapter {
             }
 
             // if lazy load and has parent, prefix with parent path
-            if (opts.node && opts.node.path) {
-              item.path = opts.node.path + '/' + item.path
+            if (node && node.path) {
+              item.path = node.path + '/' + item.path
             }
 
             const path = item.path
@@ -97,7 +82,7 @@ class Adapter {
             item.text = name
             item.icon = type // use `type` as class name for tree node
 
-            if (opts.node) {
+            if (node) {
               folders[''].push(item)
             }
             else {
@@ -105,13 +90,13 @@ class Adapter {
             }
 
             if (type === 'tree') {
-              if (opts.node) item.children = true
+              if (node) item.children = true
               else folders[item.path] = item.children = []
               item.a_attr = { href: '#' }
             }
             else if (type === 'blob') {
               item.a_attr = {
-                href: `/${this.repo.username}/${this.repo.reponame}/${type}/${this.repo.branch}/${encodeURIComponent(path)}`
+                href: `/${repo.username}/${repo.reponame}/${type}/${repo.branch}/${encodeURIComponent(path)}`
               }
             }
             else if (type === 'commit') {
@@ -140,7 +125,7 @@ class Adapter {
     })
   }
 
-  handleError(jqXHR, cb) {
+  _handleError(jqXHR, cb) {
     let error, message, needAuth
 
     switch (jqXHR.status) {
@@ -199,9 +184,104 @@ class Adapter {
         break
     }
     cb({
-      error    : `Error: ${error}`,
-      message  : message,
-      needAuth : needAuth,
+      error: `Error: ${error}`,
+      message: message,
+      needAuth: needAuth
     })
+  }
+
+  /**
+   * Returns the CSS class to be added to the Octotree sidebar.
+   * @api public
+   */
+  getCssClass() {
+    throw new Error('Not implemented')
+  }
+
+  /**
+   * Returns whether the adapter is capable of loading the entire tree in
+   * a single request. This is usually determined by the underlying the API.
+   * @api public
+   */
+  canLoadEntireTree() {
+    return false
+  }
+
+  /**
+   * Loads the code tree.
+   * @api public
+   */
+  loadCodeTree(opts, cb) {
+    throw new Error('Not implemented')
+  }
+
+  /**
+   * Returns the URL to create a personal access token.
+   * @api public
+   */
+  getCreateTokenUrl() {
+    throw new Error('Not implemented')
+  }
+
+  /**
+   * Updates the layout based on sidebar visibility and width.
+   * @api public
+   */
+  updateLayout(sidebarVisible, sidebarWidth) {
+    throw new Error('Not implemented')
+  }
+
+  /**
+   * Returns repo info at the current path.
+   * @api public
+   */
+  getRepoFromPath(showInNonCodePage, currentRepo, token, cb) {
+    throw new Error('Not implemented')
+  }
+
+  /**
+   * Selects the file at a specific path.
+   * @api public
+   */
+  selectFile(path) {
+    window.location.href = path
+  }
+
+
+  /**
+   * Selects a submodule.
+   * @api public
+   */
+  selectSubmodule(path) {
+    window.location.href = path
+  }
+
+  /**
+   * Downloads a file.
+   * @api public
+   */
+  downloadFile(path, fileName) {
+    const link = document.createElement('a')
+    link.setAttribute('href', path.replace(/\/blob\//, '/raw/'))
+    link.setAttribute('download', fileName)
+    link.click()
+  }
+
+  /**
+   * Gets tree at path.
+   * @param {Object} opts - {token, repo}
+   * @api protected
+   */
+  _getTree(path, opts, cb) {
+    throw new Error('Not implemented')
+  }
+
+  /**
+   * Gets submodules in the tree.
+   * @param {Object} opts - {token, repo, encodedBranch}
+   * @api protected
+   */
+  _getSubmodules(tree, opts, cb) {
+    throw new Error('Not implemented')
   }
 }

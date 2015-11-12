@@ -4,8 +4,8 @@ const INI_COMMENT = /^\s*;.*$/
 const INI_PARAM   = /^\s*([\w\.\-\_]+)\s*=\s*(.*?)\s*$/
 const SEPARATOR   = /\r\n|\r|\n/
 
-function parseGitmodules(data, cb) {
-  if (!data) return cb()
+function parseGitmodules(data) {
+  if (!data) return
 
   const submodules = {}
   const lines = data.split(SEPARATOR)
@@ -23,5 +23,5 @@ function parseGitmodules(data, cb) {
     else if (match[1] === 'url') submodules[lastPath] = match[2]
   })
 
-  cb(null, submodules)
+  return submodules
 }

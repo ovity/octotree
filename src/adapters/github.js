@@ -14,18 +14,22 @@ const GH_PJAX_SEL = '#js-repo-pjax-container'
 const GH_CONTAINERS = '.container'
 
 class GitHub extends Adapter {
+  // @override
   getCssClass() {
     return 'octotree_github_sidebar'
   }
 
+  // @override
   canLoadEntireTree() {
     return true
   }
 
+  // @override
   getCreateTokenUrl() {
     return `${location.protocol}//${location.host}/settings/tokens/new`
   }
 
+  // @override
   updateLayout(sidebarVisible, sidebarWidth) {
     const SPACING = 10
     const $containers = $(GH_CONTAINERS)
@@ -40,6 +44,7 @@ class GitHub extends Adapter {
     else $('html').css('margin-left', sidebarVisible ? sidebarWidth + SPACING : '')
   }
 
+  // @override
   getRepoFromPath(showInNonCodePage, currentRepo, token, cb) {
 
     // 404 page, skip
@@ -88,7 +93,7 @@ class GitHub extends Adapter {
       cb(null, repo)
     }
     else {
-      this.get(repo, null, token, (err, data) => {
+      this._get(null, {repo, token}, (err, data) => {
         if (err) return cb(err)
         repo.branch = this._defaultBranch[username + '/' + reponame] = data.default_branch || 'master'
         cb(null, repo)
@@ -96,6 +101,7 @@ class GitHub extends Adapter {
     }
   }
 
+  // @override
   selectFile(path) {
     const container = $(GH_PJAX_SEL)
 
@@ -106,53 +112,51 @@ class GitHub extends Adapter {
         container : container
       })
     }
-    else window.location.href = path // falls back if no container (i.e. GitHub DOM has changed or is not yet available)
+    else { // falls back
+      super.selectFile(path)
+    }
   }
 
+  // @override
   loadCodeTree(opts, cb) {
-    const encodedBranch = encodeURIComponent(decodeURIComponent(opts.repo.branch))
-    const treePath = (opts.node && (opts.node.sha || encodedBranch)) ||
-                     (encodedBranch + '?recursive=1')
-
-    opts.treePath = treePath
-    super.loadCodeTree(opts, null, cb)
+    opts.encodedBranch = encodeURIComponent(decodeURIComponent(opts.repo.branch))
+    opts.path = (opts.node && (opts.node.sha || opts.encodedBranch)) ||
+                (opts.encodedBranch + '?recursive=1')
+    this._loadCodeTree(opts, null, cb)
   }
 
-  getSubmodules(tree, cb) {
-    const item = tree.filter((item) => /^\.gitmodules$/i.test(item.path))[0]
-    if (!item) return cb()
-
-    this.getBlob(item.sha, (err, data) => {
-      if (err || !data) return cb(err)
-      parseGitmodules(data, cb)
-    })
-  }
-
-  getTree(tree, cb) {
-    this.get(this.repo, `/git/trees/${tree}`, this.token, (err, res) => {
+  // @override
+  _getTree(path, opts, cb) {
+    this._get(`/git/trees/${path}`, opts, (err, res) => {
       if (err) return cb(err)
       cb(null, res.tree)
     })
   }
 
-  getBlob(sha, cb) {
-    this.get(this.repo, `/git/blobs/${sha}`, this.token, (err, res) => {
+  // @override
+  _getSubmodules(tree, opts, cb) {
+    const item = tree.filter((item) => /^\.gitmodules$/i.test(item.path))[0]
+    if (!item) return cb()
+
+    this._get(`/git/blobs/${item.sha}`, opts, (err, res) => {
       if (err) return cb(err)
-      cb(null, atob(res.content.replace(/\n/g,'')))
+      const data = atob(res.content.replace(/\n/g,''))
+      cb(null, parseGitmodules(data))
     })
   }
 
-  get(repo, path, token, cb) {
-    const host = (location.host === 'github.com' ? 'api.github.com' : (location.host + '/api/v3'))
-    const base = `${location.protocol}//${host}/repos/${repo.username}/${repo.reponame}`
-    const cfg  = { method: 'GET', url: base + (path || ''), cache: false }
+  _get(path, opts, cb) {
+    const host = location.protocol + '//' +
+      (location.host === 'github.com' ? 'api.github.com' : (location.host + '/api/v3'))
+    const url = `${host}/repos/${opts.repo.username}/${opts.repo.reponame}${path || ''}`
+    const cfg  = { url, method: 'GET', cache: false }
 
-    if (token) {
-      cfg.headers = { Authorization: 'token ' + token }
+    if (opts.token) {
+      cfg.headers = { Authorization: 'token ' + opts.token }
     }
 
     $.ajax(cfg)
       .done((data) => cb(null, data))
-      .fail((jqXHR) => this.handleError(jqXHR, cb))
+      .fail((jqXHR) => this._handleError(jqXHR, cb))
   }
 }

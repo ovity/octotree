@@ -140,13 +140,11 @@ class TreeView {
 
   syncSelection() {
     const tree = this.$view.find('.octotree_view_body').jstree(true)
-
     if (!tree) return
 
     // converts /username/reponame/object_type/branch/path to path
     const path = decodeURIComponent(location.pathname)
     const match = path.match(/(?:[^\/]+\/){4}(.*)/)
-
     if (!match) return
 
     const currentPath = match[1]

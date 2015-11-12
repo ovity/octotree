@@ -1,4 +1,8 @@
 .octotree {
+  .octotree_github_only {
+    display: none;
+  }
+
   .octotree_github_sidebar {
     a.octotree_toggle {
       right: 5px;
@@ -10,10 +14,6 @@
       padding-left: 0;
     }
   }
-}
-
-.octotree_github_only {
-  display: none;
 }
 
 .octotree_github_sidebar {
@@ -80,7 +80,6 @@
           background: #dbeeff;
         }
       }
-
       .jstree-icon.tree, .jstree-icon.blob, .jstree-icon.commit {
         font: normal normal 16px octicons;
       }
@@ -106,6 +105,7 @@
       content: '\f031';
     }
   }
+
   a.octotree_toggle {
     top: 9px;
     right: -35px;

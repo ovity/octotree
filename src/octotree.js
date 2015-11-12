@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(() => {
   const store = new Storage()
 
   parallel(Object.keys(STORE), setDefault, loadExtension)
