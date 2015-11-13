@@ -37,11 +37,12 @@ $(document).ready(() => {
 
     $sidebar
       .width(parseFloat(store.get(STORE.WIDTH)))
-      .resizable({ handles: 'e', minWidth: 200 })
+      .resizable({ handles: 'e', minWidth: 230 }) // to hide GL sidebar
       .resize(layoutChanged)
       .addClass(adapter.getCssClass())
       .appendTo($('body'))
 
+    adapter.setSideBar($sidebar)
     layoutChanged()
 
     $(window).resize((event) => { // handle zoom
@@ -72,7 +73,6 @@ $(document).ready(() => {
       .on(EVENT.LAYOUT_CHANGE, layoutChanged)
       .on(EVENT.TOGGLE, layoutChanged)
       .on(EVENT.LOC_CHANGE, () => {
-        // adapter.initSidebar($sidebar) // TODO: why need this?
         layoutChanged()
         tryLoadRepo()
       })
