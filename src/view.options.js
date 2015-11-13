@@ -48,7 +48,7 @@ class OptionsView {
      * permissions to be requested only in response of user input. So...
      */
     // @ifdef CHROME
-    const $ta = this.$view.find('[data-store$=EURLS]')
+    const $ta = this.$view.find('[data-store$=EURLS]').filter(':visible')
     const storeKey = $ta.data('store')
     const urls = $ta.val().split(/\n/).filter((url) => url !== '')
 

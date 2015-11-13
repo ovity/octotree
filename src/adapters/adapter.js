@@ -268,6 +268,14 @@ class Adapter {
   }
 
   /**
+   * Keep the sidebar for further purpose: adjust, re-append...
+   * @api public
+   */
+  setSideBar(sidebar) {
+    // dummy method
+  }
+
+  /**
    * Gets tree at path.
    * @param {Object} opts - {token, repo}
    * @api protected
