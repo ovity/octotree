@@ -9,6 +9,7 @@ const GL_SHIFTED = 'h1.title'
 const GL_PROJECT_ID = '#project_id'
 
 class GitLab extends Adapter {
+
   constructor(store) {
     super()
 
@@ -21,12 +22,33 @@ class GitLab extends Adapter {
         store.set(STORE.TOKEN, token, true)
       }
     }
+  }
+
+  // @override
+  init($sidebar) {
+    super.init($sidebar)
 
     // Triggers layout when the GL sidebar is toggled
     $('.toggle-nav-collapse').click(() => {
       setTimeout(() => {
         $(document).trigger(EVENT.LAYOUT_CHANGE)
       }, 10)
+    })
+
+    // GitLab disables our submit buttons, re-enable them
+    $('.octotree_view_body button[type="submit"]').click((event) => {
+      setTimeout(() => {
+        $(event.target).prop('disabled', false).removeClass('disabled')
+      }, 100)
+    })
+
+    // Reuses GitLab styles for inputs
+    $('.octotree_view_body input[type="text"], .octotree_view_body textarea')
+      .addClass('form-control')
+
+    // GitLab removes DOM, add back
+    $(document).on(EVENT.LOC_CHANGE, () => {
+      $sidebar.appendTo('body')
     })
   }
 
@@ -36,22 +58,27 @@ class GitLab extends Adapter {
   }
 
   // @override
+  getMinWidth() {
+    return 230 // just enough to hide the GitLab sidebar
+  }
+
+  // @override
   getCreateTokenUrl() {
     return `${location.protocol}//${location.host}/profile/account`
   }
 
   // @override
   updateLayout(sidebarVisible, sidebarWidth) {
-    const useNewDesign = $('.navbar-gitlab.header-collapsed, .navbar-gitlab.header-expanded').length > 0
+    const isNewDesign = $('.navbar-gitlab.header-collapsed, .navbar-gitlab.header-expanded').length > 0
     const glSidebarExpanded = $('.page-with-sidebar').hasClass('page-sidebar-expanded')
-    let glSidebarWidth = glSidebarExpanded ? 230 : 62
 
-    if (useNewDesign) {
+    if (isNewDesign) {
+      const glSidebarWidth = glSidebarExpanded ? 230 : 62
       $(GL_SHIFTED).css('margin-left',  sidebarVisible ? '' : 36)
       $('.octotree_toggle').css('right', sidebarVisible ? '' : -(glSidebarWidth + 50))
     }
     else {
-      glSidebarWidth = glSidebarExpanded ? 230 : 52
+      const glSidebarWidth = glSidebarExpanded ? 230 : 52
       $(GL_HEADER).css('z-index', 3)
       $(GL_SIDEBAR).css('z-index', 1)
       $(GL_SHIFTED).css('margin-left',  sidebarVisible ? '' : 56)
@@ -61,7 +88,7 @@ class GitLab extends Adapter {
       })
     }
 
-    $(GL_HEADER).css({'z-index': 3, 'padding-left': sidebarVisible ? sidebarWidth : ''})
+    $(GL_HEADER).css({'z-index': 3, 'margin-left': sidebarVisible ? sidebarWidth : ''})
     $('.page-with-sidebar').css('padding-left', sidebarVisible ? sidebarWidth : '')
   }
 
@@ -136,25 +163,6 @@ class GitLab extends Adapter {
       item.sha = item.id
       item.path = item.name
     }, cb)
-  }
-
-  // @override
-  setSideBar(sidebar) {
-    this.sidebar = sidebar
-    // GL disables our submit buttons, re-enable them
-    const btns = $('.octotree_view_body button[type="submit"]')
-
-    btns.click((event) => {
-      setTimeout(() => {
-        $(event.target).prop('disabled', false).removeClass('disabled')
-      }, 30)
-    })
-    // Make inputs consistent with GL style
-    $('.octotree_view_body input[type="text"], .octotree_view_body textarea').addClass('form-control')
-
-    $(document).on(EVENT.LOC_CHANGE, () => {
-      this.sidebar.appendTo('body')
-    })
   }
 
   // @override

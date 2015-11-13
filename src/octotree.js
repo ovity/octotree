@@ -5,10 +5,8 @@ $(document).ready(() => {
 
   function setDefault(key, cb) {
     const storeKey = STORE[key]
-    const local = storeKey === STORE.TOKEN
-
-    store.get(storeKey, local, (val) => {
-      store.set(storeKey, val == null ? DEFAULTS[key] : val, local, cb)
+    store.get(storeKey, (val) => {
+      store.set(storeKey, val == null ? DEFAULTS[key] : val, cb)
     })
   }
 
@@ -36,13 +34,11 @@ $(document).ready(() => {
     let hasError = false
 
     $sidebar
-      .width(parseFloat(store.get(STORE.WIDTH)))
-      .resizable({ handles: 'e', minWidth: 230 }) // to hide GL sidebar
+      .width(parseInt(store.get(STORE.WIDTH)))
       .resize(layoutChanged)
-      .addClass(adapter.getCssClass())
       .appendTo($('body'))
 
-    adapter.setSideBar($sidebar)
+    adapter.init($sidebar)
     layoutChanged()
 
     $(window).resize((event) => { // handle zoom
@@ -170,7 +166,7 @@ $(document).ready(() => {
     }
 
     function layoutChanged() {
-      const width = $sidebar.width()
+      const width = $sidebar.outerWidth()
       adapter.updateLayout(isSidebarVisible(), width)
       store.set(STORE.WIDTH, width)
     }

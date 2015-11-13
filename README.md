@@ -50,8 +50,9 @@ By default, Octotree only works on `github.com` and `gitlab.com`. To support ent
 
 ### v2.0.0
 * Support GitLab
-* Modify Octotree options
-* Support lazy-load individual folder (GitHub)
+* Support lazy-load individual folder (GitHub only)
+* Simplify Octotree options
+* Support selecting different options for each host
 
 ### v1.7.2
 * Fix bug long branches are not loaded correctly due to GitHub DOM change

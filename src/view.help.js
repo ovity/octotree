@@ -5,13 +5,27 @@ class HelpPopup {
   }
 
   show() {
-    const $view = this.$view
     const store = this.store
     const popupShown = store.get(STORE.POPUP)
+    const sidebarVisible = $('html').hasClass(PREFIX)
 
-    if (popupShown) return
+    if (popupShown || sidebarVisible) {
+      store.set(STORE.POPUP, true)
+      return
+    }
 
-    $view.css('display', 'block').appendTo($('body'))
+    const $view = this.$view
+    const $toggler = $('.octotree_toggle')
+    const offset = $toggler.offset()
+    const height = $toggler.outerHeight()
+
+    $view
+      .css({
+        display: 'block',
+        top: offset.top + height + 2,
+        left: offset.left
+      })
+      $view.appendTo($('body'))
 
     $(document).one(EVENT.TOGGLE, hide)
 

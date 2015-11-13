@@ -28,7 +28,7 @@ class OptionsView {
 
   _load() {
     this._eachOption(
-      ($elm, key, local, value, cb) => {
+      ($elm, key, value, cb) => {
         if ($elm.is(':checkbox')) $elm.prop('checked', value)
         else $elm.val(value)
         cb()
@@ -70,11 +70,11 @@ class OptionsView {
   _saveOptions() {
     const changes = {}
     this._eachOption(
-      ($elm, key, local, value, cb) => {
+      ($elm, key, value, cb) => {
         const newValue = $elm.is(':checkbox') ? $elm.is(':checked') : $elm.val()
         if (value === newValue) return cb()
         changes[key] = [value, newValue]
-        this.store.set(key, newValue, local, cb)
+        this.store.set(key, newValue, cb)
       },
       () => {
         this._toggle(false)
@@ -90,10 +90,9 @@ class OptionsView {
       (elm, cb) => {
         const $elm = $(elm)
         const key = STORE[$elm.data('store')]
-        const local = !!$elm.data('perhost')
 
-        this.store.get(key, local, (value) => {
-          processFn($elm, key, local, value, () => cb())
+        this.store.get(key, (value) => {
+          processFn($elm, key, value, () => cb())
         })
       },
       completeFn

@@ -6,11 +6,11 @@ const STORE = {
   NONCODE   : 'octotree.noncode_shown',
   HOTKEYS   : 'octotree.hotkeys',
   LOADALL   : 'octotree.loadall',
-  GHEURLS   : 'octotree.gheurls',
-  GLEURLS   : 'octotree.gleurls',
-  WIDTH     : 'octotree.sidebar_width',
   POPUP     : 'octotree.popup_shown',
-  SHOWN     : 'octotree.sidebar_shown'
+  WIDTH     : 'octotree.sidebar_width',
+  SHOWN     : 'octotree.sidebar_shown',
+  GHEURLS   : 'octotree.gheurls.shared',
+  GLEURLS   : 'octotree.gleurls.shared'
 }
 
 const DEFAULTS = {
@@ -26,7 +26,7 @@ const DEFAULTS = {
   // @endif
   GHEURLS   : '',
   GLEURLS   : '',
-  WIDTH     : 250,
+  WIDTH     : 232,
   POPUP     : false,
   SHOWN     : false
 }

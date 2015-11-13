@@ -32,6 +32,26 @@
             <input type="text" data-store="TOKEN" data-perhost="true">
           </div>
 
+          <div>
+            <div>
+              <label>Hotkeys</label>
+              <a href="https://github.com/madrobby/keymaster#defining-shortcuts" target="_blank" tabIndex="-1">supported keys</a>
+            </div>
+            <input type="text" data-store="HOTKEYS">
+          </div>
+
+          <div>
+            <label><input type="checkbox" data-store="REMEMBER"> Remember sidebar visibility</label>
+          </div>
+
+          <div>
+            <label><input type="checkbox" data-store="NONCODE"> Show in non-code pages</label>
+          </div>
+
+          <div class="octotree_github_only">
+            <label><input type="checkbox" data-store="LOADALL"> Load entire tree at once</label>
+          </div>
+
           <!-- @ifdef CHROME -->
           <div class="octotree_github_only">
             <div>
@@ -40,6 +60,7 @@
             <textarea data-store="GHEURLS" placeholder="https://github.mysite1.com/                                        https://github.mysite2.com/">
             </textarea>
           </div>
+          
           <div class="octotree_gitlab_only">
             <div>
               <label>GitLab Enterprise URLs</label>
@@ -49,24 +70,6 @@
           </div>
           <!-- @endif -->
 
-          <hr />
-
-          <div>
-            <label><input type="checkbox" data-store="REMEMBER"> Remember sidebar visibility</label>
-          </div>
-          <div>
-            <label><input type="checkbox" data-store="NONCODE"> Show in non-code pages</label>
-          </div>
-          <div class="octotree_github_only">
-            <label><input type="checkbox" data-store="LOADALL"> Load entire tree at once</label>
-          </div>
-          <div>
-            <div>
-              <label>Hotkeys</label>
-              <a href="https://github.com/madrobby/keymaster#defining-shortcuts" target="_blank" tabIndex="-1">supported keys</a>
-            </div>
-            <input type="text" data-store="HOTKEYS">
-          </div>
           <div>
             <button type="submit" class="btn">Save</button>
           </div>

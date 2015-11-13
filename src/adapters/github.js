@@ -14,6 +14,7 @@ const GH_PJAX_SEL = '#js-repo-pjax-container'
 const GH_CONTAINERS = '.container'
 
 class GitHub extends Adapter {
+
   // @override
   getCssClass() {
     return 'octotree_github_sidebar'
