@@ -13,13 +13,13 @@ class GitLab extends Adapter {
   constructor(store) {
     super()
 
-    // GitLab (for now) embeds access token in the page.
+    // GitLab (for now) embeds access token in the page of a logged-in user.
     // Use it to set the token if one isn't available.
-    let token = store.get(STORE.TOKEN)
+    const token = store.get(STORE.TOKEN)
     if (!token) {
-      token = $('head').text().match(/gon.api_token\s*=\s*"(.*?)"/m)[1]
-      if (token) {
-        store.set(STORE.TOKEN, token, true)
+      const match = $('head').text().match(/gon.api_token\s*=\s*"(.*?)"/m)
+      if (match && match[1]) {
+        store.set(STORE.TOKEN, match[1])
       }
     }
   }

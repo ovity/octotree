@@ -11,8 +11,7 @@ $(document).ready(() => {
   }
 
   function createAdapter() {
-    var githubUrls = store.get(STORE.GHEURLS).split(/\n/).concat('github.com')
-
+    const githubUrls = store.get(STORE.GHEURLS).split(/\n/).concat('github.com')
     return ~githubUrls.indexOf(location.host)
       ? new GitHub(store)
       : new GitLab(store)
