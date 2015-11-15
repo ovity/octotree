@@ -40,6 +40,24 @@
             <input type="text" data-store="HOTKEYS">
           </div>
 
+          <!-- @ifdef CHROME -->
+          <div class="octotree_github_only">
+            <div>
+              <label>GitHub Enterprise URLs</label>
+            </div>
+            <textarea data-store="GHEURLS" placeholder="https://github.mysite1.com/                                        https://github.mysite2.com/">
+            </textarea>
+          </div>
+
+          <div class="octotree_gitlab_only">
+            <div>
+              <label>GitLab Enterprise URLs</label>
+            </div>
+            <textarea data-store="GLEURLS" placeholder="https://gitlab.mysite1.com/                                        https://gitlab.mysite2.com/">
+            </textarea>
+          </div>
+          <!-- @endif -->
+
           <div>
             <label><input type="checkbox" data-store="REMEMBER"> Remember sidebar visibility</label>
           </div>
@@ -51,24 +69,6 @@
           <div class="octotree_github_only">
             <label><input type="checkbox" data-store="LOADALL"> Load entire tree at once</label>
           </div>
-
-          <!-- @ifdef CHROME -->
-          <div class="octotree_github_only">
-            <div>
-              <label>GitHub Enterprise URLs</label>
-            </div>
-            <textarea data-store="GHEURLS" placeholder="https://github.mysite1.com/                                        https://github.mysite2.com/">
-            </textarea>
-          </div>
-          
-          <div class="octotree_gitlab_only">
-            <div>
-              <label>GitLab Enterprise URLs</label>
-            </div>
-            <textarea data-store="GLEURLS" placeholder="https://gitlab.mysite1.com/                                        https://gitlab.mysite2.com/">
-            </textarea>
-          </div>
-          <!-- @endif -->
 
           <div>
             <button type="submit" class="btn">Save</button>
