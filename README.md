@@ -2,11 +2,13 @@
 Browser extensions (Chrome, Firefox, Opera and Safari) to display GitHub and GitLab code in tree format. Useful for developers who frequently read source and do not want to download or checkout too many repositories. Features:
 
 * Easy-to-navigate code tree like IDEs
-* Fast browsing with pjax
+* Fast browsing with pjax (currently, only GitHub)
 * Customizable hotkey
 * Support private repositories (see [instructions](#access-token))
-* Support GitHub and GitLab Enterprise (Chrome and Opera only, see [instructions](#enterprise-deployment))
+* Support GitHub and GitLab Enterprise (Chrome and Opera only, see [instructions](#enterprise-urls))
 
+![Octotree on GitHub](docs/github.png)
+![Octotree on GitLab](docs/gitlab.png)
 
 ## Install on Chrome, Firefox and Opera
 * Install Octotree from [Chrome Web Store](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc), [Mozilla Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/octotree/) or [Opera Add-ons Store](https://addons.opera.com/en/extensions/details/octotree/)
@@ -44,11 +46,11 @@ By default, Octotree only works on `github.com` and `gitlab.com`. To support ent
 * Navigate to your GitHub or GitLab Enterprise site
 * You might be asked to create an [access token](#access-token)
 
-### Other Settings
+### Settings
 * __Hotkeys__: Octotree uses [keymaster](https://github.com/madrobby/keymaster) to register hotkeys. Checkout the [supported keys](https://github.com/madrobby/keymaster#supported-keys).
-* __Remember sidebar visibility__: if checked, will show or hide Octotree based on its previous visibility.
-* __Show in non-code pages__: if checked, allow Octotree to show in non-code pages such as Issues and Pull Requests.
-* __Load entire tree at once__: if checked, will issue a single API request to load the entire code tree. Could be slow in very large repos, in which case this option should be unchecked.
+* __Remember sidebar visibility__: if checked, show Octotree based on its previous visibility.
+* __Show in non-code pages__: if checked, allow Octotree to show in non-code pages such as Issues, Pull Requests and Wiki etc.
+* __Load entire tree at once__: if checked, issue a single API request to load the entire code tree. Could be slow in very large repos, in which case this option should be unchecked.
 
 
 ## Changelog
