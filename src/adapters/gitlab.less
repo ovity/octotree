@@ -35,6 +35,16 @@
         background-color: #f7f8fa;
         border-bottom: 1px solid #dce0e6;
       }
+
+      .octotree_help {
+        & > span {
+          font: normal normal 15px FontAwesome;
+          color: black;
+        }
+        & > span:before {
+          content: '\f059';
+        }
+      }
     }
 
     .octotree_treeview {
@@ -96,14 +106,14 @@
   }
 
   a.octotree_opts {
-    top: 22px;
+    top: 21px;
     right: 42px;
 
     & > span {
       font: normal normal 16px FontAwesome;
     }
     & > span:before {
-      content: '\f0ad';
+      content: '\f013';
     }
     &:hover, &.selected {
       color: #4183C4 !important;

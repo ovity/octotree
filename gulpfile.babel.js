@@ -177,9 +177,12 @@ function buildJs(overrides, ctx) {
 }
 
 function buildTemplate(ctx) {
+  const LOTS_OF_SPACES = new Array(500).join(' ')
+
   return pipe(
     './src/template.html',
     $.preprocess({context: ctx}),
+    $.replace('__SPACES__', LOTS_OF_SPACES),
     html2js('const TEMPLATE = \'$$\''),
     './tmp'
   )

@@ -33,6 +33,16 @@
         background-repeat: repeat-x;
         border-bottom: 1px solid #e5e5e5;
       }
+
+      .octotree_help {
+        & > span {
+          font: normal normal 15px octicons;
+          color: black;
+        }
+        & > span:before {
+          content: '\f02c';
+        }
+      }
     }
 
     .octotree_treeview {
@@ -61,7 +71,7 @@
       }
       .jstree-node.jstree-leaf:hover {
         .jstree-icon.blob:before {
-          content: '\f00b';
+          content: '\f0dc';
         }
       }
       .jstree-icon.commit:before {
@@ -97,14 +107,14 @@
   }
 
   a.octotree_opts {
-    top: 18px;
+    top: 16px;
     right: 42px;
 
     & > span {
-      font: normal normal 12px octicons;
+      font: normal normal 15px octicons;
     }
     & > span:before {
-      content: '\f031';
+      content: '\f02f';
     }
   }
 

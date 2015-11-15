@@ -19,11 +19,11 @@ The prebuilt packages for all extensions are located in the  [dist](https://gith
 
 * Safari: drag `safari.safariextz` to the browser and follow on-screen the instructions
 
-__Note__: the Safari build is out of date with the main line because Apple wants to be the only company who forces open-source developers to [pay](http://gizmodo.com/apples-great-new-developer-program-screws-over-safari-d-1710539882) for the privillege of creating free extensions for their little-used browser.
+__Note__: the Safari build is out of date with the main line because Apple wants to be the only company who forces open-source developers to [pay](http://gizmodo.com/apples-great-new-developer-program-screws-over-safari-d-1710539882) for the privilege of creating extensions for their little-used browser.
 
-
-## Access token
-### GitHub
+## Octotree Settings
+### Access Token
+#### GitHub
 Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve repository metadata. By default, it makes unauthenticated requests to the GitHub API. However, there are two situations when requests must be authenticated:
 
 * You access a private repository
@@ -31,26 +31,31 @@ Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve reposit
 
 When that happens, Octotree will ask for your [GitHub personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use). If you don't already have one, [create one](https://github.com/settings/tokens/new), then copy and paste it into the textbox. Note that the minimal scopes that should be granted are `public_repo` and `repo` (if you need access to private repositories).
 
-### GitLab
+#### GitLab
 Octotree uses [GitLab API](http://doc.gitlab.com/ce/api/) to retrieve repository metadata. By default, Octotree attempts to retrieve the access token embedded in the GitLab DOM and use the token to authenticate against the GitLab API. If Octotree cannot retrieve the token, it will prompt you to [create one](https://gitlab.com/profile/account).
 
-
-## Enterprise deployment
+### Enterprise URLs
 By default, Octotree only works on `github.com` and `gitlab.com`. To support enterprise version on Chrome and Opera, you must grant Octotree sufficient permissions. Follow these steps to do so:
 
 * Navigate to any GitHub or GitLab repository
 * Open Octotree's settings panel
-* Fill in the Enterprise URLs textbox, one URL per line
+* Fill in the Enterprise URLs textbox, _one URL per line_
 * Click Save and accept any permission prompt
 * Navigate to your GitHub or GitLab Enterprise site
 * You might be asked to create an [access token](#access-token)
+
+### Other Settings
+* __Hotkeys__: Octotree uses [keymaster](https://github.com/madrobby/keymaster) to register hotkeys. Checkout the [supported keys](https://github.com/madrobby/keymaster#supported-keys).
+* __Remember sidebar visibility__: if checked, will show or hide Octotree based on its previous visibility.
+* __Show in non-code pages__: if checked, allow Octotree to show in non-code pages such as Issues and Pull Requests.
+* __Load entire tree at once__: if checked, will issue a single API request to load the entire code tree. Could be slow in very large repos, in which case this option should be unchecked.
 
 
 ## Changelog
 
 ### v2.0.0
 * Support GitLab
-* Support lazy-load individual folder (GitHub only)
+* Add ability to lazy-load individual folders
 * Simplify Octotree options
 * Support selecting different options for each host
 

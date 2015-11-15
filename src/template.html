@@ -28,14 +28,15 @@
         <form class="octotree_view_body">
           <div>
             <label>Site access token</label>
-            <a href="https://github.com/buunguyen/octotree#access-token" target="_blank" tabIndex="-1">what's this?</a>
+            <a class="octotree_help" href="https://github.com/buunguyen/octotree#octotree-settings" target="_blank" tabIndex="-1">
+              <span></span>
+            </a>
             <input type="text" data-store="TOKEN" data-perhost="true">
           </div>
 
           <div>
             <div>
               <label>Hotkeys</label>
-              <a href="https://github.com/madrobby/keymaster#defining-shortcuts" target="_blank" tabIndex="-1">supported keys</a>
             </div>
             <input type="text" data-store="HOTKEYS">
           </div>
@@ -45,7 +46,7 @@
             <div>
               <label>GitHub Enterprise URLs</label>
             </div>
-            <textarea data-store="GHEURLS" placeholder="https://github.mysite1.com/                                        https://github.mysite2.com/">
+            <textarea data-store="GHEURLS" placeholder="https://github.mysite1.com/__SPACES__https://github.mysite2.com/">
             </textarea>
           </div>
 
@@ -53,7 +54,7 @@
             <div>
               <label>GitLab Enterprise URLs</label>
             </div>
-            <textarea data-store="GLEURLS" placeholder="https://gitlab.mysite1.com/                                        https://gitlab.mysite2.com/">
+            <textarea data-store="GLEURLS" placeholder="https://gitlab.mysite1.com/__SPACES__https://gitlab.mysite2.com/">
             </textarea>
           </div>
           <!-- @endif -->
