@@ -1,20 +1,20 @@
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status !== 'loading') return
 
   chrome.tabs.executeScript(tabId, {
-    code  : 'var injected = window.octotreeInjected; window.octotreeInjected = true; injected;',
-    runAt : 'document_start'
-  }, function(res) {
+    code: 'var injected = window.octotreeInjected; window.octotreeInjected = true; injected;',
+    runAt: 'document_start'
+  }, (res) => {
     if (chrome.runtime.lastError || // don't continue if error (i.e. page isn't in permission list)
         res[0]) // value of `injected` above: don't inject twice
       return
 
-    var cssFiles = [
+    const cssFiles = [
       'jstree.css',
       'octotree.css'
     ]
 
-    var jsFiles = [
+    const jsFiles = [
       'jquery.js',
       'jquery-ui.js',
       'jquery.pjax.js',
@@ -24,28 +24,24 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     ]
 
     eachTask([
-      function(cb) {
-        eachItem(cssFiles, inject('insertCSS'), cb)
-      },
-      function(cb) {
-        eachItem(jsFiles, inject('executeScript'), cb)
-      }
+      (cb) => eachItem(cssFiles, inject('insertCSS'), cb),
+      (cb) => eachItem(jsFiles, inject('executeScript'), cb)
     ])
 
     function inject(fn) {
-      return function(file, cb) {
+      return (file, cb) => {
         chrome.tabs[fn](tabId, { file: file, runAt: 'document_start' }, cb)
       }
     }
   })
 })
 
-chrome.runtime.onMessage.addListener(function(req, sender, sendRes) {
-  var handler = {
-    requestPermissions: function() {
-      var urls = (req.urls || [])
-        .filter(function(url) { return url.trim() !== '' })
-        .map(function(url) {
+chrome.runtime.onMessage.addListener((req, sender, sendRes) => {
+  const handler = {
+    requestPermissions: () => {
+      const urls = (req.urls || [])
+        .filter((url) => url.trim() !== '')
+        .map((url) => {
           if (url.slice(-2) === '/*') return url
           if (url.slice(-1) === '/') return url + '*'
           return url + '/*'
@@ -56,7 +52,7 @@ chrome.runtime.onMessage.addListener(function(req, sender, sendRes) {
         removeUnnecessaryPermissions()
       }
       else {
-        chrome.permissions.request({ origins: urls }, function(granted) {
+        chrome.permissions.request({ origins: urls }, (granted) => {
           sendRes(granted)
           removeUnnecessaryPermissions()
         })
@@ -64,11 +60,18 @@ chrome.runtime.onMessage.addListener(function(req, sender, sendRes) {
       return true
 
       function removeUnnecessaryPermissions() {
-        chrome.permissions.getAll(function(permissions) {
-          var toBeRemovedUrls = permissions.origins.filter(function(url) {
-            return (url !== 'https://github.com/*' || url !== 'https://gitlab.com/*') && !~urls.indexOf(url)
+        const whitelist = urls.concat([
+          'https://github.com/*',
+          'https://gitlab.com/*'
+        ])
+        chrome.permissions.getAll((permissions) => {
+          const toBeRemovedUrls = permissions.origins.filter((url) => {
+            return !~whitelist.indexOf(url)
           })
-          if (toBeRemovedUrls.length) chrome.permissions.remove({ origins: toBeRemovedUrls })
+
+          if (toBeRemovedUrls.length) {
+            chrome.permissions.remove({ origins: toBeRemovedUrls })
+          }
         })
       }
     }
@@ -78,18 +81,15 @@ chrome.runtime.onMessage.addListener(function(req, sender, sendRes) {
 })
 
 function eachTask(tasks, done) {
-  next(0)
-  function next(index) {
+  (function next(index = 0) {
     if (index === tasks.length) done && done()
-    else tasks[index](function() { next(index + 1) })
-  }
+    else tasks[index](() => next(++index))
+  })()
 }
 
 function eachItem(arr, iter, done) {
-  var tasks = arr.map(function(item) {
-    return function(next) {
-      iter(item, next)
-    }
+  const tasks = arr.map((item) => {
+    return (cb) => iter(item, cb)
   })
   return eachTask(tasks, done)
 }

@@ -1,5 +1,3 @@
-'use strict'
-
 const gulp  = require('gulp')
 const path  = require('path')
 const merge = require('event-stream').merge
@@ -9,7 +7,7 @@ const $     = require('gulp-load-plugins')()
 
 // Tasks
 gulp.task('clean', () => {
-  return pipe('./tmp', [$.clean()])
+  return pipe('./tmp', $.clean())
 })
 
 gulp.task('build', (cb) => {
@@ -35,9 +33,12 @@ gulp.task('test', ['build'], (cb) => {
 })
 
 gulp.task('styles', () => {
-  return pipe('./src/styles/octotree.less',
-    [$.less(), $.autoprefixer({cascade: true})],
-    './tmp')
+  return pipe(
+    './src/styles/octotree.less',
+    $.less(),
+    $.autoprefixer({cascade: true}),
+    './tmp'
+  )
 })
 
 // Chrome
@@ -52,12 +53,13 @@ gulp.task('chrome:js', ['chrome:template'], () => {
 gulp.task('chrome', ['chrome:js'], () => {
   return merge(
     pipe('./icons/**/*', './tmp/chrome/icons'),
-    pipe(['./libs/**/*', './tmp/octotree.*', './src/config/chrome/**/*', '!./src/config/chrome/storage.js'], './tmp/chrome/')
+    pipe(['./libs/**/*', './tmp/octotree.*',  './src/config/chrome/manifest.json'], './tmp/chrome/'),
+    pipe('./src/config/chrome/background.js', $.babel(), './tmp/chrome/')
   )
 })
 
 gulp.task('chrome:zip', () => {
-  return pipe('./tmp/chrome/**/*', [$.zip('chrome.zip')], './dist')
+  return pipe('./tmp/chrome/**/*', $.zip('chrome.zip'), './dist')
 })
 
 gulp.task('chrome:_crx', (cb) => {
@@ -77,24 +79,7 @@ gulp.task('opera', ['chrome'], () => {
 })
 
 gulp.task('opera:nex', () => {
-  return pipe('./dist/chrome.crx', [$.rename('opera.nex')], './dist')
-})
-
-// Safari
-gulp.task('safari:template', () => {
-  return buildTemplate({SAFARI: true})
-})
-
-gulp.task('safari:js', ['safari:template'], () => {
-  return buildJs([], {SAFARI: true})
-})
-
-gulp.task('safari', ['safari:js'], () => {
-  return merge(
-    pipe('./icons/**/*', './tmp/safari/octotree.safariextension/icons'),
-    pipe(['./libs/**/*', './tmp/octotree.js', './tmp/octotree.css',
-      './src/config/safari/**/*', '!./src/config/safari/storage.js'], './tmp/safari/octotree.safariextension/')
-  )
+  return pipe('./dist/chrome.crx', $.rename('opera.nex'), './dist')
 })
 
 // Firefox
@@ -109,8 +94,8 @@ gulp.task('firefox:js', ['firefox:template'], () => {
 gulp.task('firefox', ['firefox:js'], () => {
   return merge(
     pipe('./icons/**/*', './tmp/firefox/data/icons'),
-    pipe(['./libs/**/*', './tmp/octotree.js', './tmp/octotree.css'], './tmp/firefox/data'),
-    pipe(['./src/config/firefox/firefox.js'], './tmp/firefox/lib'),
+    pipe(['./libs/**/*', './tmp/octotree.*'], './tmp/firefox/data'),
+    pipe('./src/config/firefox/firefox.js', $.babel(), './tmp/firefox/lib'),
     pipe('./src/config/firefox/package.json', './tmp/firefox')
   )
 })
@@ -119,20 +104,31 @@ gulp.task('firefox:xpi', (cb) => {
   $.run('cd ./tmp/firefox && cfx xpi --output-file=../../dist/firefox.xpi').exec(cb)
 })
 
+// Safari
+gulp.task('safari:template', () => {
+  return buildTemplate({SAFARI: true})
+})
+
+gulp.task('safari:js', ['safari:template'], () => {
+  return buildJs([], {SAFARI: true})
+})
+
+gulp.task('safari', ['safari:js'], () => {
+  return merge(
+    pipe('./icons/**/*', './tmp/safari/octotree.safariextension/icons'),
+    pipe(
+      ['./libs/**/*', './tmp/octotree.*', './src/config/safari/**/*'],
+      './tmp/safari/octotree.safariextension/'
+    )
+  )
+})
+
 // Helpers
-function pipe(src, transforms, dest) {
-  if (typeof transforms === 'string') {
-    dest = transforms
-    transforms = null
-  }
-
-  let stream = gulp.src(src)
-  transforms && transforms.forEach(function (transform) {
-    stream = stream.pipe(transform)
-  })
-
-  if (dest) stream = stream.pipe(gulp.dest(dest))
-  return stream
+function pipe(src, ...transforms) {
+  return transforms.reduce((stream, transform) => {
+    const isDest = typeof transform === 'string'
+    return stream.pipe(isDest ? gulp.dest(transform) : transform)
+  }, gulp.src(src))
 }
 
 function html2js(template) {
@@ -171,16 +167,20 @@ function buildJs(overrides, ctx) {
   ].concat(overrides)
    .concat('./src/octotree.js')
 
-  return pipe(src, [
-    $.babel({presets: ['es2015']}),
+  return pipe(
+    src,
+    $.babel(),
     $.concat('octotree.js'),
     $.preprocess({context: ctx}),
-  ], './tmp')
+    './tmp'
+  )
 }
 
 function buildTemplate(ctx) {
-  return pipe('./src/template.html', [
+  return pipe(
+    './src/template.html',
     $.preprocess({context: ctx}),
-    html2js('const TEMPLATE = \'$$\'')
-  ], './tmp')
+    html2js('const TEMPLATE = \'$$\''),
+    './tmp'
+  )
 }

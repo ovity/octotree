@@ -1,5 +1,5 @@
-var data = require('sdk/self').data
-  , pageMod = require('sdk/page-mod')
+const data = require('sdk/self').data
+const pageMod = require('sdk/page-mod')
 
 pageMod.PageMod({
   include: ['https://github.com/*', 'https://gitlab.com/*'],
