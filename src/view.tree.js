@@ -1,69 +1,28 @@
 class TreeView {
   constructor($dom, store, adapter) {
-    this.$view = $dom.find('.octotree_treeview')
     this.store = store
     this.adapter = adapter
-    this.$view
-      .find('.octotree_view_body')
-      .on('click.jstree', '.jstree-open>a', function () {
-        $.jstree.reference(this).close_node(this)
-      })
-      .on('click.jstree', '.jstree-closed>a', function () {
-        $.jstree.reference(this).open_node(this)
-      })
-      .on('click', function (event) {
-        const self = this
-        let $target = $(event.target)
-        let download = false
-
-        // handle icon click, fix #122
-        if ($target.is('i.jstree-icon')) {
-          $target = $target.parent()
-          download = true
-        }
-
-        if (!$target.is('a.jstree-anchor')) return
-
-        const href = $target.attr('href')
-        const $icon = $target.children().length
-          ? $target.children(':first')
-          : $target.siblings(':first') // handles child links in submodule
-
-        if ($icon.hasClass('commit')) {
-          refocusAfterCompletion()
-          adapter.selectSubmodule(href)
-        }
-        else if ($icon.hasClass('blob')) {
-          if (download) {
-            adapter.downloadFile(href, $target.text())
-          }
-          else {
-            refocusAfterCompletion()
-            adapter.selectFile(href)
-          }
-        }
-
-        // refocus after complete so that keyboard navigation works, fix #158
-        function refocusAfterCompletion() {
-          $(document).one('pjax:success', () => {
-            $.jstree.reference(self).get_container().focus()
-          })
-        }
-      })
+    this.$view = $dom.find('.octotree_treeview')
+    this.$tree = this.$view.find('.octotree_view_body')
+      .on('click.jstree', '.jstree-open>a', ({target}) => this.$jstree.close_node(target))
+      .on('click.jstree', '.jstree-closed>a', ({target}) => this.$jstree.open_node(target))
+      .on('click', this._onItemClick.bind(this))
       .jstree({
         core: { multiple: false, themes : { responsive : false } },
         plugins: ['wholerow']
       })
   }
 
+  get $jstree() {
+    return this.$tree.jstree(true)
+  }
+
   show(repo, token) {
-    const treeContainer = this.$view.find('.octotree_view_body')
-    const tree = treeContainer.jstree(true)
+    const $jstree = this.$jstree
 
-    tree.settings.core.data = (node, cb) => {
+    $jstree.settings.core.data = (node, cb) => {
       const loadAll = this.adapter.canLoadEntireTree() &&
-
-                                      this.store.get(STORE.LOADALL)
+                      this.store.get(STORE.LOADALL)
       node = !loadAll && (node.id === '#' ? {path: ''} : node.original)
 
       this.adapter.loadCodeTree({repo, token, node}, (err, treeData) => {
@@ -80,13 +39,13 @@ class TreeView {
       })
     }
 
-    treeContainer.one('refresh.jstree', () => {
+    this.$tree.one('refresh.jstree', () => {
       this.syncSelection()
       $(this).trigger(EVENT.VIEW_READY)
     })
 
     this._showHeader(repo)
-    tree.refresh(true)
+    $jstree.refresh(true)
   }
 
   _showHeader(repo) {
@@ -138,9 +97,49 @@ class TreeView {
     })
   }
 
+  _onItemClick(event) {
+    let $target = $(event.target)
+    let download = false
+
+    // handle icon click, fix #122
+    if ($target.is('i.jstree-icon')) {
+      $target = $target.parent()
+      download = true
+    }
+
+    if (!$target.is('a.jstree-anchor')) return
+
+    // refocus after complete so that keyboard navigation works, fix #158
+    const refocusAfterCompletion = () => {
+      $(document).one('pjax:success', () => {
+        this.$jstree.get_container().focus()
+      })
+    }
+
+    const adapter = this.adapter
+    const href = $target.attr('href')
+    const $icon = $target.children().length
+      ? $target.children(':first')
+      : $target.siblings(':first') // handles child links in submodule
+
+    if ($icon.hasClass('commit')) {
+      refocusAfterCompletion()
+      adapter.selectSubmodule(href)
+    }
+    else if ($icon.hasClass('blob')) {
+      if (download) {
+        adapter.downloadFile(href, $target.text())
+      }
+      else {
+        refocusAfterCompletion()
+        adapter.selectFile(href)
+      }
+    }
+  }
+
   syncSelection() {
-    const tree = this.$view.find('.octotree_view_body').jstree(true)
-    if (!tree) return
+    const $jstree = this.$jstree
+    if (!$jstree) return
 
     // converts /username/reponame/object_type/branch/path to path
     const path = decodeURIComponent(location.pathname)
@@ -164,10 +163,10 @@ class TreeView {
     function selectPath(paths, index = 0) {
       const nodeId = PREFIX + paths[index]
 
-      if (tree.get_node(nodeId)) {
-        tree.deselect_all()
-        tree.select_node(nodeId)
-        tree.open_node(nodeId, () => {
+      if ($jstree.get_node(nodeId)) {
+        $jstree.deselect_all()
+        $jstree.select_node(nodeId)
+        $jstree.open_node(nodeId, () => {
           if (++index < paths.length) {
             selectPath(paths, index)
           }
