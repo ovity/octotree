@@ -8,7 +8,7 @@ class TreeView {
       .on('click.jstree', '.jstree-closed>a', ({target}) => this.$jstree.open_node(target))
       .on('click', this._onItemClick.bind(this))
       .jstree({
-        core: { multiple: false, themes : { responsive : false } },
+        core: { multiple: false, worker: false, themes : { responsive : false } },
         plugins: ['wholerow']
       })
   }

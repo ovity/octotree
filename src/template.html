@@ -1,7 +1,28 @@
 <div>
   <nav class="octotree_sidebar">
-    <a class="octotree_toggle btn"><div class="loader"></div><span></span></a>
-    <a class="octotree_opts" href="javascript:void(0)"><span></span></a>
+    <a class="octotree_toggle btn">
+      <div class="loader"></div>
+      <span></span>
+
+      <div class="popup">
+        <div class="arrow"></div>
+        <div class="content">
+          Octotree is enabled on this page. Click this button or press
+          <!-- @ifdef SAFARI -->
+          <kbd>cmd b</kbd> (or <kbd>ctrl b</kbd>)
+          <!-- @endif -->
+          <!-- @ifndef SAFARI -->
+          <kbd>cmd shift s</kbd> (or <kbd>ctrl shift s</kbd>)
+          <!-- @endif -->
+          to show it.
+        </div>
+      </div>
+    </a>
+
+    <a class="octotree_opts" href="javascript:void(0)">
+      <span></span>
+    </a>
+
     <div class="octotree_views">
       <div class="octotree_view octotree_treeview current">
         <div class="octotree_view_header"></div>
@@ -78,18 +99,4 @@
       </div>
     </div>
   </nav>
-
-  <div class="octotree_popup">
-    <div class="arrow"></div>
-    <div class="content">
-      Octotree is enabled on this page. Click this button or press
-      <!-- @ifdef SAFARI -->
-      <kbd>cmd b</kbd> (or <kbd>ctrl b</kbd>)
-      <!-- @endif -->
-      <!-- @ifndef SAFARI -->
-      <kbd>cmd shift s</kbd> (or <kbd>ctrl shift s</kbd>)
-      <!-- @endif -->
-      to show it.
-    </div>
-  </div>
 </div>

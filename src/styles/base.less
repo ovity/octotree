@@ -217,57 +217,65 @@ a.octotree_toggle {
       animation: loading .5s infinite linear;
     }
   }
+
   @keyframes loading {
     0%   { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-}
 
-.octotree_popup {
-  position: fixed;
-  cursor: pointer;
-  display: none;
-  opacity: 0;
-  z-index: 1000004;
-  width: 260px;
-  text-align: left;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid rgba(0,0,0,0.15);
-  border-radius: 5px;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.25);
-  white-space: normal;
-  transition: opacity .3s linear;
-
-  &.show {
-    opacity: 1;
-  }
-  & > .arrow, & > .arrow:after {
+  .popup {
     position: absolute;
-    display: block;
-    width: 0;
-    height: 0;
-    border-color: transparent;
-    border-style: solid;
-  }
-  & > .arrow {
-    left: 15px;
-    top: -6px;
-    border-width: 6px;
-    margin-left: -6px;
-    border-top-width: 0;
-    border-bottom-color: rgba(0, 0, 0, .25);
-  }
-  & > .arrow:after {
-    border-width: 5px;
-    content: '';
-    top: 1px;
-    margin-left: -5px;
-    border-top-width: 0;
-    border-bottom-color: #fff;
-  }
-  & > .content {
-    padding: 9px 14px;
-    font-size: 13px;
+    left: 0;
+    top: calc(~"100% + 2px");
+    cursor: pointer;
+    opacity: 0;
+    z-index: 1000004;
+    width: 260px;
+    text-align: left;
+    text-transform: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 5px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+    white-space: normal;
+    transition: opacity .3s linear;
+    font-weight: 400;
+    line-height: 20px;
+
+    &:hover {
+      color: black;
+    }
+    &.show {
+      opacity: 1;
+    }
+    & > .arrow, & > .arrow:after {
+      position: absolute;
+      display: block;
+      width: 0;
+      height: 0;
+      border-color: transparent;
+      border-style: solid;
+    }
+    & > .arrow {
+      left: 15px;
+      top: -6px;
+      border-width: 6px;
+      margin-left: -6px;
+      border-top-width: 0;
+      border-bottom-color: rgba(0, 0, 0, .25);
+    }
+    & > .arrow:after {
+      border-width: 5px;
+      content: '';
+      top: 1px;
+      margin-left: -5px;
+      border-top-width: 0;
+      border-bottom-color: #fff;
+    }
+    & > .content {
+      padding: 9px 14px;
+      font-size: 13px;
+    }
   }
 }
