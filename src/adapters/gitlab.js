@@ -46,10 +46,18 @@ class GitLab extends Adapter {
     $('.octotree_view_body input[type="text"], .octotree_view_body textarea')
       .addClass('form-control')
 
-    // GitLab removes DOM, add back
-    $(document).on(EVENT.LOC_CHANGE, () => {
-      $sidebar.appendTo('body')
-    })
+    /**
+     * GitLab uses Turbolinks to handle page load
+     * https://github.com/rails/turbolinks
+     */
+    $(document)
+      .on('page:update', () => {
+        // GitLab removes DOM, add back
+        $sidebar.appendTo('body')
+        $(document).trigger(EVENT.LOC_CHANGE)
+        $(document).trigger(EVENT.REQ_END)
+      })
+      .on('page:fetch', () => $(document).trigger(EVENT.REQ_START))
   }
 
   // @override

@@ -62,14 +62,12 @@ $(document).ready(() => {
     })
 
     $document
-      .on('pjax:send ' + EVENT.REQ_START, () => $toggler.addClass('octotree_loading'))
-      .on('pjax:end ' + EVENT.REQ_END, () => $toggler.removeClass('octotree_loading'))
-      .on('pjax:timeout', (event) => event.preventDefault())
+      .on(EVENT.REQ_START, () => $toggler.addClass('octotree_loading'))
+      .on(EVENT.REQ_END, () => $toggler.removeClass('octotree_loading'))
       .on(EVENT.LAYOUT_CHANGE, layoutChanged)
       .on(EVENT.TOGGLE, layoutChanged)
       .on(EVENT.LOC_CHANGE, () => {
         layoutChanged()
-        tryLoadRepo()
       })
 
     return tryLoadRepo()
