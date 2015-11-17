@@ -37,9 +37,6 @@ $(document).ready(() => {
       .resize(layoutChanged)
       .appendTo($('body'))
 
-    adapter.init($sidebar)
-    layoutChanged()
-
     $(window).resize((event) => { // handle zoom
       if (event.target === window) layoutChanged()
     })
@@ -67,10 +64,13 @@ $(document).ready(() => {
       .on(EVENT.LAYOUT_CHANGE, layoutChanged)
       .on(EVENT.TOGGLE, layoutChanged)
       .on(EVENT.LOC_CHANGE, () => {
+        tryLoadRepo()
         layoutChanged()
       })
 
-    return tryLoadRepo()
+    adapter.init($sidebar)
+    tryLoadRepo()
+    layoutChanged()
 
     function optionsChanged(event, changes) {
       let reload = false

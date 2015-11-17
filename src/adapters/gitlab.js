@@ -79,6 +79,7 @@ class GitLab extends Adapter {
   updateLayout(sidebarVisible, sidebarWidth) {
     const isNewDesign = $('.navbar-gitlab.header-collapsed, .navbar-gitlab.header-expanded').length > 0
     const glSidebarExpanded = $('.page-with-sidebar').hasClass('page-sidebar-expanded')
+    const toggleVisible = $('.octotree_toggle').is(":visible")
 
     if (isNewDesign) {
       const glSidebarWidth = glSidebarExpanded ? 230 : 62
@@ -95,6 +96,9 @@ class GitLab extends Adapter {
         'top': sidebarVisible ? '' : 8
       })
     }
+
+    // reset if toggle is not visible
+    if (!toggleVisible) $(GL_SHIFTED).css('margin-left',  '')
 
     $(GL_HEADER).css({'z-index': 3, 'margin-left': sidebarVisible ? sidebarWidth : ''})
     $('.page-with-sidebar').css('padding-left', sidebarVisible ? sidebarWidth : '')
