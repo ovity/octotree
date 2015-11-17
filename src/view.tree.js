@@ -111,7 +111,7 @@ class TreeView {
 
     // refocus after complete so that keyboard navigation works, fix #158
     const refocusAfterCompletion = () => {
-      $(document).one('pjax:success', () => {
+      $(document).one('pjax:success page:load', () => {
         this.$jstree.get_container().focus()
       })
     }

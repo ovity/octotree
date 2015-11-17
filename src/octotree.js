@@ -32,12 +32,7 @@ $(document).ready(() => {
     let currRepo = false
     let hasError = false
 
-    $sidebar
-      .width(parseInt(store.get(STORE.WIDTH)))
-      .resize(layoutChanged)
-      .appendTo($('body'))
-
-    $(window).resize((event) => { // handle zoom
+    $(window).resize((event) => {
       if (event.target === window) layoutChanged()
     })
 
@@ -45,7 +40,8 @@ $(document).ready(() => {
     key.filter = () => $toggler.is(':visible')
     key(store.get(STORE.HOTKEYS), toggleSidebarAndSave)
 
-    ;[treeView, errorView, optsView].forEach((view) => {
+    const views = [treeView, errorView, optsView]
+    for (const view of views) {
       $(view)
         .on(EVENT.VIEW_READY, function (event) {
           if (this !== optsView) {
@@ -56,21 +52,22 @@ $(document).ready(() => {
         .on(EVENT.VIEW_CLOSE, () => showView(hasError ? errorView.$view : treeView.$view))
         .on(EVENT.OPTS_CHANGE, optionsChanged)
         .on(EVENT.FETCH_ERROR, (event, err) => showError(err))
-    })
+    }
 
     $document
       .on(EVENT.REQ_START, () => $toggler.addClass('octotree_loading'))
       .on(EVENT.REQ_END, () => $toggler.removeClass('octotree_loading'))
       .on(EVENT.LAYOUT_CHANGE, layoutChanged)
       .on(EVENT.TOGGLE, layoutChanged)
-      .on(EVENT.LOC_CHANGE, () => {
-        tryLoadRepo()
-        layoutChanged()
-      })
+      .on(EVENT.LOC_CHANGE, () => tryLoadRepo())
+
+    $sidebar
+      .width(parseInt(store.get(STORE.WIDTH)))
+      .resize(layoutChanged)
+      .appendTo($('body'))
 
     adapter.init($sidebar)
-    tryLoadRepo()
-    layoutChanged()
+    return tryLoadRepo()
 
     function optionsChanged(event, changes) {
       let reload = false
@@ -129,6 +126,7 @@ $(document).ready(() => {
           $toggler.hide()
           toggleSidebar(false)
         }
+        layoutChanged()
       })
     }
 
@@ -164,12 +162,16 @@ $(document).ready(() => {
 
     function layoutChanged() {
       const width = $sidebar.outerWidth()
-      adapter.updateLayout(isSidebarVisible(), width)
+      adapter.updateLayout(isTogglerVisible(), isSidebarVisible(), width)
       store.set(STORE.WIDTH, width)
     }
 
     function isSidebarVisible() {
       return $html.hasClass(PREFIX)
+    }
+
+    function isTogglerVisible() {
+      return $toggler.is(':visible')
     }
   }
 })

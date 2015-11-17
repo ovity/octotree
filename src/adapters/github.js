@@ -40,7 +40,7 @@ class GitHub extends Adapter {
   }
 
   // @override
-  updateLayout(sidebarVisible, sidebarWidth) {
+  updateLayout(togglerVisible, sidebarVisible, sidebarWidth) {
     const SPACING = 10
     const $containers = $(GH_CONTAINERS)
 

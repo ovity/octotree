@@ -5,7 +5,7 @@ const GL_RESERVED_USER_NAMES = [
 const GL_RESERVED_REPO_NAMES = []
 const GL_HEADER = '.navbar-gitlab'
 const GL_SIDEBAR = '.sidebar-wrapper'
-const GL_SHIFTED = 'h1.title'
+const GL_TITLE = 'h1.title'
 const GL_PROJECT_ID = '#project_id'
 
 class GitLab extends Adapter {
@@ -46,18 +46,15 @@ class GitLab extends Adapter {
     $('.octotree_view_body input[type="text"], .octotree_view_body textarea')
       .addClass('form-control')
 
-    /**
-     * GitLab uses Turbolinks to handle page load
-     * https://github.com/rails/turbolinks
-     */
+    // GitLab uses Turbolinks to handle page load
     $(document)
-      .on('page:update', () => {
+      .on('page:fetch', () => $(document).trigger(EVENT.REQ_START))
+      .on('page:load', () => {
         // GitLab removes DOM, add back
         $sidebar.appendTo('body')
         $(document).trigger(EVENT.LOC_CHANGE)
         $(document).trigger(EVENT.REQ_END)
       })
-      .on('page:fetch', () => $(document).trigger(EVENT.REQ_START))
   }
 
   // @override
@@ -76,29 +73,30 @@ class GitLab extends Adapter {
   }
 
   // @override
-  updateLayout(sidebarVisible, sidebarWidth) {
+  updateLayout(togglerVisible, sidebarVisible, sidebarWidth) {
     const isNewDesign = $('.navbar-gitlab.header-collapsed, .navbar-gitlab.header-expanded').length > 0
     const glSidebarExpanded = $('.page-with-sidebar').hasClass('page-sidebar-expanded')
-    const toggleVisible = $('.octotree_toggle').is(":visible")
 
     if (isNewDesign) {
       const glSidebarWidth = glSidebarExpanded ? 230 : 62
-      $(GL_SHIFTED).css('margin-left',  sidebarVisible ? '' : 36)
+      $(GL_TITLE).css('margin-left',  sidebarVisible ? '' : 36)
       $('.octotree_toggle').css('right', sidebarVisible ? '' : -(glSidebarWidth + 50))
     }
     else {
       const glSidebarWidth = glSidebarExpanded ? 230 : 52
       $(GL_HEADER).css('z-index', 3)
       $(GL_SIDEBAR).css('z-index', 1)
-      $(GL_SHIFTED).css('margin-left',  sidebarVisible ? '' : 56)
+      $(GL_TITLE).css('margin-left',  sidebarVisible ? '' : 56)
       $('.octotree_toggle').css({
-        'right': sidebarVisible ? '' : -102,
-        'top': sidebarVisible ? '' : 8
+        right: sidebarVisible ? '' : -102,
+        top: sidebarVisible ? '' : 8
       })
     }
 
-    // reset if toggle is not visible
-    if (!toggleVisible) $(GL_SHIFTED).css('margin-left',  '')
+    // Reset title margin if toggler is not visible
+    if (!togglerVisible) {
+      $(GL_TITLE).css('margin-left',  '')
+    }
 
     $(GL_HEADER).css({'z-index': 3, 'margin-left': sidebarVisible ? sidebarWidth : ''})
     $('.page-with-sidebar').css('padding-left', sidebarVisible ? sidebarWidth : '')
@@ -139,7 +137,7 @@ class GitLab extends Adapter {
       return cb()
     }
 
-    // get branch by inspecting page, quite fragile so provide multiple fallbacks
+    // Get branch by inspecting page, quite fragile so provide multiple fallbacks
     const GL_BRANCH_SEL_1 = '#repository_ref'
     const GL_BRANCH_SEL_2 = '.select2-container.project-refs-select.select2 .select2-chosen'
     const GL_BRANCH_SEL_3 = '.nav.nav-sidebar .shortcuts-tree'
@@ -166,6 +164,11 @@ class GitLab extends Adapter {
         cb(null, repo)
       })
     }
+  }
+
+  // @override
+  selectFile(path) {
+    Turbolinks.visit(path)
   }
 
   // @override

@@ -245,7 +245,7 @@ class Adapter {
    * Updates the layout based on sidebar visibility and width.
    * @api public
    */
-  updateLayout(sidebarVisible, sidebarWidth) {
+  updateLayout(togglerVisible, sidebarVisible, sidebarWidth) {
     throw new Error('Not implemented')
   }
 
@@ -282,14 +282,6 @@ class Adapter {
     link.setAttribute('href', path.replace(/\/blob\//, '/raw/'))
     link.setAttribute('download', fileName)
     link.click()
-  }
-
-  /**
-   * Keep the sidebar for further purpose: adjust, re-append...
-   * @api public
-   */
-  setSideBar(sidebar) {
-    // dummy method
   }
 
   /**
