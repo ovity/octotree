@@ -15,6 +15,15 @@ const GH_CONTAINERS = '.container'
 
 class GitHub extends Adapter {
 
+  constructor() {
+    super()
+    $(document)
+      .ready(() => this._detectLocationChange())
+      .on('pjax:send', () => $(document).trigger(EVENT.REQ_START))
+      .on('pjax:end', () => $(document).trigger(EVENT.REQ_END))
+      .on('pjax:timeout', (event) => event.preventDefault())
+  }
+
   // @override
   getCssClass() {
     return 'octotree_github_sidebar'
@@ -159,5 +168,34 @@ class GitHub extends Adapter {
     $.ajax(cfg)
       .done((data) => cb(null, data))
       .fail((jqXHR) => this._handleError(jqXHR, cb))
+  }
+
+  /**
+   * When navigating from non-code pages (i.e. Pulls, Issues) to code page
+   * GitHub doesn't reload the page but uses pjax. Need to detect and load Octotree.
+   */
+  _detectLocationChange() {
+    let firstLoad = true, href, hash
+
+    function detect() {
+      if (location.href !== href || location.hash !== hash) {
+        href = location.href
+        hash = location.hash
+
+        // If this is the first time this is called, no need to notify change as
+        // Octotree does its own initialization after loading options.
+        if (firstLoad) {
+          firstLoad = false
+        }
+        else {
+          setTimeout(() => {
+            $(document).trigger(EVENT.LOC_CHANGE, href, hash)
+          }, 200) // Waits a bit for pjax DOM change
+        }
+      }
+
+      setTimeout(detect, 200)
+    }
+    detect()
   }
 }
