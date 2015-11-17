@@ -16,7 +16,8 @@ const GH_CONTAINERS = '.container'
 class GitHub extends Adapter {
 
   constructor() {
-    super()
+    super(['jquery.pjax.js'])
+
     $(document)
       .ready(() => this._detectLocationChange())
       .on('pjax:send', () => $(document).trigger(EVENT.REQ_START))

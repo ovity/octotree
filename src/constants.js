@@ -24,11 +24,11 @@ const DEFAULTS = {
   // @ifndef SAFARI
   HOTKEYS   : '⌘+⇧+s, ⌃+⇧+s',
   // @endif
-  GHEURLS   : '',
-  GLEURLS   : '',
-  WIDTH     : 232,
   POPUP     : false,
-  SHOWN     : false
+  WIDTH     : 232,
+  SHOWN     : false,
+  GHEURLS   : '',
+  GLEURLS   : ''
 }
 
 const EVENT = {

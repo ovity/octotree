@@ -1,68 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>Author</key>
-	<string>Buu Nguyen</string>
-	<key>Builder Version</key>
-	<string>9537.75.14</string>
-	<key>CFBundleDisplayName</key>
-	<string>octotree</string>
-	<key>CFBundleIdentifier</key>
-	<string>com.buunguyen.octotree</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleShortVersionString</key>
-	<string>2.0.0</string>
-	<key>CFBundleVersion</key>
-	<string>2.0.0</string>
-	<key>Chrome</key>
-	<dict/>
-	<key>Content</key>
 	<dict>
-		<key>Scripts</key>
+		<key>Author</key>
+		<string>Buu Nguyen</string>
+		<key>Builder Version</key>
+		<string>9537.75.14</string>
+		<key>CFBundleDisplayName</key>
+		<string>octotree</string>
+		<key>CFBundleIdentifier</key>
+		<string>com.buunguyen.octotree</string>
+		<key>CFBundleInfoDictionaryVersion</key>
+		<string>6.0</string>
+		<key>CFBundleShortVersionString</key>
+		<string>2.0.0</string>
+		<key>CFBundleVersion</key>
+		<string>2.0.0</string>
+		<key>Chrome</key>
+		<dict/>
+		<key>Content</key>
 		<dict>
-			<key>Start</key>
+			<key>Scripts</key>
+			<dict>
+				<key>Start</key>
+				<array>
+					<string>jquery.js</string>
+					<string>jquery-ui.js</string>
+					<string>jstree.js</string>
+					<string>keymaster.js</string>
+					<string>ondemand.js</string>
+					<string>octotree.js</string>
+				</array>
+			</dict>
+			<key>Stylesheets</key>
 			<array>
-				<string>jquery.js</string>
-        <string>jquery-ui.js</string>
-        <string>jquery.pjax.js</string>
-        <string>jstree.js</string>
-        <string>keymaster.js</string>
-        <string>octotree.js</string>
+				<string>jstree.css</string>
+				<string>octotree.css</string>
+			</array>
+			<key>Whitelist</key>
+			<array>
+				<string>https://github.com/*</string>
+				<string>https://gitlab.com/*</string>
 			</array>
 		</dict>
-		<key>Stylesheets</key>
-		<array>
-      <string>jstree.css</string>
-			<string>octotree.css</string>
-		</array>
-    <key>Whitelist</key>
-    <array>
-      <string>https://github.com/*</string>
-      <string>https://gitlab.com/*</string>
-    </array>
-	</dict>
-	<key>Description</key>
-	<string>Display GitHub code in tree format</string>
-	<key>ExtensionInfoDictionaryVersion</key>
-	<string>1.0</string>
-	<key>Permissions</key>
-	<dict>
-		<key>Website Access</key>
+		<key>Description</key>
+		<string>Display GitHub code in tree format</string>
+		<key>ExtensionInfoDictionaryVersion</key>
+		<string>1.0</string>
+		<key>Permissions</key>
 		<dict>
-			<key>Allowed Domains</key>
-			<array>
-				<string>github.com</string>
-				<string>gitlab.com</string>
-			</array>
-			<key>Include Secure Pages</key>
-			<true/>
-			<key>Level</key>
-			<string>Some</string>
+			<key>Website Access</key>
+			<dict>
+				<key>Allowed Domains</key>
+				<array>
+					<string>github.com</string>
+					<string>gitlab.com</string>
+				</array>
+				<key>Include Secure Pages</key>
+				<true/>
+				<key>Level</key>
+				<string>Some</string>
+			</dict>
 		</dict>
+		<key>Website</key>
+		<string>https://github.com/buunguyen/octotree</string>
 	</dict>
-	<key>Website</key>
-	<string>https://github.com/buunguyen/octotree</string>
-</dict>
 </plist>

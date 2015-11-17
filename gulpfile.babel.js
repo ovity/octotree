@@ -1,4 +1,5 @@
 const gulp  = require('gulp')
+const fs    = require('fs')
 const path  = require('path')
 const merge = require('event-stream').merge
 const map   = require('map-stream')
@@ -41,19 +42,32 @@ gulp.task('styles', () => {
   )
 })
 
+gulp.task('lib:ondemand', (cb) => {
+  const dir = './libs/ondemand'
+  const code = fs.readdirSync(dir).map(file => {
+    return `window['${file}'] = function () {
+      ${fs.readFileSync(path.join(dir, file))}
+    };\n`
+  }).join('')
+
+  fs.writeFileSync('./tmp/ondemand.js', code)
+
+  cb()
+})
+
 // Chrome
 gulp.task('chrome:template', () => {
   return buildTemplate({CHROME: true})
 })
 
-gulp.task('chrome:js', ['chrome:template'], () => {
+gulp.task('chrome:js', ['chrome:template', 'lib:ondemand'], () => {
   return buildJs(['./src/config/chrome/overrides.js'], {CHROME: true})
 })
 
 gulp.task('chrome', ['chrome:js'], () => {
   return merge(
     pipe('./icons/**/*', './tmp/chrome/icons'),
-    pipe(['./libs/**/*', './tmp/octotree.*',  './src/config/chrome/manifest.json'], './tmp/chrome/'),
+    pipe(['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js', './src/config/chrome/manifest.json'], './tmp/chrome/'),
     pipe('./src/config/chrome/background.js', $.babel(), './tmp/chrome/')
   )
 })
@@ -87,14 +101,14 @@ gulp.task('firefox:template', () => {
   return buildTemplate({FIREFOX: true})
 })
 
-gulp.task('firefox:js', ['firefox:template'], () => {
+gulp.task('firefox:js', ['firefox:template', 'lib:ondemand'], () => {
   return buildJs([], {FIREFOX: true})
 })
 
 gulp.task('firefox', ['firefox:js'], () => {
   return merge(
     pipe('./icons/**/*', './tmp/firefox/data/icons'),
-    pipe(['./libs/**/*', './tmp/octotree.*'], './tmp/firefox/data'),
+    pipe(['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'], './tmp/firefox/data'),
     pipe('./src/config/firefox/firefox.js', $.babel(), './tmp/firefox/lib'),
     pipe('./src/config/firefox/package.json', './tmp/firefox')
   )
@@ -109,7 +123,7 @@ gulp.task('safari:template', () => {
   return buildTemplate({SAFARI: true})
 })
 
-gulp.task('safari:js', ['safari:template'], () => {
+gulp.task('safari:js', ['safari:template', 'lib:ondemand'], () => {
   return buildJs([], {SAFARI: true})
 })
 
@@ -117,7 +131,7 @@ gulp.task('safari', ['safari:js'], () => {
   return merge(
     pipe('./icons/**/*', './tmp/safari/octotree.safariextension/icons'),
     pipe(
-      ['./libs/**/*', './tmp/octotree.*', './src/config/safari/**/*'],
+      ['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js', './src/config/safari/**/*'],
       './tmp/safari/octotree.safariextension/'
     )
   )

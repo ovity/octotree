@@ -11,7 +11,7 @@ const GL_PROJECT_ID = '#project_id'
 class GitLab extends Adapter {
 
   constructor(store) {
-    super()
+    super(['turbolinks.js'])
 
     // GitLab (for now) embeds access token in the page of a logged-in user.
     // Use it to set the token if one isn't available.

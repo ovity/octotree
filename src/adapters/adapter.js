@@ -1,5 +1,6 @@
 class Adapter {
-  constructor() {
+  constructor(deps) {
+    deps.forEach(dep => window[dep]())
     this._defaultBranch = {}
     this._observe()
   }

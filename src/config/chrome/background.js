@@ -17,10 +17,9 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     const jsFiles = [
       'jquery.js',
       'jquery-ui.js',
-      'jquery.pjax.js',
-      'turbolinks.js',
       'jstree.js',
       'keymaster.js',
+      'ondemand.js',
       'octotree.js'
     ]
 

@@ -119,7 +119,9 @@ $(document).ready(() => {
               currRepo = repo
               treeView.show(repo, token)
             }
-            else treeView.syncSelection()
+            else {
+              treeView.syncSelection()
+            }
           }
         }
         else {
