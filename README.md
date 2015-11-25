@@ -142,7 +142,7 @@ By default, Octotree only works on `github.com` and `gitlab.com`. To support ent
 * And some other minor changes
 
 ## Credits
-* @crashbell for helping with GitLab implementation
+* @crashbell for helping GitLab and others
 * @Ephemera for fixing many bugs
 * @athaeryn and @letunglam for the UI design
 * @pstadler for the [extension icon](https://github.com/pstadler/octofolders)
