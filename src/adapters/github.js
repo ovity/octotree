@@ -108,7 +108,7 @@ class GitHub extends Adapter {
   updateLayout(togglerVisible, sidebarVisible, sidebarWidth) {
     const SPACING = 10
     const $containers = $(GH_CONTAINERS)
-    const autoMarginLeft = ($(document).width() - 980) / 2
+    const autoMarginLeft = ($(document).width() - $containers.width()) / 2
     const shouldPushLeft = sidebarVisible && (autoMarginLeft <= sidebarWidth + SPACING)
 
     $('html').css('margin-left', shouldPushLeft ? sidebarWidth : '')
