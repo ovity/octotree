@@ -2,10 +2,10 @@
 Browser extensions (Chrome, Firefox, Opera and Safari) to display GitHub and GitLab code in tree format. Useful for developers who frequently read source and do not want to download or checkout too many repositories. Features:
 
 * Easy-to-navigate code tree like IDEs
-* Fast browsing with pjax (currently, only GitHub)
-* Customizable hotkey
+* Fast browsing with pjax and Turbolinks
 * Support private repositories (see [instructions](#access-token))
 * Support GitHub and GitLab Enterprise (Chrome and Opera only, see [instructions](#enterprise-urls))
+* __Note__: for Octotree to show on GitLab, must login to GitLab first
 
 ![Octotree on GitHub](docs/github.png)
 ![Octotree on GitLab](docs/gitlab.png)
@@ -56,8 +56,9 @@ By default, Octotree only works on `github.com` and `gitlab.com`. To support ent
 ## Changelog
 
 ### v2.0.0
-* Support GitLab
+* Support GitLab (note: users must login to GitLab first)
 * Add ability to lazy-load individual folders
+* Support new GitHub layout
 * Simplify Octotree options
 * Support selecting different options for each host
 
@@ -141,8 +142,8 @@ By default, Octotree only works on `github.com` and `gitlab.com`. To support ent
 * And some other minor changes
 
 ## Credits
-* @crashbell for the work on GitLab
-* @Ephemera for many bug fixes
+* @crashbell for helping with GitLab implementation
+* @Ephemera for fixing many bugs
 * @athaeryn and @letunglam for the UI design
 * @pstadler for the [extension icon](https://github.com/pstadler/octofolders)
 * And many other people who submit bug fixes and reports
