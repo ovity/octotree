@@ -106,13 +106,13 @@ class GitHub extends Adapter {
 
   // @override
   updateLayout(togglerVisible, sidebarVisible, sidebarWidth) {
-    const SPACING = 10
+    const sidebarWidthWithSpace = sidebarWidth + 10
     const $containers = $(GH_CONTAINERS)
-    const autoMarginLeft = ($(document).width() - 980) / 2
-    const shouldPushLeft = sidebarVisible && (autoMarginLeft <= sidebarWidth + SPACING)
+    const autoMarginLeft = ($(document).width() - $containers.width()) / 2
+    const shouldPushContent = sidebarVisible && (autoMarginLeft <= sidebarWidthWithSpace)
 
-    $('html').css('margin-left', shouldPushLeft ? sidebarWidth : '')
-    $containers.css('margin-left', shouldPushLeft ? SPACING : '')
+    $('html').css('margin-left', shouldPushContent ? sidebarWidthWithSpace : '')
+    $containers.css('margin-left', shouldPushContent ? 0 : '')
   }
 
   // @override
