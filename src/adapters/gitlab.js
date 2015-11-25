@@ -28,7 +28,7 @@ class GitLab extends Adapter {
   init($sidebar) {
     super.init($sidebar)
 
-    // Triggers layout when the GL sidebar is toggled
+    // Trigger layout when the GL sidebar is toggled
     $('.toggle-nav-collapse').click(() => {
       setTimeout(() => {
         $(document).trigger(EVENT.LAYOUT_CHANGE)
@@ -42,7 +42,7 @@ class GitLab extends Adapter {
       }, 100)
     })
 
-    // Reuses GitLab styles for inputs
+    // Reuse GitLab styles for inputs
     $('.octotree_view_body input[type="text"], .octotree_view_body textarea')
       .addClass('form-control')
 
@@ -50,8 +50,11 @@ class GitLab extends Adapter {
     $(document)
       .on('page:fetch', () => $(document).trigger(EVENT.REQ_START))
       .on('page:load', () => {
-        // GitLab removes DOM, add back
+
+        // GitLab removes DOM, let's add back
         $sidebar.appendTo('body')
+
+        // Trigger location change since the new page might not have projectID
         $(document).trigger(EVENT.LOC_CHANGE)
         $(document).trigger(EVENT.REQ_END)
       })
@@ -124,13 +127,13 @@ class GitLab extends Adapter {
     const username = match[1]
     const reponame = match[2]
 
-    // not a repository, skip
+    // Not a repository, skip
     if (~GL_RESERVED_USER_NAMES.indexOf(username) ||
         ~GL_RESERVED_REPO_NAMES.indexOf(reponame)) {
       return cb()
     }
 
-    // skip non-code page unless showInNonCodePage is true
+    // Skip non-code page unless showInNonCodePage is true
     // with GitLab /username/repo is non-code page
     if (!showInNonCodePage &&
       (!match[3] || (match[3] && !~['tree', 'blob'].indexOf(match[3])))) {

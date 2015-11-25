@@ -10,7 +10,7 @@ const GH_RESERVED_USER_NAMES = [
 ]
 const GH_RESERVED_REPO_NAMES = ['followers', 'following', 'repositories']
 const GH_404_SEL = '#parallax_wrapper'
-const GH_PJAX_SEL = '#js-repo-pjax-container'
+const GH_PJAX_CONTAINER_SEL = '#js-repo-pjax-container, .context-loader-container, [data-pjax-container]'
 const GH_CONTAINERS = '.container'
 
 class GitHub extends Adapter {
@@ -19,10 +19,74 @@ class GitHub extends Adapter {
     super(['jquery.pjax.js'])
 
     $(document)
-      .ready(() => this._detectLocationChange())
       .on('pjax:send', () => $(document).trigger(EVENT.REQ_START))
       .on('pjax:end', () => $(document).trigger(EVENT.REQ_END))
       .on('pjax:timeout', (event) => event.preventDefault())
+  }
+
+  // @override
+  init($sidebar) {
+    super.init($sidebar)
+
+    if (!window.MutationObserver) return
+
+    // Fix #151 by detecting when page layout is updated.
+    // In this case, split-diff page has a wider layout, so need to recompute margin.
+    // Note that couldn't do this in response to URL change, since new DOM via pjax might not be ready.
+    const diffModeObserver = new window.MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (~mutation.oldValue.indexOf('split-diff') ||
+            ~mutation.target.className.indexOf('split-diff')) {
+          return $(document).trigger(EVENT.LAYOUT_CHANGE)
+        }
+      }
+    })
+
+    diffModeObserver.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class'],
+      attributeOldValue: true
+    })
+
+    // GitHub switch pages using pjax. This observer detects if the pjax container
+    // has been updated with new contents and trigger layout.
+    const pageChangeObserver = new window.MutationObserver(() => {
+      // Trigger location change, can't just relayout as Octotree might need to
+      // hide/show depending on whether the current page is a code page or not.
+      return $(document).trigger(EVENT.LOC_CHANGE)
+    })
+
+    const pjaxContainer = $(GH_PJAX_CONTAINER_SEL)[0]
+
+    if (pjaxContainer) {
+      pageChangeObserver.observe(pjaxContainer, {
+        childList: true,
+      })
+    }
+    else { // Fall back if DOM has been changed
+      let firstLoad = true, href, hash
+
+      function detectLocChange() {
+        if (location.href !== href || location.hash !== hash) {
+          href = location.href
+          hash = location.hash
+
+          // If this is the first time this is called, no need to notify change as
+          // Octotree does its own initialization after loading options.
+          if (firstLoad) {
+            firstLoad = false
+          }
+          else {
+            setTimeout(() => {
+              $(document).trigger(EVENT.LOC_CHANGE)
+            }, 300) // Wait a bit for pjax DOM change
+          }
+        }
+        setTimeout(detectLocChange, 200)
+      }
+
+      detectLocChange()
+    }
   }
 
   // @override
@@ -44,15 +108,11 @@ class GitHub extends Adapter {
   updateLayout(togglerVisible, sidebarVisible, sidebarWidth) {
     const SPACING = 10
     const $containers = $(GH_CONTAINERS)
+    const autoMarginLeft = ($(document).width() - 980) / 2
+    const shouldPushLeft = sidebarVisible && (autoMarginLeft <= sidebarWidth + SPACING)
 
-    if ($containers.length === 4) {
-      const autoMarginLeft = ($('body').width() - $containers.width()) / 2
-      const shouldPushLeft = sidebarVisible && (autoMarginLeft <= sidebarWidth + SPACING)
-      $containers.css('margin-left', shouldPushLeft ? sidebarWidth + SPACING : '')
-    }
-
-    // falls-back if GitHub DOM has been updated
-    else $('html').css('margin-left', sidebarVisible ? sidebarWidth + SPACING : '')
+    $('html').css('margin-left', shouldPushLeft ? sidebarWidth : '')
+    $containers.css('margin-left', shouldPushLeft ? SPACING : '')
   }
 
   // @override
@@ -72,32 +132,30 @@ class GitHub extends Adapter {
     const username = match[1]
     const reponame = match[2]
 
-    // not a repository, skip
+    // Not a repository, skip
     if (~GH_RESERVED_USER_NAMES.indexOf(username) ||
         ~GH_RESERVED_REPO_NAMES.indexOf(reponame)) {
       return cb()
     }
 
-    // skip non-code page unless showInNonCodePage is true
+    // Skip non-code page unless showInNonCodePage is true
     if (!showInNonCodePage && match[3] && !~['tree', 'blob'].indexOf(match[3])) {
       return cb()
     }
 
-    // get branch by inspecting page, quite fragile so provide multiple fallbacks
+    // Get branch by inspecting page, quite fragile so provide multiple fallbacks
     const GH_BRANCH_SEL_1 = '[aria-label="Switch branches or tags"]'
     const GH_BRANCH_SEL_2 = '.repo-root a[data-branch]'
-    const GH_BRANCH_SEL_3 = '.repository-sidebar a[aria-label="Code"]'
 
     const branch =
-      // Code page
+      // Detect branch in code page (don't care about non-code pages, let them use the next fallback)
       $(GH_BRANCH_SEL_1).attr('title') || $(GH_BRANCH_SEL_2).data('branch') ||
-      // Non-code page
-      ($(GH_BRANCH_SEL_3).attr('href') || '').match(/([^\/]+)/g)[3] ||
-      // Assume same with previously
-      (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch) ||
-      // Default from cache
+      // Reuse last selected branch if exist
+      (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch)
+      // Get default branch from cache
       this._defaultBranch[username + '/' + reponame]
 
+    // Still no luck, get default branch for real
     const repo = {username: username, reponame: reponame, branch: branch}
 
     if (repo.branch) {
@@ -114,13 +172,13 @@ class GitHub extends Adapter {
 
   // @override
   selectFile(path) {
-    const container = $(GH_PJAX_SEL)
+    const $pjaxContainer = $(GH_PJAX_CONTAINER_SEL)
 
-    if (container.length) {
+    if ($pjaxContainer.length) {
       $.pjax({
         // needs full path for pjax to work with Firefox as per cross-domain-content setting
-        url : location.protocol + '//' + location.host + path,
-        container : container
+        url: location.protocol + '//' + location.host + path,
+        container: $pjaxContainer
       })
     }
     else { // falls back
@@ -169,34 +227,5 @@ class GitHub extends Adapter {
     $.ajax(cfg)
       .done((data) => cb(null, data))
       .fail((jqXHR) => this._handleError(jqXHR, cb))
-  }
-
-  /**
-   * When navigating from non-code pages (i.e. Pulls, Issues) to code page
-   * GitHub doesn't reload the page but uses pjax. Need to detect and load Octotree.
-   */
-  _detectLocationChange() {
-    let firstLoad = true, href, hash
-
-    function detect() {
-      if (location.href !== href || location.hash !== hash) {
-        href = location.href
-        hash = location.hash
-
-        // If this is the first time this is called, no need to notify change as
-        // Octotree does its own initialization after loading options.
-        if (firstLoad) {
-          firstLoad = false
-        }
-        else {
-          setTimeout(() => {
-            $(document).trigger(EVENT.LOC_CHANGE, href, hash)
-          }, 200) // Waits a bit for pjax DOM change
-        }
-      }
-
-      setTimeout(detect, 200)
-    }
-    detect()
   }
 }
