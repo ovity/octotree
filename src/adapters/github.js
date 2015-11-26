@@ -146,10 +146,16 @@ class GitHub extends Adapter {
     // Get branch by inspecting page, quite fragile so provide multiple fallbacks
     const GH_BRANCH_SEL_1 = '[aria-label="Switch branches or tags"]'
     const GH_BRANCH_SEL_2 = '.repo-root a[data-branch]'
+    const GH_BRANCH_SEL_3 = '.repository-sidebar a[aria-label="Code"]'
+    const GH_BRANCH_SEL_4 = 'link[title*="Recent Commits to"]'
 
     const branch =
       // Detect branch in code page (don't care about non-code pages, let them use the next fallback)
       $(GH_BRANCH_SEL_1).attr('title') || $(GH_BRANCH_SEL_2).data('branch') ||
+      // Non-code page
+      ($(GH_BRANCH_SEL_3).attr('href') || ' ').match(/([^\/]+)/g)[3] ||
+      // Non-code page (new design)
+      ($(GH_BRANCH_SEL_4).attr('title') || ' ').match(/([^\:]+)/g)[1] ||
       // Reuse last selected branch if exist
       (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch)
       // Get default branch from cache
