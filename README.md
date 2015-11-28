@@ -23,7 +23,7 @@ The prebuilt packages for all extensions are located in the  [dist](https://gith
 
 __Note__: the Safari build is out of date with the main line because Apple wants to be the only company who forces open-source developers to [pay](http://gizmodo.com/apples-great-new-developer-program-screws-over-safari-d-1710539882) for the privilege of creating extensions for their little-used browser.
 
-## Octotree Settings
+## Settings
 ### Access Token
 #### GitHub
 Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve repository metadata. By default, it makes unauthenticated requests to the GitHub API. However, there are two situations when requests must be authenticated:
@@ -46,11 +46,11 @@ By default, Octotree only works on `github.com` and `gitlab.com`. To support ent
 * Navigate to your GitHub or GitLab Enterprise site
 * You might be asked to create an [access token](#access-token)
 
-### Settings
+### Others
 * __Hotkeys__: Octotree uses [keymaster](https://github.com/madrobby/keymaster) to register hotkeys. Checkout the [supported keys](https://github.com/madrobby/keymaster#supported-keys).
-* __Remember sidebar visibility__: if checked, show Octotree based on its previous visibility.
-* __Show in non-code pages__: if checked, allow Octotree to show in non-code pages such as Issues, Pull Requests and Wiki etc.
-* __Load entire tree at once__: if checked, issue a single API request to load the entire code tree. Could be slow in very large repos, in which case this option should be unchecked.
+* __Remember sidebar visibility__: if checked, show/hide Octotree based on its previous visibility.
+* __Show in non-code pages__: if checked, allow Octotree to show in non-code pages such as Issues and Pull Requests...
+* __Load entire tree at once__: if checked, load and render the entire code tree at once. Should be unchecked if you frequently work with very large repos.
 
 
 ## Changelog
