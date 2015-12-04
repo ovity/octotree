@@ -18,10 +18,10 @@ class GitHub extends Adapter {
   constructor() {
     super(['jquery.pjax.js'])
 
+    $.pjax.defaults.timeout = 0 // no timeout
     $(document)
       .on('pjax:send', () => $(document).trigger(EVENT.REQ_START))
       .on('pjax:end', () => $(document).trigger(EVENT.REQ_END))
-      .on('pjax:timeout', (event) => event.preventDefault())
   }
 
   // @override
