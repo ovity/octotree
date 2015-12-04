@@ -48,19 +48,20 @@ By default, Octotree only works on `github.com` and `gitlab.com`. To support ent
 
 ### Others
 * __Hotkeys__: Octotree uses [keymaster](https://github.com/madrobby/keymaster) to register hotkeys. Checkout the [supported keys](https://github.com/madrobby/keymaster#supported-keys).
-* __Remember sidebar visibility__: if checked, show/hide Octotree based on its previous visibility.
-* __Show in non-code pages__: if checked, allow Octotree to show in non-code pages such as Issues and Pull Requests...
-* __Load entire tree at once__: if checked, load and render the entire code tree at once. Should be unchecked if you frequently work with very large repos.
+* __Remember sidebar visibility__: if checked, show or hide Octotree based on its last visibility.
+* __Show in non-code pages__: if checked, allow Octotree to show in non-code pages such as Issues and Pull Requests.
+* __Load entire tree at once__: if checked, load and render the entire code tree at once. To avoid long loading, this should be unchecked if you frequently work with very large repos.
 
 
 ## Changelog
 
 ### v2.0.0
-* Support GitLab (note: users must login to GitLab first)
+* Support GitLab (require login to GitLab before Octotree shows)
 * Add ability to lazy-load individual folders
+* Simplify Octotree settings
+* Store settings for each host separately
 * Support new GitHub layout
-* Simplify Octotree options
-* Support selecting different options for each host
+* And various bug fixes
 
 ### v1.7.2
 * Fix bug long branches are not loaded correctly due to GitHub DOM change
