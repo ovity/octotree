@@ -151,16 +151,14 @@ class GitHub extends Adapter {
     const GH_BRANCH_SEL_5 = 'link[title*="Recent Commits to"]'
 
     const branch =
-      // Detect branch in code page (don't care about non-code pages, let them use the next fallback)
+      // Detect branch in code page
       $(GH_BRANCH_SEL_1).attr('title') || $(GH_BRANCH_SEL_2).data('branch') ||
-      // Non-code page
+      // Non-code page (old GH design)
       ($(GH_BRANCH_SEL_3).attr('href') || ' ').match(/([^\/]+)/g)[3] ||
-      // Non-code page (new design)
-      // Specific handle /commit page
+      // Non-code page: commit page
       ($(GH_BRANCH_SEL_4).attr('title') || ' ').match(/([^\:]+)/g)[1] ||
-      // Ignore if Github expands one more <link> - use last selected one instead
-      ($(GH_BRANCH_SEL_5).length === 1
-        && ($(GH_BRANCH_SEL_5).attr('title') || ' ').match(/([^\:]+)/g)[1]) ||
+      // Non-code page: others
+      ($(GH_BRANCH_SEL_5).length === 1 && ($(GH_BRANCH_SEL_5).attr('title') || ' ').match(/([^\:]+)/g)[1]) ||
 
       // Reuse last selected branch if exist
       (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch)
