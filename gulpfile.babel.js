@@ -115,7 +115,9 @@ gulp.task('firefox', ['firefox:js'], () => {
 })
 
 gulp.task('firefox:xpi', (cb) => {
-  $.run('cd ./tmp/firefox && cfx xpi --output-file=../../dist/firefox.xpi').exec(cb)
+  // TODO: waiting for --output-file option to be merged
+  // The PR is at https://github.com/mozilla-jetpack/jpm/pull/344
+  $.run('cd ./tmp/firefox && jpm xpi && mv jid1-Om7eJGwA1U8Akg*.xpi ../../dist/firefox.xpi').exec(cb)
 })
 
 // Safari
