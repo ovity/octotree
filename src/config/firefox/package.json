@@ -5,11 +5,9 @@
   "description": "Display GitHub code in tree format",
   "author": "Buu Nguyen",
   "homepage": "https://github.com/buunguyen/octotree",
-  "lib": "lib",
   "main": "lib/firefox",
-  "data": "data",
-  "icon": "data/icons/icon48.png",
-  "icon64": "data/icons/icon64.png",
+  "icon": "resource://jid1-Om7eJGwA1U8Akg-at-jetpack/data/icons/icon48.png",
+  "icon64": "resource://jid1-Om7eJGwA1U8Akg-at-jetpack/data/icons/icon64.png",
   "license": "MIT",
   "version": "2.0.0",
   "permissions": {
