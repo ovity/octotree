@@ -4,7 +4,10 @@
   "description": "Display GitHub code in tree format",
   "main": "inject.js",
   "scripts": {
-    "test": "gulp test"
+    "build": "gulp",
+    "test": "gulp test",
+    "dist": "gulp dist",
+    "ff": "cd ./tmp/firefox && jpm run"
   },
   "repository": {
     "type": "git",
@@ -23,7 +26,6 @@
     "crx": "^0.4.4",
     "event-stream": "*",
     "firefox-profile": "~0.3.6",
-    "gulp": "^3.9.0",
     "gulp-autoprefixer": "0.0.8",
     "gulp-babel": "^6.1.0",
     "gulp-clean": "^0.3.1",
@@ -39,6 +41,7 @@
     "gulp-run-sequence": "*",
     "gulp-util": "^2.2.20",
     "gulp-zip": "^2.0.1",
+    "jpm": "^1.0.3",
     "map-stream": "*",
     "mocha": "2.0.1",
     "request": "~2.48.0",
