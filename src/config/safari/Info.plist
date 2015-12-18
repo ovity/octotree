@@ -44,7 +44,7 @@
 			</array>
 		</dict>
 		<key>Description</key>
-		<string>Display GitHub code in tree format</string>
+		<string>Code tree for GitHub and GitLab</string>
 		<key>ExtensionInfoDictionaryVersion</key>
 		<string>1.0</string>
 		<key>Permissions</key>

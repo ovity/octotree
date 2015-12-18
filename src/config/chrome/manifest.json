@@ -1,9 +1,9 @@
 {
   "name": "Octotree",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "manifest_version": 2,
   "author": "Buu Nguyen",
-  "description": "Display GitHub code in tree format",
+  "description": "Code tree for GitHub and GitLab",
   "homepage_url": "https://github.com/buunguyen/octotree",
   "icons": {
     "128": "icons/icon128.png"

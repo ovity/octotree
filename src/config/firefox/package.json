@@ -2,7 +2,7 @@
   "name": "octotree",
   "title": "Octotree",
   "id": "jid1-Om7eJGwA1U8Akg@jetpack",
-  "description": "Display GitHub code in tree format",
+  "description": "Code tree for GitHub and GitLab",
   "author": "Buu Nguyen",
   "homepage": "https://github.com/buunguyen/octotree",
   "main": "lib/firefox",
