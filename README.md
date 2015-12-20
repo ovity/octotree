@@ -5,6 +5,7 @@ Browser extensions (Chrome, Firefox, Opera and Safari) to display GitHub and Git
 * Fast browsing with pjax and Turbolinks
 * Support private repositories (see [instructions](#access-token))
 * Support GitHub and GitLab Enterprise (Chrome and Opera only, see [instructions](#enterprise-urls))
+
 * __Note__: for Octotree to show on GitLab, must login to GitLab first
 
 ![Octotree on GitHub](docs/github.png)
@@ -15,13 +16,10 @@ Browser extensions (Chrome, Firefox, Opera and Safari) to display GitHub and Git
 * Navigate to any GitHub repository (or just refresh this page as an example)
 * The code tree should show on the left-hand side of the screen
 
-
 ## Install on Safari
 The prebuilt packages for all extensions are located in the  [dist](https://github.com/buunguyen/octotree/tree/master/dist) folder. For security reason, only download Octotree from this location.
 
 * Safari: drag `safari.safariextz` to the browser and follow on-screen the instructions
-
-__Note__: the Safari build is out of date with the main line because Apple wants to be the only company who forces open-source developers to [pay](http://gizmodo.com/apples-great-new-developer-program-screws-over-safari-d-1710539882) for the privilege of creating extensions for their little-used browser.
 
 ## Settings
 ### Access Token

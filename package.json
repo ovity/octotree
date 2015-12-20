@@ -41,7 +41,7 @@
     "gulp-run-sequence": "*",
     "gulp-util": "^2.2.20",
     "gulp-zip": "^2.0.1",
-    "jpm": "^1.0.3",
+    "jpm": "^1.0.4",
     "map-stream": "*",
     "mocha": "2.0.1",
     "request": "~2.48.0",
