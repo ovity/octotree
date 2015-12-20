@@ -17,9 +17,17 @@ Browser extensions (Chrome, Firefox, Opera and Safari) to display GitHub and Git
 * The code tree should show on the left-hand side of the screen
 
 ## Install on Safari
+
+Octotree is not available on the Safari gallery. Instead, you must use the prebuilt package or build one from source.
+
+* Download the [Safari prebuilt package](https://github.com/buunguyen/octotree/tree/master/dist)
+* Double-click or drag it to Safari
+
+## Install from prebuilt packages (all browsers)
+
 The prebuilt packages for all extensions are located in the  [dist](https://github.com/buunguyen/octotree/tree/master/dist) folder. For security reason, only download Octotree from this location.
 
-* Safari: drag `safari.safariextz` to the browser and follow on-screen the instructions
+Firefox 43+ requires add-ons to be signed. Therefore, you should install Octotree from the Mozilla store. For some reason if you want to install the prebuilt package instead, you have to [disable sign-check](https://github.com/buunguyen/octotree/issues/220#issuecomment-166012724).
 
 ## Settings
 ### Access Token

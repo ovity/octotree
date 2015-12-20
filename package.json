@@ -1,6 +1,6 @@
 {
   "name": "octotree",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "description": "Code tree for GitHub and GitLab",
   "main": "inject.js",
   "scripts": {
