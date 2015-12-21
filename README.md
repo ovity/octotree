@@ -5,27 +5,26 @@ Browser extensions (Chrome, Firefox, Opera and Safari) to display GitHub and Git
 * Fast browsing with pjax and Turbolinks
 * Support private repositories (see [instructions](#access-token))
 * Support GitHub and GitLab Enterprise (Chrome and Opera only, see [instructions](#enterprise-urls))
-
 * __Note__: for Octotree to show on GitLab, must login to GitLab first
 
 ![Octotree on GitHub](docs/github.png)
 ![Octotree on GitLab](docs/gitlab.png)
 
-## Install on Chrome, Firefox and Opera
+### Install on Chrome, Firefox and Opera
 * Install Octotree from [Chrome Web Store](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc), [Mozilla Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/octotree/) or [Opera Add-ons Store](https://addons.opera.com/en/extensions/details/octotree/)
 * Navigate to any GitHub repository (or just refresh this page as an example)
 * The code tree should show on the left-hand side of the screen
 
-## Install on Safari
+### Install on Safari
 
 Octotree is not available on the Safari gallery. Instead, you must use the prebuilt package or build one from source.
 
 * Download the [Safari prebuilt package](https://github.com/buunguyen/octotree/tree/master/dist)
 * Double-click or drag it to Safari
 
-## Install from prebuilt packages (all browsers)
+### Install prebuilt packages (all browsers)
 
-The prebuilt packages for all extensions are located in the  [dist](https://github.com/buunguyen/octotree/tree/master/dist) folder. For security reason, only download Octotree from this location.
+The prebuilt packages are available in the  [dist](https://github.com/buunguyen/octotree/tree/master/dist) folder. For security reason, only download Octotree from this location.
 
 Firefox 43+ requires add-ons to be signed. Therefore, you should install Octotree from the Mozilla store. For some reason if you want to install the prebuilt package instead, you have to [disable sign-check](https://github.com/buunguyen/octotree/issues/220#issuecomment-166012724).
 
