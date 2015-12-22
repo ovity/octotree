@@ -98,7 +98,7 @@ var controls = {
   ghBreadcrumb    : '.breadcrumb .final-path',
   ghSearch        : '.js-site-search-field',
 
-  helpPopup       : '.octotree_popup',
+  helpPopup       : '.popup',
   toggleButton    : '.octotree_toggle',
   sidebar         : '.octotree_sidebar',
   branchLabel     : '.octotree_header_branch',
