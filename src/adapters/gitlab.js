@@ -6,7 +6,6 @@ const GL_RESERVED_REPO_NAMES = []
 const GL_HEADER = '.navbar-gitlab'
 const GL_SIDEBAR = '.sidebar-wrapper'
 const GL_TITLE = 'h1.title'
-const GL_PROJECT_ID = '#project_id'
 
 class GitLab extends Adapter {
 
@@ -54,7 +53,7 @@ class GitLab extends Adapter {
         // GitLab removes DOM, let's add back
         $sidebar.appendTo('body')
 
-        // Trigger location change since the new page might not have projectID
+        // Trigger location change since the new page might not a repo page
         $(document).trigger(EVENT.LOC_CHANGE)
         $(document).trigger(EVENT.REQ_END)
       })
@@ -110,11 +109,6 @@ class GitLab extends Adapter {
 
     // 404 page, skip - GitLab doesn't have specific element for Not Found page
     if ($(document).find('title').text() === 'The page you\'re looking for could not be found (404)') {
-      return cb()
-    }
-
-    // We need project ID
-    if (!$(GL_PROJECT_ID).length) {
       return cb()
     }
 
@@ -200,9 +194,9 @@ class GitLab extends Adapter {
   }
 
   _get(path, opts, cb) {
-    const projectId = $(GL_PROJECT_ID).val()
+    const repo = opts.repo
     const host = `${location.protocol}//${location.host}/api/v3`
-    const url = `${host}/projects/${projectId}/repository${path}&private_token=${opts.token}`
+    const url = `${host}/projects/${repo.username}%2f${repo.reponame}/repository${path}&private_token=${opts.token}`
     const cfg = { url, method: 'GET', cache: false }
 
     $.ajax(cfg)
