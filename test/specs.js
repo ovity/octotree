@@ -42,7 +42,7 @@ function runTest(browser) {
 
       yit('should create toggle button and sidebar', function *() {
         assert.ok(yield po.toggleButton.isDisplayed())
-        assert.equal(yield po.sidebar.getCssValue('width'), '251px')
+        assert.equal(yield po.sidebar.getCssValue('width'), '232px')
       })
 
       yit('should display help popup', function *() {
