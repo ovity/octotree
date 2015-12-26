@@ -5,7 +5,6 @@ Browser extensions (Chrome, Firefox, Opera and Safari) to display GitHub and Git
 * Fast browsing with pjax and Turbolinks
 * Support private repositories (see [instructions](#access-token))
 * Support GitHub and GitLab Enterprise (Chrome and Opera only, see [instructions](#enterprise-urls))
-* __Note__: for Octotree to show on GitLab, must login to GitLab first
 
 ![Octotree on GitHub](docs/github.png)
 ![Octotree on GitLab](docs/gitlab.png)
@@ -24,7 +23,7 @@ Octotree is not available on the Safari gallery. Instead, you must use the prebu
 
 ### Install prebuilt packages (all browsers)
 
-The prebuilt packages are available in the  [dist](https://github.com/buunguyen/octotree/tree/master/dist) folder. For security reason, only download Octotree from this location.
+Prebuilt packages are available in the  [dist](https://github.com/buunguyen/octotree/tree/master/dist) folder. For security reason, only download Octotree from this location.
 
 Firefox 43+ requires add-ons to be signed. Therefore, you should install Octotree from the Mozilla store. For some reason if you want to install the prebuilt package instead, you have to [disable sign-check](https://github.com/buunguyen/octotree/issues/220#issuecomment-166012724).
 
@@ -61,7 +60,7 @@ By default, Octotree only works on `github.com` and `gitlab.com`. To support ent
 ## Changelog
 
 ### v2.0.0
-* Support GitLab (require login to GitLab before Octotree shows)
+* Support GitLab
 * Add ability to lazy-load individual folders
 * Simplify Octotree settings
 * Store settings for each host separately
