@@ -82,30 +82,25 @@ class GitLab extends Adapter {
     const glSidebarExpanded = $('.page-with-sidebar').hasClass('page-sidebar-expanded')
 
     if (isNewDesign) {
+      console.log('new ')
       const glSidebarWidth = glSidebarExpanded ? 230 : 62
-      $(GL_TITLE).css('margin-left',  sidebarVisible ? '' : 36)
+      $(GL_TITLE).css('margin-left',  (!togglerVisible || sidebarVisible) ? '' : 36)
       $('.octotree_toggle').css('right', sidebarVisible ? '' : -(glSidebarWidth + 50))
+      $(GL_HEADER).css({'z-index': 3, 'margin-left': sidebarVisible ? sidebarWidth : ''})
+      $('.page-with-sidebar').css('padding-left', sidebarVisible ? sidebarWidth : '')
     }
     else {
-      const glSidebarWidth = glSidebarExpanded ? 230 : 52
       $(GL_HEADER).css('z-index', 3)
       $(GL_SIDEBAR).css('z-index', 1)
       $(GL_TITLE).css('margin-left',  sidebarVisible ? '' : 56)
-      // GL_CONTENT and GL_MAIN_NAV is Special for earlier GitLab such as version 7.5.3 b656b85
-      $(GL_CONTENT).parent().add(GL_MAIN_NAV).css('margin-left', sidebarVisible ? 230 : '')
       $('.octotree_toggle').css({
         right: sidebarVisible ? '' : -102,
-        top: sidebarVisible ? '' : 8
+        top: sidebarVisible ? '' : 0
       })
-    }
 
-    // Reset title margin if toggler is not visible
-    if (!togglerVisible) {
-      $(GL_TITLE).css('margin-left',  '')
+      // Deals with GitLab 7.5
+      $(GL_CONTENT).parent().add(GL_MAIN_NAV).css('margin-left', sidebarVisible ? 230 : '')
     }
-
-    $(GL_HEADER).css({'z-index': 3, 'margin-left': sidebarVisible ? sidebarWidth : ''})
-    $('.page-with-sidebar').css('padding-left', sidebarVisible ? sidebarWidth : '')
   }
 
   // @override
