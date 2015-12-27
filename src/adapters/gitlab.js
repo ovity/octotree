@@ -82,7 +82,6 @@ class GitLab extends Adapter {
     const glSidebarExpanded = $('.page-with-sidebar').hasClass('page-sidebar-expanded')
 
     if (isNewDesign) {
-      console.log('new ')
       const glSidebarWidth = glSidebarExpanded ? 230 : 62
       $(GL_TITLE).css('margin-left',  (!togglerVisible || sidebarVisible) ? '' : 36)
       $('.octotree_toggle').css('right', sidebarVisible ? '' : -(glSidebarWidth + 50))
