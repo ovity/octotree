@@ -6,6 +6,8 @@ const GL_RESERVED_REPO_NAMES = []
 const GL_HEADER = '.navbar-gitlab'
 const GL_SIDEBAR = '.sidebar-wrapper'
 const GL_TITLE = 'h1.title'
+const GL_CONTENT = '.container>.content'
+const GL_MAIN_NAV = '.main-nav'
 
 class GitLab extends Adapter {
 
@@ -89,6 +91,8 @@ class GitLab extends Adapter {
       $(GL_HEADER).css('z-index', 3)
       $(GL_SIDEBAR).css('z-index', 1)
       $(GL_TITLE).css('margin-left',  sidebarVisible ? '' : 56)
+      // GL_CONTENT and GL_MAIN_NAV is Special for earlier GitLab such as version 7.5.3 b656b85
+      $(GL_CONTENT).parent().add(GL_MAIN_NAV).css('margin-left', sidebarVisible ? 230 : '')
       $('.octotree_toggle').css({
         right: sidebarVisible ? '' : -102,
         top: sidebarVisible ? '' : 8
