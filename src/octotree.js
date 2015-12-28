@@ -11,7 +11,9 @@ $(document).ready(() => {
   }
 
   function createAdapter() {
-    const githubUrls = store.get(STORE.GHEURLS).split(/\n/).concat('https://github.com')
+    const githubUrls = store.get(STORE.GHEURLS).split(/\n/)
+      .map((url) => url.replace(/(.*?:\/\/[^/]+)(.*)/, '$1'))
+      .concat('https://github.com')
     return ~githubUrls.indexOf(location.protocol + '//' + location.host)
       ? new GitHub(store)
       : new GitLab(store)
