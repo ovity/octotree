@@ -1,5 +1,6 @@
 ### v2.0.3
 * Fix bug cannot load Octotree in GitHub Enterprise
+* No longer need to login to GitLab before showing tree
 
 ### v2.0.0
 * Support GitLab
