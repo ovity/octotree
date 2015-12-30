@@ -115,6 +115,12 @@ class Adapter {
            Please try again later.`
         needAuth = false
         break
+      case 206:
+        error = 'Repo too large'
+        message =
+          `This repository is too large to be retrieved at once.
+           If you frequently work with this repository, go to Settings and unselect the "Load entire tree at once" option.`
+        break
       case 401:
         error = 'Invalid token'
         message =

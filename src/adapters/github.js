@@ -207,8 +207,8 @@ class GitHub extends Adapter {
   // @override
   _getTree(path, opts, cb) {
     this._get(`/git/trees/${path}`, opts, (err, res) => {
-      if (err) return cb(err)
-      cb(null, res.tree)
+      if (err) cb(err)
+      else cb(null, res.tree)
     })
   }
 
@@ -235,7 +235,12 @@ class GitHub extends Adapter {
     }
 
     $.ajax(cfg)
-      .done((data) => cb(null, data))
+      .done((data) => {
+        if (path.indexOf('/git/trees') === 0 && data.truncated) {
+          this._handleError({status: 206}, cb)
+        }
+        else cb(null, data)
+      })
       .fail((jqXHR) => this._handleError(jqXHR, cb))
   }
 }
