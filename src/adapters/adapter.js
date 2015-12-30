@@ -119,7 +119,7 @@ class Adapter {
         error = 'Repo too large'
         message =
           `This repository is too large to be retrieved at once.
-           If you frequently work with this repository, go to Settings and unselect the "Load entire tree at once" option.`
+           If you frequently work with this repository, go to Settings and uncheck the "Load entire tree at once" option.`
         break
       case 401:
         error = 'Invalid token'
