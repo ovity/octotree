@@ -1,10 +1,10 @@
-const gulp  = require('gulp')
-const fs    = require('fs')
-const path  = require('path')
-const merge = require('event-stream').merge
-const map   = require('map-stream')
-const spawn = require('child_process').spawn
-const $     = require('gulp-load-plugins')()
+import gulp from 'gulp'
+import fs from 'fs'
+import path from 'path'
+import {merge} from 'event-stream'
+import map from 'map-stream'
+import {spawn} from 'child_process'
+const $ = require('gulp-load-plugins')()
 
 // Tasks
 gulp.task('clean', () => {
