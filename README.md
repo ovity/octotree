@@ -6,8 +6,8 @@ Browser extensions (Chrome, Firefox, Opera and Safari) to display GitHub and Git
 * Support private repositories (see [instructions](#access-token))
 * Support GitHub and GitLab Enterprise (Chrome and Opera only, see [instructions](#enterprise-urls))
 
-![Octotree on GitHub](docs/github.png)
-![Octotree on GitLab](docs/gitlab.png)
+![Octotree on GitHub](docs/chrome-github.png)
+![Octotree on GitLab](docs/chrome-gitlab.png)
 
 ### Install on Chrome, Firefox and Opera
 * Install Octotree from [Chrome Web Store](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc), [Mozilla Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/octotree/) or [Opera Add-ons Store](https://addons.opera.com/en/extensions/details/octotree/)
