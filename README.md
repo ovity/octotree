@@ -57,8 +57,7 @@ By default, Octotree only works on `github.com` and `gitlab.com`. To support ent
 * __Load entire tree at once__: if checked, load and render the entire code tree at once. To avoid long loading, this should be unchecked if you frequently work with very large repos.
 
 ## Credits
-* @crashbell for helping GitLab and others
+* @crashbell for helping with GitLab and others
 * @Ephemera for fixing many bugs
-* @athaeryn and @letunglam for the UI design
-* @pstadler for the [extension icon](https://github.com/pstadler/octofolders)
+* @athaeryn and @letunglam for helping with UI design
 * And many other people who submit bug fixes and reports
