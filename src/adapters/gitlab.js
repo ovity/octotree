@@ -103,6 +103,11 @@ class GitLab extends Adapter {
   }
 
   // @override
+  getPath(path) {
+    return path
+  }
+
+  // @override
   getRepoFromPath(showInNonCodePage, currentRepo, token, cb) {
 
     // 404 page, skip - GitLab doesn't have specific element for Not Found page
