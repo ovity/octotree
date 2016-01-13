@@ -74,7 +74,7 @@ class Adapter {
             }
             else if (type === 'blob') {
               item.a_attr = {
-                href: `/${repo.username}/${repo.reponame}/${type}/${repo.branch}/${this.getPath(path)}`
+                href: `/${repo.username}/${repo.reponame}/${type}/${repo.branch}/${encodeURIComponent(path)}`
               }
             }
             else if (type === 'commit') {
@@ -223,14 +223,6 @@ class Adapter {
    */
   getCreateTokenUrl() {
     throw new Error('Not implemented')
-  }
-
-  /**
-   * Gets url for path.
-   * @api public
-   */
-  getPath(path) {
-    return encodeURIComponent(path)
   }
 
   /**
