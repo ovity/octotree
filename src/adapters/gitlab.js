@@ -79,7 +79,7 @@ class GitLab extends Adapter {
   // @override
   updateLayout(togglerVisible, sidebarVisible, sidebarWidth) {
     const isNewDesign = $('.navbar-gitlab.header-collapsed, .navbar-gitlab.header-expanded').length > 0
-    const glSidebarExpanded = $('.page-with-sidebar').hasClass('page-sidebar-expanded')
+    const glSidebarExpanded = $('.page-with-sidebar').hasClass('page-sidebar-expanded') && $(document).width() > 1199
 
     if (isNewDesign) {
       const glSidebarWidth = glSidebarExpanded ? 230 : 62
