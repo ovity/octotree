@@ -1,34 +1,36 @@
 const PREFIX = 'octotree'
 
 const STORE = {
-  TOKEN     : 'octotree.access_token',
-  REMEMBER  : 'octotree.remember',
-  NONCODE   : 'octotree.noncode_shown',
-  HOTKEYS   : 'octotree.hotkeys',
-  LOADALL   : 'octotree.loadall',
-  POPUP     : 'octotree.popup_shown',
-  WIDTH     : 'octotree.sidebar_width',
-  SHOWN     : 'octotree.sidebar_shown',
-  GHEURLS   : 'octotree.gheurls.shared',
-  GLEURLS   : 'octotree.gleurls.shared'
+  TOKEN       : 'octotree.access_token',
+  REMEMBER    : 'octotree.remember',
+  NONCODE     : 'octotree.noncode_shown',
+  HOTKEYS     : 'octotree.hotkeys',
+  LOADALL     : 'octotree.loadall',
+  POPUP       : 'octotree.popup_shown',
+  WIDTH       : 'octotree.sidebar_width',
+  SHOWN       : 'octotree.sidebar_shown',
+  GHEURLS     : 'octotree.gheurls.shared',
+  GLEURLS     : 'octotree.gleurls.shared',
+  PATH_ENCODE : 'octotree.path_encode'
 }
 
 const DEFAULTS = {
-  TOKEN     : '',
-  REMEMBER  : true,
-  NONCODE   : true,
-  LOADALL   : true,
+  TOKEN       : '',
+  REMEMBER    : true,
+  NONCODE     : true,
+  LOADALL     : true,
   // @ifdef SAFARI
-  HOTKEYS   : '⌘+b, ⌃+b',
+  HOTKEYS     : '⌘+b, ⌃+b',
   // @endif
   // @ifndef SAFARI
-  HOTKEYS   : '⌘+⇧+s, ⌃+⇧+s',
+  HOTKEYS     : '⌘+⇧+s, ⌃+⇧+s',
   // @endif
-  POPUP     : false,
-  WIDTH     : 232,
-  SHOWN     : false,
-  GHEURLS   : '',
-  GLEURLS   : ''
+  POPUP       : false,
+  WIDTH       : 232,
+  SHOWN       : false,
+  GHEURLS     : '',
+  GLEURLS     : '',
+  PATH_ENCODE : true
 }
 
 const EVENT = {

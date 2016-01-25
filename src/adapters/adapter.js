@@ -1,5 +1,6 @@
 class Adapter {
-  constructor(deps) {
+  constructor(store, deps) {
+    this.path_encode = store.get(STORE.PATH_ENCODE);
     deps.forEach(dep => window[dep]())
     this._defaultBranch = {}
   }
@@ -73,8 +74,12 @@ class Adapter {
               item.a_attr = { href: '#' }
             }
             else if (type === 'blob') {
+              let path_glue = path;
+              if (this.path_encode) {
+                path_glue = encodeURIComponent(path);
+              }
               item.a_attr = {
-                href: `/${repo.username}/${repo.reponame}/${type}/${repo.branch}/${encodeURIComponent(path)}`
+                href: `/${repo.username}/${repo.reponame}/${type}/${repo.branch}/${path_glue}`
               }
             }
             else if (type === 'commit') {
