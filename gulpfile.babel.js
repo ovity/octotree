@@ -67,6 +67,7 @@ gulp.task('chrome:js', ['chrome:template', 'lib:ondemand'], () => {
 gulp.task('chrome', ['chrome:js'], () => {
   return merge(
     pipe('./icons/**/*', './tmp/chrome/icons'),
+    pipe('./fonts/**/*', './tmp/chrome/fonts'),
     pipe(['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js', './src/config/chrome/manifest.json'], './tmp/chrome/'),
     pipe('./src/config/chrome/background.js', $.babel(), './tmp/chrome/')
   )

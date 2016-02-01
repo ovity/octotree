@@ -1,3 +1,7 @@
+### v2.0.4
+* Fix font icons issue as GitHub switches to SVG
+* Fix toggle button position when GitLab is in compact mode
+
 ### v2.0.3
 * Fix bug cannot load Octotree in GitHub Enterprise
 * No longer need to login to GitLab before showing tree
