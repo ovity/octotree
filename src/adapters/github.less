@@ -96,10 +96,13 @@
   a.octotree_opts {
     top: 16px;
     right: 38px;
+    width: 14px;
+    height: 14px;
+    background: data-uri('image/svg+xml;charset=UTF-8','../../icons/github-icons/gear.svg');
+  }
 
-    & > span:before {
-      content: data-uri('image/svg+xml;charset=UTF-8','../../icons/github-icons/gear.svg');
-    }
+  a.octotree_opts:hover {
+    background: data-uri('image/svg+xml;charset=UTF-8','../../icons/github-icons/gear-hover.svg');
   }
 
   a.octotree_toggle {
