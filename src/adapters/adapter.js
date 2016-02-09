@@ -157,7 +157,7 @@ class Adapter {
           message =
             `You are not allowed to access the API.
              You might need to provide an access token.
-             Follow <a href="${getCreateTokenUrl()}" target="_blank">this link</a>
+             Follow <a href="${this.getCreateTokenUrl()}" target="_blank">this link</a>
              to create one and paste it below.`
           needAuth = true
           break
