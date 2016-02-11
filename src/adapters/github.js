@@ -236,7 +236,7 @@ class GitHub extends Adapter {
 
     $.ajax(cfg)
       .done((data) => {
-        if (path.indexOf('/git/trees') === 0 && data.truncated) {
+        if (path && path.indexOf('/git/trees') === 0 && data.truncated) {
           this._handleError({status: 206}, cb)
         }
         else cb(null, data)
