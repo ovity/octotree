@@ -105,6 +105,7 @@ $(document).ready(() => {
       adapter.getRepoFromPath(showInNonCodePage, currRepo, token, (err, repo) => {
         if (err) {
           showError(err)
+          helpPopup.clean()
         }
         else if (repo) {
           $toggler.show()
