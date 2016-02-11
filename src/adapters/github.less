@@ -1,10 +1,3 @@
-@font-face {
-  font-family: 'octicons';
-  src: url('chrome-extension://__MSG_@@extension_id__/fonts/octicons.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
 .octotree {
   .octotree_github_only {
     display: none;
@@ -14,7 +7,7 @@
     a.octotree_toggle {
       right: 5px;
       &:not(.octotree_loading) > span:after {
-        content: '\f0a4';
+        content: data-uri('image/svg+xml;charset=UTF-8', '../../icons/github-icons/chevron-left.svg');
       }
     }
   }
@@ -42,12 +35,8 @@
       }
 
       .octotree_help {
-        & > span {
-          font: normal normal 15px octicons;
-          color: black;
-        }
         & > span:before {
-          content: '\f02c';
+          content: data-uri('image/svg+xml;charset=UTF-8', '../../icons/github-icons/question.svg');
         }
       }
     }
@@ -57,33 +46,27 @@
         font-size: 13px;
       }
       .octotree_header_repo:before {
-        font-family: octicons;
-        content: '\f001';
+        content: data-uri('image/svg+xml;charset=UTF-8', '../../icons/github-icons/repo.svg');
       }
       .octotree_header_branch {
         font-size: 11px;
       }
       .octotree_header_branch:before {
-        font-family: octicons;
-        content: '\f020';
-        color: #bbb;
+        content: data-uri('image/svg+xml;charset=UTF-8','../../icons/github-icons/git-branch.svg');
       }
       .jstree-icon.tree:before {
-        content: '\f016';
-        color: #80a6cd;
+        content: data-uri('image/svg+xml;charset=UTF-8','../../icons/github-icons/file-directory.svg');
       }
       .jstree-icon.blob:before {
-        content: '\f011';
-        color: #777;
+        content: data-uri('image/svg+xml;charset=UTF-8','../../icons/github-icons/file-text.svg');
       }
       .jstree-node.jstree-leaf:hover {
         .jstree-icon.blob:before {
-          content: '\f00b';
+          content: data-uri('image/svg+xml;charset=UTF-8','../../icons/github-icons/cloud-download.svg');
         }
       }
       .jstree-icon.commit:before {
-        content: '\f017';
-        color: #777;
+        content: data-uri('image/svg+xml;charset=UTF-8','../../icons/github-icons/file-submodule.svg');
       }
       .jstree-anchor {
         color: #4183c4 !important;
@@ -99,9 +82,6 @@
           background: #dbeeff;
         }
       }
-      .jstree-icon.tree, .jstree-icon.blob, .jstree-icon.commit {
-        font: normal normal 16px octicons;
-      }
     }
   }
 
@@ -116,24 +96,21 @@
   a.octotree_opts {
     top: 16px;
     right: 38px;
+    width: 14px;
+    height: 14px;
+    background: data-uri('image/svg+xml;charset=UTF-8','../../icons/github-icons/gear.svg');
+  }
 
-    & > span {
-      font: normal normal 15px octicons;
-    }
-    & > span:before {
-      content: '\f02f';
-    }
+  a.octotree_opts:hover {
+    background: data-uri('image/svg+xml;charset=UTF-8','../../icons/github-icons/gear-hover.svg');
   }
 
   a.octotree_toggle {
     top: 9px;
     right: -35px;
 
-    & > span {
-      font: normal normal 16px octicons;
-    }
     &:not(.octotree_loading) > span:after {
-      content: '\f078';
+      content: data-uri('image/svg+xml;charset=UTF-8','../../icons/github-icons/chevron-right.svg');
     }
   }
 }
