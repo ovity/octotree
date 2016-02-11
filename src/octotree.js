@@ -108,7 +108,6 @@ $(document).ready(() => {
         }
         else if (repo) {
           $toggler.show()
-          helpPopup.show()
 
           if (remember && shown) {
             toggleSidebar(true)
@@ -131,6 +130,7 @@ $(document).ready(() => {
           $toggler.hide()
           toggleSidebar(false)
         }
+        helpPopup.init()
         layoutChanged()
       })
     }

@@ -4,7 +4,7 @@ class HelpPopup {
     this.store = store
   }
 
-  show() {
+  init() {
     const $view = this.$view
     const store = this.store
     const popupShown = store.get(STORE.POPUP)
