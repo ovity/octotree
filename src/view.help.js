@@ -4,6 +4,11 @@ class HelpPopup {
     this.store = store
   }
 
+  clean() {
+    const $view = this.$view
+    $view.remove()
+  }
+
   show() {
     const $view = this.$view
     const store = this.store
