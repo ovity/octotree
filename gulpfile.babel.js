@@ -36,7 +36,8 @@ gulp.task('test', ['build'], (cb) => {
 gulp.task('styles', () => {
   return pipe(
     './src/styles/octotree.less',
-    $.less(),
+    $.plumber(),
+    $.less({relativeUrls: true}),
     $.autoprefixer({cascade: true}),
     './tmp'
   )

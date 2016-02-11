@@ -1,6 +1,6 @@
 {
   "name": "Octotree",
-  "version": "2.0.3",
+  "version": "2.0.5",
   "manifest_version": 2,
   "author": "Buu Nguyen",
   "description": "Code tree for GitHub and GitLab",
@@ -19,8 +19,5 @@
   "background": {
     "scripts": [ "background.js" ],
     "persistent": false
-  },
-  "web_accessible_resources": [
-    "fonts/*.woff"
-  ]
+  }
 }

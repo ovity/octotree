@@ -7,7 +7,10 @@
     a.octotree_toggle {
       right: 5px;
       &:not(.octotree_loading) > span:after {
-        content: data-uri('image/svg+xml;charset=UTF-8', '../../icons/github-icons/chevron-left.svg');
+        content: data-uri('image/svg+xml;charset=UTF-8', './octicons/chevron-left.svg');
+      }
+      &:not(.octotree_loading):hover > span:after {
+        content: data-uri('image/svg+xml;charset=UTF-8', './octicons/chevron-left-hover.svg');
       }
     }
   }
@@ -36,7 +39,7 @@
 
       .octotree_help {
         & > span:before {
-          content: data-uri('image/svg+xml;charset=UTF-8', '../../icons/github-icons/question.svg');
+          content: data-uri('image/svg+xml;charset=UTF-8', './octicons/question.svg');
         }
       }
     }
@@ -46,27 +49,34 @@
         font-size: 13px;
       }
       .octotree_header_repo:before {
-        content: data-uri('image/svg+xml;charset=UTF-8', '../../icons/github-icons/repo.svg');
+        position: relative;
+        top: 2px;
+        content: data-uri('image/svg+xml;charset=UTF-8', './octicons/repo.svg');
       }
       .octotree_header_branch {
         font-size: 11px;
       }
       .octotree_header_branch:before {
-        content: data-uri('image/svg+xml;charset=UTF-8','../../icons/github-icons/git-branch.svg');
+        position: relative;
+        top: 2px;
+        content: data-uri('image/svg+xml;charset=UTF-8', './octicons/git-branch.svg');
+      }
+      .jstree-icon {
+        margin-top: 3px;
       }
       .jstree-icon.tree:before {
-        content: data-uri('image/svg+xml;charset=UTF-8','../../icons/github-icons/file-directory.svg');
+        content: data-uri('image/svg+xml;charset=UTF-8', './octicons/file-directory.svg');
       }
       .jstree-icon.blob:before {
-        content: data-uri('image/svg+xml;charset=UTF-8','../../icons/github-icons/file-text.svg');
+        content: data-uri('image/svg+xml;charset=UTF-8', './octicons/file-text.svg');
       }
       .jstree-node.jstree-leaf:hover {
         .jstree-icon.blob:before {
-          content: data-uri('image/svg+xml;charset=UTF-8','../../icons/github-icons/cloud-download.svg');
+          content: data-uri('image/svg+xml;charset=UTF-8', './octicons/cloud-download.svg');
         }
       }
       .jstree-icon.commit:before {
-        content: data-uri('image/svg+xml;charset=UTF-8','../../icons/github-icons/file-submodule.svg');
+        content: data-uri('image/svg+xml;charset=UTF-8', './octicons/file-submodule.svg');
       }
       .jstree-anchor {
         color: #4183c4 !important;
@@ -98,11 +108,10 @@
     right: 38px;
     width: 14px;
     height: 14px;
-    background: data-uri('image/svg+xml;charset=UTF-8','../../icons/github-icons/gear.svg');
-  }
-
-  a.octotree_opts:hover {
-    background: data-uri('image/svg+xml;charset=UTF-8','../../icons/github-icons/gear-hover.svg');
+    background: data-uri('image/svg+xml;charset=UTF-8', './octicons/gear.svg');
+    &:hover {
+      background: data-uri('image/svg+xml;charset=UTF-8', './octicons/gear-hover.svg');
+    }
   }
 
   a.octotree_toggle {
@@ -110,7 +119,10 @@
     right: -35px;
 
     &:not(.octotree_loading) > span:after {
-      content: data-uri('image/svg+xml;charset=UTF-8','../../icons/github-icons/chevron-right.svg');
+      content: data-uri('image/svg+xml;charset=UTF-8', './octicons/chevron-right.svg');
+    }
+    &:not(.octotree_loading):hover > span:after {
+      content: data-uri('image/svg+xml;charset=UTF-8', './octicons/chevron-right-hover.svg');
     }
   }
 }
