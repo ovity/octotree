@@ -56,7 +56,7 @@ class Adapter {
             const index = path.lastIndexOf('/')
             const name = $dummyDiv.text(path.substring(index + 1)).html() // sanitizes, closes #9
 
-            item.id = PREFIX + path
+            item.id = NODE_PREFIX + path
             item.text = name
             item.icon = type // use `type` as class name for tree node
 

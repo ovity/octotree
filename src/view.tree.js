@@ -161,7 +161,7 @@ class TreeView {
     }
 
     function selectPath(paths, index = 0) {
-      const nodeId = PREFIX + paths[index]
+      const nodeId = NODE_PREFIX + paths[index]
 
       if ($jstree.get_node(nodeId)) {
         $jstree.deselect_all()

@@ -8,7 +8,7 @@ class HelpPopup {
     const $view = this.$view
     const store = this.store
     const popupShown = store.get(STORE.POPUP)
-    const sidebarVisible = $('html').hasClass(PREFIX)
+    const sidebarVisible = $('html').hasClass(SHOW_CLASS)
 
     if (popupShown || sidebarVisible) {
       return hideAndDestroy()

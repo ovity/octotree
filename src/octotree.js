@@ -35,6 +35,8 @@ $(document).ready(() => {
     let currRepo = false
     let hasError = false
 
+    $html.addClass(ADDON_CLASS)
+
     $(window).resize((event) => {
       if (event.target === window) layoutChanged()
     })
@@ -160,7 +162,7 @@ $(document).ready(() => {
         toggleSidebar()
       }
       else {
-        $html.toggleClass(PREFIX)
+        $html.toggleClass(SHOW_CLASS)
         $document.trigger(EVENT.TOGGLE, isSidebarVisible())
       }
     }
@@ -172,7 +174,7 @@ $(document).ready(() => {
     }
 
     function isSidebarVisible() {
-      return $html.hasClass(PREFIX)
+      return $html.hasClass(SHOW_CLASS)
     }
 
     function isTogglerVisible() {

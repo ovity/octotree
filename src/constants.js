@@ -1,4 +1,6 @@
-const PREFIX = 'octotree'
+const NODE_PREFIX = 'octotree'
+const ADDON_CLASS = 'octotree'
+const SHOW_CLASS = 'octotree-show'
 
 const STORE = {
   TOKEN     : 'octotree.access_token',
