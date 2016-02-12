@@ -1,3 +1,8 @@
+### v2.0.7
+* Fix font icons issue on Firefox and Safari
+* Fix bug help popup doesn't disappear upon error
+* Allow Octotree to be used in Firefox private-browsing mode
+
 ### v2.0.4
 * Fix font icons issue as GitHub switches to SVG
 * Fix toggle button position when GitLab is in compact mode
