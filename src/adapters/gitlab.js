@@ -150,7 +150,13 @@ class GitLab extends Adapter {
       // Default from cache
       this._defaultBranch[username + '/' + reponame]
 
-    const repo = {username: username, reponame: reponame, branch: branch}
+    const repo = {username: username, reponame: reponame, branch: branch, project_id: null}
+
+    // After login we will have a project_id in a hidden input field
+    const project_id = $('#project_id').val();
+    if (project_id) {
+      repo.project_id = project_id;
+    }
 
     if (repo.branch) {
       cb(null, repo)
@@ -197,7 +203,13 @@ class GitLab extends Adapter {
   _get(path, opts, cb) {
     const repo = opts.repo
     const host = `${location.protocol}//${location.host}/api/v3`
-    const url = `${host}/projects/${repo.username}%2f${repo.reponame}/repository${path}&private_token=${opts.token}`
+    let url = `${host}/projects/${repo.username}%2f${repo.reponame}/repository${path}&private_token=${opts.token}`
+
+    // If we have a project_id, try fetching directly
+    if (repo.project_id) {
+      url = `${host}/projects/${repo.project_id}/repository${path}&private_token=${opts.token}`
+    }
+
     const cfg = { url, method: 'GET', cache: false }
 
     $.ajax(cfg)
