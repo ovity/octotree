@@ -3,6 +3,7 @@ const GL_RESERVED_USER_NAMES = [
   'explore', 'profile', 'public', 'groups', 'abuse_reports'
 ]
 const GL_RESERVED_REPO_NAMES = []
+const GL_RESERVED_TYPES = ['raw']
 const GL_HEADER = '.navbar-gitlab'
 const GL_SIDEBAR = '.sidebar-wrapper'
 const GL_TITLE = 'h1.title'
@@ -118,10 +119,12 @@ class GitLab extends Adapter {
 
     const username = match[1]
     const reponame = match[2]
+    const type = match[3]
 
     // Not a repository, skip
     if (~GL_RESERVED_USER_NAMES.indexOf(username) ||
-        ~GL_RESERVED_REPO_NAMES.indexOf(reponame)) {
+        ~GL_RESERVED_REPO_NAMES.indexOf(reponame) ||
+        ~GL_RESERVED_TYPES.indexOf(type)) {
       return cb()
     }
 
