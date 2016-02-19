@@ -1,3 +1,7 @@
+### v2.0.8
+* Support old GitLab CE deployments
+* Fix bug Octotree shows in GitLab raw page
+
 ### v2.0.7
 * Fix font icons issue on Firefox and Safari
 * Fix bug help popup doesn't disappear upon error
