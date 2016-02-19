@@ -15,8 +15,8 @@ const GH_CONTAINERS = '.container'
 
 class GitHub extends Adapter {
 
-  constructor() {
-    super(['jquery.pjax.js'])
+  constructor(store) {
+    super(store, ['jquery.pjax.js'])
 
     $.pjax.defaults.timeout = 0 // no timeout
     $(document)
