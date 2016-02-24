@@ -34,12 +34,12 @@ class GitHub extends Adapter {
     // In this case, split-diff page has a wider layout, so need to recompute margin.
     // Note that couldn't do this in response to URL change, since new DOM via pjax might not be ready.
     const diffModeObserver = new window.MutationObserver((mutations) => {
-      for (const mutation of mutations) {
+      mutations.forEach((mutation) => {
         if (~mutation.oldValue.indexOf('split-diff') ||
             ~mutation.target.className.indexOf('split-diff')) {
           return $(document).trigger(EVENT.LAYOUT_CHANGE)
         }
-      }
+      })
     })
 
     diffModeObserver.observe(document.body, {

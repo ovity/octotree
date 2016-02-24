@@ -46,7 +46,7 @@ $(document).ready(() => {
     key(store.get(STORE.HOTKEYS), toggleSidebarAndSave)
 
     const views = [treeView, errorView, optsView]
-    for (const view of views) {
+    views.forEach((view) => {
       $(view)
         .on(EVENT.VIEW_READY, function (event) {
           if (this !== optsView) {
@@ -57,7 +57,7 @@ $(document).ready(() => {
         .on(EVENT.VIEW_CLOSE, () => showView(hasError ? errorView.$view : treeView.$view))
         .on(EVENT.OPTS_CHANGE, optionsChanged)
         .on(EVENT.FETCH_ERROR, (event, err) => showError(err))
-    }
+    })
 
     $document
       .on(EVENT.REQ_START, () => $toggler.addClass('octotree_loading'))
