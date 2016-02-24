@@ -63,7 +63,6 @@ function runTest(browser) {
         assert.equal(yield po.branchLabel.getText(), 'master')
 
         yield po.setUrl('https://github.com/buunguyen/octotree/tree/v1.6.2')
-        yield po.toggleSidebar()
         assert.equal(yield po.branchLabel.getText(), 'v1.6.2')
       })
     })
@@ -72,7 +71,6 @@ function runTest(browser) {
       before(function (cb) {
         starx(function *() {
           yield po.reset()
-          yield po.toggleSidebar()
           if (token) {
             yield po.toggleOptsView()
             yield po.tokenInput.sendKeys(token)
@@ -227,7 +225,6 @@ function runTest(browser) {
                 assert.ok(yield po.isSidebarHidden())
               }
               yield po.reset()
-              yield po.toggleSidebar()
             })
 
             yit('should show in non-code pages if option is set', function *() {

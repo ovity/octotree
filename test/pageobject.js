@@ -54,13 +54,13 @@ PageObject.prototype = {
   },
 
   isSidebarShown: function *() {
-    var hasCssClass = yield this.driver.isElementPresent($css('html.octotree'))
+    var hasCssClass = yield this.driver.isElementPresent($css('html.octotree-show'))
     var btnRight = yield this.toggleButton.getCssValue('right')
     return hasCssClass && btnRight === '5px'
   },
 
   isSidebarHidden: function *() {
-    var hasCssClass = yield this.driver.isElementPresent($css('html.octotree'))
+    var hasCssClass = yield this.driver.isElementPresent($css('html.octotree-show'))
     var btnRight = yield this.toggleButton.getCssValue('right')
     return !hasCssClass && btnRight === '-35px'
   },
