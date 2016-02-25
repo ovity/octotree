@@ -42,6 +42,7 @@
     "gulp-replace": "^0.5.4",
     "gulp-run": "^1.6.4",
     "gulp-run-sequence": "*",
+    "gulp-sourcemaps": "^1.6.0",
     "gulp-util": "^2.2.20",
     "gulp-zip": "^2.0.3",
     "jpm": "^1.0.4",
