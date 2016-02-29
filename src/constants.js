@@ -12,7 +12,8 @@ const STORE = {
   WIDTH     : 'octotree.sidebar_width',
   SHOWN     : 'octotree.sidebar_shown',
   GHEURLS   : 'octotree.gheurls.shared',
-  GLEURLS   : 'octotree.gleurls.shared'
+  GLEURLS   : 'octotree.gleurls.shared',
+  DOWNLOAD  : 'octotree.download'
 }
 
 const DEFAULTS = {
@@ -30,7 +31,8 @@ const DEFAULTS = {
   WIDTH     : 232,
   SHOWN     : false,
   GHEURLS   : '',
-  GLEURLS   : ''
+  GLEURLS   : '',
+  DOWNLOAD  : true
 }
 
 const EVENT = {

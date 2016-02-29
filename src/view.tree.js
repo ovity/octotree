@@ -5,7 +5,7 @@ class TreeView {
     this.$view = $dom.find('.octotree_treeview')
     this.$tree = this.$view.find('.octotree_view_body')
       .on('click.jstree', '.jstree-open>a', ({target}) => this.$jstree.close_node(target))
-      .on('click.jstree', '.jstree-closed>a', ({target}) => this.$jstree.open_node(target))
+      .on('click.jstree', '.jstree-closed>a', ({target}) => this.$jstree.open_node(target)) //TODO: need to add call to _toggleDownloadIcon() here (see: https://bitbucket.org/jamez14/octotree/commits/f97e234da74aba9d2818e7bca2649380564d6fcc#Lsrc/view.tree.jsT13)
       .on('click', this._onItemClick.bind(this))
       .jstree({
         core: { multiple: false, worker: false, themes : { responsive : false } },
@@ -42,10 +42,18 @@ class TreeView {
     this.$tree.one('refresh.jstree', () => {
       this.syncSelection()
       $(this).trigger(EVENT.VIEW_READY)
+      _toggleDownloadIcon()
     })
 
     this._showHeader(repo)
     $jstree.refresh(true)
+  }
+
+  _toggleDownloadIcon() {
+    const enableDownloading = self.store.get(STORE.DOWNLOAD)
+    if (!enableDownloading) {
+      this.$view.find('.jstree-icon.blob').addClass('downloading_disabled')
+    }
   }
 
   _showHeader(repo) {
@@ -98,13 +106,18 @@ class TreeView {
   }
 
   _onItemClick(event) {
+    const enableDownloading = this.store.get(STORE.DOWNLOAD)
     let $target = $(event.target)
     let download = false
 
     // handle icon click, fix #122
     if ($target.is('i.jstree-icon')) {
       $target = $target.parent()
-      download = true
+      if (enableDownloading) {
+        download = true
+      } else {
+        download = false
+      }
     }
 
     if (!$target.is('a.jstree-anchor')) return
