@@ -1,3 +1,6 @@
+### v2.0.9
+* Fix bug GitLab: diff box header shows on top of page header
+
 ### v2.0.8
 * Support old GitLab CE deployments
 * Fix bug Octotree shows in GitLab raw page
