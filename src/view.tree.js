@@ -113,11 +113,7 @@ class TreeView {
     // handle icon click, fix #122
     if ($target.is('i.jstree-icon')) {
       $target = $target.parent()
-      if (enableDownloading) {
-        download = true
-      } else {
-        download = false
-      }
+      download = enableDownloading
     }
 
     if (!$target.is('a.jstree-anchor')) return
