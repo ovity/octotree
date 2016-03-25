@@ -92,9 +92,9 @@ $(document).ready(() => {
           case STORE.DOWNLOAD:
             var $blobIcon = $('.jstree-icon.blob')
             if (value[1]) {
-              $blobIcon.removeClass('downloading_disabled')
+              $blobIcon.removeClass('downloading-disabled')
             } else {
-              $blobIcon.addClass('downloading_disabled')
+              $blobIcon.addClass('downloading-disabled')
             }
             break
 
