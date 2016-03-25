@@ -70,7 +70,9 @@ class Adapter {
             if (type === 'tree') {
               if (node) item.children = true
               else folders[item.path] = item.children = []
-              item.a_attr = { href: '#' }
+              item.a_attr = {
+                href: `/${repo.username}/${repo.reponame}/${type}/${repo.branch}/${encodeURIComponent(path)}`
+              }
             }
             else if (type === 'blob') {
               item.a_attr = {
