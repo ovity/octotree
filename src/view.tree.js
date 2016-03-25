@@ -109,6 +109,9 @@ class TreeView {
 
     if (!$target.is('a.jstree-anchor')) return
 
+    // handle middle click
+    if (event.which === 2) return
+
     // refocus after complete so that keyboard navigation works, fix #158
     const refocusAfterCompletion = () => {
       $(document).one('pjax:success page:load', () => {
