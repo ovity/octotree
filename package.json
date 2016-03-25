@@ -1,6 +1,6 @@
 {
   "name": "octotree",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "description": "Code tree for GitHub and GitLab",
   "main": "inject.js",
   "scripts": {
@@ -14,7 +14,7 @@
     "url": "https://github.com/buunguyen/octotree"
   },
   "author": "Buu Nguyen <buunguyen@gmail.com> (https://github.com/buunguyen)",
-  "license": "MIT",
+  "license": "AGPL",
   "bugs": {
     "url": "https://github.com/buunguyen/octotree/issues"
   },
