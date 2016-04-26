@@ -50,6 +50,8 @@ By default, Octotree only works on `github.com` and `gitlab.com`. To support ent
 
 * To add GitHub enterprise, go to a GitHub repo; otherwise, go to a GitLab repo
 * Open the Octotree settings panel
+![Settings](docs/settings.jpg)
+
 * Fill in the GitHub/GitLab Enterprise URLs textbox, _one URL per line_
 * Click Save and accept the permission prompt
 * Navigate to your GitHub/GitLab Enterprise site
