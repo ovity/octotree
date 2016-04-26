@@ -74,7 +74,7 @@ class Adapter {
             }
             else if (type === 'blob') {
               item.a_attr = {
-                href: `/${repo.username}/${repo.reponame}/${type}/${repo.branch}/${encodeURI(path)}`
+                href: `/${repo.username}/${repo.reponame}/${type}/${repo.branch}/${encodeURIComponent(path)}`
               }
             }
             else if (type === 'commit') {
