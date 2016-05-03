@@ -48,7 +48,8 @@ Octotree uses [GitLab API](http://doc.gitlab.com/ce/api/) to retrieve repository
 
 ### Enterprise URLs
 By default, Octotree only works on `github.com` and `gitlab.com`. To support enterprise version on Chrome and Opera, you must grant Octotree sufficient permissions. Follow these steps to do so:
-* To add GitHub enterprise, go to a GitHub repo; otherwise, go to a [GitLab repo](https://gitlab.com/gitlab-org/gitlab-ce) 
+
+* To add GitHub enterprise, go to a GitHub repo; otherwise, go to a GitLab repo, [such as gitlab-ce](https://gitlab.com/gitlab-org/gitlab-ce).
 * Open the Octotree settings panel
 * Fill in the GitHub/GitLab Enterprise URLs textbox, _one URL per line_
 * Click Save and accept the permission prompt
