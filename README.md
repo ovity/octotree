@@ -45,10 +45,11 @@ When that happens, Octotree will ask for your [GitHub personal access token](htt
 #### GitLab
 Octotree uses [GitLab API](http://doc.gitlab.com/ce/api/) to retrieve repository metadata. By default, Octotree attempts to retrieve the access token embedded in the GitLab DOM and use the token to authenticate against the GitLab API. If Octotree cannot retrieve the token, it will prompt you to [create one](https://gitlab.com/profile/account).
 
+
 ### Enterprise URLs
 By default, Octotree only works on `github.com` and `gitlab.com`. To support enterprise version on Chrome and Opera, you must grant Octotree sufficient permissions. Follow these steps to do so:
 
-* To add GitHub enterprise, go to a GitHub repo; otherwise, go to a GitLab repo
+* To add GitHub enterprise, go to a GitHub repo; otherwise, go to a GitLab repo, [such as gitlab-ce](https://gitlab.com/gitlab-org/gitlab-ce).
 * Open the Octotree settings panel
 
 ![Settings](docs/settings.jpg)
