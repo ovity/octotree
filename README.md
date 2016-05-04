@@ -49,7 +49,7 @@ Octotree uses [GitLab API](http://doc.gitlab.com/ce/api/) to retrieve repository
 ### Enterprise URLs
 By default, Octotree only works on `github.com` and `gitlab.com`. To support enterprise version on Chrome and Opera, you must grant Octotree sufficient permissions. Follow these steps to do so:
 
-* To add GitHub enterprise, go to a GitHub repo; otherwise, go to a GitLab repo, [such as gitlab-ce](https://gitlab.com/gitlab-org/gitlab-ce).
+* To add GitHub enterprise, go to any GitHub repo; otherwise, go to any GitLab repo (e.g. [gitlab-ce](https://gitlab.com/gitlab-org/gitlab-ce)).
 * Open the Octotree settings panel
 
 ![Settings](docs/settings.jpg)
@@ -66,7 +66,7 @@ By default, Octotree only works on `github.com` and `gitlab.com`. To support ent
 * __Load entire tree at once__: if checked, load and render the entire code tree at once. To avoid long loading, this should be unchecked if you frequently work with very large repos.
 
 ## Credits
-* @crashbell for helping with GitLab and others
-* @Ephemera for fixing many bugs
-* @athaeryn and @letunglam for helping with UI design
+* [@crashbell](https://github.com/crashbell) for helping with GitLab and others
+* [@Ephemera](https://github.com/Ephemera) for fixing many bugs
+* [@athaeryn](https://github.com/athaeryn) and [@letunglam](https://github.com/letunglam) for helping with UI design
 * And many other people who submit bug fixes and reports
