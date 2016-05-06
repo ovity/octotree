@@ -42,10 +42,18 @@ class TreeView {
     this.$tree.one('refresh.jstree', () => {
       this.syncSelection()
       $(this).trigger(EVENT.VIEW_READY)
+      this._toggleDownloadIcon()
     })
 
     this._showHeader(repo)
     $jstree.refresh(true)
+  }
+
+  _toggleDownloadIcon() {
+    const enableDownloading = this.store.get(STORE.DOWNLOAD)
+    if (!enableDownloading) {
+      this.$view.find('.jstree-icon.blob').addClass('downloading-disabled')
+    }
   }
 
   _showHeader(repo) {
@@ -98,13 +106,14 @@ class TreeView {
   }
 
   _onItemClick(event) {
+    const enableDownloading = this.store.get(STORE.DOWNLOAD)
     let $target = $(event.target)
     let download = false
 
     // handle icon click, fix #122
     if ($target.is('i.jstree-icon')) {
       $target = $target.parent()
-      download = true
+      download = enableDownloading
     }
 
     if (!$target.is('a.jstree-anchor')) return
