@@ -20,7 +20,7 @@ Octotree is not available on the Safari gallery. Instead, you must install the e
 
 * Download the [Safari prebuilt package](https://github.com/buunguyen/octotree/tree/master/dist/octotree.safariextz)
 * Double click on the `octotree.safariextz` file once it finishes downloading
-* Click "Trust" when Safari asks to install the extension.
+* Click "Trust" when Safari asks to install the extension
 
 ### Install prebuilt packages (all browsers)
 
