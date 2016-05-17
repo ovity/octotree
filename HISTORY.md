@@ -1,3 +1,7 @@
+### v2.0.10
+* Retain slashes in item URL
+* Improve behavior of middle-click
+
 ### v2.0.9
 * Fix bug GitLab: diff box header shows on top of page header
 
