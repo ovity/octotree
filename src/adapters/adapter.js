@@ -58,7 +58,7 @@ class Adapter {
 
             item.id = NODE_PREFIX + path
             item.text = name
-            item.icon = type // use `type` as class name for tree node
+            item.icon = type // uses `type` as class name for tree node
 
             if (node) {
               folders[''].push(item)
@@ -67,16 +67,16 @@ class Adapter {
               folders[path.substring(0, index)].push(item)
             }
 
-            if (type === 'tree') {
-              if (node) item.children = true
-              else folders[item.path] = item.children = []
-              item.a_attr = {
-                href: `/${repo.username}/${repo.reponame}/${type}/${repo.branch}/${encodeURIComponent(path)}`
+            if (type === 'tree' || type === 'blob') {
+              if (type === 'tree') {
+                if (node) item.children = true
+                else folders[item.path] = item.children = []
               }
-            }
-            else if (type === 'blob') {
+
+              // encodes but retains the slashes, see #274
+              const encodedPath = path.split('/').map(encodeURIComponent).join('/')
               item.a_attr = {
-                href: `/${repo.username}/${repo.reponame}/${type}/${repo.branch}/${encodeURIComponent(path)}`
+                href: `/${repo.username}/${repo.reponame}/${type}/${repo.branch}/${encodedPath}`
               }
             }
             else if (type === 'commit') {
