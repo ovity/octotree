@@ -20,12 +20,7 @@ const DEFAULTS = {
   REMEMBER  : true,
   NONCODE   : true,
   LOADALL   : true,
-  // @ifdef SAFARI
-  HOTKEYS   : '⌘+b, ⌃+b',
-  // @endif
-  // @ifndef SAFARI
   HOTKEYS   : '⌘+⇧+s, ⌃+⇧+s',
-  // @endif
   POPUP     : false,
   WIDTH     : 232,
   SHOWN     : false,

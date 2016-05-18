@@ -101,6 +101,9 @@ class TreeView {
     let $target = $(event.target)
     let download = false
 
+    // handle middle click
+    if (event.which === 2) return
+
     // handle icon click, fix #122
     if ($target.is('i.jstree-icon')) {
       $target = $target.parent()
