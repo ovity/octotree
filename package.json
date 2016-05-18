@@ -38,7 +38,7 @@
     "gulp-mocha": "2.0.0",
     "gulp-plumber": "^1.1.0",
     "gulp-preprocess": "^1.1.1",
-    "gulp-rename": "^1.2.0",
+    "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",
     "gulp-run": "^1.6.4",
     "gulp-run-sequence": "*",

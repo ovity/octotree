@@ -131,7 +131,7 @@ gulp.task('safari:js', ['safari:template', 'lib:ondemand'], () => {
 
 gulp.task('safari', ['safari:js'], () => {
   return merge(
-    pipe('./icons/**/*', './tmp/safari/octotree.safariextension/icons'),
+    pipe('./icons/icon64.png', $.rename('Icon-64.png'), './tmp/safari/octotree.safariextension'),
     pipe(
       ['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js', './src/config/safari/**/*'],
       './tmp/safari/octotree.safariextension/'
