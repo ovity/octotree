@@ -1,5 +1,5 @@
 ### v2.0.10
-* Retain slashes in item URL
+* Retain forward slashes in URLs
 * Improve behavior of middle-click
 
 ### v2.0.9

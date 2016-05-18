@@ -20,7 +20,7 @@ gulp.task('default', ['build'], () => {
 })
 
 gulp.task('dist', ['build'], (cb) => {
-  $.runSequence('firefox:xpi', 'chrome:zip', 'chrome:crx', 'opera:nex', 'safari:zip', cb)
+  $.runSequence('firefox:xpi', 'chrome:zip', 'chrome:crx', 'opera:nex', cb)
 })
 
 gulp.task('test', ['build'], (cb) => {
@@ -136,14 +136,6 @@ gulp.task('safari', ['safari:js'], () => {
       ['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js', './src/config/safari/**/*'],
       './tmp/safari/octotree.safariextension/'
     )
-  )
-})
-
-gulp.task('safari:zip', () => {
-  return pipe(
-    './tmp/safari/**/*',
-    $.zip('safari.zip'),
-    './dist/'
   )
 })
 
