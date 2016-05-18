@@ -18,7 +18,7 @@ Browser extensions (Chrome, Firefox, Opera and Safari) to display GitHub and Git
 
 Octotree is not available on the Safari gallery. Instead, you must use the prebuilt package or build one from source. Follow the below instructions to install using the prebuilt package.
 
-* Download the [Safari prebuilt package](https://github.com/buunguyen/octotree/tree/master/dist/safari.safariextz)
+* Download the [Safari prebuilt package](https://github.com/buunguyen/octotree/blob/master/dist/safari.safariextz?raw=true)
 * Double-click or drag it to Safari
 
 ### Install prebuilt packages (all browsers)
