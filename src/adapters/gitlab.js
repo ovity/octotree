@@ -197,7 +197,7 @@ class GitLab extends Adapter {
   _get(path, opts, cb) {
     const repo = opts.repo
     const host = `${location.protocol}//${location.host}/api/v3`
-    const project = $('#project_id').val() || `${repo.username}%2f${repo.reponame}`
+    const project = $('#search_project_id').val() || $('#project_id').val() || `${repo.username}%2f${repo.reponame}`
     const url = `${host}/projects/${project}/repository${path}&private_token=${opts.token}`
     const cfg = { url, method: 'GET', cache: false }
 
