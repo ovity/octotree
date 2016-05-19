@@ -1,7 +1,7 @@
 ## Octotree
-Browser extensions (Chrome, Firefox, Opera and Safari) to display GitHub and GitLab code in tree format. Useful for developers who frequently read source and do not want to download or checkout too many repositories. Features:
+Browser extension (Chrome, Firefox, Opera and Safari) to show a code tree on GitHub and GitLab. Awesome for exploring project source without having to pull every single repository to your machine. Features:
 
-* Easy-to-navigate code tree like IDEs
+* Easy-to-navigate code tree, just like in IDEs
 * Fast browsing with pjax and Turbolinks
 * Support private repositories (see [instructions](#access-token))
 * Support GitHub and GitLab Enterprise (Chrome and Opera only, see [instructions](#enterprise-urls))
@@ -11,24 +11,29 @@ Browser extensions (Chrome, Firefox, Opera and Safari) to display GitHub and Git
 
 ### Install on Chrome, Firefox and Opera
 * Install Octotree from [Chrome Web Store](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc), [Mozilla Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/octotree/) or [Opera Add-ons Store](https://addons.opera.com/en/extensions/details/octotree/)
-* Navigate to any GitHub repository (or just refresh this page as an example)
+* Navigate to any GitHub or GitLab repository (or just refresh this page as an example)
 * The code tree should show on the left-hand side of the screen
+
+__Note__: to configure Octotree for GitHub and GitLab Enterprise, see [instructions](#enterprise-urls)
 
 ### Install on Safari
 
-Octotree is not available on the Safari gallery. Instead, you must use the prebuilt package or build one from source. Follow the below instructions to install using the prebuilt package.
+Octotree is not available on the Safari gallery. Instead, you must use the prebuilt package or build one from source.
 
 * Download the [Safari prebuilt package](https://github.com/buunguyen/octotree/blob/master/dist/safari.safariextz?raw=true)
 * Double-click or drag it to Safari
 
-### Install prebuilt packages (all browsers)
+### Install from prebuilt packages (all browsers)
 
 Prebuilt packages are available in the  [dist](https://github.com/buunguyen/octotree/tree/master/dist) folder. For security reason, only download Octotree from this location.
 
-Firefox 43+ requires add-ons to be signed. Therefore, you should install Octotree from the Mozilla store. For some reason if you want to install the prebuilt package instead, you have to [disable sign-check](https://github.com/buunguyen/octotree/issues/220#issuecomment-166012724).
+__Note__: Firefox 43+ requires add-ons to be signed. Therefore, you should install Octotree from the Mozilla store. For some reason if you want to install the prebuilt package instead, you have to [disable sign-check](https://github.com/buunguyen/octotree/issues/220#issuecomment-166012724).
 
 ## Settings
 ### Access Token
+
+__Note for the paranoids (like me!)__: Octotree only stores access tokens in your browser local storage and never transmits them. If you want to be absolutely sure, check out the source, starting with [this line](https://github.com/buunguyen/octotree/blob/master/src/view.options.js#L77). 
+
 #### GitHub
 Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve repository metadata. By default, it makes unauthenticated requests to the GitHub API. However, there are two situations when requests must be authenticated:
 
@@ -40,9 +45,8 @@ When that happens, Octotree will ask for your [GitHub personal access token](htt
 #### GitLab
 Octotree uses [GitLab API](http://doc.gitlab.com/ce/api/) to retrieve repository metadata. By default, Octotree attempts to retrieve the access token embedded in the GitLab DOM and use the token to authenticate against the GitLab API. If Octotree cannot retrieve the token, it will prompt you to [create one](https://gitlab.com/profile/account).
 
-
 ### Enterprise URLs
-By default, Octotree only works on `github.com` and `gitlab.com`. To support enterprise version on Chrome and Opera, you must grant Octotree sufficient permissions. Follow these steps to do so:
+By default, Octotree only works on `github.com` and `gitlab.com`. To support enterprise version (Chrome and Opera only), you must grant Octotree sufficient permissions. Follow these steps to do so:
 
 * To add GitHub enterprise, go to any GitHub repo; otherwise, go to any GitLab repo (e.g. [gitlab-ce](https://gitlab.com/gitlab-org/gitlab-ce)).
 * Open the Octotree settings panel
