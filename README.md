@@ -32,7 +32,7 @@ __Note__: Firefox 43+ requires add-ons to be signed. Therefore, you should insta
 ## Settings
 ### Access Token
 
-__Note for the paranoids (like me!)__: Octotree only stores access tokens in your browser local storage and never transmits them. If you want to be absolutely sure, check out the source, starting with [this line](https://github.com/buunguyen/octotree/blob/master/src/view.options.js#L77). 
+__Note for the paranoids (like me!)__: Octotree stores access tokens in your browser local storage and never transmits it anywhere. If you want to verify, check out the source, starting with [this line](https://github.com/buunguyen/octotree/blob/master/src/view.options.js#L77). 
 
 #### GitHub
 Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve repository metadata. By default, it makes unauthenticated requests to the GitHub API. However, there are two situations when requests must be authenticated:
