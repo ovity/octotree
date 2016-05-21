@@ -69,7 +69,7 @@ class GitLab extends Adapter {
 
   // @override
   getMinWidth() {
-    return 230 // just enough to hide the GitLab sidebar
+    return 220 // just enough to hide the GitLab sidebar
   }
 
   // @override
@@ -83,9 +83,9 @@ class GitLab extends Adapter {
     const glSidebarExpanded = $('.page-with-sidebar').hasClass('page-sidebar-expanded') && $(document).width() > 1199
 
     if (isNewDesign) {
-      const glSidebarWidth = glSidebarExpanded ? 230 : 62
+      const glSidebarWidth = glSidebarExpanded ? 220 : 62
       $(GL_TITLE).css('margin-left',  (!togglerVisible || sidebarVisible) ? '' : 36)
-      $('.octotree_toggle').css('right', sidebarVisible ? '' : -(glSidebarWidth + 50))
+      $('.octotree_toggle').css('right', sidebarVisible ? '' : -(glSidebarWidth + 44))
       $(GL_HEADER).css({'margin-left': sidebarVisible ? sidebarWidth : ''})
       $('.page-with-sidebar').css('padding-left', sidebarVisible ? sidebarWidth : '')
     }
