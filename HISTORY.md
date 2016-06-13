@@ -1,3 +1,7 @@
+### v2.0.11
+* Encode branch before displaying to avoid XSS
+* Fix bug project ID not retrieved in latest GitLab layout
+
 ### v2.0.10
 * Retain forward slashes in URLs
 * Improve behavior of middle-click

@@ -59,13 +59,17 @@ class TreeView {
            '<a data-pjax href="/' + repo.username + '/' + repo.reponame + '">' + repo.reponame +'</a>' +
          '</div>' +
          '<div class="octotree_header_branch">' +
-           repo.branch +
+           this._deXss(repo.branch) +
          '</div>'
       )
       .on('click', 'a[data-pjax]', function (event) {
         event.preventDefault()
         adapter.selectFile($(this).attr('href') /* a.href always return absolute URL, don't want that */)
       })
+  }
+
+  _deXss(str) {
+    return str && str.replace(/[<>'"&]/g, '-')
   }
 
   _sort(folder) {
