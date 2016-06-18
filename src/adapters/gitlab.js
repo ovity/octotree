@@ -138,13 +138,15 @@ class GitLab extends Adapter {
     // Get branch by inspecting page, quite fragile so provide multiple fallbacks
     const GL_BRANCH_SEL_1 = '#repository_ref'
     const GL_BRANCH_SEL_2 = '.select2-container.project-refs-select.select2 .select2-chosen'
-    const GL_BRANCH_SEL_3 = '.nav.nav-sidebar .shortcuts-tree'
+    // .nav.nav-sidebar is for versions below 8.8
+    const GL_BRANCH_SEL_3 = '.nav.nav-sidebar .shortcuts-tree, .nav-links .shortcuts-tree'
 
     const branch =
       // Code page
       $(GL_BRANCH_SEL_1).val() || $(GL_BRANCH_SEL_2).text() ||
       // Non-code page
-      ($(GL_BRANCH_SEL_3).attr('href') || '').match(/([^\/]+)/g)[3] ||
+      // A space ' ' is a failover to make match() always return an array
+      ($(GL_BRANCH_SEL_3).attr('href') || ' ').match(/([^\/]+)/g)[3] ||
       // Assume same with previously
       (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch) ||
       // Default from cache
