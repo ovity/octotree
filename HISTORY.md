@@ -1,3 +1,6 @@
+### v2.0.12
+* Fix issue due to GitLab redesign
+
 ### v2.0.11
 * Encode branch before displaying to avoid XSS
 * Fix bug project ID not retrieved in latest GitLab layout
