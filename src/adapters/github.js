@@ -125,9 +125,9 @@ class GitHub extends Adapter {
       return cb()
     }
 
-    // (username)/(reponame)[/(type)]
-    const match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/)
-    if (!match) {
+    // (username)/(reponame)[/(type)][.*][.(patch|diff)]
+    const match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?(?:\/[^.]+)?(?:\.(patch|diff))?$/i)
+    if (!match || match[4]) {
       return cb()
     }
 
