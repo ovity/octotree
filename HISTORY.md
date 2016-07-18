@@ -1,5 +1,4 @@
-### v2.0.13
-* Avoid showing on patch and diff
+### v2.0.14
 * Add more reserved names
 * Update GitLab token link
 
