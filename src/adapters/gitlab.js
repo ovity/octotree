@@ -74,7 +74,7 @@ class GitLab extends Adapter {
 
   // @override
   getCreateTokenUrl() {
-    return `${location.protocol}//${location.host}/profile/account`
+    return `${location.protocol}//${location.host}/profile/personal_access_tokens`
   }
 
   // @override
