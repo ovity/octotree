@@ -6,7 +6,9 @@ const GH_RESERVED_USER_NAMES = [
   'search', 'developer', 'account',
   'pulls', 'issues', 'features', 'contact',
   'security', 'join', 'login', 'watching',
-  'new', 'integrations', 'gist'
+  'new', 'integrations', 'gist', 'business',
+  'mirrors', 'open-source', 'personal',
+  'pricing'
 ]
 const GH_RESERVED_REPO_NAMES = ['followers', 'following', 'repositories']
 const GH_404_SEL = '#parallax_wrapper'
