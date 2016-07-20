@@ -1,3 +1,6 @@
+### v2.0.15
+* Avoid showing tree in raw GitHub pages
+
 ### v2.0.14
 * Add more reserved names
 * Update GitLab token link
