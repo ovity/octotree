@@ -69,3 +69,4 @@ By default, Octotree only works on `github.com` and `gitlab.com`. To support ent
 * [@Ephemera](https://github.com/Ephemera) for fixing many bugs
 * [@athaeryn](https://github.com/athaeryn) and [@letunglam](https://github.com/letunglam) for helping with UI design
 * And many other people who submit bug fixes and reports
+Xi uzgoogluz
