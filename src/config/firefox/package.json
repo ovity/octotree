@@ -9,7 +9,7 @@
   "icon": "resource://jid1-Om7eJGwA1U8Akg-at-jetpack/data/icons/icon48.png",
   "icon64": "resource://jid1-Om7eJGwA1U8Akg-at-jetpack/data/icons/icon64.png",
   "license": "MIT",
-  "version": "2.0.15",
+  "version": "2.0.16",
   "permissions": {
     "cross-domain-content": ["https://api.github.com", "https://github.com", "https://gitlab.com"],
     "private-browsing": true

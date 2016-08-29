@@ -1,3 +1,6 @@
+### v2.0.16
+* Fix toggle button position in GitLab
+
 ### v2.0.15
 * Avoid showing tree in raw GitHub pages
 
