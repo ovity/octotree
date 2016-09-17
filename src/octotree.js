@@ -15,6 +15,11 @@ $(document).ready(() => {
       .map((url) => url.replace(/(.*?:\/\/[^/]+)(.*)/, '$1'))
       .concat('https://github.com')
 
+    // TODO
+    if (location.host === 'bitbucket.org') {
+      return new Bitbucket(store)
+    }
+
     return ~githubUrls.indexOf(`${location.protocol}//${location.host}`)
       ? new GitHub(store)
       : new GitLab(store)

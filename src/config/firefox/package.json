@@ -11,7 +11,13 @@
   "license": "MIT",
   "version": "2.0.17",
   "permissions": {
-    "cross-domain-content": ["https://api.github.com", "https://github.com", "https://gitlab.com"],
+    "cross-domain-content": [
+      "https://api.bitbucket.org",
+      "https://api.github.com",
+      "https://bitbucket.org",
+      "https://github.com",
+      "https://gitlab.com"
+    ],
     "private-browsing": true
   }
 }

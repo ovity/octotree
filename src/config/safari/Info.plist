@@ -39,6 +39,7 @@
 			</array>
 			<key>Whitelist</key>
 			<array>
+				<string>https://bitbucket.org/*</string>
 				<string>https://github.com/*</string>
 				<string>https://gitlab.com/*</string>
 			</array>
