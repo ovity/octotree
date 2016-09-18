@@ -1,3 +1,7 @@
+### v2.0.17
+* Update for new GitLab layout and remove support for old GitLab layouts
+* Fix bug GitHub not used cached branch
+
 ### v2.0.16
 * Fix toggle button position in GitLab
 

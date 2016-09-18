@@ -4,11 +4,6 @@ const GL_RESERVED_USER_NAMES = [
 ]
 const GL_RESERVED_REPO_NAMES = []
 const GL_RESERVED_TYPES = ['raw']
-const GL_HEADER = '.navbar-gitlab'
-const GL_SIDEBAR = '.sidebar-wrapper'
-const GL_TITLE = 'h1.title'
-const GL_CONTENT = '.container>.content'
-const GL_MAIN_NAV = '.main-nav'
 
 class GitLab extends Adapter {
 
@@ -79,28 +74,11 @@ class GitLab extends Adapter {
 
   // @override
   updateLayout(togglerVisible, sidebarVisible, sidebarWidth) {
-    const isNewDesign = $('.navbar-gitlab.header-collapsed, .navbar-gitlab.header-expanded').length > 0
-    const glSidebarExpanded = $('.page-with-sidebar').hasClass('page-sidebar-expanded') && $(document).width() > 1199
-
-    if (isNewDesign) {
-      const glSidebarWidth = glSidebarExpanded ? 220 : 62
-      $(GL_TITLE).css('margin-left',  (!togglerVisible || sidebarVisible) ? '' : 36)
-      $('.octotree_toggle').css('right', sidebarVisible ? '' : -(glSidebarWidth + 13))
-      $(GL_HEADER).css({'margin-left': sidebarVisible ? sidebarWidth : ''})
-      $('.page-with-sidebar').css('padding-left', sidebarVisible ? sidebarWidth : '')
-    }
-    else {
-      $(GL_HEADER).css('z-index', 3)
-      $(GL_SIDEBAR).css('z-index', 1)
-      $(GL_TITLE).css('margin-left',  sidebarVisible ? '' : 56)
-      $('.octotree_toggle').css({
-        right: sidebarVisible ? '' : -102,
-        top: sidebarVisible ? '' : 0
-      })
-
-      // Deals with GitLab 7.5
-      $(GL_CONTENT).parent().add(GL_MAIN_NAV).css('margin-left', sidebarVisible ? 230 : '')
-    }
+    const glSidebarPinned = $('.page-with-sidebar').hasClass('page-sidebar-pinned')
+    $('.octotree_toggle').css('right', sidebarVisible ? '' : -40)
+    $('.side-nav-toggle, h1.title').css('margin-left',  (glSidebarPinned || sidebarVisible) ? '' : 36)
+    $('.navbar-gitlab').css({'margin-left': sidebarVisible ? (sidebarWidth - (glSidebarPinned ? 220 : 0)) : ''})
+    $('.page-with-sidebar').css('padding-left', sidebarVisible ? (sidebarWidth - (glSidebarPinned ? 220 : 0)) : '')
   }
 
   // @override
