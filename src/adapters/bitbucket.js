@@ -19,7 +19,7 @@ class Bitbucket extends Adapter {
 
   // @override
   getCssClass() {
-    return 'octotree_github_sidebar'
+    return 'octotree_bitbucket_sidebar'
   }
 
   // @override
