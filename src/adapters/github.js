@@ -169,7 +169,7 @@ class GitHub extends Adapter {
       ($(GH_BRANCH_SEL_5).length === 1 && ($(GH_BRANCH_SEL_5).attr('title') || ' ').match(/([^\:]+)/g)[1]) ||
 
       // Reuse last selected branch if exist
-      (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch)
+      (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch) ||
       // Get default branch from cache
       this._defaultBranch[username + '/' + reponame]
 
