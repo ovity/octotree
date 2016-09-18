@@ -3,11 +3,17 @@ const BB_RESERVED_USER_NAMES = [
   'repo', 'snippets', 'support', 'whats-new'
 ]
 const BB_RESERVED_REPO_NAMES = []
+const BB_PJAX_CONTAINER_SEL = '#source-container'
 
 class Bitbucket extends Adapter {
 
   constructor() {
-    super([])
+    super(['jquery.pjax.js'])
+
+    $.pjax.defaults.timeout = 0 // no timeout
+    $(document)
+      .on('pjax:send', () => $(document).trigger(EVENT.REQ_START))
+      .on('pjax:end', () => $(document).trigger(EVENT.REQ_END))
   }
 
   // @override
@@ -87,8 +93,18 @@ class Bitbucket extends Adapter {
 
   // @override
   selectFile(path) {
-    // TODO
-    console.log('selectFile')
+    const $pjaxContainer = $(BB_PJAX_CONTAINER_SEL)
+
+    if ($pjaxContainer.length) {
+      $.pjax({
+        // needs full path for pjax to work with Firefox as per cross-domain-content setting
+        url: location.protocol + '//' + location.host + path,
+        container: $pjaxContainer
+      })
+    }
+    else { // falls back
+      super.selectFile(path)
+    }
   }
 
   // @override
@@ -106,6 +122,11 @@ class Bitbucket extends Adapter {
     this._get(`/src/${opts.repo.branch}/${path}`, opts, (err, res) => {
       if (err) return cb(err)
       const directories = res.directories.map((dir) => ({path: dir, type: 'tree'}))
+      res.files.forEach((file) => {
+        if (file.path.startsWith(res.path)) {
+          file.path = file.path.substring(res.path.length)
+        }
+      })
       const tree = res.files.concat(directories)
       cb(null, tree)
     })
@@ -128,5 +149,10 @@ class Bitbucket extends Adapter {
     $.ajax(cfg)
       .done((data) => cb(null, data))
       .fail((jqXHR) => this._handleError(jqXHR, cb))
+  }
+
+  // @override
+  getItemHref(repo, type, encodedPath) {
+    return `/${repo.username}/${repo.reponame}/src/${repo.branch}/${encodedPath}`
   }
 }

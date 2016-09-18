@@ -76,7 +76,7 @@ class Adapter {
               // encodes but retains the slashes, see #274
               const encodedPath = path.split('/').map(encodeURIComponent).join('/')
               item.a_attr = {
-                href: `/${repo.username}/${repo.reponame}/${type}/${repo.branch}/${encodedPath}`
+                href: this.getItemHref(repo, type, path)
               }
             }
             else if (type === 'commit') {
@@ -287,4 +287,12 @@ class Adapter {
   _getSubmodules(tree, opts, cb) {
     throw new Error('Not implemented')
   }
+
+  /**
+   * Returns item's href value.
+   * @api public
+   */
+   getItemHref(repo, type, encodedPath) {
+     return `/${repo.username}/${repo.reponame}/${type}/${repo.branch}/${encodedPath}`
+   }
 }
