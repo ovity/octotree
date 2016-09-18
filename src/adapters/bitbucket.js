@@ -23,11 +23,6 @@ class Bitbucket extends Adapter {
   }
 
   // @override
-  canLoadEntireTree() {
-    return true
-  }
-
-  // @override
   getCreateTokenUrl() {
     return `${location.protocol}//${location.host}/account/admin/app-passwords/new`
   }
@@ -98,12 +93,9 @@ class Bitbucket extends Adapter {
 
   // @override
   loadCodeTree(opts, cb) {
-    opts.path = ''
+    opts.path = opts.node.path
     this._loadCodeTree(opts, (item) => {
-      if (item.path.endsWith('/')) {
-        item.path = item.path.slice(0, -1)
-        item.type = 'tree'
-      } else {
+      if (!item.type) {
         item.type = 'blob'
       }
     }, cb)
@@ -111,11 +103,11 @@ class Bitbucket extends Adapter {
 
   // @override
   _getTree(path, opts, cb) {
-    // `/directory` endpoint is not officially supported.
-    // See https://bitbucket.org/site/master/issues/8316/rest-api-list-all-files-in-repo-like-git
-    this._get(`/directory/${opts.repo.branch}/`, opts, (err, res) => {
-      if (err) cb(err)
-      else cb(null, res.values.filter(v => v !== '/').map(v => ({ path: v })))
+    this._get(`/src/${opts.repo.branch}/${path}`, opts, (err, res) => {
+      if (err) return cb(err)
+      const directories = res.directories.map((dir) => ({path: dir, type: 'tree'}))
+      const tree = res.files.concat(directories)
+      cb(null, tree)
     })
   }
 
@@ -133,7 +125,6 @@ class Bitbucket extends Adapter {
     const url = `${host}/repositories/${opts.repo.username}/${opts.repo.reponame}${path || ''}`
     const cfg  = { url, method: 'GET', cache: false }
 
-    // TODO: handle too many files failure
     $.ajax(cfg)
       .done((data) => cb(null, data))
       .fail((jqXHR) => this._handleError(jqXHR, cb))
