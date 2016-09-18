@@ -3,6 +3,7 @@ const BB_RESERVED_USER_NAMES = [
   'repo', 'snippets', 'support', 'whats-new'
 ]
 const BB_RESERVED_REPO_NAMES = []
+const BB_404_SEL = '#error.404'
 const BB_PJAX_CONTAINER_SEL = '#source-container'
 
 class Bitbucket extends Adapter {
@@ -41,8 +42,10 @@ class Bitbucket extends Adapter {
   // @override
   getRepoFromPath(showInNonCodePage, currentRepo, token, cb) {
 
-    // TODO: skip 404 page
-
+    // 404 page, skip
+    if ($(BB_404_SEL).length) {
+      return cb()
+    }
 
     // (username)/(reponame)[/(type)]
     const match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/)
