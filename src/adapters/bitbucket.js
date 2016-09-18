@@ -65,8 +65,16 @@ class Bitbucket extends Adapter {
       return cb()
     }
 
-    // TODO: get branch name
-    const branch = ''
+    // Get branch by inspecting page, quite fragile so provide multiple fallbacks
+    const BB_BRANCH_SEL_1 = '.branch-dialog-trigger'
+
+    const branch =
+      // Code page
+      $(BB_BRANCH_SEL_1).attr('title') ||
+      // Assume same with previously
+      (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch) ||
+      // Default from cache
+      this._defaultBranch[username + '/' + reponame]
 
     const repo = {username: username, reponame: reponame, branch: branch}
 
