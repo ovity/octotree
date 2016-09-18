@@ -21,7 +21,47 @@ class Bitbucket extends Adapter {
   init($sidebar) {
     super.init($sidebar)
 
-    // TODO
+    if (!window.MutationObserver) return
+
+    // Bitbucket switch pages using pjax. This observer detects if the pjax container
+    // has been updated with new contents and trigger layout.
+    const pageChangeObserver = new window.MutationObserver(() => {
+      // Trigger location change, can't just relayout as Octotree might need to
+      // hide/show depending on whether the current page is a code page or not.
+      return $(document).trigger(EVENT.LOC_CHANGE)
+    })
+
+    const pjaxContainer = $(BB_PJAX_CONTAINER_SEL)[0]
+
+    if (pjaxContainer) {
+      pageChangeObserver.observe(pjaxContainer, {
+        childList: true,
+      })
+    }
+    else { // Fall back if DOM has been changed
+      let firstLoad = true, href, hash
+
+      function detectLocChange() {
+        if (location.href !== href || location.hash !== hash) {
+          href = location.href
+          hash = location.hash
+
+          // If this is the first time this is called, no need to notify change as
+          // Octotree does its own initialization after loading options.
+          if (firstLoad) {
+            firstLoad = false
+          }
+          else {
+            setTimeout(() => {
+              $(document).trigger(EVENT.LOC_CHANGE)
+            }, 300) // Wait a bit for pjax DOM change
+          }
+        }
+        setTimeout(detectLocChange, 200)
+      }
+
+      detectLocChange()
+    }
   }
 
   // @override
