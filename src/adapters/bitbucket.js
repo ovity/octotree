@@ -1,3 +1,9 @@
+const BB_RESERVED_USER_NAMES = [
+  'account', 'dashboard', 'integrations', 'product',
+  'repo', 'snippets', 'support', 'whats-new'
+]
+const BB_RESERVED_REPO_NAMES = []
+
 class Bitbucket extends Adapter {
 
   constructor() {
@@ -45,6 +51,12 @@ class Bitbucket extends Adapter {
 
     const username = match[1]
     const reponame = match[2]
+
+    // Not a repository, skip
+    if (~BB_RESERVED_USER_NAMES.indexOf(username) ||
+        ~BB_RESERVED_REPO_NAMES.indexOf(reponame)) {
+      return cb()
+    }
 
     // TODO: get branch name
     const branch = ''
