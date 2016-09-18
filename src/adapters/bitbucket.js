@@ -58,6 +58,13 @@ class Bitbucket extends Adapter {
       return cb()
     }
 
+    // Skip non-code page unless showInNonCodePage is true
+    // with Bitbucket /username/repo is non-code page
+    if (!showInNonCodePage &&
+      (!match[3] || (match[3] && match[3] !== 'src'))) {
+      return cb()
+    }
+
     // TODO: get branch name
     const branch = ''
 
