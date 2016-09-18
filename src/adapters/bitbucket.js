@@ -28,8 +28,7 @@ class Bitbucket extends Adapter {
 
   // @override
   updateLayout(togglerVisible, sidebarVisible, sidebarWidth) {
-    // TODO
-    console.log('updateLayout')
+    $('html').css('margin-left', sidebarVisible ? sidebarWidth : '')
   }
 
   // @override
