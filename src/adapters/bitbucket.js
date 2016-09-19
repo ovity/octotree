@@ -77,6 +77,8 @@ class Bitbucket extends Adapter {
 
   // @override
   updateLayout(togglerVisible, sidebarVisible, sidebarWidth) {
+    $('.octotree_toggle').css('right', sidebarVisible ? '' : -44)
+    $('.aui-header').css('padding-left', sidebarVisible ? '' : 56)
     $('html').css('margin-left', sidebarVisible ? sidebarWidth : '')
   }
 
