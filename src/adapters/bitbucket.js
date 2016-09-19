@@ -189,6 +189,15 @@ class Bitbucket extends Adapter {
     const url = `${host}/repositories/${opts.repo.username}/${opts.repo.reponame}${path || ''}`
     const cfg  = { url, method: 'GET', cache: false }
 
+    if (opts.token) {
+      // Bitbucket App passwords can be used only for Basic Authentication.
+      // Get username of logged-in user.
+      const currentUser = JSON.parse($('body').attr('data-current-user'))
+      if (currentUser.username) {
+        cfg.headers = { Authorization: 'Basic ' + btoa(currentUser.username + ':' + opts.token) }
+      }
+    }
+
     $.ajax(cfg)
       .done((data) => cb(null, data))
       .fail((jqXHR) => this._handleError(jqXHR, cb))
