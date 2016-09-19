@@ -3,6 +3,7 @@ const BB_RESERVED_USER_NAMES = [
   'repo', 'snippets', 'support', 'whats-new'
 ]
 const BB_RESERVED_REPO_NAMES = []
+const BB_RESERVED_TYPES = ['raw']
 const BB_404_SEL = '#error.404'
 const BB_PJAX_CONTAINER_SEL = '#source-container'
 
@@ -95,17 +96,19 @@ class Bitbucket extends Adapter {
 
     const username = match[1]
     const reponame = match[2]
+    const type = match[3]
 
     // Not a repository, skip
     if (~BB_RESERVED_USER_NAMES.indexOf(username) ||
-        ~BB_RESERVED_REPO_NAMES.indexOf(reponame)) {
+        ~BB_RESERVED_REPO_NAMES.indexOf(reponame) ||
+        ~BB_RESERVED_TYPES.indexOf(type)) {
       return cb()
     }
 
     // Skip non-code page unless showInNonCodePage is true
     // with Bitbucket /username/repo is non-code page
     if (!showInNonCodePage &&
-      (!match[3] || (match[3] && match[3] !== 'src'))) {
+      (!type || (tyep && type !== 'src'))) {
       return cb()
     }
 
