@@ -199,13 +199,13 @@ class Bitbucket extends Adapter {
 
   _getSubmodulesInCurrentPath(tree, opts, cb) {
     const currentPath = opts.path
-    const filterFn = (currentPath) ?
-      ((path) => path.startsWith(`${currentPath}/`)) :
-      ((path) => path.indexOf('/') === -1)
+    const isInCurrentPath = currentPath
+      ? (path) => path.startsWith(`${currentPath}/`)
+      : (path) => path.indexOf('/') === -1
 
     const submodules = opts.repo.submodules
     const submodulesInCurrentPath = {}
-    Object.keys(submodules).filter(filterFn).forEach((key) => {
+    Object.keys(submodules).filter(isInCurrentPath).forEach((key) => {
       submodulesInCurrentPath[key] = submodules[key]
     })
 
