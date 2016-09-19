@@ -180,11 +180,43 @@ class Bitbucket extends Adapter {
 
   // @override
   _getSubmodules(tree, opts, cb) {
+    if (opts.repo.submodules) {
+      return this._getSubmodulesInCurrentPath(tree, opts, cb)
+    }
+
     const item = tree.filter((item) => /^\.gitmodules$/i.test(item.path))[0]
     if (!item) return cb()
 
-    // TODO: get submodules
-    cb()
+    this._get(`/src/${opts.encodedBranch}/${item.path}`, opts, (err, res) => {
+      if (err) return cb(err)
+      // Memoize submodules so that they will be inserted into the tree later.
+      opts.repo.submodules = parseGitmodules(res.data)
+      this._getSubmodulesInCurrentPath(tree, opts, cb)
+    })
+  }
+
+  _getSubmodulesInCurrentPath(tree, opts, cb) {
+    const currentPath = opts.path
+    const filterFn = (currentPath) ?
+      ((path) => path.startsWith(`${currentPath}/`)) :
+      ((path) => path.indexOf('/') === -1)
+
+    const submodules = opts.repo.submodules
+    const submodulesInCurrentPath = {}
+    Object.keys(submodules).filter(filterFn).forEach((key) => {
+      submodulesInCurrentPath[key] = submodules[key]
+    })
+
+    // Insert submodules in current path into the tree because submodules can not
+    // be retrieved with Bitbucket API but can only by reading .gitmodules.
+    Object.keys(submodulesInCurrentPath).forEach((path) => {
+      if (currentPath) {
+        // `currentPath` is prefixed to `path`, so delete it.
+        path = path.substring(currentPath.length + 1)
+      }
+      tree.push({path: path, type: 'commit'})
+    })
+    cb(null, submodulesInCurrentPath)
   }
 
   _get(path, opts, cb) {
