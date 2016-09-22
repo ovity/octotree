@@ -156,6 +156,14 @@ class Bitbucket extends Adapter {
   }
 
   // @override
+  downloadFile(path, fileName) {
+    const link = document.createElement('a')
+    link.setAttribute('href', path.replace(/\/src\//, '/raw/'))
+    link.setAttribute('download', fileName)
+    link.click()
+  }
+
+  // @override
   loadCodeTree(opts, cb) {
     opts.path = opts.node.path
     this._loadCodeTree(opts, (item) => {
