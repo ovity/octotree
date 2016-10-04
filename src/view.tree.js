@@ -64,7 +64,7 @@ class TreeView {
       )
       .on('click', 'a[data-pjax]', function (event) {
         event.preventDefault()
-        adapter.selectFile($(this).attr('href') /* a.href always return absolute URL, don't want that */)
+        event.ctrlKey ? adapter.selectFileNewTab($(this).attr('href')) : adapter.selectFile($(this).attr('href')) /* a.href always return absolute URL, don't want that */
       })
   }
 
@@ -131,7 +131,7 @@ class TreeView {
 
     if ($icon.hasClass('commit')) {
       refocusAfterCompletion()
-      adapter.selectSubmodule(href)
+      event.ctrlKey ? adapter.selectSubmoduleNewTab(href) : adapter.selectSubmodule(href)
     }
     else if ($icon.hasClass('blob')) {
       if (download) {
@@ -139,7 +139,7 @@ class TreeView {
       }
       else {
         refocusAfterCompletion()
-        adapter.selectFile(href)
+        event.ctrlKey ? adapter.selectFileNewTab(href) : adapter.selectFile(href)
       }
     }
   }
