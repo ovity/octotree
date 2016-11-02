@@ -3,6 +3,7 @@ If this is a bug, provide as much information as you can to help reproduce the i
 
 ### Environment (if bug)
 
-* Octotree version: CHANGE_THIS
-* Browser & version: CHANGE_THIS
-* OS & version: CHANGE_THIS
+* Octotree version:
+* Browser & version:
+* OS & version:
+* Screenshot, if any (drag an image here)
