@@ -65,7 +65,8 @@ class TreeView {
       .on('click', 'a[data-pjax]', function (event) {
         event.preventDefault()
         const href = $(this).attr('href'); /* a.href always return absolute URL, don't want that */
-        event.ctrlKey ? adapter.openInNewTab(href) : adapter.selectFile(href)
+        const newTab = event.shiftKey || event.ctrlKey || event.metaKey
+        newTab ? adapter.openInNewTab(href) : adapter.selectFile(href)
       })
   }
 
@@ -125,6 +126,7 @@ class TreeView {
     }
 
     const adapter = this.adapter
+    const newTab = event.shiftKey || event.ctrlKey || event.metaKey
     const href = $target.attr('href')
     const $icon = $target.children().length
       ? $target.children(':first')
@@ -132,7 +134,7 @@ class TreeView {
 
     if ($icon.hasClass('commit')) {
       refocusAfterCompletion()
-      event.ctrlKey ? adapter.openInNewTab(href) : adapter.selectSubmodule(href)
+      newTab ? adapter.openInNewTab(href) : adapter.selectSubmodule(href)
     }
     else if ($icon.hasClass('blob')) {
       if (download) {
@@ -140,7 +142,7 @@ class TreeView {
       }
       else {
         refocusAfterCompletion()
-        event.ctrlKey ? adapter.openInNewTab(href) : adapter.selectFile(href)
+        newTab ? adapter.openInNewTab(href) : adapter.selectFile(href)
       }
     }
   }

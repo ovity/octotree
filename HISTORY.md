@@ -1,3 +1,7 @@
+### v2.0.18
+* Update GitHub and GitLab layout
+* Support cmd/ctrl/shift-click to open new tab
+
 ### v2.0.17
 * Update for new GitLab layout and remove support for old GitLab layouts
 * Fix bug GitHub not used cached branch

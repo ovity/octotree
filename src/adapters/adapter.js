@@ -260,12 +260,11 @@ class Adapter {
   }
 
   /**
-   * Selects the file/submodule/... at a specific path in a new tab window.
+   * Opens file or submodule in a new tab.
    * @api public
    */
   openInNewTab(path) {
-    let win = window.open(path, '_blank')
-    win.focus()
+    window.open(path, '_blank').focus()
   }
 
   /**
