@@ -170,6 +170,7 @@ function buildJs(overrides, ctx) {
     './tmp/template.js',
     './src/constants.js',
     './src/adapters/adapter.js',
+    './src/adapters/bitbucket.js',
     './src/adapters/github.js',
     './src/adapters/gitlab.js',
     './src/view.help.js',
