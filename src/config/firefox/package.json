@@ -16,6 +16,7 @@
       "https://github.com",
       "https://gitlab.com"
     ],
-    "private-browsing": true
+    "private-browsing": true,
+    "multiprocess": true
   }
 }
