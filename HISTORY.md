@@ -1,3 +1,7 @@
+### v2.0.19
+* Accommodate new GitHub layout
+* Support multiprocess for Firefox
+
 ### v2.0.18
 * Update GitHub and GitLab layout
 * Support cmd/ctrl/shift-click to open new tab
