@@ -1,3 +1,6 @@
+### v2.0.20
+* Fix bug causing some branches not to show
+
 ### v2.0.19
 * Accommodate new GitHub layout
 * Support multiprocess for Firefox

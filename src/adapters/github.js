@@ -152,7 +152,7 @@ class GitHub extends Adapter {
     }
 
     // Get branch by inspecting page, quite fragile so provide multiple fallbacks
-    const GH_BRANCH_SEL_1 = '[aria-label="Switch branches or tags"] .css-truncate-target'
+    const GH_BRANCH_SEL_1 = '[aria-label="Switch branches or tags"]'
     const GH_BRANCH_SEL_2 = '.repo-root a[data-branch]'
     const GH_BRANCH_SEL_3 = '.repository-sidebar a[aria-label="Code"]'
     const GH_BRANCH_SEL_4 = '.current-branch'
@@ -160,7 +160,7 @@ class GitHub extends Adapter {
 
     const branch =
       // Detect branch in code page
-      $(GH_BRANCH_SEL_1).text() || $(GH_BRANCH_SEL_2).data('branch') ||
+      $(GH_BRANCH_SEL_1).attr('title') || $(GH_BRANCH_SEL_2).data('branch') ||
       // Non-code page (old GH design)
       ($(GH_BRANCH_SEL_3).attr('href') || ' ').match(/([^\/]+)/g)[3] ||
       // Non-code page: commit page
