@@ -152,22 +152,11 @@ class GitHub extends Adapter {
     }
 
     // Get branch by inspecting page, quite fragile so provide multiple fallbacks
-    const GH_BRANCH_SEL_1 = '[aria-label="Switch branches or tags"]'
-    const GH_BRANCH_SEL_2 = '.repo-root a[data-branch]'
-    const GH_BRANCH_SEL_3 = '.repository-sidebar a[aria-label="Code"]'
-    const GH_BRANCH_SEL_4 = '.current-branch'
-    const GH_BRANCH_SEL_5 = 'link[title*="Recent Commits to"]'
-
     const branch =
-      // Detect branch in code page
-      $(GH_BRANCH_SEL_1).attr('title') || $(GH_BRANCH_SEL_2).data('branch') ||
-      // Non-code page (old GH design)
-      ($(GH_BRANCH_SEL_3).attr('href') || ' ').match(/([^\/]+)/g)[3] ||
-      // Non-code page: commit page
-      ($(GH_BRANCH_SEL_4).attr('title') || ' ').match(/([^\:]+)/g)[1] ||
-      // Non-code page: others
-      ($(GH_BRANCH_SEL_5).length === 1 && ($(GH_BRANCH_SEL_5).attr('title') || ' ').match(/([^\:]+)/g)[1]) ||
-
+      // Code page
+      $('.branch-select-menu .select-menu-item.selected').data('name') ||
+      // Pull requests page
+      ($('.commit-ref.base-ref').attr('title') || ':').match(/:(.*)/)[1] ||
       // Reuse last selected branch if exist
       (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch) ||
       // Get default branch from cache
