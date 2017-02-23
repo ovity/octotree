@@ -5,6 +5,7 @@ import {merge} from 'event-stream'
 import map from 'map-stream'
 import {spawn} from 'child_process'
 const $ = require('gulp-load-plugins')()
+const version = require('./package.json').version
 
 // Tasks
 gulp.task('clean', () => {
@@ -69,8 +70,9 @@ gulp.task('chrome', ['chrome:js'], () => {
   return merge(
     pipe('./icons/**/*', './tmp/chrome/icons'),
     pipe('./fonts/**/*', './tmp/chrome/fonts'),
-    pipe(['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js', './src/config/chrome/manifest.json'], './tmp/chrome/'),
-    pipe('./src/config/chrome/background.js', $.babel(), './tmp/chrome/')
+    pipe(['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'], './tmp/chrome/'),
+    pipe('./src/config/chrome/background.js', $.babel(), './tmp/chrome/'),
+    pipe('./src/config/chrome/manifest.json', $.replace('$VERSION', version), './tmp/chrome/')
   )
 })
 
@@ -112,7 +114,7 @@ gulp.task('firefox', ['firefox:js'], () => {
     pipe('./icons/**/*', './tmp/firefox/data/icons'),
     pipe(['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'], './tmp/firefox/data'),
     pipe('./src/config/firefox/firefox.js', $.babel(), './tmp/firefox/lib'),
-    pipe('./src/config/firefox/package.json', './tmp/firefox')
+    pipe('./src/config/firefox/package.json', $.replace('$VERSION', version), './tmp/firefox')
   )
 })
 
@@ -133,9 +135,10 @@ gulp.task('safari', ['safari:js'], () => {
   return merge(
     pipe('./icons/icon64.png', $.rename('Icon-64.png'), './tmp/safari/octotree.safariextension'),
     pipe(
-      ['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js', './src/config/safari/**/*'],
+      ['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'],
       './tmp/safari/octotree.safariextension/'
-    )
+    ),
+    pipe('./src/config/safari/Info.plist', $.replace('$VERSION', version), './tmp/safari/octotree.safariextension')
   )
 })
 
