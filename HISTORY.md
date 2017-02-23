@@ -1,3 +1,6 @@
+### v2.0.21
+* Fix branch selection in pull request page
+
 ### v2.0.20
 * Fix bug causing some branches not to show
 
