@@ -1,20 +1,22 @@
 ## Octotree
-Browser extension (Chrome, Firefox, Opera and Safari) to show a code tree on GitHub and GitLab. Awesome for exploring project source without having to pull every single repository to your machine. Features:
+Browser extension (Chrome, Firefox, Opera and Safari) to show a code tree on GitHub. Awesome for exploring project source without having to pull every single repository to your machine. Features:
 
 * Easy-to-navigate code tree, just like in IDEs
 * Fast browsing with pjax and Turbolinks
 * Support private repositories (see [instructions](#access-token))
-* Support GitHub and GitLab Enterprise (Chrome and Opera only, see [instructions](#enterprise-urls))
+* Support GitHub Enterprise (Chrome and Opera only, see [instructions](#enterprise-urls))
+
+__Deprecated GitLab support__: I will no longer actively support GitLab. The reason is GitLab has changed so much recently and it would take too much effort to keep up. In addition, the GitLab team has [told me](https://github.com/buunguyen/octotree/issues/265) they would include Octotree-like feature in GitLab itself, so there's little reason to continue investing in GitLab support in Octotree. That being said, I'll gladly accept PRs to benefit those who are using Octotree for GitLab.
 
 ![Octotree on GitHub](docs/chrome-github.png)
-![Octotree on GitLab](docs/chrome-gitlab.png)
+
 
 ### Install on Chrome, Firefox and Opera
 * Install Octotree from [Chrome Web Store](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc), [Mozilla Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/octotree/) or [Opera Add-ons Store](https://addons.opera.com/en/extensions/details/octotree/)
-* Navigate to any GitHub or GitLab repository (or just refresh this page as an example)
+* Navigate to any GitHub repository (or just refresh this page as an example)
 * The code tree should show on the left-hand side of the screen
 
-__Note__: to configure Octotree for GitHub and GitLab Enterprise, see [instructions](#enterprise-urls)
+__Note__: to configure Octotree for GitHub Enteprise, see [instructions](#enterprise-urls)
 
 ### Install on Safari
 
@@ -42,20 +44,17 @@ Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve reposit
 
 When that happens, Octotree will ask for your [GitHub personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use). If you don't already have one, [create one](https://github.com/settings/tokens/new), then copy and paste it into the textbox. Note that the minimal scopes that should be granted are `public_repo` and `repo` (if you need access to private repositories).
 
-#### GitLab
-Octotree uses [GitLab API](http://doc.gitlab.com/ce/api/) to retrieve repository metadata. By default, Octotree attempts to retrieve the access token embedded in the GitLab DOM and use the token to authenticate against the GitLab API. If Octotree cannot retrieve the token, it will prompt you to [create one](https://gitlab.com/profile/personal_access_tokens).
-
 ### Enterprise URLs
-By default, Octotree only works on `github.com` and `gitlab.com`. To support enterprise version (Chrome and Opera only), you must grant Octotree sufficient permissions. Follow these steps to do so:
+By default, Octotree only works on `github.com`. To support enterprise version (Chrome and Opera only), you must grant Octotree sufficient permissions. Follow these steps to do so:
 
-* To add GitHub enterprise, go to any GitHub repo; otherwise, go to any GitLab repo (e.g. [gitlab-ce](https://gitlab.com/gitlab-org/gitlab-ce)).
+* Go to any GitHub repo
 * Open the Octotree settings panel
 
 ![Settings](docs/settings.jpg)
 
-* Fill in the GitHub/GitLab Enterprise URLs textbox, _one URL per line_
+* Fill in the GitHub Enterprise URLs textbox, _one URL per line_
 * Click Save and accept the permission prompt
-* Navigate to your GitHub/GitLab Enterprise site
+* Navigate to your GitHub Enterprise site
 * You might be asked to create an [access token](#access-token)
 
 ### Others
