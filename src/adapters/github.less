@@ -21,7 +21,7 @@
 }
 
 .octotree_github_sidebar {
-  padding-top: 49px;
+  padding-top: 54px;
   background-color: #f7f7f7;
 
   .octotree_github_only {
@@ -31,8 +31,8 @@
   .octotree_views {
     .octotree_view {
       .octotree_view_header {
-        height: 49px;
-        background-color: #f3f3f3;
+        height: 54px;
+        background-color: #1e2327;
         background-image: linear-gradient(#f9f9f9, #f3f3f3);
         background-repeat: repeat-x;
         border-bottom: 1px solid #e5e5e5;
@@ -55,6 +55,7 @@
         content: data-uri('image/svg+xml;charset=UTF-8', './octicons/repo.svg');
       }
       .octotree_header_branch {
+        color: #fff;
         font-size: 11px;
       }
       .octotree_header_branch:before {
@@ -96,11 +97,11 @@
     }
   }
 
-  a.octotree_toggle, a.octotree_opts {
-    color: black !important;
+  a.octotree_toggle, a.octotree_opts, a.octotree_header_repo {
+    color: rgba(255, 255, 255, 0.75) !important;
 
     &:hover, &.selected {
-      color: #4183C4 !important;
+      color: rgba(255, 255, 255, 1) !important;
     }
   }
 
@@ -116,7 +117,7 @@
   }
 
   a.octotree_toggle {
-    top: 9px;
+    top: 12px;
     right: -35px;
 
     &:not(.octotree_loading) > span:after {
