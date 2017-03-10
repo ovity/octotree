@@ -5,7 +5,8 @@
 
   .octotree_github_sidebar {
     a.octotree_toggle {
-      right: 5px;
+      right: 12px;
+      top: 12px;
       &:not(.octotree_loading) > span:after {
         content: data-uri('image/svg+xml;charset=UTF-8', './octicons/chevron-left.svg');
       }
@@ -21,21 +22,26 @@
 }
 
 .octotree_github_sidebar {
-  padding-top: 49px;
+  padding-top: 54px;
   background-color: #f7f7f7;
+  border-right: none;
 
   .octotree_github_only {
     display: block;
   }
 
   .octotree_views {
+    border-right: 1px solid #ddd;
+    background-color: #fafbfc;
+
     .octotree_view {
       .octotree_view_header {
-        height: 49px;
-        background-color: #f3f3f3;
-        background-image: linear-gradient(#f9f9f9, #f3f3f3);
-        background-repeat: repeat-x;
-        border-bottom: 1px solid #e5e5e5;
+        font-weight: normal;
+        color: #eee;
+        text-shadow: none;
+        height: 54px;
+        line-height: 2.8;
+        background: #24292e none;
       }
 
       .octotree_help {
@@ -48,6 +54,11 @@
     .octotree_treeview {
       .octotree_header_repo {
         font-size: 13px;
+        font-weight: normal;
+        a {
+          color: #eee;
+          font-weight: normal;
+        }
       }
       .octotree_header_repo:before {
         position: relative;
@@ -105,18 +116,18 @@
   }
 
   a.octotree_opts {
-    top: 16px;
-    right: 38px;
-    width: 14px;
+    top: 19px;
+    right: 48px;
+    width: 16px;
     height: 16px;
-    background: data-uri('image/svg+xml;charset=UTF-8', './octicons/gear.svg');
+    background: data-uri('image/svg+xml;charset=UTF-8', 'octicons/light-gear.svg');
     &:hover {
-      background: data-uri('image/svg+xml;charset=UTF-8', './octicons/gear-hover.svg');
+      background: data-uri('image/svg+xml;charset=UTF-8', './octicons/light-gear-hover.svg');
     }
   }
 
   a.octotree_toggle {
-    top: 9px;
+    top: 12px;
     right: -35px;
 
     &:not(.octotree_loading) > span:after {
