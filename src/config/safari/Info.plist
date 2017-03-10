@@ -40,11 +40,10 @@
 			<key>Whitelist</key>
 			<array>
 				<string>https://github.com/*</string>
-				<string>https://gitlab.com/*</string>
 			</array>
 		</dict>
 		<key>Description</key>
-		<string>Code tree for GitHub and GitLab</string>
+		<string>Code tree for GitHub</string>
 		<key>ExtensionInfoDictionaryVersion</key>
 		<string>1.0</string>
 		<key>Permissions</key>
@@ -54,7 +53,6 @@
 				<key>Allowed Domains</key>
 				<array>
 					<string>github.com</string>
-					<string>gitlab.com</string>
 				</array>
 				<key>Include Secure Pages</key>
 				<true/>

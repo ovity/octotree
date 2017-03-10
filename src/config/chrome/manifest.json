@@ -3,14 +3,13 @@
   "version": "$VERSION",
   "manifest_version": 2,
   "author": "Buu Nguyen",
-  "description": "Code tree for GitHub and GitLab",
+  "description": "Code tree for GitHub",
   "homepage_url": "https://github.com/buunguyen/octotree",
   "icons": {
     "128": "icons/icon128.png"
   },
   "permissions": [
     "https://github.com/*",
-    "https://gitlab.com/*",
     "storage"
   ],
   "optional_permissions": [

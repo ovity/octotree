@@ -2,7 +2,7 @@
   "name": "octotree",
   "title": "Octotree",
   "id": "jid1-Om7eJGwA1U8Akg@jetpack",
-  "description": "Code tree for GitHub and GitLab",
+  "description": "Code tree for GitHub",
   "author": "Buu Nguyen",
   "homepage": "https://github.com/buunguyen/octotree",
   "main": "lib/firefox",
@@ -13,8 +13,7 @@
   "permissions": {
     "cross-domain-content": [
       "https://api.github.com",
-      "https://github.com",
-      "https://gitlab.com"
+      "https://github.com"
     ],
     "private-browsing": true,
     "multiprocess": true
