@@ -8,7 +8,7 @@ const GL_RESERVED_TYPES = ['raw']
 class GitLab extends Adapter {
 
   constructor(store) {
-    super(['turbolinks.js'])
+    super()
 
     // GitLab (for now) embeds access token in the page of a logged-in user.
     // Use it to set the token if one isn't available.
@@ -43,18 +43,10 @@ class GitLab extends Adapter {
     $('.octotree_view_body input[type="text"], .octotree_view_body textarea')
       .addClass('form-control')
 
-    // GitLab uses Turbolinks to handle page load
-    $(document)
-      .on('page:fetch', () => $(document).trigger(EVENT.REQ_START))
-      .on('page:load', () => {
-
-        // GitLab removes DOM, let's add back
-        $sidebar.appendTo('body')
-
-        // Trigger location change since the new page might not a repo page
-        $(document).trigger(EVENT.LOC_CHANGE)
-        $(document).trigger(EVENT.REQ_END)
-      })
+    $(document).ready(() => {
+      // GitLab removes DOM, let's add back
+      $sidebar.appendTo('body')
+    })
   }
 
   // @override
@@ -142,11 +134,6 @@ class GitLab extends Adapter {
         cb(null, repo)
       })
     }
-  }
-
-  // @override
-  selectFile(path) {
-    Turbolinks.visit(path)
   }
 
   // @override
