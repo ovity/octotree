@@ -1,5 +1,6 @@
 ### v2.1.0
 * Remove GitLab support
+* Improve GitHub styling
 
 ### v2.0.21
 * Fix branch selection in pull request page
