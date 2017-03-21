@@ -138,7 +138,7 @@ class Adapter {
       case 404:
         error = 'Private repository'
         message =
-          `Accessing private repositories requires a access token.
+          `Accessing private repositories requires an access token.
            Follow <a href="${this.getCreateTokenUrl()}" target="_blank">this link</a>
            to create one and paste it below.`
         needAuth = true
