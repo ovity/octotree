@@ -80,7 +80,7 @@ class Adapter {
                if (item.patch.additions != 0 || item.patch.deletions != 0) {
                  patch_html += `
                    <span class="text-green">+${item.patch.additions}</span>
-                   <span class="text-red">+${item.patch.deletions}</span>
+                   <span class="text-red">-${item.patch.deletions}</span>
                  `
                }
 
