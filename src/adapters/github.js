@@ -91,8 +91,9 @@ class GitHub extends PjaxAdapter {
       return cb()
     }
 
-    const username = match[1]
-    const reponame = match[2]
+    let username = ($('.commit-ref.head-ref').attr('title') || '/').match(/(.*?)\//)[1] ||
+      match[1]
+    let reponame = match[2]
 
     // Not a repository, skip
     if (~GH_RESERVED_USER_NAMES.indexOf(username) ||
@@ -110,7 +111,7 @@ class GitHub extends PjaxAdapter {
       // Code page
       $('.branch-select-menu .select-menu-item.selected').data('name') ||
       // Pull requests page
-      ($('.commit-ref.base-ref').attr('title') || ':').match(/:(.*)/)[1] ||
+      ($('.commit-ref.head-ref').attr('title') || ':').match(/:(.*)/)[1] ||
       // Reuse last selected branch if exist
       (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch) ||
       // Get default branch from cache
@@ -149,9 +150,79 @@ class GitHub extends PjaxAdapter {
   _getTree(path, opts, cb) {
     this._get(`/git/trees/${path}`, opts, (err, res) => {
       if (err) cb(err)
-      else cb(null, res.tree)
+      else {
+        const diff = this._getPatch(path)
+        const diffExists = (Object.keys(diff).length > 0)
+        const filteredTree = res.tree.filter((node) => {
+          node.patch = diff[node.path]
+          delete diff[node.path]
+          return !diffExists || node.patch
+        })
+
+        cb(null, filteredTree)
+      }
     })
   }
+
+  // @override
+   _getPatch(path) {
+     const diff = {}
+     const files = $(".diff-view .file-info")
+     files.each(function() {
+       const file = $(this).find("a.link-gray-dark").first()
+
+       let path = file.attr("title")
+       let href = file.attr("href")
+       let previous = ""
+
+       const rename_index = path.indexOf("→")
+       if (rename_index != -1) {
+         previous = path.substring(0, rename_index-1)
+         path = path.substring(rename_index+2)
+       }
+
+       if (!path.startsWith(path)) return
+
+       const stats = $(this).find(".diffstat").first()
+       const stats_text = stats.attr("aria-label")
+       const patch = {type: "blob", path: path, href: href, additions: 0, deletions: 0}
+
+       if (stats_text.indexOf("addition") != -1) {
+         const stats_parts = stats_text.split(" ")
+         patch.additions = Number(stats_parts[0])
+         patch.deletions = Number(stats_parts[3])
+         patch.action = "modify"
+       } else {
+         if (stats_text.indexOf("renamed") != -1) {
+           patch.action = "rename"
+           patch.previous = previous
+         } else if (stats_text.indexOf("added") != -1) {
+           patch.action = "add"
+         }
+       }
+
+       diff[path] = patch
+
+       const base = []
+       path.split("/").slice(0, -1).forEach(function(rel_path) {
+         base.push(rel_path)
+         const fullpath = base.join("/")
+
+         if (!diff[fullpath]) {
+           diff[fullpath] = {
+             path:fullpath, type:"tree",
+             additions:0, deletions:0, files: 0,
+           }
+         }
+
+         diff[fullpath].files++
+         diff[fullpath].additions += patch.additions
+         diff[fullpath].deletions += patch.deletions
+       })
+     })
+
+     return diff
+   }
 
   // @override
   _getSubmodules(tree, opts, cb) {

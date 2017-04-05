@@ -60,6 +60,33 @@ class Adapter {
             item.text = name
             item.icon = type // uses `type` as class name for tree node
 
+            if (item.patch) {
+               let patch_html = ""
+
+               if (item.patch.action) {
+                 if (item.patch.action == "add") {
+                   patch_html += '<span class="text-green">added</span>'
+                 } else if (item.patch.action == "rename") {
+                   patch_html += `<span class="text-green"
+                     title="${item.patch.previous}">renamed
+                   </span>`
+                 }
+               }
+
+               if (item.patch.files) {
+                 patch_html += `<span>${item.patch.files} changes</span>`
+               }
+
+               if (item.patch.additions != 0 || item.patch.deletions != 0) {
+                 patch_html += `
+                   <span class="text-green">+${item.patch.additions}</span>
+                   <span class="text-red">+${item.patch.deletions}</span>
+                 `
+               }
+
+               item.text += `<span class="patch">${patch_html}</span>`
+             }
+
             if (node) {
               folders[''].push(item)
             }
@@ -325,7 +352,7 @@ class PjaxAdapter extends Adapter {
 
     opts = opts || {}
     const pjaxContainer = opts.pjaxContainer
-  
+
     if (!window.MutationObserver) return
 
     // Some host switch pages using pjax. This observer detects if the pjax container
