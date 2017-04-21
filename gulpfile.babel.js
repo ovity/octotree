@@ -21,7 +21,7 @@ gulp.task('default', ['build'], () => {
 })
 
 gulp.task('dist', ['build'], (cb) => {
-  $.runSequence('firefox:xpi', 'chrome:zip', 'chrome:crx', 'opera:nex', cb)
+  $.runSequence('firefox:zip', 'chrome:zip', 'chrome:crx', 'opera:nex', cb)
 })
 
 gulp.task('test', ['build'], (cb) => {
@@ -111,15 +111,15 @@ gulp.task('firefox:js', ['firefox:template', 'lib:ondemand'], () => {
 
 gulp.task('firefox', ['firefox:js'], () => {
   return merge(
-    pipe('./icons/**/*', './tmp/firefox/data/icons'),
-    pipe(['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'], './tmp/firefox/data'),
-    pipe('./src/config/firefox/firefox.js', $.babel(), './tmp/firefox/lib'),
-    pipe('./src/config/firefox/package.json', $.replace('$VERSION', version), './tmp/firefox')
+    pipe('./icons/**/*', './tmp/firefox/icons'),
+    pipe(['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'], './tmp/firefox'),
+    pipe('./src/config/firefox/background.js', $.babel(), './tmp/firefox/'),
+    pipe('./src/config/firefox/manifest.json', $.replace('$VERSION', version), './tmp/firefox')
   )
 })
 
-gulp.task('firefox:xpi', (cb) => {
-  $.run('cd ./tmp/firefox && ../../node_modules/.bin/jpm xpi && mkdir -p ../../dist && mv jid1-Om7eJGwA1U8Akg*.xpi ../../dist/firefox.xpi').exec(cb)
+gulp.task('firefox:zip', () => {
+  return pipe('./tmp/firefox/**/*', $.zip('firefox.zip'), './dist')
 })
 
 // Safari
