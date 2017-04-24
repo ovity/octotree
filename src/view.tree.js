@@ -59,7 +59,7 @@ class TreeView {
            '<a data-pjax href="/' + repo.username + '/' + repo.reponame + '">' + repo.reponame +'</a>' +
          '</div>' +
          '<div class="octotree_header_branch">' +
-           this._deXss(repo.branch) +
+           this._deXss(repo.branch.toString()) +
          '</div>'
       )
       .on('click', 'a[data-pjax]', function (event) {
