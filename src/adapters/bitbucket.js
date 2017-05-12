@@ -7,62 +7,16 @@ const BB_RESERVED_TYPES = ['raw']
 const BB_404_SEL = '#error.404'
 const BB_PJAX_CONTAINER_SEL = '#source-container'
 
-class Bitbucket extends Adapter {
+class Bitbucket extends PjaxAdapter {
 
   constructor() {
     super(['jquery.pjax.js'])
-
-    $.pjax.defaults.timeout = 0 // no timeout
-    $(document)
-      .on('pjax:send', () => $(document).trigger(EVENT.REQ_START))
-      .on('pjax:end', () => $(document).trigger(EVENT.REQ_END))
   }
 
   // @override
   init($sidebar) {
-    super.init($sidebar)
-
-    if (!window.MutationObserver) return
-
-    // Bitbucket switch pages using pjax. This observer detects if the pjax container
-    // has been updated with new contents and trigger layout.
-    const pageChangeObserver = new window.MutationObserver(() => {
-      // Trigger location change, can't just relayout as Octotree might need to
-      // hide/show depending on whether the current page is a code page or not.
-      return $(document).trigger(EVENT.LOC_CHANGE)
-    })
-
     const pjaxContainer = $(BB_PJAX_CONTAINER_SEL)[0]
-
-    if (pjaxContainer) {
-      pageChangeObserver.observe(pjaxContainer, {
-        childList: true,
-      })
-    }
-    else { // Fall back if DOM has been changed
-      let firstLoad = true, href, hash
-
-      function detectLocChange() {
-        if (location.href !== href || location.hash !== hash) {
-          href = location.href
-          hash = location.hash
-
-          // If this is the first time this is called, no need to notify change as
-          // Octotree does its own initialization after loading options.
-          if (firstLoad) {
-            firstLoad = false
-          }
-          else {
-            setTimeout(() => {
-              $(document).trigger(EVENT.LOC_CHANGE)
-            }, 300) // Wait a bit for pjax DOM change
-          }
-        }
-        setTimeout(detectLocChange, 200)
-      }
-
-      detectLocChange()
-    }
+    super.init($sidebar, {'pjaxContainer': pjaxContainer})
   }
 
   // @override
@@ -142,25 +96,7 @@ class Bitbucket extends Adapter {
   // @override
   selectFile(path) {
     const $pjaxContainer = $(BB_PJAX_CONTAINER_SEL)
-
-    if ($pjaxContainer.length) {
-      $.pjax({
-        // needs full path for pjax to work with Firefox as per cross-domain-content setting
-        url: location.protocol + '//' + location.host + path,
-        container: $pjaxContainer
-      })
-    }
-    else { // falls back
-      super.selectFile(path)
-    }
-  }
-
-  // @override
-  downloadFile(path, fileName) {
-    const link = document.createElement('a')
-    link.setAttribute('href', path.replace(/\/src\//, '/raw/'))
-    link.setAttribute('download', fileName)
-    link.click()
+    super.selectFile(path, {'$pjaxContainer': $pjaxContainer})
   }
 
   // @override
@@ -205,6 +141,7 @@ class Bitbucket extends Adapter {
     })
   }
 
+  // @override
   _getSubmodulesInCurrentPath(tree, opts, cb) {
     const currentPath = opts.path
     const isInCurrentPath = currentPath
@@ -229,6 +166,7 @@ class Bitbucket extends Adapter {
     cb(null, submodulesInCurrentPath)
   }
 
+  // @override
   _get(path, opts, cb) {
     const host = location.protocol + '//' + 'api.bitbucket.org/1.0'
     const url = `${host}/repositories/${opts.repo.username}/${opts.repo.reponame}${path || ''}`
@@ -238,18 +176,37 @@ class Bitbucket extends Adapter {
       // Bitbucket App passwords can be used only for Basic Authentication.
       // Get username of logged-in user.
       const currentUser = JSON.parse($('body').attr('data-current-user'))
-      if (currentUser.username) {
+
+      // Or get username by spliting token.
+      if (opts.token.includes(':')) {
+        const result = opts.token.split(':')
+        const username =  result[0], token = result[1]
+        cfg.headers = { Authorization: 'Basic ' + btoa(username + ':' + token) }
+      }
+      else if (currentUser.username) {
         cfg.headers = { Authorization: 'Basic ' + btoa(currentUser.username + ':' + opts.token) }
       }
     }
 
     $.ajax(cfg)
       .done((data) => cb(null, data))
-      .fail((jqXHR) => this._handleError(jqXHR, cb))
+      .fail((jqXHR) => {
+        if (opts.token && !opts.token.includes(':')) {
+          cb({
+            error: 'Error: Invalid token',
+            message: `Cannot get your username from current page,
+                      please enter your access token with username.
+                      e.g. USERNAME:TOKEN`,
+            needAuth: true
+          })
+          return
+        }
+        this._handleError(jqXHR, cb)
+      })
   }
 
   // @override
-  getItemHref(repo, type, encodedPath) {
+  _getItemHref(repo, type, encodedPath) {
     return `/${repo.username}/${repo.reponame}/src/${repo.branch}/${encodedPath}`
   }
 }
