@@ -59,12 +59,14 @@ class TreeView {
            '<a data-pjax href="/' + repo.username + '/' + repo.reponame + '">' + repo.reponame +'</a>' +
          '</div>' +
          '<div class="octotree_header_branch">' +
-           this._deXss(repo.branch) +
+           this._deXss(repo.branch.toString()) +
          '</div>'
       )
       .on('click', 'a[data-pjax]', function (event) {
         event.preventDefault()
-        adapter.selectFile($(this).attr('href') /* a.href always return absolute URL, don't want that */)
+        const href = $(this).attr('href'); /* a.href always return absolute URL, don't want that */
+        const newTab = event.shiftKey || event.ctrlKey || event.metaKey
+        newTab ? adapter.openInNewTab(href) : adapter.selectFile(href)
       })
   }
 
@@ -124,6 +126,7 @@ class TreeView {
     }
 
     const adapter = this.adapter
+    const newTab = event.shiftKey || event.ctrlKey || event.metaKey
     const href = $target.attr('href')
     const $icon = $target.children().length
       ? $target.children(':first')
@@ -131,7 +134,7 @@ class TreeView {
 
     if ($icon.hasClass('commit')) {
       refocusAfterCompletion()
-      adapter.selectSubmodule(href)
+      newTab ? adapter.openInNewTab(href) : adapter.selectSubmodule(href)
     }
     else if ($icon.hasClass('blob')) {
       if (download) {
@@ -139,7 +142,7 @@ class TreeView {
       }
       else {
         refocusAfterCompletion()
-        adapter.selectFile(href)
+        newTab ? adapter.openInNewTab(href) : adapter.selectFile(href)
       }
     }
   }
