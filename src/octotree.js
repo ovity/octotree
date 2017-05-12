@@ -11,23 +11,17 @@ $(document).ready(() => {
   }
 
   function createAdapter() {
-    const normailzeUrl = (url) => url.replace(/(.*?:\/\/[^/]+)(.*)/, '$1')
+    const normalizeUrl = (url) => url.replace(/(.*?:\/\/[^/]+)(.*)/, '$1')
 
     const githubUrls = store.get(STORE.GHEURLS).split(/\n/)
-      .map(normailzeUrl)
+      .map(normalizeUrl)
       .concat('https://github.com')
-
-    const gitlabUrls = store.get(STORE.GLEURLS).split(/\n/)
-      .map(normailzeUrl)
-      .concat('https://gitlab.com')
 
     const bitbucketUrls = ['https://bitbucket.org']
     const currentUrl = `${location.protocol}//${location.host}`
 
     if (~githubUrls.indexOf(currentUrl)) {
       return new GitHub(store)
-    } else if (~gitlabUrls.indexOf(currentUrl)) {
-      return new GitLab(store)
     } else if (~bitbucketUrls.indexOf(currentUrl)) {
       return new Bitbucket(store)
     }
