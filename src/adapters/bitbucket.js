@@ -64,7 +64,7 @@ class Bitbucket extends PjaxAdapter {
     // Skip non-code page unless showInNonCodePage is true
     // with Bitbucket /username/repo is non-code page
     if (!showInNonCodePage &&
-      (!type || (tyep && type !== 'src'))) {
+      (!type || (type && type !== 'src'))) {
       return cb()
     }
 
@@ -175,32 +175,32 @@ class Bitbucket extends PjaxAdapter {
     if (opts.token) {
       // Bitbucket App passwords can be used only for Basic Authentication.
       // Get username of logged-in user.
-      const currentUser = JSON.parse($('body').attr('data-current-user'))
+      let username = null, token = null
 
       // Or get username by spliting token.
       if (opts.token.includes(':')) {
         const result = opts.token.split(':')
-        const username =  result[0], token = result[1]
-        cfg.headers = { Authorization: 'Basic ' + btoa(username + ':' + token) }
+        username =  result[0], token = result[1]
       }
-      else if (currentUser.username) {
-        cfg.headers = { Authorization: 'Basic ' + btoa(currentUser.username + ':' + opts.token) }
+      else {
+        const currentUser = JSON.parse($('body').attr('data-current-user'))
+        if (!currentUser || !currentUser.username) {
+          return cb({
+            error: 'Error: Invalid token',
+            message: `Cannot retrieve your user name from the current page.
+                      Please update the token setting to prepend your user
+                      name to the token, separated by a colon, i.e. USERNAME:TOKEN`,
+            needAuth: true
+          })
+        }
+        username = currentUser.username, token = opts.token
       }
+      cfg.headers = { Authorization: 'Basic ' + btoa(username + ':' + token) }
     }
 
     $.ajax(cfg)
       .done((data) => cb(null, data))
       .fail((jqXHR) => {
-        if (opts.token && !opts.token.includes(':')) {
-          cb({
-            error: 'Error: Invalid token',
-            message: `Cannot get your username from current page,
-                      please enter your access token with username.
-                      e.g. USERNAME:TOKEN`,
-            needAuth: true
-          })
-          return
-        }
         this._handleError(jqXHR, cb)
       })
   }
