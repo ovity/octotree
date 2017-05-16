@@ -106,7 +106,9 @@ gulp.task('firefox:template', () => {
 })
 
 gulp.task('firefox:js', ['firefox:template', 'lib:ondemand'], () => {
-  return buildJs([], {FIREFOX: true})
+  return buildJs([
+    './src/config/firefox/overrides.js'
+  ], {FIREFOX: true})
 })
 
 gulp.task('firefox', ['firefox:js'], () => {
