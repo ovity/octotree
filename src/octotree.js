@@ -11,7 +11,20 @@ $(document).ready(() => {
   }
 
   function createAdapter() {
-    return new GitHub(store)
+    const normalizeUrl = (url) => url.replace(/(.*?:\/\/[^/]+)(.*)/, '$1')
+
+    const githubUrls = store.get(STORE.GHEURLS).split(/\n/)
+      .map(normalizeUrl)
+      .concat('https://github.com')
+
+    const bitbucketUrls = ['https://bitbucket.org']
+    const currentUrl = `${location.protocol}//${location.host}`
+
+    if (~githubUrls.indexOf(currentUrl)) {
+      return new GitHub(store)
+    } else if (~bitbucketUrls.indexOf(currentUrl)) {
+      return new Bitbucket(store)
+    }
   }
 
   function loadExtension() {
@@ -110,7 +123,8 @@ $(document).ready(() => {
           }
 
           if (isSidebarVisible()) {
-            const repoChanged = JSON.stringify(repo) !== JSON.stringify(currRepo)
+            const replacer = ['username', 'reponame', 'branch']
+            const repoChanged = JSON.stringify(repo, replacer) !== JSON.stringify(currRepo, replacer)
 
             if (repoChanged || reload === true) {
               $document.trigger(EVENT.REQ_START)

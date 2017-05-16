@@ -9,6 +9,7 @@
     "128": "icons/icon128.png"
   },
   "permissions": [
+    "https://bitbucket.org/*",
     "https://github.com/*",
     "storage"
   ],

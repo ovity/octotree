@@ -16,22 +16,16 @@ const GH_PJAX_CONTAINER_SEL = '#js-repo-pjax-container, .context-loader-containe
 const GH_CONTAINERS = '.container, .container-responsive'
 const GH_RAW_CONTENT = 'body > pre'
 
-class GitHub extends Adapter {
+class GitHub extends PjaxAdapter {
 
   constructor() {
     super(['jquery.pjax.js'])
-
-    $.pjax.defaults.timeout = 0 // no timeout
-    $(document)
-      .on('pjax:send', () => $(document).trigger(EVENT.REQ_START))
-      .on('pjax:end', () => $(document).trigger(EVENT.REQ_END))
   }
 
   // @override
   init($sidebar) {
-    super.init($sidebar)
-
-    if (!window.MutationObserver) return
+    const pjaxContainer = $(GH_PJAX_CONTAINER_SEL)[0]
+    super.init($sidebar, {'pjaxContainer': pjaxContainer})
 
     // Fix #151 by detecting when page layout is updated.
     // In this case, split-diff page has a wider layout, so need to recompute margin.
@@ -50,46 +44,6 @@ class GitHub extends Adapter {
       attributeFilter: ['class'],
       attributeOldValue: true
     })
-
-    // GitHub switch pages using pjax. This observer detects if the pjax container
-    // has been updated with new contents and trigger layout.
-    const pageChangeObserver = new window.MutationObserver(() => {
-      // Trigger location change, can't just relayout as Octotree might need to
-      // hide/show depending on whether the current page is a code page or not.
-      return $(document).trigger(EVENT.LOC_CHANGE)
-    })
-
-    const pjaxContainer = $(GH_PJAX_CONTAINER_SEL)[0]
-
-    if (pjaxContainer) {
-      pageChangeObserver.observe(pjaxContainer, {
-        childList: true,
-      })
-    }
-    else { // Fall back if DOM has been changed
-      let firstLoad = true, href, hash
-
-      function detectLocChange() {
-        if (location.href !== href || location.hash !== hash) {
-          href = location.href
-          hash = location.hash
-
-          // If this is the first time this is called, no need to notify change as
-          // Octotree does its own initialization after loading options.
-          if (firstLoad) {
-            firstLoad = false
-          }
-          else {
-            setTimeout(() => {
-              $(document).trigger(EVENT.LOC_CHANGE)
-            }, 300) // Wait a bit for pjax DOM change
-          }
-        }
-        setTimeout(detectLocChange, 200)
-      }
-
-      detectLocChange()
-    }
   }
 
   // @override
@@ -180,17 +134,7 @@ class GitHub extends Adapter {
   // @override
   selectFile(path) {
     const $pjaxContainer = $(GH_PJAX_CONTAINER_SEL)
-
-    if ($pjaxContainer.length) {
-      $.pjax({
-        // needs full path for pjax to work with Firefox as per cross-domain-content setting
-        url: location.protocol + '//' + location.host + path,
-        container: $pjaxContainer
-      })
-    }
-    else { // falls back
-      super.selectFile(path)
-    }
+    super.selectFile(path, {'$pjaxContainer': $pjaxContainer})
   }
 
   // @override

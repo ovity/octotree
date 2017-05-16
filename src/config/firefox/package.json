@@ -12,7 +12,9 @@
   "version": "$VERSION",
   "permissions": {
     "cross-domain-content": [
+      "https://api.bitbucket.org",
       "https://api.github.com",
+      "https://bitbucket.org",
       "https://github.com"
     ],
     "private-browsing": true,
