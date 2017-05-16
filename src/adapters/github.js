@@ -109,6 +109,8 @@ class GitHub extends PjaxAdapter {
     const branch =
       // Code page
       $('.branch-select-menu .select-menu-item.selected').data('name') ||
+      // Page title
+      (document.title.match(/ at (\w+)/) || '')[1] ||
       // Pull requests page
       ($('.commit-ref.base-ref').attr('title') || ':').match(/:(.*)/)[1] ||
       // Reuse last selected branch if exist
