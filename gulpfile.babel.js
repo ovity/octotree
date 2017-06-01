@@ -188,9 +188,11 @@ function buildJs(overrides, ctx) {
 
   return pipe(
     src,
+    $.sourcemaps.init(),
     $.babel(),
     $.concat('octotree.js'),
     $.preprocess({context: ctx}),
+    $.sourcemaps.write(),
     './tmp'
   )
 }
