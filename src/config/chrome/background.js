@@ -20,7 +20,8 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
       'jstree.js',
       'keymaster.js',
       'ondemand.js',
-      'octotree.js'
+      'octotree.js',
+      'bindWithDelay.js',
     ]
 
     eachTask([
