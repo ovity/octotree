@@ -2,6 +2,8 @@ class TreeView {
   constructor($dom, store, adapter) {
     this.store = store
     this.adapter = adapter
+    this.$search = $dom.find('.octotree_view_search input')
+    this.$search.bindWithDelay('keyup', this._search.bind(this), 300)
     this.$view = $dom.find('.octotree_treeview')
     this.$tree = this.$view.find('.octotree_view_body')
       .on('click.jstree', '.jstree-open>a', ({target}) => this.$jstree.close_node(target))
@@ -9,7 +11,7 @@ class TreeView {
       .on('click', this._onItemClick.bind(this))
       .jstree({
         core: { multiple: false, worker: false, themes : { responsive : false } },
-        plugins: ['wholerow']
+        plugins: ['wholerow', 'search']
       })
   }
 
@@ -183,5 +185,11 @@ class TreeView {
         })
       }
     }
+  }
+
+  _search(event) {
+    if (!this.$jstree) return
+
+    this.$jstree.search(this.$search.val());
   }
 }

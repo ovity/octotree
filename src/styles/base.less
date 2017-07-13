@@ -47,6 +47,25 @@
       z-index: 1000002;
     }
 
+    .octotree_view_search {
+      width: 100%;
+      margin: 2px 0;
+      padding: 2px 7px 2px 5px;
+    }
+
+    .octotree_view_search input {
+      width: 100%;
+    }
+
+    .octotree_view_search input:focus {
+      border-color: rgb(204,204,204); /* Restate unfocused value to make CSSLint happy that there's a pre-CSS3 fallback*/
+      border-color: rgba(82,168,236,.8);
+      outline: 0;
+      outline: thin dotted \9; /* IE6-9 */
+      -webkit-box-shadow: 0 0 8px rgba(82,168,236,.6);
+	            box-shadow: 0 0 8px rgba(82,168,236,.6);
+    }
+    
     .octotree_help {
       outline: 0;
       cursor: pointer;
