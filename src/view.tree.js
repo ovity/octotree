@@ -190,6 +190,11 @@ class TreeView {
   _search(event) {
     if (!this.$jstree) return
 
-    this.$jstree.search(this.$search.val());
+    this.$jstree.settings.search.fuzzy = this.store.get(STORE.SEARCH_FUZZY)
+    this.$jstree.settings.search.case_sensitive = this.store.get(STORE.SEARCH_CASE_SENSITIVE)
+    this.$jstree.settings.search.show_only_matches = this.store.get(STORE.SEARCH_SHOW_ONLY_MATCHES)
+    this.$jstree.settings.search.show_only_matches_children = this.store.get(STORE.SEARCH_SHOW_ONLY_MATCHES_CHILDREN)
+    this.$jstree.settings.search.search_leaves_only = this.store.get(STORE.SEARCH_SEARCH_LEAVES_ONLY)
+    this.$jstree.search(this.$search.val())
   }
 }
