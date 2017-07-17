@@ -1,0 +1,33 @@
+{
+  "name": "Octotree",
+  "version": "$VERSION",
+  "manifest_version": 2,
+  "author": "Buu Nguyen",
+  "description": "Code tree for GitHub",
+  "homepage_url": "https://github.com/buunguyen/octotree",
+  "icons": {
+    "48": "icons/icon48.png",
+    "64": "icons/icon64.png"
+  },
+  "permissions": [
+    "https://*.github.com/*",
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*"],
+      "js": [
+        "jquery.js",
+        "jquery-ui.js",
+        "jstree.js",
+        "keymaster.js",
+        "ondemand.js",
+        "octotree.js"
+      ],
+      "css": [
+        "jstree.css",
+        "octotree.css"
+      ]
+    }
+  ]
+}
