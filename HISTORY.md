@@ -1,3 +1,7 @@
+### v2.2.0
+* Support BitBucket (experimental)
+* Fix minor bugs
+
 ### v2.1.0
 * Remove GitLab support
 * Improve GitHub styling

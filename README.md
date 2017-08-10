@@ -1,4 +1,4 @@
-[![OpenCollective](https://opencollective.com/octotree/backers/badge.svg)](#backers) 
+[![OpenCollective](https://opencollective.com/octotree/backers/badge.svg)](#backers)
 [![OpenCollective](https://opencollective.com/octotree/sponsors/badge.svg)](#sponsors)
 
 ## Octotree
@@ -48,10 +48,10 @@ Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve reposit
 
 When that happens, Octotree will ask for your [GitHub personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use). If you don't already have one, [create one](https://github.com/settings/tokens/new), then copy and paste it into the textbox. Note that the minimal scopes that should be granted are `public_repo` and `repo` (if you need access to private repositories).
 
-#### Bitbucket
-Octotree uses [Bitbucket API](https://confluence.atlassian.com/bitbucket/repositories-endpoint-1-0-296092719.html) to retrieve repository metadata. By defualt, Octotree will ask for your [Bitbucket App password](https://confluence.atlassian.com/bitbucket/app-passwords-828781300.html). If you don't already have one, [create one](https://bitbucket.org/account/admin/app-passwords) (the minimal requirement is `Repositories`'s `Read` permission), then copy and paste it into the textbox.
+#### Bitbucket (experimental)
+Octotree uses [Bitbucket API](https://confluence.atlassian.com/bitbucket/repositories-endpoint-1-0-296092719.html) to retrieve repository metadata. By default, Octotree asks for your [Bitbucket App password](https://confluence.atlassian.com/bitbucket/app-passwords-828781300.html). If you don't already have one, [create one](https://bitbucket.org/account/admin/app-passwords) (the minimal requirement is `Repositories`'s `Read` permission), then copy and paste it into the textbox.
 
-Note that Octotree extract your username from your current page by default for calling Bitbucket API. If fail to extract, Octotree will ask you for a token update, then you just need to prepend your username to the token, separated by a colon, i.e. `USERNAME:TOKEN`.
+Note that Octotree extracts your username from the current page to invoke the Bitbucket API. If fail to do so, Octotree will ask you for a token update, you just need to prepend your username to the token, separated by a colon, i.e. `USERNAME:TOKEN`.
 
 ### Enterprise URLs
 By default, Octotree only works on `github.com`. To support enterprise version (Chrome and Opera only), you must grant Octotree sufficient permissions. Follow these steps to do so:

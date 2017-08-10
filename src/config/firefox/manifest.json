@@ -11,6 +11,7 @@
   },
   "permissions": [
     "https://*.github.com/*",
+    "https://*.bitbucket.com/*",
     "storage"
   ],
   "content_scripts": [
