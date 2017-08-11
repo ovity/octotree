@@ -11,12 +11,15 @@
   },
   "permissions": [
     "https://*.github.com/*",
-    "https://*.bitbucket.com/*",
+    "https://*.bitbucket.org/*",
     "storage"
   ],
   "content_scripts": [
     {
-      "matches": ["https://github.com/*"],
+      "matches": [
+        "https://github.com/*",
+        "https://bitbucket.org/*"
+      ],
       "js": [
         "jquery.js",
         "jquery-ui.js",
