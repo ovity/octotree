@@ -85,15 +85,15 @@ class GitHub extends PjaxAdapter {
       return cb()
     }
 
-    // (username)/(reponame)[/(type)]
-    const match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/)
+    // (username)/(reponame)[/(type)][/(typeId)]
+    const match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))(?:\/([^\/]+))?/)
     if (!match) {
       return cb()
     }
 
-    let username = ($('.commit-ref.head-ref').attr('title') || '/').match(/(.*?)\//)[1] ||
-      match[1]
+    let username = match[1]
     let reponame = match[2]
+    let type = match[3]
 
     // Not a repository, skip
     if (~GH_RESERVED_USER_NAMES.indexOf(username) ||
@@ -101,8 +101,9 @@ class GitHub extends PjaxAdapter {
       return cb()
     }
 
+    // TODO: Add option for toggling PR view
     // Skip non-code page unless showInNonCodePage is true
-    if (!showInNonCodePage && match[3] && !~['tree', 'blob'].indexOf(match[3])) {
+    if (!showInNonCodePage && type && !~['tree', 'blob', 'pull'].indexOf(type)) {
       return cb()
     }
 
@@ -111,14 +112,18 @@ class GitHub extends PjaxAdapter {
       // Code page
       $('.branch-select-menu .select-menu-item.selected').data('name') ||
       // Pull requests page
-      ($('.commit-ref.head-ref').attr('title') || ':').match(/:(.*)/)[1] ||
+      ($('.commit-ref.base-ref').attr('title') || ':').match(/:(.*)/)[1] ||
       // Reuse last selected branch if exist
       (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch) ||
       // Get default branch from cache
       this._defaultBranch[username + '/' + reponame]
 
+    // Check if this is a PR
+    const isPR = type === 'pull';
+    const pullNumber = isPR ? match[4] : null;
+
     // Still no luck, get default branch for real
-    const repo = {username: username, reponame: reponame, branch: branch}
+    const repo = {username: username, reponame: reponame, branch: branch, pullNumber: pullNumber}
 
     if (repo.branch) {
       cb(null, repo)
@@ -151,77 +156,81 @@ class GitHub extends PjaxAdapter {
     this._get(`/git/trees/${path}`, opts, (err, res) => {
       if (err) cb(err)
       else {
-        const diff = this._getPatch(path)
-        const diffExists = (Object.keys(diff).length > 0)
-        const filteredTree = res.tree.filter((node) => {
-          node.patch = diff[node.path]
-          delete diff[node.path]
-          return !diffExists || node.patch
-        })
-
-        cb(null, filteredTree)
+        if (!opts.repo.pullNumber) cb(null, res.tree)
+        else {
+          this._getPatch(opts, (patchErr, patchRes) => {
+            const diffExists = patchRes && Object.keys(patchRes).length > 0
+            if(patchErr || !diffExists) cb(null, res.tree)
+            else {
+              const filteredTree = res.tree
+                  .filter((node) => {
+                    return patchRes[node.path] !== undefined
+                  })
+                  .map((node) => {
+                    console.log(node)
+                    node.patch = patchRes[node.path]
+                    return node
+                  })
+              cb(null, filteredTree)
+            }
+          })
+        }
       }
     })
   }
 
-  // @override
-   _getPatch(path) {
-     const diff = {}
-     const files = $(".diff-view .file-info")
-     files.each(function() {
-       const file = $(this).find("a.link-gray-dark").first()
-
-       let path = file.attr("title")
-       let href = file.attr("href")
-       let previous = ""
-
-       const rename_index = path.indexOf("→")
-       if (rename_index != -1) {
-         previous = path.substring(0, rename_index-1)
-         path = path.substring(rename_index+2)
-       }
-
-       if (!path.startsWith(path)) return
-
-       const stats = $(this).find(".diffstat").first()
-       const stats_text = stats.attr("aria-label")
-       const patch = {type: "blob", path: path, href: href, additions: 0, deletions: 0}
-
-       if (stats_text.indexOf("addition") != -1) {
-         const stats_parts = stats_text.split(" ")
-         patch.additions = Number(stats_parts[0])
-         patch.deletions = Number(stats_parts[3])
-         patch.action = "modify"
-       } else {
-         if (stats_text.indexOf("renamed") != -1) {
-           patch.action = "rename"
-           patch.previous = previous
-         } else if (stats_text.indexOf("added") != -1) {
-           patch.action = "add"
-         }
-       }
-
-       diff[path] = patch
-
-       const base = []
-       path.split("/").slice(0, -1).forEach(function(rel_path) {
-         base.push(rel_path)
-         const fullpath = base.join("/")
-
-         if (!diff[fullpath]) {
-           diff[fullpath] = {
-             path:fullpath, type:"tree",
-             additions:0, deletions:0, files: 0,
-           }
-         }
-
-         diff[fullpath].files++
-         diff[fullpath].additions += patch.additions
-         diff[fullpath].deletions += patch.deletions
-       })
-     })
-
-     return diff
+  /**
+   * Get files that were patched in Pull Request.
+   * The diff map that is returned contains file filenames as well as the filenames
+   * of the node paths leading to the file.  This allows the tree to be filtered for
+   * only folders that contain files with diffs.
+   * @param {Object} opts: {
+   *                  path: the starting path to load the tree,
+   *                  repo: the current repository,
+   *                  node (optional): the selected node (null to load entire tree),
+   *                  token (optional): the personal access token
+   *                 }
+   * @param {Function} cb(err: error, diffMap: Object[Object|Boolean])
+   */
+   _getPatch(opts, cb) {
+    const {reponame, pullNumber} = opts.repo
+    this._get(`/pulls/${pullNumber}/files`, opts, (err, res) => {
+      if (err) cb(err)
+      else {
+        const diffMap = {}
+        res.forEach(file => {
+          const pathPieces = file.filename.split('/')
+          let string = pathPieces[0]
+          for (let i = 1; i <= pathPieces.length; i++) {
+            if (i === pathPieces.length) {
+              diffMap[string] = {
+                action: file.status,
+                additions: file.additions,
+                deletions: file.deletions,
+                filename: file.filename,
+                href: file.blob_url,
+                path: file.path,
+                sha: file.sha,
+              }
+            } else {
+              if (!diffMap[string]) {
+                diffMap[string] = {
+                  additions: file.additions,
+                  deletions: file.deletions,
+                  changes: 1,
+                }
+              } else {
+                diffMap[string].additions += file.additions
+                diffMap[string].deletions += file.deletions
+                diffMap[string]++
+              }
+              string = `${string}/${pathPieces[i]}`
+            }
+          }
+        })
+        cb(null, diffMap);
+      }
+    })
    }
 
   // @override
