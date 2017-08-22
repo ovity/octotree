@@ -162,13 +162,14 @@ class GitHub extends PjaxAdapter {
             const diffExists = patchRes && Object.keys(patchRes).length > 0
             if(patchErr || !diffExists) cb(null, res.tree)
             else {
+              // Filter tree to only include files and directories that are included in the patch
               const filteredTree = res.tree
                   .filter((node) => {
                     return patchRes[node.path] !== undefined
                   })
                   .map((node) => {
-                    console.log(node)
-                    node.patch = patchRes[node.path]
+                    const patch = patchRes[node.path]
+                    node.patch = typeof patch === 'object' ? patch : undefined
                     return node
                   })
               cb(null, filteredTree)
@@ -181,50 +182,64 @@ class GitHub extends PjaxAdapter {
 
   /**
    * Get files that were patched in Pull Request.
-   * The diff map that is returned contains file filenames as well as the filenames
-   * of the node paths leading to the file.  This allows the tree to be filtered for
-   * only folders that contain files with diffs.
+   * The diff map that is returned contains changed files, as well as the parents of the changed files.
+   * This allows the tree to be filtered for only folders that contain files with diffs.
    * @param {Object} opts: {
    *                  path: the starting path to load the tree,
    *                  repo: the current repository,
    *                  node (optional): the selected node (null to load entire tree),
    *                  token (optional): the personal access token
    *                 }
-   * @param {Function} cb(err: error, diffMap: Object[Object|Boolean])
+   * @param {Function} cb(err: error, diffMap: Object)
    */
    _getPatch(opts, cb) {
-    const {reponame, pullNumber} = opts.repo
+    const {pullNumber} = opts.repo
     this._get(`/pulls/${pullNumber}/files`, opts, (err, res) => {
       if (err) cb(err)
       else {
         const diffMap = {}
         res.forEach(file => {
-          const pathPieces = file.filename.split('/')
-          let string = pathPieces[0]
-          for (let i = 1; i <= pathPieces.length; i++) {
-            if (i === pathPieces.length) {
-              diffMap[string] = {
-                action: file.status,
-                additions: file.additions,
-                deletions: file.deletions,
-                filename: file.filename,
-                href: file.blob_url,
-                path: file.path,
-                sha: file.sha,
-              }
+          // Grab parent folder path
+          const folderPath = file.filename.split('/').slice(0,-1).join('/')
+          // Record file patch info
+          diffMap[file.filename] = {
+            action: file.status,
+            additions: file.additions,
+            deletions: file.deletions,
+            filename: file.filename,
+            path: file.path,
+            sha: file.sha,
+          }
+          // Record ancestor folder patch info
+          const split = folderPath.split('/')
+          split.reduce((path, curr) => {
+            if (path.length) {
+              path = `${path}/${curr}`
             } else {
-              if (!diffMap[string]) {
-                diffMap[string] = {
-                  additions: file.additions,
-                  deletions: file.deletions,
-                  changes: 1,
-                }
-              } else {
-                diffMap[string].additions += file.additions
-                diffMap[string].deletions += file.deletions
-                diffMap[string]++
-              }
-              string = `${string}/${pathPieces[i]}`
+              path = `${curr}`
+            }
+            // Either the current path contains children with diffs
+            // or assign it true so that it's included in
+            // the filtered tree
+            if (typeof diffMap[path] === 'object') {
+              // Path already has been recorded, accumulate changes
+              diffMap[path].additions += file.additions
+              diffMap[path].deletions += file.deletions
+              diffMap[path].changes++
+            } else {
+              diffMap[path] = true
+            }
+            return path
+          }, '')
+
+          // After recording ancestor diffs, record parent
+          // folder diffs if not already added to diffMap
+          if (typeof diffMap[folderPath] !== 'object') {
+            // Record patch info for parent of patched file
+            diffMap[folderPath] = {
+              additions: file.additions,
+              deletions: file.deletions,
+              changes: 1,
             }
           }
         })
