@@ -168,7 +168,7 @@ class GitHub extends PjaxAdapter {
                   })
                   .map((node) => {
                     const patch = patchRes[node.path]
-                    node.patch = typeof patch === 'object' ? patch : undefined
+                    node.patch = patch
                     return node
                   })
               cb(null, filteredTree)
