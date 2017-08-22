@@ -86,7 +86,7 @@ class GitHub extends PjaxAdapter {
     }
 
     // (username)/(reponame)[/(type)][/(typeId)]
-    const match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))(?:\/([^\/]+))?/)
+    const match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?(?:\/([^\/]+))?/)
     if (!match) {
       return cb()
     }
@@ -103,6 +103,7 @@ class GitHub extends PjaxAdapter {
 
     // TODO: Add option for toggling PR view
     // Skip non-code page unless showInNonCodePage is true
+    console.log(showInNonCodePage)
     if (!showInNonCodePage && type && !~['tree', 'blob', 'pull'].indexOf(type)) {
       return cb()
     }
@@ -120,11 +121,10 @@ class GitHub extends PjaxAdapter {
 
     // Check if this is a PR
     const isPR = type === 'pull';
-    const pullNumber = isPR ? match[4] : null;
+    const pull = isPR ? match[4] : null;
 
     // Still no luck, get default branch for real
-    const repo = {username: username, reponame: reponame, branch: branch, pullNumber: pullNumber}
-
+    const repo = {username: username, reponame: reponame, branch: branch, pull: pull}
     if (repo.branch) {
       cb(null, repo)
     }
@@ -156,7 +156,7 @@ class GitHub extends PjaxAdapter {
     this._get(`/git/trees/${path}`, opts, (err, res) => {
       if (err) cb(err)
       else {
-        if (!opts.repo.pullNumber) cb(null, res.tree)
+        if (!opts.repo.pull) cb(null, res.tree)
         else {
           this._getPatch(opts, (patchErr, patchRes) => {
             const diffExists = patchRes && Object.keys(patchRes).length > 0
@@ -193,8 +193,8 @@ class GitHub extends PjaxAdapter {
    * @param {Function} cb(err: error, diffMap: Object)
    */
    _getPatch(opts, cb) {
-    const {pullNumber} = opts.repo
-    this._get(`/pulls/${pullNumber}/files`, opts, (err, res) => {
+    const {pull} = opts.repo
+    this._get(`/pulls/${pull}/files`, opts, (err, res) => {
       if (err) cb(err)
       else {
         const diffMap = {}
@@ -215,7 +215,8 @@ class GitHub extends PjaxAdapter {
           split.reduce((path, curr) => {
             if (path.length) {
               path = `${path}/${curr}`
-            } else {
+            }
+            else {
               path = `${curr}`
             }
             // Either the current path contains children with diffs
@@ -226,7 +227,8 @@ class GitHub extends PjaxAdapter {
               diffMap[path].additions += file.additions
               diffMap[path].deletions += file.deletions
               diffMap[path].changes++
-            } else {
+            }
+            else {
               diffMap[path] = true
             }
             return path

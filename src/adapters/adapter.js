@@ -61,15 +61,17 @@ class Adapter {
             item.icon = type // uses `type` as class name for tree node
 
             if (item.patch) {
-               let patch_html = ""
+               let patch_html = ''
 
                if (item.patch.action) {
-                 if (item.patch.action == "add") {
+                 if (item.patch.action === 'add') {
                    patch_html += '<span class="text-green">added</span>'
-                 } else if (item.patch.action == "rename") {
-                   patch_html += `<span class="text-green"
+                 }
+                 else if (item.patch.action === 'rename') {
+                   patch_html +=
+                   `<span class="text-green"
                      title="${item.patch.previous}">renamed
-                   </span>`
+                    </span>`
                  }
                }
 
@@ -77,7 +79,7 @@ class Adapter {
                  patch_html += `<span>${item.patch.files} changes</span>`
                }
 
-               if (item.patch.additions != 0 || item.patch.deletions != 0) {
+               if (item.patch.additions !== 0 || item.patch.deletions !== 0) {
                  patch_html += `
                    <span class="text-green">+${item.patch.additions}</span>
                    <span class="text-red">-${item.patch.deletions}</span>
