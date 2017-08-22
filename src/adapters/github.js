@@ -103,7 +103,6 @@ class GitHub extends PjaxAdapter {
 
     // TODO: Add option for toggling PR view
     // Skip non-code page unless showInNonCodePage is true
-    console.log(showInNonCodePage)
     if (!showInNonCodePage && type && !~['tree', 'blob', 'pull'].indexOf(type)) {
       return cb()
     }
@@ -229,21 +228,14 @@ class GitHub extends PjaxAdapter {
               diffMap[path].changes++
             }
             else {
-              diffMap[path] = true
+              diffMap[path] = {
+                additions: file.additions,
+                deletions: file.deletions,
+                changes: 1,
+              }
             }
             return path
           }, '')
-
-          // After recording ancestor diffs, record parent
-          // folder diffs if not already added to diffMap
-          if (typeof diffMap[folderPath] !== 'object') {
-            // Record patch info for parent of patched file
-            diffMap[folderPath] = {
-              additions: file.additions,
-              deletions: file.deletions,
-              changes: 1,
-            }
-          }
         })
         cb(null, diffMap);
       }
