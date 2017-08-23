@@ -108,10 +108,11 @@ $(document).ready(() => {
       hasError = false
       const remember = store.get(STORE.REMEMBER)
       const showInNonCodePage = store.get(STORE.NONCODE)
+      const showOnlyChangedInPR = store.get(STORE.PR)
       const shown = store.get(STORE.SHOWN)
       const token = store.get(STORE.TOKEN)
 
-      adapter.getRepoFromPath(showInNonCodePage, currRepo, token, (err, repo) => {
+      adapter.getRepoFromPath(showInNonCodePage, showOnlyChangedInPR, currRepo, token, (err, repo) => {
         if (err) {
           showError(err)
         }

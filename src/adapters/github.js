@@ -73,7 +73,7 @@ class GitHub extends PjaxAdapter {
   }
 
   // @override
-  getRepoFromPath(showInNonCodePage, currentRepo, token, cb) {
+  getRepoFromPath(showInNonCodePage, showOnlyChangedInPR, currentRepo, token, cb) {
 
     // 404 page, skip
     if ($(GH_404_SEL).length) {
@@ -101,9 +101,12 @@ class GitHub extends PjaxAdapter {
       return cb()
     }
 
-    // TODO: Add option for toggling PR view
+    // Check if this is a PR and whether we should show changes
+    const isPR = type === 'pull';
+    const pull = isPR && showOnlyChangedInPR ? match[4] : null;
+
     // Skip non-code page unless showInNonCodePage is true
-    if (!showInNonCodePage && type && !~['tree', 'blob', 'pull'].indexOf(type)) {
+    if (!showInNonCodePage && type && !~['tree', 'blob'].indexOf(type)) {
       return cb()
     }
 
@@ -117,10 +120,6 @@ class GitHub extends PjaxAdapter {
       (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch) ||
       // Get default branch from cache
       this._defaultBranch[username + '/' + reponame]
-
-    // Check if this is a PR
-    const isPR = type === 'pull';
-    const pull = isPR ? match[4] : null;
 
     // Still no luck, get default branch for real
     const repo = {username: username, reponame: reponame, branch: branch, pull: pull}
