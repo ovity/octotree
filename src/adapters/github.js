@@ -227,14 +227,14 @@ class GitHub extends PjaxAdapter {
             if (typeof diffMap[path] === 'object') {
               diffMap[path].additions += file.additions
               diffMap[path].deletions += file.deletions
-              diffMap[path].changes++
+              diffMap[path].filesChanged++
             }
             // Path is new
             else {
               diffMap[path] = {
                 additions: file.additions,
                 deletions: file.deletions,
-                changes: 1,
+                filesChanged: 1,
               }
             }
             return path

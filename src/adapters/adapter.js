@@ -75,8 +75,9 @@ class Adapter {
                 }
               }
 
-              if (item.patch.changes) {
-                patch_html += `<span>${item.patch.changes} changes</span>`
+              if (item.patch.filesChanged) {
+                const fileString = item.patch.filesChanged === 1 ? 'file' : 'files'
+                patch_html += `<span>${item.patch.filesChanged} ${fileString}</span>`
               }
 
               if (item.patch.additions !== 0 || item.patch.deletions !== 0) {
