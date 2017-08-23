@@ -210,6 +210,7 @@ class GitHub extends PjaxAdapter {
           }
           // Record ancestor folder patch info
           const split = folderPath.split('/')
+          // Start at root folder and construct path
           split.reduce((path, curr) => {
             if (path.length) {
               path = `${path}/${curr}`
@@ -217,15 +218,13 @@ class GitHub extends PjaxAdapter {
             else {
               path = `${curr}`
             }
-            // Either the current path contains children with diffs
-            // or assign it true so that it's included in
-            // the filtered tree
+            // Path already has been recorded, accumulate changes
             if (typeof diffMap[path] === 'object') {
-              // Path already has been recorded, accumulate changes
               diffMap[path].additions += file.additions
               diffMap[path].deletions += file.deletions
               diffMap[path].changes++
             }
+            // Path is new
             else {
               diffMap[path] = {
                 additions: file.additions,
