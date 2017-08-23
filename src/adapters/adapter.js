@@ -61,33 +61,33 @@ class Adapter {
             item.icon = type // uses `type` as class name for tree node
 
             if (item.patch) {
-               let patch_html = ''
+              let patch_html = ''
 
-               if (item.patch.action) {
-                 if (item.patch.action === 'add') {
-                   patch_html += '<span class="text-green">added</span>'
-                 }
-                 else if (item.patch.action === 'rename') {
-                   patch_html +=
-                   `<span class="text-green"
-                     title="${item.patch.previous}">renamed
+              if (item.patch.action) {
+                if (item.patch.action === 'add') {
+                  patch_html += '<span class="text-green">added</span>'
+                }
+                else if (item.patch.action === 'rename') {
+                  patch_html +=
+                    `<span class="text-green"
+                      title="${item.patch.previous}">renamed
                     </span>`
-                 }
-               }
+                }
+              }
 
-               if (item.patch.changes) {
-                 patch_html += `<span>${item.patch.changes} changes</span>`
-               }
+              if (item.patch.changes) {
+                patch_html += `<span>${item.patch.changes} changes</span>`
+              }
 
-               if (item.patch.additions !== 0 || item.patch.deletions !== 0) {
-                 patch_html += `
-                   <span class="text-green">+${item.patch.additions}</span>
-                   <span class="text-red">-${item.patch.deletions}</span>
-                 `
-               }
+              if (item.patch.additions !== 0 || item.patch.deletions !== 0) {
+                patch_html += `
+                  <span class="text-green">+${item.patch.additions}</span>
+                  <span class="text-red">-${item.patch.deletions}</span>
+                `
+              }
 
-               item.text += `<span class="patch">${patch_html}</span>`
-             }
+              item.text += `<span class="patch">${patch_html}</span>`
+            }
 
             if (node) {
               folders[''].push(item)
@@ -102,10 +102,17 @@ class Adapter {
                 else folders[item.path] = item.children = []
               }
 
-              // encodes but retains the slashes, see #274
-              const encodedPath = path.split('/').map(encodeURIComponent).join('/')
-              item.a_attr = {
-                href: this._getItemHref(repo, type, path)
+              // If item is part of a PR, jump to that file's diff
+              if (item.patch && typeof item.patch.diffId === 'number') {
+                item.a_attr = {
+                  href: `/${repo.username}/${repo.reponame}/pull/${repo.pull}/files#diff-${item.patch.diffId}`
+                }
+              } else {
+                // encodes but retains the slashes, see #274
+                const encodedPath = path.split('/').map(encodeURIComponent).join('/')
+                item.a_attr = {
+                  href: this._getItemHref(repo, type, path)
+                }
               }
             }
             else if (type === 'commit') {

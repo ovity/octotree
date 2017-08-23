@@ -196,7 +196,7 @@ class GitHub extends PjaxAdapter {
       if (err) cb(err)
       else {
         const diffMap = {}
-        res.forEach(file => {
+        res.forEach((file, index) => {
           // Grab parent folder path
           const folderPath = file.filename.split('/').slice(0,-1).join('/')
           // Record file patch info
@@ -204,6 +204,7 @@ class GitHub extends PjaxAdapter {
             action: file.status,
             additions: file.additions,
             deletions: file.deletions,
+            diffId: index,
             filename: file.filename,
             path: file.path,
             sha: file.sha,
