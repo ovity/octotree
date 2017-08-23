@@ -163,10 +163,14 @@ class GitHub extends PjaxAdapter {
               // Filter tree to only include files and directories that are included in the patch
               const filteredTree = res.tree
                   .filter((node) => {
-                    return patchRes[node.path] !== undefined
+                    // If lazy load, prepend the path of node that's currently loading
+                    let nodePath = opts.node.path ? `${opts.node.path}/${node.path}` : node.path
+                    return patchRes[nodePath] !== undefined
                   })
                   .map((node) => {
-                    const patch = patchRes[node.path]
+                    // If lazy load, prepend the path of node that's currently loading
+                    let nodePath = opts.node.path ? `${opts.node.path}/${node.path}` : node.path
+                    const patch = patchRes[nodePath]
                     node.patch = patch
                     return node
                   })
