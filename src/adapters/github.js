@@ -102,8 +102,8 @@ class GitHub extends PjaxAdapter {
     }
 
     // Check if this is a PR and whether we should show changes
-    const isPR = type === 'pull';
-    const pull = isPR && showOnlyChangedInPR ? match[4] : null;
+    const isPR = type === 'pull'
+    const pull = isPR && showOnlyChangedInPR ? match[4] : null
 
     // Skip non-code page unless showInNonCodePage is true
     if (!showInNonCodePage && type && !~['tree', 'blob'].indexOf(type)) {
@@ -158,7 +158,7 @@ class GitHub extends PjaxAdapter {
         else {
           this._getPatch(opts, (patchErr, patchRes) => {
             const diffExists = patchRes && Object.keys(patchRes).length > 0
-            if(patchErr || !diffExists) cb(null, res.tree)
+            if (patchErr || !diffExists) cb(null, res.tree)
             else {
               // Filter tree to only include files and directories that are included in the patch
               const filteredTree = res.tree
@@ -235,7 +235,7 @@ class GitHub extends PjaxAdapter {
             return path
           }, '')
         })
-        cb(null, diffMap);
+        cb(null, diffMap)
       }
     })
    }
