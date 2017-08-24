@@ -94,6 +94,7 @@ class GitHub extends PjaxAdapter {
     let username = match[1]
     let reponame = match[2]
     let type = match[3]
+    let typeId = match[4]
 
     // Not a repository, skip
     if (~GH_RESERVED_USER_NAMES.indexOf(username) ||
@@ -103,7 +104,7 @@ class GitHub extends PjaxAdapter {
 
     // Check if this is a PR and whether we should show changes
     const isPR = type === 'pull'
-    const pull = isPR && showOnlyChangedInPR ? match[4] : null
+    const pullNumber = isPR && showOnlyChangedInPR ? typeId : null
 
     // Skip non-code page unless showInNonCodePage is true
     if (!showInNonCodePage && type && !~['tree', 'blob'].indexOf(type)) {
@@ -122,7 +123,7 @@ class GitHub extends PjaxAdapter {
       this._defaultBranch[username + '/' + reponame]
 
     // Still no luck, get default branch for real
-    const repo = {username: username, reponame: reponame, branch: branch, pull: pull}
+    const repo = {username: username, reponame: reponame, branch: branch, pullNumber: pullNumber}
     if (repo.branch) {
       cb(null, repo)
     }
@@ -154,7 +155,7 @@ class GitHub extends PjaxAdapter {
     this._get(`/git/trees/${path}`, opts, (err, res) => {
       if (err) cb(err)
       else {
-        if (!opts.repo.pull) cb(null, res.tree)
+        if (!opts.repo.pullNumber) cb(null, res.tree)
         else {
           this._getPatch(opts, (patchErr, patchRes) => {
             const diffExists = patchRes && Object.keys(patchRes).length > 0
@@ -195,8 +196,8 @@ class GitHub extends PjaxAdapter {
    * @param {Function} cb(err: error, diffMap: Object)
    */
    _getPatch(opts, cb) {
-    const {pull} = opts.repo
-    this._get(`/pulls/${pull}/files`, opts, (err, res) => {
+    const {pullNumber} = opts.repo
+    this._get(`/pulls/${pullNumber}/files`, opts, (err, res) => {
       if (err) cb(err)
       else {
         const diffMap = {}

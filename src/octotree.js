@@ -124,7 +124,7 @@ $(document).ready(() => {
           }
 
           if (isSidebarVisible()) {
-            const replacer = ['username', 'reponame', 'branch', 'pull']
+            const replacer = ['username', 'reponame', 'branch', 'pullNumber']
             const repoChanged = JSON.stringify(repo, replacer) !== JSON.stringify(currRepo, replacer)
             if (repoChanged || reload === true) {
               $document.trigger(EVENT.REQ_START)
