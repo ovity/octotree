@@ -152,35 +152,21 @@ class GitHub extends PjaxAdapter {
 
   // @override
   _getTree(path, opts, cb) {
-    this._get(`/git/trees/${path}`, opts, (err, res) => {
-      if (err) cb(err)
-      else {
-        if (!opts.repo.pullNumber) cb(null, res.tree)
+    if (opts.repo.pullNumber) {
+      this._getPatch(opts, (err, res) => {
+        if (err) cb(err)
+        else cb(null, res)
+      })
+    }
+    else {
+      this._get(`/git/trees/${path}`, opts, (err, res) => {
+        if (err) cb(err)
         else {
-          this._getPatch(opts, (patchErr, patchRes) => {
-            const diffExists = patchRes && Object.keys(patchRes).length > 0
-            if (patchErr || !diffExists) cb(null, res.tree)
-            else {
-              // Filter tree to only include files and directories that are included in the patch
-              const filteredTree = res.tree
-                  .filter((node) => {
-                    // If lazy load, prepend the path of node that's currently loading
-                    let nodePath = opts.node.path ? `${opts.node.path}/${node.path}` : node.path
-                    return patchRes[nodePath] !== undefined
-                  })
-                  .map((node) => {
-                    // If lazy load, prepend the path of node that's currently loading
-                    let nodePath = opts.node.path ? `${opts.node.path}/${node.path}` : node.path
-                    const patch = patchRes[nodePath]
-                    node.patch = patch
-                    return node
-                  })
-              cb(null, filteredTree)
-            }
-          })
+          console.log(res.tree)
+          cb(null, res.tree)
         }
-      }
-    })
+      })
+    }
   }
 
   /**
@@ -201,6 +187,7 @@ class GitHub extends PjaxAdapter {
       if (err) cb(err)
       else {
         const diffMap = {}
+        // Iterate files/folders to determine diff details
         res.forEach((file, index) => {
           // Grab parent folder path
           const folderPath = file.filename.split('/').slice(0,-1).join('/')
@@ -213,6 +200,7 @@ class GitHub extends PjaxAdapter {
             filename: file.filename,
             path: file.path,
             sha: file.sha,
+            type: 'blob',
           }
           // Record ancestor folder patch info
           const split = folderPath.split('/')
@@ -236,12 +224,27 @@ class GitHub extends PjaxAdapter {
                 additions: file.additions,
                 deletions: file.deletions,
                 filesChanged: 1,
+                type: 'tree',
+                filename: path,
               }
             }
             return path
           }, '')
         })
-        cb(null, diffMap)
+        // Convert diffMap to emulate response from get `tree`
+        const diffTree = []
+        Object.keys(diffMap).forEach(fileName => {
+          const patch = diffMap[fileName]
+          diffTree.push({
+            patch,
+            path: fileName,
+            sha: patch.sha,
+            type: patch.type,
+          })
+        })
+        // Sort by path, needs to be alphabetical order (so parent folders come before children)
+        diffTree.sort((a,b) => a.path.localeCompare(b.path))
+        cb(null, diffTree)
       }
     })
    }

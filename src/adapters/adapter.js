@@ -71,6 +71,10 @@ class Adapter {
                   patch_html +=
                     `<span class="text-green" title="${item.patch.previous}">renamed</span>`
                   break
+                case 'deleted':
+                  patch_html +=
+                    `<span class="text-red" title="${item.patch.previous}">deleted</span>`
+                  break
                 default:
                   break
               }
