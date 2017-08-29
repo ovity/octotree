@@ -71,9 +71,9 @@ class Adapter {
                   patch_html +=
                     `<span class="text-green" title="${item.patch.previous}">renamed</span>`
                   break
-                case 'deleted':
+                case 'removed':
                   patch_html +=
-                    `<span class="text-red" title="${item.patch.previous}">deleted</span>`
+                    `<span class="text-red" title="${item.patch.previous}">removed</span>`
                   break
                 default:
                   break
@@ -121,7 +121,7 @@ class Adapter {
                 const encodedPath = path.split('/').map(encodeURIComponent).join('/')
                 const url = this._getItemHref(repo, type, encodedPath)
                 item.a_attr = {
-                  href: url
+                  href: url,
                   'data-downloadHref': url,
                   'data-downloadFileName': name,
                 }

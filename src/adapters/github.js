@@ -161,10 +161,7 @@ class GitHub extends PjaxAdapter {
     else {
       this._get(`/git/trees/${path}`, opts, (err, res) => {
         if (err) cb(err)
-        else {
-          console.log(res.tree)
-          cb(null, res.tree)
-        }
+        else cb(null, res.tree)
       })
     }
   }
@@ -190,7 +187,7 @@ class GitHub extends PjaxAdapter {
         // Iterate files/folders to determine diff details
         res.forEach((file, index) => {
           // Grab parent folder path
-          const folderPath = file.filename.split('/').slice(0,-1).join('/')
+          const folderPath = file.filename.split('/').slice(0, -1).join('/')
           // Record file patch info
           diffMap[file.filename] = {
             action: file.status,
@@ -245,7 +242,7 @@ class GitHub extends PjaxAdapter {
           })
         })
         // Sort by path, needs to be alphabetical order (so parent folders come before children)
-        diffTree.sort((a,b) => a.path.localeCompare(b.path))
+        diffTree.sort((a, b) => a.path.localeCompare(b.path))
         cb(null, diffTree)
       }
     })
