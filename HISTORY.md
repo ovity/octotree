@@ -1,3 +1,7 @@
+### v2.3.0
+* Support PR viewing mode
+* Handle reserved chars in URL
+
 ### v2.2.0
 * Support BitBucket (experimental)
 * Fix minor bugs
