@@ -60,6 +60,40 @@ class Adapter {
             item.text = name
             item.icon = type // uses `type` as class name for tree node
 
+            if (item.patch) {
+              let patch_html = ''
+
+              switch (item.patch.action) {
+                case 'added':
+                  patch_html += '<span class="text-green">added</span>'
+                  break
+                case 'renamed':
+                  patch_html +=
+                    `<span class="text-green" title="${item.patch.previous}">renamed</span>`
+                  break
+                case 'removed':
+                  patch_html +=
+                    `<span class="text-red" title="${item.patch.previous}">removed</span>`
+                  break
+                default:
+                  break
+              }
+
+              if (item.patch.filesChanged) {
+                const fileString = item.patch.filesChanged === 1 ? 'file' : 'files'
+                patch_html += `<span>${item.patch.filesChanged} ${fileString}</span>`
+              }
+
+              if (item.patch.additions !== 0) {
+                patch_html += `<span class="text-green">+${item.patch.additions}</span>`
+              }
+              if (item.patch.deletions !== 0) {
+                patch_html += `<span class="text-red">-${item.patch.deletions}</span>`
+              }
+
+              item.text += `<span class="patch">${patch_html}</span>`
+            }
+
             if (node) {
               folders[''].push(item)
             }
@@ -73,10 +107,24 @@ class Adapter {
                 else folders[item.path] = item.children = []
               }
 
-              // encodes but retains the slashes, see #274
-              const encodedPath = path.split('/').map(encodeURIComponent).join('/')
-              item.a_attr = {
-                href: this._getItemHref(repo, type, path)
+              // If item is part of a PR, jump to that file's diff
+              if (item.patch && typeof item.patch.diffId === 'number') {
+                let url = `/${repo.username}/${repo.reponame}/pull/${repo.pullNumber}/files`.split('/').map(encodeURIComponent).join('/')
+                url = `${url}#diff-${item.patch.diffId}`
+                item.a_attr = {
+                  href: url,
+                  'data-downloadHref': item.url,
+                  'data-downloadFileName': name,
+                }
+              } else {
+                // encodes but retains the slashes, see #274
+                const encodedPath = path.split('/').map(encodeURIComponent).join('/')
+                const url = this._getItemHref(repo, type, encodedPath)
+                item.a_attr = {
+                  href: url,
+                  'data-downloadHref': url,
+                  'data-downloadFileName': name,
+                }
               }
             }
             else if (type === 'commit') {
@@ -325,7 +373,7 @@ class PjaxAdapter extends Adapter {
 
     opts = opts || {}
     const pjaxContainer = opts.pjaxContainer
-  
+
     if (!window.MutationObserver) return
 
     // Some host switch pages using pjax. This observer detects if the pjax container

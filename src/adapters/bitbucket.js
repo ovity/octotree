@@ -37,7 +37,7 @@ class Bitbucket extends PjaxAdapter {
   }
 
   // @override
-  getRepoFromPath(showInNonCodePage, currentRepo, token, cb) {
+  getRepoFromPath(showInNonCodePage, showOnlyChangedInPR, currentRepo, token, cb) {
 
     // 404 page, skip
     if ($(BB_404_SEL).length) {

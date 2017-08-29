@@ -73,7 +73,7 @@ class GitHub extends PjaxAdapter {
   }
 
   // @override
-  getRepoFromPath(showInNonCodePage, currentRepo, token, cb) {
+  getRepoFromPath(showInNonCodePage, showOnlyChangedInPR, currentRepo, token, cb) {
 
     // 404 page, skip
     if ($(GH_404_SEL).length) {
@@ -85,14 +85,16 @@ class GitHub extends PjaxAdapter {
       return cb()
     }
 
-    // (username)/(reponame)[/(type)]
-    const match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?/)
+    // (username)/(reponame)[/(type)][/(typeId)]
+    const match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?(?:\/([^\/]+))?/)
     if (!match) {
       return cb()
     }
 
-    const username = match[1]
-    const reponame = match[2]
+    let username = match[1]
+    let reponame = match[2]
+    let type = match[3]
+    let typeId = match[4]
 
     // Not a repository, skip
     if (~GH_RESERVED_USER_NAMES.indexOf(username) ||
@@ -100,8 +102,12 @@ class GitHub extends PjaxAdapter {
       return cb()
     }
 
+    // Check if this is a PR and whether we should show changes
+    const isPR = type === 'pull'
+    const pullNumber = isPR && showOnlyChangedInPR ? typeId : null
+
     // Skip non-code page unless showInNonCodePage is true
-    if (!showInNonCodePage && match[3] && !~['tree', 'blob'].indexOf(match[3])) {
+    if (!showInNonCodePage && type && !~['tree', 'blob'].indexOf(type)) {
       return cb()
     }
 
@@ -117,8 +123,7 @@ class GitHub extends PjaxAdapter {
       this._defaultBranch[username + '/' + reponame]
 
     // Still no luck, get default branch for real
-    const repo = {username: username, reponame: reponame, branch: branch}
-
+    const repo = {username: username, reponame: reponame, branch: branch, pullNumber: pullNumber}
     if (repo.branch) {
       cb(null, repo)
     }
@@ -147,11 +152,101 @@ class GitHub extends PjaxAdapter {
 
   // @override
   _getTree(path, opts, cb) {
-    this._get(`/git/trees/${path}`, opts, (err, res) => {
-      if (err) cb(err)
-      else cb(null, res.tree)
-    })
+    if (opts.repo.pullNumber) {
+      this._getPatch(opts, (err, res) => {
+        if (err) cb(err)
+        else cb(null, res)
+      })
+    }
+    else {
+      this._get(`/git/trees/${path}`, opts, (err, res) => {
+        if (err) cb(err)
+        else cb(null, res.tree)
+      })
+    }
   }
+
+  /**
+   * Get files that were patched in Pull Request.
+   * The diff map that is returned contains changed files, as well as the parents of the changed files.
+   * This allows the tree to be filtered for only folders that contain files with diffs.
+   * @param {Object} opts: {
+   *                  path: the starting path to load the tree,
+   *                  repo: the current repository,
+   *                  node (optional): the selected node (null to load entire tree),
+   *                  token (optional): the personal access token
+   *                 }
+   * @param {Function} cb(err: error, diffMap: Object)
+   */
+   _getPatch(opts, cb) {
+    const {pullNumber} = opts.repo
+    this._get(`/pulls/${pullNumber}/files`, opts, (err, res) => {
+      if (err) cb(err)
+      else {
+        const diffMap = {}
+        // Iterate files/folders to determine diff details
+        res.forEach((file, index) => {
+          // Grab parent folder path
+          const folderPath = file.filename.split('/').slice(0, -1).join('/')
+          // Record file patch info
+          diffMap[file.filename] = {
+            action: file.status,
+            additions: file.additions,
+            blob_url: file.blob_url,
+            deletions: file.deletions,
+            diffId: index,
+            filename: file.filename,
+            path: file.path,
+            sha: file.sha,
+            type: 'blob',
+          }
+          // Record ancestor folder patch info
+          const split = folderPath.split('/')
+          // Start at root folder and construct path
+          split.reduce((path, curr) => {
+            if (path.length) {
+              path = `${path}/${curr}`
+            }
+            else {
+              path = `${curr}`
+            }
+            // Path already has been recorded, accumulate changes
+            if (diffMap[path]) {
+              diffMap[path].additions += file.additions
+              diffMap[path].deletions += file.deletions
+              diffMap[path].filesChanged++
+            }
+            // Path is new
+            else {
+              diffMap[path] = {
+                additions: file.additions,
+                deletions: file.deletions,
+                filesChanged: 1,
+                type: 'tree',
+                filename: path,
+              }
+            }
+            return path
+          }, '')
+        })
+        // Convert diffMap to emulate response from get `tree`
+        const diffTree = []
+        Object.keys(diffMap).forEach(fileName => {
+          const patch = diffMap[fileName]
+          diffTree.push({
+            patch,
+            path: fileName,
+            sha: patch.sha,
+            type: patch.type,
+            url: patch.blob_url,
+          })
+        })
+        // Sort by path, needs to be alphabetical order (so parent folders come before children)
+        diffTree.sort((a, b) => a.path.localeCompare(b.path))
+        cb(null, diffTree)
+      }
+    })
+   }
 
   // @override
   _getSubmodules(tree, opts, cb) {

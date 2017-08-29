@@ -108,10 +108,11 @@ $(document).ready(() => {
       hasError = false
       const remember = store.get(STORE.REMEMBER)
       const showInNonCodePage = store.get(STORE.NONCODE)
+      const showOnlyChangedInPR = store.get(STORE.PR)
       const shown = store.get(STORE.SHOWN)
       const token = store.get(STORE.TOKEN)
 
-      adapter.getRepoFromPath(showInNonCodePage, currRepo, token, (err, repo) => {
+      adapter.getRepoFromPath(showInNonCodePage, showOnlyChangedInPR, currRepo, token, (err, repo) => {
         if (err) {
           showError(err)
         }
@@ -123,9 +124,8 @@ $(document).ready(() => {
           }
 
           if (isSidebarVisible()) {
-            const replacer = ['username', 'reponame', 'branch']
+            const replacer = ['username', 'reponame', 'branch', 'pullNumber']
             const repoChanged = JSON.stringify(repo, replacer) !== JSON.stringify(currRepo, replacer)
-
             if (repoChanged || reload === true) {
               $document.trigger(EVENT.REQ_START)
               currRepo = repo
