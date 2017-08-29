@@ -71,7 +71,7 @@ By default, Octotree only works on `github.com`. To support enterprise version (
 * __Remember sidebar visibility__: if checked, show or hide Octotree based on its last visibility.
 * __Show in non-code pages__: if checked, allow Octotree to show in non-code pages such as Issues and Pull Requests.
 * __Load entire tree at once__: if checked, load and render the entire code tree at once. To avoid long loading, this should be unchecked if you frequently work with very large repos.
-* __Show pull request changes__ _(new!)_: if checked and in "Pull requests" page, only show the change set of the pull request.
+* __Show only pull request changes__ _(new!)_: if checked and in "Pull requests" page, only show the change set of the pull request.
 
 ## Credits
 * [@crashbell](https://github.com/crashbell) for helping with GitLab and others

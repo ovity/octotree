@@ -181,7 +181,7 @@ class GitHub extends PjaxAdapter {
    _getPatch(opts, cb) {
     const {pullNumber} = opts.repo
 
-    this._get(`/pulls/${pullNumber}/files`, opts, (err, res) => {
+    this._get(`/pulls/${pullNumber}/files?per_page=300`, opts, (err, res) => {
       if (err) cb(err)
       else {
         const diffMap = {}
