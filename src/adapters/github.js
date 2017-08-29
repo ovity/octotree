@@ -195,6 +195,7 @@ class GitHub extends PjaxAdapter {
           diffMap[file.filename] = {
             action: file.status,
             additions: file.additions,
+            blob_url: file.blob_url,
             deletions: file.deletions,
             diffId: index,
             filename: file.filename,
@@ -213,7 +214,7 @@ class GitHub extends PjaxAdapter {
               path = `${curr}`
             }
             // Path already has been recorded, accumulate changes
-            if (typeof diffMap[path] === 'object') {
+            if (diffMap[path]) {
               diffMap[path].additions += file.additions
               diffMap[path].deletions += file.deletions
               diffMap[path].filesChanged++
@@ -240,6 +241,7 @@ class GitHub extends PjaxAdapter {
             path: fileName,
             sha: patch.sha,
             type: patch.type,
+            url: patch.blob_url,
           })
         })
         // Sort by path, needs to be alphabetical order (so parent folders come before children)

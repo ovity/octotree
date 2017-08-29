@@ -109,14 +109,21 @@ class Adapter {
 
               // If item is part of a PR, jump to that file's diff
               if (item.patch && typeof item.patch.diffId === 'number') {
+                let url = `/${repo.username}/${repo.reponame}/pull/${repo.pullNumber}/files`.split('/').map(encodeURIComponent).join('/')
+                url = `${url}#diff-${item.patch.diffId}`
                 item.a_attr = {
-                  href: `/${repo.username}/${repo.reponame}/pull/${repo.pullNumber}/files#diff-${item.patch.diffId}`
+                  href: url,
+                  'data-downloadHref': item.url,
+                  'data-downloadFileName': name,
                 }
               } else {
                 // encodes but retains the slashes, see #274
                 const encodedPath = path.split('/').map(encodeURIComponent).join('/')
+                const url = this._getItemHref(repo, type, encodedPath)
                 item.a_attr = {
-                  href: this._getItemHref(repo, type, path)
+                  href: url
+                  'data-downloadHref': url,
+                  'data-downloadFileName': name,
                 }
               }
             }
