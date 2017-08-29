@@ -1,7 +1,8 @@
 class Adapter {
-  constructor(deps) {
+  constructor(deps, store) {
     deps.forEach(dep => window[dep]())
     this._defaultBranch = {}
+    this.store = store
   }
 
   /**
@@ -14,8 +15,9 @@ class Adapter {
    *                 }
    * @param {Function} transform(item)
    * @param {Function} cb(err: error, tree: Array[Array|item])
+   * @api protected
    */
-  _loadCodeTree(opts, transform, cb) {
+  _loadCodeTreeInternal(opts, transform, cb) {
     const folders = { '': [] }
     const $dummyDiv = $('<div/>')
     const {path, repo, node} = opts
@@ -107,14 +109,13 @@ class Adapter {
                 else folders[item.path] = item.children = []
               }
 
-              // If item is part of a PR, jump to that file's diff
+              // if item is part of a PR, jump to that file's diff
               if (item.patch && typeof item.patch.diffId === 'number') {
-                let url = `/${repo.username}/${repo.reponame}/pull/${repo.pullNumber}/files`.split('/').map(encodeURIComponent).join('/')
-                url = `${url}#diff-${item.patch.diffId}`
+                const url = this._getPatchHref(repo, item.patch)
                 item.a_attr = {
                   href: url,
-                  'data-downloadHref': item.url,
-                  'data-downloadFileName': name,
+                  'data-download-url': item.url,
+                  'data-download-filename': name,
                 }
               } else {
                 // encodes but retains the slashes, see #274
@@ -122,8 +123,8 @@ class Adapter {
                 const url = this._getItemHref(repo, type, encodedPath)
                 item.a_attr = {
                   href: url,
-                  'data-downloadHref': url,
-                  'data-downloadFileName': name,
+                  'data-download-url': url,
+                  'data-download-filename': name,
                 }
               }
             }
@@ -153,6 +154,10 @@ class Adapter {
     })
   }
 
+  /**
+   * Generic error handler.
+   * @api protected
+   */
   _handleError(jqXHR, cb) {
     let error, message, needAuth
 
@@ -225,20 +230,10 @@ class Adapter {
   }
 
   /**
-   * Inits behaviors after the sidebar is added to the DOM.
-   * @api public
-   */
-  init($sidebar) {
-    $sidebar
-      .resizable({ handles: 'e', minWidth: this.getMinWidth() })
-      .addClass(this.getCssClass())
-  }
-
-  /**
    * Returns the CSS class to be added to the Octotree sidebar.
    * @api protected
    */
-  getCssClass() {
+  _getCssClass() {
     throw new Error('Not implemented')
   }
 
@@ -246,8 +241,18 @@ class Adapter {
    * Returns the minimum width acceptable for the sidebar.
    * @api protected
    */
-  getMinWidth() {
+  _getMinWidth() {
     return 200
+  }
+
+  /**
+   * Inits behaviors after the sidebar is added to the DOM.
+   * @api public
+   */
+  init($sidebar) {
+    $sidebar
+      .resizable({ handles: 'e', minWidth: this._getMinWidth() })
+      .addClass(this._getCssClass())
   }
 
   /**
@@ -287,7 +292,7 @@ class Adapter {
    * Returns repo info at the current path.
    * @api public
    */
-  getRepoFromPath(showInNonCodePage, currentRepo, token, cb) {
+  getRepoFromPath(token, cb) {
     throw new Error('Not implemented')
   }
 
@@ -351,87 +356,11 @@ class Adapter {
    _getItemHref(repo, type, encodedPath) {
      return `/${repo.username}/${repo.reponame}/${type}/${repo.branch}/${encodedPath}`
    }
-}
-
-
-class PjaxAdapter extends Adapter {
-  constructor() {
-    super(['jquery.pjax.js'])
-
-    $.pjax.defaults.timeout = 0 // no timeout
-    $(document)
-      .on('pjax:send', () => $(document).trigger(EVENT.REQ_START))
-      .on('pjax:end', () => $(document).trigger(EVENT.REQ_END))
-  }
-
-
-  // @override
-  // @param {Object} opts - {pjaxContainer: the specified pjax container}
-  // @api public
-  init($sidebar, opts) {
-    super.init($sidebar)
-
-    opts = opts || {}
-    const pjaxContainer = opts.pjaxContainer
-
-    if (!window.MutationObserver) return
-
-    // Some host switch pages using pjax. This observer detects if the pjax container
-    // has been updated with new contents and trigger layout.
-    const pageChangeObserver = new window.MutationObserver(() => {
-      // Trigger location change, can't just relayout as Octotree might need to
-      // hide/show depending on whether the current page is a code page or not.
-      return $(document).trigger(EVENT.LOC_CHANGE)
-    })
-
-    if (pjaxContainer) {
-      pageChangeObserver.observe(pjaxContainer, {
-        childList: true,
-      })
-    }
-    else { // Fall back if DOM has been changed
-      let firstLoad = true, href, hash
-
-      function detectLocChange() {
-        if (location.href !== href || location.hash !== hash) {
-          href = location.href
-          hash = location.hash
-
-          // If this is the first time this is called, no need to notify change as
-          // Octotree does its own initialization after loading options.
-          if (firstLoad) {
-            firstLoad = false
-          }
-          else {
-            setTimeout(() => {
-              $(document).trigger(EVENT.LOC_CHANGE)
-            }, 300) // Wait a bit for pjax DOM change
-          }
-        }
-        setTimeout(detectLocChange, 200)
-      }
-
-      detectLocChange()
-    }
-  }
-
-
-  // @override
-  // @param {Object} opts - {$pjax_container: jQuery object}
-  // @api public
-  selectFile(path, opts) {
-    opts = opts || {}
-    const $pjaxContainer = opts.$pjaxContainer
-
-    if ($pjaxContainer.length) {
-      $.pjax({
-        // needs full path for pjax to work with Firefox as per cross-domain-content setting
-        url: location.protocol + '//' + location.host + path,
-        container: $pjaxContainer
-      })
-    }
-    else { // falls back
-      super.selectFile(path)
-    }
-  }
-}
+   /**
+    * Returns patch's href value.
+    * @api protected
+    */
+   _getPatchHref(repo, patch) {
+     return `/${repo.username}/${repo.reponame}/pull/${repo.pullNumber}/files#diff-${patch.diffId}`
+   }
+ }

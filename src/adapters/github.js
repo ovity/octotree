@@ -18,8 +18,8 @@ const GH_RAW_CONTENT = 'body > pre'
 
 class GitHub extends PjaxAdapter {
 
-  constructor() {
-    super(['jquery.pjax.js'])
+  constructor(store) {
+    super(store)
   }
 
   // @override
@@ -47,7 +47,7 @@ class GitHub extends PjaxAdapter {
   }
 
   // @override
-  getCssClass() {
+  _getCssClass() {
     return 'octotree_github_sidebar'
   }
 
@@ -73,7 +73,9 @@ class GitHub extends PjaxAdapter {
   }
 
   // @override
-  getRepoFromPath(showInNonCodePage, showOnlyChangedInPR, currentRepo, token, cb) {
+  getRepoFromPath(currentRepo, token, cb) {
+    const showInNonCodePage = this.store.get(STORE.NONCODE)
+    const showOnlyChangedInPR = this.store.get(STORE.PR)
 
     // 404 page, skip
     if ($(GH_404_SEL).length) {
@@ -147,19 +149,17 @@ class GitHub extends PjaxAdapter {
     opts.encodedBranch = encodeURIComponent(decodeURIComponent(opts.repo.branch))
     opts.path = (opts.node && (opts.node.sha || opts.encodedBranch)) ||
                 (opts.encodedBranch + '?recursive=1')
-    this._loadCodeTree(opts, null, cb)
+    this._loadCodeTreeInternal(opts, null, cb)
   }
 
   // @override
   _getTree(path, opts, cb) {
     if (opts.repo.pullNumber) {
-      this._getPatch(opts, (err, res) => {
-        if (err) cb(err)
-        else cb(null, res)
-      })
+      this._getPatch(opts, cb)
     }
     else {
       this._get(`/git/trees/${path}`, opts, (err, res) => {
+        // console.log('****', res.tree);
         if (err) cb(err)
         else cb(null, res.tree)
       })
@@ -180,70 +180,71 @@ class GitHub extends PjaxAdapter {
    */
    _getPatch(opts, cb) {
     const {pullNumber} = opts.repo
+
     this._get(`/pulls/${pullNumber}/files`, opts, (err, res) => {
       if (err) cb(err)
       else {
         const diffMap = {}
-        // Iterate files/folders to determine diff details
+
         res.forEach((file, index) => {
-          // Grab parent folder path
-          const folderPath = file.filename.split('/').slice(0, -1).join('/')
-          // Record file patch info
+
+          // record file patch info
           diffMap[file.filename] = {
+            type: 'blob',
+            diffId: index,
             action: file.status,
             additions: file.additions,
             blob_url: file.blob_url,
             deletions: file.deletions,
-            diffId: index,
             filename: file.filename,
             path: file.path,
-            sha: file.sha,
-            type: 'blob',
+            sha: file.sha
           }
-          // Record ancestor folder patch info
+
+          // record ancestor folders
+          const folderPath = file.filename.split('/').slice(0, -1).join('/')
           const split = folderPath.split('/')
-          // Start at root folder and construct path
+
+          // aggregate metadata for ancestor folders
           split.reduce((path, curr) => {
-            if (path.length) {
-              path = `${path}/${curr}`
+            if (path.length) path = `${path}/${curr}`
+            else path = `${curr}`
+
+            if (diffMap[path] == null) {
+              diffMap[path] = {
+                type: 'tree',
+                filename: path,
+                filesChanged: 1,
+                additions: file.additions,
+                deletions: file.deletions
+              }
             }
             else {
-              path = `${curr}`
-            }
-            // Path already has been recorded, accumulate changes
-            if (diffMap[path]) {
               diffMap[path].additions += file.additions
               diffMap[path].deletions += file.deletions
               diffMap[path].filesChanged++
             }
-            // Path is new
-            else {
-              diffMap[path] = {
-                additions: file.additions,
-                deletions: file.deletions,
-                filesChanged: 1,
-                type: 'tree',
-                filename: path,
-              }
-            }
             return path
           }, '')
         })
-        // Convert diffMap to emulate response from get `tree`
-        const diffTree = []
-        Object.keys(diffMap).forEach(fileName => {
+
+        // transform to emulate response from get `tree`
+        const tree = Object.keys(diffMap).map(fileName => {
           const patch = diffMap[fileName]
-          diffTree.push({
+          return {
             patch,
             path: fileName,
             sha: patch.sha,
             type: patch.type,
             url: patch.blob_url,
-          })
+          }
         })
-        // Sort by path, needs to be alphabetical order (so parent folders come before children)
-        diffTree.sort((a, b) => a.path.localeCompare(b.path))
-        cb(null, diffTree)
+
+        // sort by path, needs to be alphabetical order (so parent folders come before children)
+        // note: this is still part of the above transform to mimic the behavior of get tree
+        tree.sort((a, b) => a.path.localeCompare(b.path))
+
+        cb(null, tree)
       }
     })
    }

@@ -9,10 +9,6 @@ const BB_PJAX_CONTAINER_SEL = '#source-container'
 
 class Bitbucket extends PjaxAdapter {
 
-  constructor() {
-    super(['jquery.pjax.js'])
-  }
-
   // @override
   init($sidebar) {
     const pjaxContainer = $(BB_PJAX_CONTAINER_SEL)[0]
@@ -20,7 +16,7 @@ class Bitbucket extends PjaxAdapter {
   }
 
   // @override
-  getCssClass() {
+  _getCssClass() {
     return 'octotree_bitbucket_sidebar'
   }
 
@@ -37,7 +33,7 @@ class Bitbucket extends PjaxAdapter {
   }
 
   // @override
-  getRepoFromPath(showInNonCodePage, showOnlyChangedInPR, currentRepo, token, cb) {
+  getRepoFromPath(currentRepo, token, cb) {
 
     // 404 page, skip
     if ($(BB_404_SEL).length) {
@@ -63,8 +59,8 @@ class Bitbucket extends PjaxAdapter {
 
     // Skip non-code page unless showInNonCodePage is true
     // with Bitbucket /username/repo is non-code page
-    if (!showInNonCodePage &&
-      (!type || (type && type !== 'src'))) {
+    const showInNonCodePage = this.store.get(STORE.NONCODE)
+    if (!showInNonCodePage && (!type || (type && type !== 'src'))) {
       return cb()
     }
 
@@ -102,7 +98,7 @@ class Bitbucket extends PjaxAdapter {
   // @override
   loadCodeTree(opts, cb) {
     opts.path = opts.node.path
-    this._loadCodeTree(opts, (item) => {
+    this._loadCodeTreeInternal(opts, (item) => {
       if (!item.type) {
         item.type = 'blob'
       }

@@ -20,7 +20,7 @@ const DEFAULTS = {
   TOKEN     : '',
   REMEMBER  : true,
   NONCODE   : true,
-  PR        : false,
+  PR        : true,
   LOADALL   : true,
   HOTKEYS   : '⌘+⇧+s, ⌃+⇧+s',
   POPUP     : false,

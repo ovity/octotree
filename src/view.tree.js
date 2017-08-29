@@ -128,9 +128,6 @@ class TreeView {
     const adapter = this.adapter
     const newTab = event.shiftKey || event.ctrlKey || event.metaKey
     const href = $target.attr('href')
-    // Link to download might be different from link to online view (PR View)
-    const downloadHref = $target.attr('data-downloadHref')
-    const downloadFileName = $target.attr('data-downloadFileName')
     const $icon = $target.children().length
       ? $target.children(':first')
       : $target.siblings(':first') // handles child links in submodule
@@ -141,7 +138,9 @@ class TreeView {
     }
     else if ($icon.hasClass('blob')) {
       if (download) {
-        adapter.downloadFile(downloadHref, downloadFileName)
+        const downloadUrl = $target.attr('data-download-url')
+        const downloadFileName = $target.attr('data-download-filename')
+        adapter.downloadFile(downloadUrl, downloadFileName)
       }
       else {
         refocusAfterCompletion()
