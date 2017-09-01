@@ -75,7 +75,7 @@ $(document).ready(() => {
 
     $sidebar
       .width(parseInt(store.get(STORE.WIDTH)))
-      .resize(layoutChanged)
+      .resize(() => layoutChanged(true))
       .appendTo($('body'))
 
     adapter.init($sidebar)
@@ -173,10 +173,12 @@ $(document).ready(() => {
       }
     }
 
-    function layoutChanged() {
+    function layoutChanged(save = false) {
       const width = $sidebar.outerWidth()
       adapter.updateLayout(isTogglerVisible(), isSidebarVisible(), width)
-      store.set(STORE.WIDTH, width)
+      if (save === true) {
+        store.set(STORE.WIDTH, width)
+      }
     }
 
     function isSidebarVisible() {
