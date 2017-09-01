@@ -1,3 +1,7 @@
+### v2.3.1
+* Fix bug PR mode doesn't work with lazy loading
+* Fix bug sidebar width is not stable in Firefox
+
 ### v2.3.0
 * Support PR viewing mode
 * Handle reserved chars in URLs
