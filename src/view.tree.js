@@ -21,11 +21,10 @@ class TreeView {
     const $jstree = this.$jstree
 
     $jstree.settings.core.data = (node, cb) => {
-      const loadAll = this.adapter.canLoadEntireTree() &&
-                      this.store.get(STORE.LOADALL)
-      // No lazy loading in PR tree view
-      const isPR = this.store.get(STORE.PR) && repo.pullNumber
-      node = !loadAll && !isPR && (node.id === '#' ? {path: ''} : node.original)
+      const prMode = this.store.get(STORE.PR) && repo.pullNumber
+      const loadAll = this.adapter.canLoadEntireTree() && (prMode || this.store.get(STORE.LOADALL))
+
+      node = !loadAll && (node.id === '#' ? {path: ''} : node.original)
 
       this.adapter.loadCodeTree({repo, token, node}, (err, treeData) => {
         if (err) {
@@ -33,7 +32,7 @@ class TreeView {
         }
         else {
           treeData = this._sort(treeData)
-          if (loadAll || isPR) {
+          if (loadAll) {
             treeData = this._collapse(treeData)
           }
           cb(treeData)
