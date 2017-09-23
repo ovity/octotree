@@ -59,7 +59,7 @@ By default, Octotree only works on `github.com`. To support enterprise version (
 * Go to any GitHub repo
 * Open the Octotree settings panel
 
-![Settings](docs/settings.jpg)
+![Settings](docs/settings.png)
 
 * Fill in the GitHub Enterprise URLs textbox, _one URL per line_
 * Click Save and accept the permission prompt
