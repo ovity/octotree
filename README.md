@@ -12,7 +12,7 @@ Browser extension (Chrome, Firefox, Opera and Safari) to show a code tree on Git
 __GitLab is no longer supported__:
 As of version 2.1.0, Octotree no longer supports GitLab. There are 2 reasons for this. First, GitLab has changed so much recently that it would take a lot of effort to keep Octotree up to date. Second, the GitLab team has [told me](https://github.com/buunguyen/octotree/issues/265) they would build a tree feature in GitLab itself. I can't afford working on something knowing my effort will be irrelevant any time soon. That being said, if anyone wants to work on supporting the new GitLab, I'll gladly accept contributions to add back GitLab support.
 
-![Octotree on GitHub](docs/chrome-github.png)
+![Octotree on GitHub](docs/chrome-github.jpg)
 
 
 ### Install on Chrome, Firefox and Opera
