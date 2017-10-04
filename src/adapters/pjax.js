@@ -66,8 +66,8 @@ class PjaxAdapter extends Adapter {
     const $pjaxContainer = opts.$pjaxContainer
 
     // If we're on the same page but just navigating to a different anchor, don't bother fetching the page with pjax
-    const pathWithoutAnnchor = path.replace(/#.*$/, "")
-    const onSamePage = window.location.pathname == pathWithoutAnnchor
+    const pathWithoutAnchor = path.replace(/#.*$/, "")
+    const onSamePage = location.pathname == pathWithoutAnchor
 
     if ($pjaxContainer.length && !onSamePage) {
       $.pjax({
