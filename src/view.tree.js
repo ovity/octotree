@@ -52,6 +52,30 @@ class TreeView {
   _showHeader(repo) {
     const adapter = this.adapter
 
+    let currentBranchName = repo.branch.toString();
+    let branchHtml = '';
+
+    // Display branch switcher if the repository has multiple branches
+    if (repo.branches && repo.branches.length > 1) {
+      branchHtml = '<select id="octotree_header_branch_switcher">' +
+        repo.branches.map((branchName) => {
+          const safeBranchName = this._deXss(branchName).toString();
+
+          // Disable non-matching branch names, because URL won't work
+          const disabled = branchName !== safeBranchName;
+          const selected = branchName === currentBranchName;
+
+          return '<option value="' + safeBranchName + '"' +
+            (disabled ? ' disabled' : '') +
+            (selected ? ' selected' : '') +
+            '>' + safeBranchName + '</option>'
+        }).join('') +
+      '</select>';
+    }
+    else {
+      branchHtml = this._deXss(currentBranchName);
+    }
+
     this.$view.find('.octotree_view_header')
       .html(
         '<div class="octotree_header_repo">' +
@@ -60,7 +84,7 @@ class TreeView {
            '<a data-pjax href="/' + repo.username + '/' + repo.reponame + '">' + repo.reponame +'</a>' +
          '</div>' +
          '<div class="octotree_header_branch">' +
-           this._deXss(repo.branch.toString()) +
+           branchHtml +
          '</div>'
       )
       .on('click', 'a[data-pjax]', function (event) {
@@ -69,6 +93,27 @@ class TreeView {
         const newTab = event.shiftKey || event.ctrlKey || event.metaKey
         newTab ? adapter.openInNewTab(href) : adapter.selectFile(href)
       })
+      .on('change', '#octotree_header_branch_switcher', function () {
+        const currentPathWithBranch = repoPath + '/tree/' + currentBranchName;
+        const newBranchName = $(this).val();
+
+        let newPath = '';
+
+        /*
+         * If currently viewing a branch, replace the branch in the URL with
+         * the new branch name. This also handles viewing a file on a branch.
+         */
+        const indexOfBranch = window.location.pathname.indexOf(currentBranchName);
+        if (indexOfBranch > -1) {
+          newPath = window.location.pathname.replace(currentBranchName, newBranchName);
+        }
+        // Otherwise, navigate to the repository root of the new branch
+        else {
+          newPath = repoPath + '/tree/' + newBranchName;
+        }
+
+        adapter.selectSubmodule(newPath);
+      });
   }
 
   _deXss(str) {
