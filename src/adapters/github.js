@@ -126,25 +126,16 @@ class GitHub extends PjaxAdapter {
 
     // Still no luck, get default branch for real
     const repo = {username: username, reponame: reponame, branch: branch, pullNumber: pullNumber}
-
-    // Get all branches for branch switcher
-    this._get('/branches', {repo, token}, (err, data) => {
-      if (err) return cb(err);
-      repo.branches = data.map((repoBranch) => {
-        return repoBranch.name;
-      });
-
-      if (repo.branch) {
+    if (repo.branch) {
+      cb(null, repo)
+    }
+    else {
+      this._get(null, {repo, token}, (err, data) => {
+        if (err) return cb(err)
+        repo.branch = this._defaultBranch[username + '/' + reponame] = data.default_branch || 'master'
         cb(null, repo)
-      }
-      else {
-        this._get(null, {repo, token}, (err, data) => {
-          if (err) return cb(err)
-          repo.branch = this._defaultBranch[username + '/' + reponame] = data.default_branch || 'master'
-          cb(null, repo)
-        })
-      }
-    });
+      })
+    }
   }
 
   // @override
