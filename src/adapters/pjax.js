@@ -65,7 +65,11 @@ class PjaxAdapter extends Adapter {
     opts = opts || {}
     const $pjaxContainer = opts.$pjaxContainer
 
-    if ($pjaxContainer.length) {
+    // If we're on the same page but just navigating to a different anchor, don't bother fetching the page with pjax
+    const pathWithoutAnchor = path.replace(/#.*$/, "")
+    const onSamePage = location.pathname == pathWithoutAnchor
+
+    if ($pjaxContainer.length && !onSamePage) {
       $.pjax({
         // needs full path for pjax to work with Firefox as per cross-domain-content setting
         url: location.protocol + '//' + location.host + path,
