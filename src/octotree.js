@@ -72,6 +72,7 @@ $(document).ready(() => {
       .on(EVENT.LAYOUT_CHANGE, layoutChanged)
       .on(EVENT.TOGGLE, layoutChanged)
       .on(EVENT.LOC_CHANGE, () => tryLoadRepo())
+      .on(EVENT.PJAX_RELOAD, (e) => e.preventDefault())
 
     $sidebar
       .width(parseInt(store.get(STORE.WIDTH)))
