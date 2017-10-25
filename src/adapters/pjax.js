@@ -65,18 +65,20 @@ class PjaxAdapter extends Adapter {
     opts = opts || {}
     const $pjaxContainer = opts.$pjaxContainer
 
-    // If we're on the same page but just navigating to a different anchor, don't bother fetching the page with pjax
-    const pathWithoutAnchor = path.replace(/#.*$/, "")
-    const onSamePage = location.pathname == pathWithoutAnchor
+    // if we're on the same page and just navigating to a different anchor
+    // don't bother fetching the page with pjax
+    const pathWithoutAnchor = path.replace(/#.*$/, '')
+    const isSamePage = location.pathname === pathWithoutAnchor
+    const loadWithPjax = $pjaxContainer.length && !isSamePage
 
-    if ($pjaxContainer.length && !onSamePage) {
+    if (loadWithPjax) {
       $.pjax({
         // needs full path for pjax to work with Firefox as per cross-domain-content setting
         url: location.protocol + '//' + location.host + path,
         container: $pjaxContainer
       })
     }
-    else { // falls back
+    else {
       super.selectFile(path)
     }
   }
