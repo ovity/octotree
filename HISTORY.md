@@ -1,3 +1,6 @@
+### v2.3.2
+* Improve file navigation speed in pull requests
+
 ### v2.3.1
 * Fix bug PR mode doesn't work with lazy loading
 * Fix bug sidebar width is not stable in Firefox
