@@ -1,3 +1,6 @@
+### v2.3.3
+* Handle local storage error
+
 ### v2.3.2
 * Improve file navigation speed in pull requests
 
