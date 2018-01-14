@@ -101,33 +101,33 @@
 	font-family: FontAwesome;
 	font-weight: normal;
 	font-style: normal;
-	src: url("chrome-extension://__MSG_@@extension_id__/file-icons-fonts/fontawesome.woff2");
+	src: url("../fonts/fontawesome.woff2");
 }
 
 @font-face {
 	font-family: Mfizz;
-	src: url("chrome-extension://__MSG_@@extension_id__/file-icons-fonts/mfixx.woff2");
+	src: url("../fonts/mfixx.woff2");
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: Devicons;
-	src: url("chrome-extension://__MSG_@@extension_id__/file-icons-fonts/devopicons.woff2");
+	src: url("../fonts/devopicons.woff2");
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: file-icons;
-	src: url("chrome-extension://__MSG_@@extension_id__/file-icons-fonts/file-icons.woff2");
+	src: url("../fonts/file-icons.woff2");
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: octicons;
-	src: url("chrome-extension://__MSG_@@extension_id__/file-icons-fonts/octicons.woff2");
+	src: url("../fonts/octicons.woff2");
 	font-weight: normal;
 	font-style: normal;
 }

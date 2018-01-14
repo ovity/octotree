@@ -59,18 +59,18 @@ gulp.task('lib:ondemand', (cb) => {
 
 // Chrome
 gulp.task('chrome:template', () => {
-  return buildTemplate({CHROME: true})
+  return buildTemplate({SUPPORT_FILE_ICONS: true, SUPPORT_GHE: true})
 })
 
 gulp.task('chrome:js', ['chrome:template', 'lib:ondemand'], () => {
-  return buildJs(['./src/config/chrome/overrides.js'], {CHROME: true})
+  return buildJs(['./src/config/chrome/overrides.js'], {SUPPORT_FILE_ICONS: true, SUPPORT_GHE: true})
 })
 
 gulp.task('chrome', ['chrome:js'], () => {
   return merge(
     pipe('./icons/**/*', './tmp/chrome/icons'),
-    pipe('./fonts/**/*', './tmp/chrome/fonts'),
     pipe(['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'], './tmp/chrome/'),
+    pipe('./libs/file-icons.css', $.replace('../fonts', 'chrome-extension://__MSG_@@extension_id__/fonts'), './tmp/chrome/'),
     pipe('./src/config/chrome/background.js', $.babel(), './tmp/chrome/'),
     pipe('./src/config/chrome/manifest.json', $.replace('$VERSION', version), './tmp/chrome/')
   )
@@ -102,17 +102,18 @@ gulp.task('opera:nex', () => {
 
 // Firefox
 gulp.task('firefox:template', () => {
-  return buildTemplate({FIREFOX: true})
+  return buildTemplate({SUPPORT_FILE_ICONS: true})
 })
 
 gulp.task('firefox:js', ['firefox:template', 'lib:ondemand'], () => {
-  return buildJs([], {FIREFOX: true})
+  return buildJs([], {SUPPORT_FILE_ICONS: true})
 })
 
 gulp.task('firefox', ['firefox:js'], () => {
   return merge(
     pipe('./icons/**/*', './tmp/firefox/icons'),
     pipe(['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'], './tmp/firefox'),
+    pipe('./libs/file-icons.css', $.replace('../fonts', 'moz-extension://__MSG_@@extension_id__/fonts'), './tmp/firefox/'),
     pipe('./src/config/firefox/background.js', $.babel(), './tmp/firefox/'),
     pipe('./src/config/firefox/manifest.json', $.replace('$VERSION', version), './tmp/firefox')
   )
@@ -124,11 +125,11 @@ gulp.task('firefox:zip', () => {
 
 // Safari
 gulp.task('safari:template', () => {
-  return buildTemplate({SAFARI: true})
+  return buildTemplate({})
 })
 
 gulp.task('safari:js', ['safari:template', 'lib:ondemand'], () => {
-  return buildJs([], {SAFARI: true})
+  return buildJs([], {})
 })
 
 gulp.task('safari', ['safari:js'], () => {
