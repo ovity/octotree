@@ -11,10 +11,12 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
     const cssFiles = [
       'jstree.css',
+      'file-icons.css',
       'octotree.css'
     ]
 
     const jsFiles = [
+      'file-icons.js',
       'jquery.js',
       'jquery-ui.js',
       'jstree.js',
