@@ -1,3 +1,6 @@
+### v2.4.0
+* Support file icons
+
 ### v2.3.3
 * Handle local storage error
 
