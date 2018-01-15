@@ -1,5 +1,6 @@
 import gulp from 'gulp'
 import fs from 'fs'
+import os from 'os'
 import path from 'path'
 import {merge} from 'event-stream'
 import map from 'map-stream'
@@ -80,15 +81,15 @@ gulp.task('chrome:zip', () => {
   return pipe('./tmp/chrome/**/*', $.zip('chrome.zip'), './dist')
 })
 
-gulp.task('chrome:_crx', (cb) => {
-  $.run('"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"' +
-    ' --pack-extension=' + path.join(__dirname, './tmp/chrome') +
-    ' --pack-extension-key=' + path.join(process.env.HOME, '.ssh/chrome.pem')
-  ).exec(cb)
-})
+gulp.task('chrome:crx', () => {
+  const real = path.join(os.homedir() + '.ssh/chrome.pem')
+  const test = './chrome_test_key.pem'
+  const privateKey = fs.existsSync(real) ? fs.readFileSync(real) : fs.readFileSync(test)
 
-gulp.task('chrome:crx', ['chrome:_crx'], () => {
-  return pipe('./tmp/chrome.crx', './dist')
+  return pipe('./tmp/chrome', $.crxPack({
+    privateKey: privateKey,
+    filename: 'chrome.crx'
+  }), './dist')
 })
 
 // Opera
