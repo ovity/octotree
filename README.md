@@ -61,13 +61,13 @@ By default, Octotree only works on `github.com`. To support enterprise version (
 
 ![Settings](docs/settings.jpg)
 
-* Fill in the GitHub Enterprise URLs textbox, _one URL per line_
+* Fill in the GitHub Enterprise URLs textbox, __one URL per line__
 * Click Save and accept the permission prompt
 * Navigate to your GitHub Enterprise site
 * You might be asked to create an [access token](#access-token)
 
 ### Others
-* __Hotkeys__: Octotree uses [keymaster](https://github.com/madrobby/keymaster) to register hotkeys. Checkout the [supported keys](https://github.com/madrobby/keymaster#supported-keys).
+* __Hotkeys__: Octotree uses [keymaster](https://github.com/madrobby/keymaster) to register hotkeys. Check out the [supported keys](https://github.com/madrobby/keymaster#supported-keys).
 * __Remember sidebar visibility__: if checked, show or hide Octotree based on its last visibility.
 * __Show in non-code pages__: if checked, allow Octotree to show in non-code pages such as Issues and Pull Requests.
 * __Load entire tree at once__: if checked, load and render the entire code tree at once. To avoid long loading, this should be unchecked if you frequently work with very large repos.
