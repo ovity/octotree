@@ -60,7 +60,25 @@ class Adapter {
 
             item.id = NODE_PREFIX + path
             item.text = name
-            item.icon = type // uses `type` as class name for tree node
+
+            // uses `type` as class name for tree node
+            item.icon = type
+
+            // @ifdef SUPPORT_FILE_ICONS
+            if (type === 'blob') {
+              if (this.store.get(STORE.ICONS)) {
+                const className = FileIcons.getClassWithColor(name)
+                item.icon += ' ' + (className || 'file-generic')
+              }
+              else {
+                item.icon += ' file-generic'
+              }
+            }
+            // @endif
+
+            // @ifndef SUPPORT_FILE_ICONS
+            item.icon += ' file-generic'
+            // @endif
 
             if (item.patch) {
               let patch_html = ''

@@ -90,6 +90,7 @@ $(document).ready(() => {
         switch (storeKey) {
           case STORE.TOKEN:
           case STORE.LOADALL:
+          case STORE.ICONS:
             reload = true
             break
           case STORE.HOTKEYS:

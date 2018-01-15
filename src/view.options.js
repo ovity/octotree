@@ -47,7 +47,7 @@ class OptionsView {
      * Certainly not a good place to put this logic but Chrome requires
      * permissions to be requested only in response of user input. So...
      */
-    // @ifdef CHROME
+    // @ifdef SUPPORT_GHE
     const $ta = this.$view.find('[data-store$=EURLS]').filter(':visible')
     if ($ta.length > 0) {
       const storeKey = $ta.data('store')

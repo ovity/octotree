@@ -57,13 +57,19 @@
             <input type="text" data-store="HOTKEYS">
           </div>
 
-          <!-- @ifdef CHROME -->
+          <!-- @ifdef SUPPORT_GHE -->
           <div class="octotree_github_only">
             <div>
               <label>GitHub Enterprise URLs</label>
             </div>
             <textarea data-store="GHEURLS" placeholder="https://github.mysite1.com__SPACES__https://github.mysite2.com">
             </textarea>
+          </div>
+          <!-- @endif -->
+
+          <!-- @ifdef SUPPORT_FILE_ICONS -->
+          <div>
+            <label><input type="checkbox" data-store="ICONS"> Show file-specific icons</label>
           </div>
           <!-- @endif -->
 
