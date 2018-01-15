@@ -82,6 +82,10 @@ gulp.task('chrome:zip', () => {
 })
 
 gulp.task('chrome:crx', () => {
+  // This will package the crx using a private key.
+  // For the convenience of people who want to build locally without having to
+  // manage their own Chrome key, this code will use the bundled test key if
+  // a real key is not found in ~/.ssh.
   const real = path.join(os.homedir() + '.ssh/chrome.pem')
   const test = './chrome_test_key.pem'
   const privateKey = fs.existsSync(real) ? fs.readFileSync(real) : fs.readFileSync(test)
