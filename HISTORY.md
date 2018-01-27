@@ -1,3 +1,6 @@
+### v2.4.1
+* Fix issue download icon not shown upon hover
+
 ### v2.4.0
 * Support file icons
 
