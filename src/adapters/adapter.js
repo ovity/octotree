@@ -138,7 +138,7 @@ class Adapter {
               } else {
                 // encodes but retains the slashes, see #274
                 const encodedPath = path.split('/').map(encodeURIComponent).join('/')
-                const url = this._getItemHref(repo, type, encodedPath)
+                const url = this._getItemHref(repo, type, encodedPath, opts.encodedBranch)
                 item.a_attr = {
                   href: url,
                   'data-download-url': url,
@@ -371,8 +371,8 @@ class Adapter {
    * Returns item's href value.
    * @api protected
    */
-   _getItemHref(repo, type, encodedPath) {
-     return `/${repo.username}/${repo.reponame}/${type}/${repo.branch}/${encodedPath}`
+   _getItemHref(repo, type, encodedPath, encodedBranch) {
+     return `/${repo.username}/${repo.reponame}/${type}/${encodedBranch}/${encodedPath}`
    }
    /**
     * Returns patch's href value.
