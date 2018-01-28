@@ -202,7 +202,7 @@ class Bitbucket extends PjaxAdapter {
   }
 
   // @override
-  _getItemHref(repo, type, encodedPath) {
-    return `/${repo.username}/${repo.reponame}/src/${repo.branch}/${encodedPath}`
+  _getItemHref(repo, type, encodedPath, encodedBranch) {
+    return `/${repo.username}/${repo.reponame}/src/${encodedBranch}/${encodedPath}`
   }
 }
