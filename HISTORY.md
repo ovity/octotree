@@ -1,3 +1,6 @@
+### v2.4.3
+* Fix issue branch path not encoded in file navigation
+
 ### v2.4.2
 * Fix issue download icon not shown upon hover
 
