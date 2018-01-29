@@ -14,7 +14,7 @@ gulp.task('clean', () => {
 })
 
 gulp.task('build', (cb) => {
-  $.runSequence('clean', 'styles', 'chrome', 'opera', 'safari', 'firefox', cb)
+  $.runSequence('clean', 'styles', 'chrome', 'opera', 'safari', 'firefox', 'edge', cb)
 })
 
 gulp.task('default', ['build'], () => {
@@ -145,6 +145,25 @@ gulp.task('safari', ['safari:js'], () => {
       './tmp/safari/octotree.safariextension/'
     ),
     pipe('./src/config/safari/Info.plist', $.replace('$VERSION', version), './tmp/safari/octotree.safariextension')
+  )
+})
+
+// Edge
+gulp.task('edge:template', () => {
+  return buildTemplate({SUPPORT_FILE_ICONS: true})
+})
+
+gulp.task('edge:js', ['edge:template', 'lib:ondemand'], () => {
+  return buildJs([], {SUPPORT_FILE_ICONS: true})
+})
+
+gulp.task('edge', ['edge:js'], () => {
+  return merge(
+    pipe('./icons/**/*', './tmp/edge/icons'),
+    pipe(['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'], './tmp/edge/'),
+    pipe('./libs/file-icons.css', $.replace('../fonts', 'ms-browser-extension://__MSG_@@extension_id__/fonts'), './tmp/edge/'),
+    pipe('./src/config/edge/background.js', $.babel(), './tmp/edge/'),
+    pipe('./src/config/edge/manifest.json', $.replace('$VERSION', version), './tmp/edge/')
   )
 })
 
