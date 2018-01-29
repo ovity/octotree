@@ -1,4 +1,4 @@
-$(document).ready(() => {
+const octotreeMain = () => {
   const store = new Storage()
 
   parallel(Object.keys(STORE), setDefault, loadExtension)
@@ -190,4 +190,10 @@ $(document).ready(() => {
       return $toggler.is(':visible')
     }
   }
-})
+}
+
+if(document.readyState === 'complete') {
+  octotreeMain()
+} else {
+  $(document).ready(octotreeMain)
+}
