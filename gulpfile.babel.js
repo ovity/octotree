@@ -159,11 +159,13 @@ gulp.task('edge:js', ['edge:template', 'lib:ondemand'], () => {
 
 gulp.task('edge', ['edge:js'], () => {
   return merge(
-    pipe('./icons/**/*', './tmp/edge/icons'),
-    pipe(['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'], './tmp/edge/'),
-    pipe('./libs/file-icons.css', $.replace('../fonts', 'ms-browser-extension://__MSG_@@extension_id__/fonts'), './tmp/edge/'),
-    pipe('./src/config/edge/background.js', $.babel(), './tmp/edge/'),
-    pipe('./src/config/edge/manifest.json', $.replace('$VERSION', version), './tmp/edge/')
+    pipe('./icons/**/*', './tmp/edge/Extension/icons/'),
+    pipe(['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'], './tmp/edge/Extension/'),
+    pipe('./libs/file-icons.css', $.replace('../fonts', 'ms-browser-extension://__MSG_@@extension_id__/fonts'), './tmp/edge/Extension/'),
+    pipe('./src/config/edge/background.js', $.babel(), './tmp/edge/Extension/'),
+    pipe('./src/config/edge/manifest.json', $.replace('$VERSION', version), './tmp/edge/Extension/'),
+    pipe('./src/config/edge/AppxManifest.xml', $.replace('$VERSION', version), './tmp/edge/'),
+    pipe('./icons/icon@(44|50|150).png', './tmp/edge/Assets/'),
   )
 })
 
