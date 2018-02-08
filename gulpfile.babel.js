@@ -6,7 +6,6 @@ import {merge} from 'event-stream'
 import map from 'map-stream'
 import {spawn} from 'child_process'
 const $ = require('gulp-load-plugins')()
-const version = require('./package.json').version
 
 // Tasks
 gulp.task('clean', () => {
@@ -18,7 +17,7 @@ gulp.task('build', (cb) => {
 })
 
 gulp.task('default', ['build'], () => {
-  gulp.watch(['./libs/**/*', './src/**/*'], ['default'])
+  gulp.watch(['./libs/**/*', './src/**/*', './package.json'], ['default'])
 })
 
 gulp.task('dist', ['build'], (cb) => {
@@ -73,7 +72,7 @@ gulp.task('chrome', ['chrome:js'], () => {
     pipe(['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'], './tmp/chrome/'),
     pipe('./libs/file-icons.css', $.replace('../fonts', 'chrome-extension://__MSG_@@extension_id__/fonts'), './tmp/chrome/'),
     pipe('./src/config/chrome/background.js', $.babel(), './tmp/chrome/'),
-    pipe('./src/config/chrome/manifest.json', $.replace('$VERSION', version), './tmp/chrome/')
+    pipe('./src/config/chrome/manifest.json', $.replace('$VERSION', getVersion()), './tmp/chrome/')
   )
 })
 
@@ -120,7 +119,7 @@ gulp.task('firefox', ['firefox:js'], () => {
     pipe(['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'], './tmp/firefox'),
     pipe('./libs/file-icons.css', $.replace('../fonts', 'moz-extension://__MSG_@@extension_id__/fonts'), './tmp/firefox/'),
     pipe('./src/config/firefox/background.js', $.babel(), './tmp/firefox/'),
-    pipe('./src/config/firefox/manifest.json', $.replace('$VERSION', version), './tmp/firefox')
+    pipe('./src/config/firefox/manifest.json', $.replace('$VERSION', getVersion()), './tmp/firefox')
   )
 })
 
@@ -144,7 +143,7 @@ gulp.task('safari', ['safari:js'], () => {
       ['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'],
       './tmp/safari/octotree.safariextension/'
     ),
-    pipe('./src/config/safari/Info.plist', $.replace('$VERSION', version), './tmp/safari/octotree.safariextension')
+    pipe('./src/config/safari/Info.plist', $.replace('$VERSION', getVersion()), './tmp/safari/octotree.safariextension')
   )
 })
 
@@ -212,4 +211,9 @@ function buildTemplate(ctx) {
     html2js('const TEMPLATE = \'$$\''),
     './tmp'
   )
+}
+
+function getVersion() {
+  delete require.cache[require.resolve('./package.json')]
+  return require('./package.json').version
 }
