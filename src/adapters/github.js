@@ -58,7 +58,7 @@ class GitHub extends PjaxAdapter {
 
   // @override
   getCreateTokenUrl() {
-    return `${location.protocol}//${location.host}/settings/tokens/new?scopes=public_repo&description=OctoTree browser extension`
+    return `${location.protocol}//${location.host}/settings/tokens/new?scopes=repo&description=Octotree%20browser%20extension`
   }
 
   // @override
