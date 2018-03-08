@@ -24,10 +24,13 @@ __Note__: to configure Octotree for GitHub Enteprise, see [instructions](#enterp
 
 ### Install on Safari
 
-Octotree is not available on the Safari gallery. Instead, you must use the prebuilt package or build one from source.
+Octotree is not available on the Safari gallery. You have to build from source.  Download this repo and run the following command:
 
-* Download the [Safari prebuilt package](https://github.com/buunguyen/octotree/blob/master/dist/safari.safariextz?raw=true)
-* Double-click or drag it to Safari
+```bash
+gulp safari
+```
+
+Find the extension folder in `tmp/safari`. Follow Apple instructions to install the extension to your browser.
 
 ### Install from prebuilt packages (all browsers)
 
