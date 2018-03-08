@@ -72,7 +72,8 @@ $(document).ready(() => {
       .on(EVENT.LAYOUT_CHANGE, layoutChanged)
       .on(EVENT.TOGGLE, layoutChanged)
       .on(EVENT.LOC_CHANGE, () => tryLoadRepo())
-      .on(EVENT.PJAX_RELOAD, (e) => e.preventDefault())
+      // This seems to fix intermitten page reload #342
+      .on('pjax:reload', (e) => e.preventDefault())
 
     $sidebar
       .width(parseInt(store.get(STORE.WIDTH)))

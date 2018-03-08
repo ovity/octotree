@@ -41,6 +41,5 @@ const EVENT = {
   OPTS_CHANGE   : 'octotree:change',
   VIEW_READY    : 'octotree:ready',
   VIEW_CLOSE    : 'octotree:close',
-  FETCH_ERROR   : 'octotree:error',
-  PJAX_RELOAD   : 'pjax:reload'
+  FETCH_ERROR   : 'octotree:error'
 }
