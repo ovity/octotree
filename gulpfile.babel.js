@@ -129,11 +129,11 @@ gulp.task('firefox:zip', () => {
 
 // Safari
 gulp.task('safari:template', () => {
-  return buildTemplate({})
+  return buildTemplate({SUPPORT_FILE_ICONS: true})
 })
 
 gulp.task('safari:js', ['safari:template', 'lib:ondemand'], () => {
-  return buildJs([], {})
+  return buildJs([], {SUPPORT_FILE_ICONS: true})
 })
 
 gulp.task('safari', ['safari:js'], () => {
@@ -143,6 +143,7 @@ gulp.task('safari', ['safari:js'], () => {
       ['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'],
       './tmp/safari/octotree.safariextension/'
     ),
+    pipe('./libs/file-icons.css', $.replace('../fonts', 'fonts'), './tmp/safari/octotree.safariextension/'),
     pipe('./src/config/safari/Info.plist', $.replace('$VERSION', getVersion()), './tmp/safari/octotree.safariextension')
   )
 })

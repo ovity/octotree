@@ -29,12 +29,14 @@
 					<string>jstree.js</string>
 					<string>keymaster.js</string>
 					<string>ondemand.js</string>
+					<string>file-icons.js</string>
 					<string>octotree.js</string>
 				</array>
 			</dict>
 			<key>Stylesheets</key>
 			<array>
 				<string>jstree.css</string>
+				<string>file-icons.css</string>
 				<string>octotree.css</string>
 			</array>
 			<key>Whitelist</key>
