@@ -5,15 +5,11 @@
 Browser extension (Chrome, Firefox, Opera and Safari) to show a code tree on GitHub. Awesome for exploring project source without having to pull every single repository to your machine. Features:
 
 * Easy-to-navigate code tree, just like in IDEs
-* Fast browsing with pjax and Turbolinks
+* Fast browsing with pjax
 * Support private repositories (see [instructions](#access-token))
 * Support GitHub Enterprise (Chrome and Opera only, see [instructions](#enterprise-urls))
 
-__GitLab is no longer supported__:
-As of version 2.1.0, Octotree no longer supports GitLab. There are 2 reasons for this. First, GitLab has changed so much recently that it would take a lot of effort to keep Octotree up to date. Second, the GitLab team has [told me](https://github.com/buunguyen/octotree/issues/265) they would build a tree feature in GitLab itself. I can't afford working on something knowing my effort will be irrelevant any time soon. That being said, if anyone wants to work on supporting the new GitLab, I'll gladly accept contributions to add back GitLab support.
-
 ![Octotree on GitHub](docs/chrome-github.jpg)
-
 
 ### Install on Chrome, Firefox and Opera
 * Install Octotree from [Chrome Web Store](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc), [Mozilla Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/octotree/) or [Opera Add-ons Store](https://addons.opera.com/en/extensions/details/octotree/)
@@ -41,7 +37,7 @@ __Note__: Firefox 43+ requires add-ons to be signed. Therefore, you should insta
 ## Settings
 ### Access Token
 
-__Note for the paranoids (like me!)__: Octotree stores access tokens in your browser local storage and never transmits it anywhere. If you want to verify, check out the source, starting with [this line](https://github.com/buunguyen/octotree/blob/master/src/view.options.js#L77).
+__Note for the paranoids (like me!)__: Octotree stores access tokens in your browser local storage and never transmits it anywhere.
 
 #### GitHub
 Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve repository metadata. By default, it makes unauthenticated requests to the GitHub API. However, there are two situations when requests must be authenticated:
@@ -84,7 +80,9 @@ By default, Octotree only works on `github.com`. To support enterprise version (
 
 ## Backers
 
-Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/octotree#backer)]
+Please consider [donating](https://opencollective.com/octotree#backer) to help us continue ongoing development of Octotree.
+
+[[Become a backer](https://opencollective.com/octotree#backer)]
 
 <a href="https://opencollective.com/octotree/backer/0/website" target="_blank"><img src="https://opencollective.com/octotree/backer/0/avatar.svg"></a>
 <a href="https://opencollective.com/octotree/backer/1/website" target="_blank"><img src="https://opencollective.com/octotree/backer/1/avatar.svg"></a>
