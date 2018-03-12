@@ -1,3 +1,6 @@
+### v2.4.6
+* Fix random page reload
+
 ### v2.4.4
 * Fix layout in project page
 * Fix intermittent page reload
