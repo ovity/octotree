@@ -2,10 +2,10 @@ class PjaxAdapter extends Adapter {
   constructor(store) {
     super(['jquery.pjax.js'], store)
 
-    $.pjax.defaults.timeout = 0 // no timeout
     $(document)
-      .on('pjax:send', () => $(document).trigger(EVENT.REQ_START))
+      .on('pjax:start', () => $(document).trigger(EVENT.REQ_START))
       .on('pjax:end', () => $(document).trigger(EVENT.REQ_END))
+      .on('pjax:timeout', (e) => e.preventDefault())
   }
 
   // @override
@@ -75,7 +75,8 @@ class PjaxAdapter extends Adapter {
       $.pjax({
         // needs full path for pjax to work with Firefox as per cross-domain-content setting
         url: location.protocol + '//' + location.host + path,
-        container: $pjaxContainer
+        container: $pjaxContainer,
+        timeout: 0 // global timeout doesn't seem to work, use this instead
       })
     }
     else {
