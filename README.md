@@ -80,7 +80,7 @@ By default, Octotree only works on `github.com`. To support enterprise version (
 
 ## Backers
 
-Please consider [donating](https://opencollective.com/octotree#backer) to help us continue ongoing development of Octotree.
+Loving Octotree? [Donating](https://opencollective.com/octotree) to help us continue working on it.
 
 [[Become a backer](https://opencollective.com/octotree#backer)]
 
