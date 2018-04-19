@@ -13,7 +13,6 @@
       "https://*.bitbucket.org/*",
       "storage"
     ],
-    "content_security_policy": "default-src 'self'",
     "web_accessible_resources": ["*.woff2"],
     "content_scripts": [
       {
@@ -27,7 +26,7 @@
           "jquery-ui.js",
           "jstree.js",
           "keymaster.js",
-          "ondemand.js", 
+          "ondemand.js",
           "octotree.js"
         ],
         "css": [
@@ -38,4 +37,3 @@
       }
     ]
   }
-  

@@ -1,6 +1,5 @@
 class TreeView {
   constructor($dom, store, adapter) {
-    const isEdge = window.navigator.userAgent.indexOf('Edge') > 0;
     this.store = store
     this.adapter = adapter
     this.$view = $dom.find('.octotree_treeview')
@@ -9,7 +8,7 @@ class TreeView {
       .on('click.jstree', '.jstree-closed>a', ({target}) => this.$jstree.open_node(target))
       .on('click', this._onItemClick.bind(this))
       .jstree({
-        core: { multiple: false, worker: false, themes : { responsive : false }, animation: isEdge ? 0 : undefined },
+        core: { multiple: false, worker: false, themes : { responsive : false } },
         plugins: ['wholerow']
       })
   }

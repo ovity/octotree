@@ -192,8 +192,9 @@ const octotreeMain = () => {
   }
 }
 
-if(document.readyState === 'complete') {
+if (document.readyState === 'complete') {
   octotreeMain()
-} else {
+}
+else {
   $(document).ready(octotreeMain)
 }
