@@ -1,3 +1,12 @@
+### v2.4.6
+* Fix random page reload
+
+### v2.4.4
+* Fix layout in project page
+* Fix intermittent page reload
+* Support file icon in Safari
+* Set default GitHub token options
+
 ### v2.4.3
 * Fix issue branch path not encoded in file navigation
 
