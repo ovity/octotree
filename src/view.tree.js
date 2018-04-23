@@ -76,9 +76,48 @@ class TreeView {
   }
 
   _sort(folder) {
+    const $jstree = this.$jstree
+
     folder.sort((a, b) => {
-      if (a.type === b.type) return a.text === b.text ? 0 : a.text < b.text ? -1 : 1
-      return a.type === 'blob' ? 1 : -1
+      let iconA = fitIcon(a.icon)
+      let iconB = fitIcon(b.icon)
+
+      function fitIcon(icon)
+      {
+        const blobIcon = "blob"
+
+        if (icon.indexOf(blobIcon) != -1)
+        {
+          return blobIcon
+        }
+        else
+        {
+          return icon;
+        }
+      }
+
+      if (iconA !== iconB)
+      {
+        if (iconA > iconB)
+        {
+          return -1;
+        }
+        else
+        {
+          return 1;
+        }
+      }
+      else
+      {
+        if (a.text.toLowerCase() > b.text.toLowerCase())
+        {
+          return 1;
+        }
+        else
+        {
+          return -1;
+        }
+      }
     })
 
     folder.forEach((item) => {
