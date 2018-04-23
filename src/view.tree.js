@@ -92,7 +92,7 @@ class TreeView {
         }
         else
         {
-          return icon;
+          return icon
         }
       }
 
@@ -100,22 +100,22 @@ class TreeView {
       {
         if (iconA > iconB)
         {
-          return -1;
+          return -1
         }
         else
         {
-          return 1;
+          return 1
         }
       }
       else
       {
         if (a.text.toLowerCase() > b.text.toLowerCase())
         {
-          return 1;
+          return 1
         }
         else
         {
-          return -1;
+          return -1
         }
       }
     })
