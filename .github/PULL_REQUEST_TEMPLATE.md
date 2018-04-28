@@ -1,5 +1,8 @@
-### Description
-Summary of what issue(s) this PR resolves
+### Problem
+Describe the problem.
 
-### Proposal
-Summary of what changes this PR proposes
+### Solution
+Describe the solution.
+
+### Screenshots
+Screenshots before and after applying the PR.
