@@ -180,7 +180,7 @@ class Bitbucket extends PjaxAdapter {
         username =  result[0], token = result[1]
       }
       else {
-        const currentUser = JSON.parse($('body').attr('data-current-user'))
+        const currentUser = JSON.parse($('meta').attr('data-current-user'))
         if (!currentUser || !currentUser.username) {
           return cb({
             error: 'Error: Invalid token',
