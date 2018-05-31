@@ -78,6 +78,10 @@ $(document).ready(() => {
       .resize(() => layoutChanged(true))
       .appendTo($('body'))
 
+	if(store.get(STORE.DARKMODE)) {
+		$sidebar.addClass('dark-mode')
+	}
+
     adapter.init($sidebar)
     return tryLoadRepo()
 
@@ -89,10 +93,11 @@ $(document).ready(() => {
 
         switch (storeKey) {
           case STORE.TOKEN:
-          case STORE.LOADALL:
+		  case STORE.LOADALL:
           case STORE.ICONS:
             reload = true
             break
+		  case STORE.DARKMODE:
           case STORE.HOTKEYS:
             key.unbind(value[0])
             key(value[1], toggleSidebar)

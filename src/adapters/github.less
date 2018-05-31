@@ -139,10 +139,10 @@
   }
 
   a.octotree_toggle, a.octotree_opts {
-    color: black !important;
+    color: black;
 
     &:hover, &.selected {
-      color: #0366d6 !important;
+      color: #0366d6;
     }
   }
 
@@ -168,4 +168,53 @@
       content: data-uri('image/svg+xml;charset=UTF-8', './octicons/chevron-right-hover.svg');
     }
   }
+}
+
+.dark-mode {
+	&.octotree_github_sidebar {
+		background-color: #21252b !important;
+		.octotree_opts {
+			color: #ccc !important;
+		}
+	}
+	.octotree_views {
+		background-color: #21252b !important;
+		border-right: 1px solid rgb(32, 36, 43) !important;		
+		.octotree_view_header {
+			background-color: #20242b !important;
+			border-right: 1px solid #1c2027 !important;
+			border-bottom: 1px solid #1c2027 !important;	
+			color: #ccc !important;							
+			.octotree_header_repo {
+				color: #ccc !important;				
+				a {
+					color: #ccc !important;					
+				}
+			}		
+		}
+		.octotree_view_body {
+			label {
+				color: #ccc !important;				
+			}
+			input[type="text"], textarea {
+				background-color: rgb(29, 31, 35) !important;
+				border: 1px solid rgb(29, 31, 35) !important;
+				color: rgb(204, 204, 204) !important;
+				&:focus {
+					outline: 0 !important;
+				}
+			}
+		}
+		.jstree-wholerow-hovered {
+        	background: rgba(0,0,0,0.2) !important;
+		}
+		.jstree-wholerow-clicked {
+        	background: rgba(0,0,0,0.3) !important;         
+        }
+		.octotree_treeview {
+			.jstree-anchor, .octotree_header_branch {
+				color: #ccc !important;
+			}
+		} 
+	}
 }
