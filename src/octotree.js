@@ -86,8 +86,8 @@ $(document).ready(() => {
     return tryLoadRepo()
 
     function optionsChanged(event, changes) {
-      let reload = false
-
+	  let reload = false
+	  
       Object.keys(changes).forEach((storeKey) => {
         const value = changes[storeKey]
 
@@ -97,18 +97,27 @@ $(document).ready(() => {
           case STORE.ICONS:
             reload = true
             break
-		  case STORE.DARKMODE:
           case STORE.HOTKEYS:
             key.unbind(value[0])
             key(value[1], toggleSidebar)
-            break
+			break
+		  case STORE.DARKMODE:
+			handleTheme()
         }
       })
 
       if (reload) {
         tryLoadRepo(true)
       }
-    }
+	}
+	
+	function handleTheme() {
+		if (store.get(STORE.DARKMODE)) {
+			$sidebar.addClass('dark-mode');
+		} else {
+			$sidebar.removeClass('dark-mode');			
+		}
+	}
 
     function tryLoadRepo(reload) {
       hasError = false
