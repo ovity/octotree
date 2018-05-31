@@ -16,6 +16,21 @@
     }
   }
 
+  .dark-mode {
+	&.octotree_github_sidebar {
+		a.octotree_toggle {
+		right: 12px;
+		top: 12px;
+		&:not(.octotree_loading) > span:after {
+			content: data-uri('image/svg+xml;charset=UTF-8', './octicons/chevron-left-light.svg') !important;
+		}
+		&:not(.octotree_loading):hover > span:after {
+			content: data-uri('image/svg+xml;charset=UTF-8', './octicons/chevron-left-light.svg') !important;
+		}
+		}
+	}	
+  }
+
   body.split-diff .container {
     padding-left: 0;
   }
@@ -174,7 +189,20 @@
 	&.octotree_github_sidebar {
 		background-color: #21252b !important;
 		.octotree_opts {
-			color: #ccc !important;
+			background: data-uri('image/svg+xml;charset=UTF-8', './octicons/gear-light.svg') !important;
+			&:hover{
+				background: data-uri('image/svg+xml;charset=UTF-8', './octicons/gear-light.svg') !important;	
+			}
+		}
+		.octotree_toggle{
+			background-color: #0f1115 !important;
+			background-image: none !important;
+			&:not(.octotree_loading) > span:after {
+				content: data-uri('image/svg+xml;charset=UTF-8', './octicons/chevron-right-light.svg');
+			}
+			&:not(.octotree_loading):hover > span:after {
+				content: data-uri('image/svg+xml;charset=UTF-8', './octicons/chevron-right-light.svg');
+			}
 		}
 	}
 	.octotree_views {
@@ -204,13 +232,21 @@
 					outline: 0 !important;
 				}
 			}
+			.save-btn{
+				background-color: #ef4c59 !important;
+				background-image: none !important;
+				color: #fff !important;
+			}
+			.message{
+				color: #ccc !important;				
+			}
 		}
 		.jstree-wholerow-hovered {
         	background: rgba(0,0,0,0.2) !important;
 		}
 		.jstree-wholerow-clicked {
         	background: rgba(0,0,0,0.3) !important;         
-        }
+		}
 		.octotree_treeview {
 			.jstree-anchor, .octotree_header_branch {
 				color: #ccc !important;
