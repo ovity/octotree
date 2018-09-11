@@ -16,7 +16,7 @@ Browser extension (Chrome, Firefox, Opera and Safari) to show a code tree on Git
 * Navigate to any GitHub repository (or just refresh this page as an example)
 * The code tree should show on the left-hand side of the screen
 
-__Note__: to configure Octotree for GitHub Enteprise, see [instructions](#enterprise-urls)
+__Note__: to configure Octotree for GitHub Enterprise, see [instructions](#enterprise-urls)
 
 ### Install on Safari
 
