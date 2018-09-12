@@ -52,6 +52,13 @@ class TreeView {
   _showHeader(repo) {
     const adapter = this.adapter
 
+    // Copy GitHub's branch switcher
+    let branchHtml = $('<div>').append($('.branch-select-menu').clone()).html();
+
+    if (branchHtml === null || branchHtml === '') {
+      branchHtml = this._deXss(repo.branch.toString());
+    }
+
     this.$view.find('.octotree_view_header')
       .html(
         '<div class="octotree_header_repo">' +
@@ -60,7 +67,7 @@ class TreeView {
            '<a data-pjax href="/' + repo.username + '/' + repo.reponame + '">' + repo.reponame +'</a>' +
          '</div>' +
          '<div class="octotree_header_branch">' +
-           this._deXss(repo.branch.toString()) +
+           branchHtml +
          '</div>'
       )
       .on('click', 'a[data-pjax]', function (event) {
