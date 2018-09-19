@@ -14,6 +14,7 @@ const GH_RESERVED_REPO_NAMES = ['followers', 'following', 'repositories']
 const GH_404_SEL = '#parallax_wrapper'
 const GH_PJAX_CONTAINER_SEL = '#js-repo-pjax-container, .context-loader-container, [data-pjax-container]'
 const GH_CONTAINERS = '.container, .container-lg, .container-responsive'
+const GH_HEADER = '.js-header-wrapper > header'
 const GH_RAW_CONTENT = 'body > pre'
 
 class GitHub extends PjaxAdapter {
@@ -64,12 +65,15 @@ class GitHub extends PjaxAdapter {
   // @override
   updateLayout(togglerVisible, sidebarVisible, sidebarWidth) {
     const SPACING = 10
+    const $header = $(GH_HEADER)
     const $containers = $(GH_CONTAINERS)
     const autoMarginLeft = ($(document).width() - $containers.width()) / 2
-    const shouldPushLeft = sidebarVisible && (autoMarginLeft <= sidebarWidth + SPACING)
+    const shouldPushEverything = sidebarVisible && (autoMarginLeft <= sidebarWidth + SPACING)
+    const shouldPushHeader = togglerVisible && !shouldPushEverything
 
-    $('html').css('margin-left', shouldPushLeft ? sidebarWidth : '')
-    $containers.css('margin-left', shouldPushLeft ? SPACING : '')
+    $('html').css('margin-left', shouldPushEverything ? sidebarWidth : '')
+    $containers.css('margin-left', shouldPushEverything ? SPACING : '')
+    $header.css('padding-left', shouldPushHeader ? 25 : '')
   }
 
   // @override
