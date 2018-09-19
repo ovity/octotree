@@ -1,3 +1,6 @@
+### v2.4.7
+* Minor UI tweaks
+
 ### v2.4.6
 * Fix random page reload
 
