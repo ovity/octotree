@@ -22,11 +22,40 @@
     top: 0;
     bottom: 0;
   }
+
+  .octotree_bottom {
+    position: absolute;
+    border-top: 1px solid #e1e4e8;
+    border-right: 1px solid #e1e4e8;
+    background-color: #fafbfc;
+    font-size: 11px;
+    line-height: 14px;
+    padding: 5px;
+    bottom: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    color: #6a737d;
+
+    a {
+      color: #6a737d;
+
+      &:hover {
+        color: #0366d6;
+        text-decoration: none;
+
+        .octotree_icon:before {
+          color: #0366d6;
+        }
+      }
+    }
+  }
 }
 
 .octotree_views {
   height: 100%;
   overflow: auto;
+  padding-bottom: 25px;
 
   .octotree_view {
     display: none;
@@ -177,15 +206,6 @@
       font-size: 12px;
       margin-left: 17px;
     }
-
-    .octotree_opts_backing {
-      color: gray;
-      font-size: 12px;
-      margin-left: 2px;
-      a {
-        float: none;
-      }
-    }
   }
 }
 
@@ -303,5 +323,32 @@ a.octotree_toggle {
    }
   .octotree_sidebar {
      display: none;
+  }
+}
+
+.octotree_icon {
+  &:before {
+  	font-weight: normal;
+  	font-style: normal;
+  	text-align: center;
+  	width: 16px;
+  	line-height: 1;
+  	position: relative;
+  	display: inline-block;
+  	-webkit-font-smoothing: antialiased;
+    color: #6a737d;
+    font-size: 14px;
+  }
+
+  &.heart-icon {
+    &:before {
+      font-family: octicons;
+      top: 2px;
+      content: "\2665";
+    }
+  }
+
+  &.github-icon {
+    margin-right: 3px;
   }
 }
