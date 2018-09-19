@@ -6,7 +6,7 @@ var factory    = require('./factory')
   , files
 
 before(function (cb) {
-  getJson('https://api.github.com/repos/buunguyen/octotree/git/trees/master?recursive=true', token, function (err, data) {
+  getJson('https://api.github.com/repos/ovity/octotree/git/trees/master?recursive=true', token, function (err, data) {
     if (err) return cb(err)
     files = data.tree
     cb()
@@ -23,7 +23,7 @@ function runTest(browser) {
       starx(function *() {
         var driver = yield factory[browser + 'Driver']
         yield sleep(5000) // wait for browser to start up
-        po = new PageObject(driver, 'https://github.com/buunguyen/octotree')
+        po = new PageObject(driver, 'https://github.com/ovity/octotree')
       })(cb)
     })
 
@@ -62,7 +62,7 @@ function runTest(browser) {
         yield po.toggleSidebar()
         assert.equal(yield po.branchLabel.getText(), 'master')
 
-        yield po.setUrl('https://github.com/buunguyen/octotree/tree/v1.6.2')
+        yield po.setUrl('https://github.com/ovity/octotree/tree/v1.6.2')
         assert.equal(yield po.branchLabel.getText(), 'v1.6.2')
       })
     })
@@ -86,7 +86,7 @@ function runTest(browser) {
 
         yit('should show repository information', function *() {
           var links = yield po.treeHeaderLinks
-          assert.equal(yield links[0].getText(), 'buunguyen')
+          assert.equal(yield links[0].getText(), 'ovity')
           assert.equal(yield links[1].getText(), 'octotree')
         })
 
@@ -109,7 +109,7 @@ function runTest(browser) {
             var node = po.nodeFor(someFile.path)
             yield po.clickNode(node)
             assert.ok(yield po.isNodeSelected(node))
-            assert.equal(yield po.getUrl(), 'https://github.com/buunguyen/octotree/blob/master/' + someFile.path)
+            assert.equal(yield po.getUrl(), 'https://github.com/ovity/octotree/blob/master/' + someFile.path)
             yield sleep(200) // pjax
             assert.equal(yield po.ghBreadcrumb.getText(), someFile.path)
           }
@@ -213,10 +213,10 @@ function runTest(browser) {
 
           describe('non-code', function () {
             var pages = [
-              'https://github.com/buunguyen/octotree/issues',
-              'https://github.com/buunguyen/octotree/pulls',
-              'https://github.com/buunguyen/octotree/pulse',
-              'https://github.com/buunguyen/octotree/graphs/contributors'
+              'https://github.com/ovity/octotree/issues',
+              'https://github.com/ovity/octotree/pulls',
+              'https://github.com/ovity/octotree/pulse',
+              'https://github.com/ovity/octotree/graphs/contributors'
             ]
 
             yit('should hide in non-code pages', function *() {

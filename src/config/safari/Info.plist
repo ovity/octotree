@@ -9,7 +9,7 @@
 		<key>CFBundleDisplayName</key>
 		<string>octotree</string>
 		<key>CFBundleIdentifier</key>
-		<string>com.buunguyen.octotree</string>
+		<string>com.ovity.octotree</string>
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
 		<key>CFBundleShortVersionString</key>
@@ -65,6 +65,6 @@
 			</dict>
 		</dict>
 		<key>Website</key>
-		<string>https://github.com/buunguyen/octotree</string>
+		<string>https://github.com/ovity/octotree</string>
 	</dict>
 </plist>

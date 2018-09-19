@@ -34,7 +34,7 @@ global.rand = function (arr) {
 
 global.getJson = function (url, token, cb) {
   var headers = {
-    'User-Agent': 'buunguyen/octotree (unit test)'
+    'User-Agent': 'ovity/octotree (unit test)'
   }
   if (token) headers.Authorization = 'token ' + token
 

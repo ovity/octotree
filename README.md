@@ -30,9 +30,9 @@ Find the extension folder in `tmp/safari`. Follow Apple instructions to install 
 
 ### Install from prebuilt packages (all browsers)
 
-Prebuilt packages are available in the  [dist](https://github.com/buunguyen/octotree/tree/master/dist) folder. For security reason, only download Octotree from this location.
+Prebuilt packages are available in the  [dist](https://github.com/ovity/octotree/tree/master/dist) folder. For security reason, only download Octotree from this location.
 
-__Note__: Firefox 43+ requires add-ons to be signed. Therefore, you should install Octotree from the Mozilla store. For some reason if you want to install the prebuilt package instead, you have to [disable sign-check](https://github.com/buunguyen/octotree/issues/220#issuecomment-166012724).
+__Note__: Firefox 43+ requires add-ons to be signed. Therefore, you should install Octotree from the Mozilla store. For some reason if you want to install the prebuilt package instead, you have to [disable sign-check](https://github.com/ovity/octotree/issues/220#issuecomment-166012724).
 
 ## Settings
 ### Access Token

@@ -1,6 +1,6 @@
 {
   "name": "octotree",
-  "version": "2.4.6",
+  "version": "2.4.7",
   "description": "Code tree for GitHub",
   "main": "inject.js",
   "scripts": {
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/buunguyen/octotree"
+    "url": "https://github.com/ovity/octotree"
   },
   "author": "Buu Nguyen <buunguyen@gmail.com> (https://github.com/buunguyen)",
   "license": "AGPL",
   "bugs": {
-    "url": "https://github.com/buunguyen/octotree/issues"
+    "url": "https://github.com/ovity/octotree/issues"
   },
-  "homepage": "https://github.com/buunguyen/octotree",
+  "homepage": "https://github.com/ovity/octotree",
   "devDependencies": {
     "async": "~0.9.0",
     "babel-core": "^6.1.2",
@@ -27,7 +27,7 @@
     "crx": "^0.4.4",
     "event-stream": "*",
     "firefox-profile": "~0.3.6",
-    "gulp": "^3.9.0",
+    "gulp": "^3.9.1",
     "gulp-autoprefixer": "0.0.8",
     "gulp-babel": "^6.1.0",
     "gulp-clean": "^0.3.1",

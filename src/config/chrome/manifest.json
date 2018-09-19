@@ -4,7 +4,7 @@
   "manifest_version": 2,
   "author": "Buu Nguyen",
   "description": "Code tree for GitHub",
-  "homepage_url": "https://github.com/buunguyen/octotree",
+  "homepage_url": "https://github.com/ovity/octotree",
   "icons": {
     "128": "icons/icon128.png"
   },
