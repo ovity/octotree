@@ -69,11 +69,16 @@ class GitHub extends PjaxAdapter {
     const $containers = $(GH_CONTAINERS)
     const autoMarginLeft = ($(document).width() - $containers.width()) / 2
     const shouldPushEverything = sidebarVisible && (autoMarginLeft <= sidebarWidth + SPACING)
-    const shouldPushHeader = togglerVisible && !shouldPushEverything
 
     $('html').css('margin-left', shouldPushEverything ? sidebarWidth : '')
     $containers.css('margin-left', shouldPushEverything ? SPACING : '')
-    $header.css('padding-left', shouldPushHeader ? 25 : '')
+
+    const headerPadding = shouldPushEverything || (!togglerVisible && !sidebarVisible)
+        ? '' // nothing is visible or already pushed, leave as-is
+        : !sidebarVisible
+          ? 25 // sidebar is collapsed, move the logo to avoid hiding the toggler
+          : sidebarWidth // otherwise, move the header from the sidebar
+    $header.css('padding-left', headerPadding)
   }
 
   // @override
