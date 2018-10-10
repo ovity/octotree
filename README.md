@@ -81,3 +81,11 @@ By default, Octotree only works on `github.com`. To support enterprise version (
 ## Donate
 
 Loving Octotree? [Donating](https://opencollective.com/octotree) to help us continue working on it.
+
+## Development getting started
+
+1. Install [node v10+](https://nodejs.org/en/download/)
+1. Run `npm install` to install dependencies
+1. Run `npm run build` to watch code changes and build unpacked extensions
+1. Install unpacked extentions built under `tmp` folder to browsers
+1. Begin coding
