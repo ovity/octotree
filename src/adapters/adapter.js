@@ -343,9 +343,19 @@ class Adapter {
    * @api public
    */
   downloadFile(path, fileName) {
+    const downloadUrl = path.replace(/\/blob\/|\/src\//, '/raw/')
     const link = document.createElement('a')
-    link.setAttribute('href', path.replace(/\/blob\/|\/src\//, '/raw/'))
-    link.setAttribute('download', fileName)
+
+    link.setAttribute('href', downloadUrl)
+
+    // Github will redirect to a different origin (host) for downloading the file.
+    // However, the new host hasn't been added in the Content-Security-Policy header from
+    // Github so the browser won't save the file, it navigates to the file instead.
+    // Using '_blank' as a trick to not being navigated
+    // See more about Content Security Policy at
+    // https://www.html5rocks.com/en/tutorials/security/content-security-policy/
+    link.setAttribute('target', '_blank')
+
     link.click()
   }
 
