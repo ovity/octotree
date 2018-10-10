@@ -72,6 +72,14 @@ By default, Octotree only works on `github.com`. To support enterprise version (
 * __Load entire tree at once__: if checked, load and render the entire code tree at once. To avoid long loading, this should be unchecked if you frequently work with very large repos.
 * __Show only pull request changes__ _(new!)_: if checked and in "Pull requests" page, only show the change set of the pull request.
 
+## Contribution
+
+1. Install [node 8 or above](https://nodejs.org/en/download/)
+1. Run `npm install` to install dependencies
+1. Run `npm run build` to watch code changes and build unpacked extensions
+1. Install unpacked extentions in the `tmp` folder (check specific browser instructions)
+1. Please follow existing style for new code
+
 ## Credits
 * [@crashbell](https://github.com/crashbell) for helping with GitLab and others
 * [@Ephemera](https://github.com/Ephemera) for fixing many bugs
@@ -81,11 +89,3 @@ By default, Octotree only works on `github.com`. To support enterprise version (
 ## Donate
 
 Loving Octotree? [Donating](https://opencollective.com/octotree) to help us continue working on it.
-
-## Development getting started
-
-1. Install [node v10+](https://nodejs.org/en/download/)
-1. Run `npm install` to install dependencies
-1. Run `npm run build` to watch code changes and build unpacked extensions
-1. Install unpacked extentions built under `tmp` folder to browsers
-1. Begin coding
