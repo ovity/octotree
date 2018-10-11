@@ -10,6 +10,7 @@ const STORE = {
   HOTKEYS   : 'octotree.hotkeys',
   ICONS     : 'octotree.icons',
   LOADALL   : 'octotree.loadall',
+  DARKMODE  : 'octotree.darkmode',
   POPUP     : 'octotree.popup_shown',
   WIDTH     : 'octotree.sidebar_width',
   SHOWN     : 'octotree.sidebar_shown',
