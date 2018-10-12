@@ -1,0 +1,9 @@
+# Guide for updating .svg files in this folder
+
+Icon (.svg files) in this folder come from [Githun Octicons](https://octicons.github.com/) project.
+
+To get the new .svg file for an icon:
+
+1. Open terminal at any folder, run `npm install octicons`
+1. Look for desire icon at [Githun Octicons](https://octicons.github.com/)
+1. Find corresponding name at `node_modules/octicons/build/svg/` and get the file
