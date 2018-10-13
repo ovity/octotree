@@ -7,11 +7,11 @@
     a.octotree_toggle {
       right: 12px;
       top: 14px;
-      &:not(.octotree_loading) > span:after {
-        content: data-uri('image/svg+xml;charset=UTF-8', './octicons/chevron-left.svg');
-      }
+
+      &:not(.octotree_loading) > span:after,
       &:not(.octotree_loading):hover > span:after {
-        content: data-uri('image/svg+xml;charset=UTF-8', './octicons/chevron-left-hover.svg');
+        #octicons.chevron-left();
+        font-size: 15px;
       }
     }
   }
@@ -48,7 +48,8 @@
 
       .octotree_help {
         & > span:before {
-          content: data-uri('image/svg+xml;charset=UTF-8', './octicons/question.svg');
+          #octicons.question();
+          color: @dark;
         }
       }
 
@@ -76,40 +77,51 @@
       .octotree_header_repo {
         font-size: 13px;
         font-weight: normal;
+
+        &:before {
+          #octicons.repo();
+          position: relative;
+          top: 2px;
+          color: @light;
+        }
       }
-      .octotree_header_repo:before {
-        position: relative;
-        top: 2px;
-        content: data-uri('image/svg+xml;charset=UTF-8', './octicons/repo.svg');
-      }
+
       .octotree_header_branch {
         font-size: 11px;
+
+        &:before {
+          #octicons.git-branch();
+          position: relative;
+          top: 2px;
+          color: @light;
+        }
       }
-      .octotree_header_branch:before {
-        position: relative;
-        top: 2px;
-        content: data-uri('image/svg+xml;charset=UTF-8', './octicons/git-branch.svg');
-      }
-      .jstree-icon.tree, .jstree-icon.commit, .jstree-icon.blob.file-generic {
-        margin-top: 3px;
+
+      .jstree-icon.tree, .jstree-icon.commit, .jstree-icon.file-generic {
+        margin-top: 0;
+        margin-right: 3px !important;
       }
       .jstree-icon.tree:before {
-        content: data-uri('image/svg+xml;charset=UTF-8', './octicons/file-directory.svg');
+        #octicons.file-directory();
+        color: #8197B1;
       }
       .jstree-icon.file-generic:before {
-        content: data-uri('image/svg+xml;charset=UTF-8', './octicons/file-text.svg');
+        #octicons.file-text();
+        color: @gray;
       }
       .jstree-node.jstree-leaf:hover {
         .jstree-icon.blob {
           margin-top: 1px;
 
           &:before {
-            #octicon-icons.open-new-tab();
+            #octicons.link-external();
+            color: @accent;
           }
         }
       }
       .jstree-icon.commit:before {
-        content: data-uri('image/svg+xml;charset=UTF-8', './octicons/file-submodule.svg');
+        #octicons.file-submodule();
+        color: @gray;
       }
       .jstree-anchor {
         color: #0366d6 !important;
@@ -153,9 +165,15 @@
     right: 48px;
     width: 14px;
     height: 16px;
-    background: data-uri('image/svg+xml;charset=UTF-8', './octicons/gear.svg');
-    &:hover {
-      background: data-uri('image/svg+xml;charset=UTF-8', './octicons/gear-hover.svg');
+
+    .settings:before {
+      #octicons.gear();
+      color: @dark;
+      font-size: 15px;
+    }
+
+    &:hover .settings:before {
+      color: @blue;
     }
   }
 
@@ -163,11 +181,16 @@
     top: 14px;
     right: -35px;
 
-    &:not(.octotree_loading) > span:after {
-      content: data-uri('image/svg+xml;charset=UTF-8', './octicons/chevron-right.svg');
-    }
+    &:not(.octotree_loading) > span:after,
     &:not(.octotree_loading):hover > span:after {
-      content: data-uri('image/svg+xml;charset=UTF-8', './octicons/chevron-right-hover.svg');
+      #octicons.chevron-right();
+      font-size: 15px;
+      position: relative;
+      left: 3px;
+    }
+
+    &:not(.octotree_loading):hover > span:after {
+      color: @blue;
     }
   }
 }

@@ -96,11 +96,12 @@
     }
     .octotree_header_repo {
       font-weight: bold;
-    }
-    .octotree_header_repo:before {
-      color: #bbb;
-      margin-right: 6px;
-      line-height: 28px;
+
+      &:before {
+        color: #bbb;
+        margin-right: 6px;
+        line-height: 28px;
+      }
     }
     .octotree_header_branch {
       line-height: 1;
@@ -110,10 +111,11 @@
       font-size: 12px;
       margin-top: -6px;
       font-size: 13px;
-    }
-    .octotree_header_branch:before {
-      margin-right: 8px;
-      margin-left: 3px;
+
+      &:before {
+        margin-right: 4px;
+        margin-left: 3px;
+      }
     }
     .jstree-anchor {
       text-decoration: none;
@@ -173,7 +175,7 @@
   .octotree_optsview {
     .octotree_view_header {
       padding-left: 5px;
-      padding-top: 5px;
+      padding-top: 7px !important;
     }
     & > form {
       margin: 6px;
@@ -326,29 +328,26 @@ a.octotree_toggle {
   }
 }
 
-.octotree_icon {
-  &:before {
-  	font-weight: normal;
-  	font-style: normal;
-  	text-align: center;
-  	width: 16px;
-  	line-height: 1;
-  	position: relative;
-  	display: inline-block;
-  	-webkit-font-smoothing: antialiased;
-    color: #6a737d;
-    font-size: 14px;
+.octotree_bottom {
+  i:before {
+    color: @gray;
+    top: 2px;
   }
 
-  &.heart-icon {
-    &:before {
-      font-family: octicons;
-      top: 2px;
-      content: "\2665";
-    }
+  a:hover i:before {
+    color: @blue;
   }
 
-  &.github-icon {
+  i.support:before {
+    #octicons.heart();
+  }
+
+  i.github {
+    position: relative;
+    top: -1px;
     margin-right: 3px;
+    &:before {
+      #octicons.mark-github();
+    }
   }
 }

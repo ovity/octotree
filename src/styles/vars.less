@@ -1,9 +1,42 @@
-#octicon-icons {
-  // Reference icon codes at
-  // https://github.com/atom/atom/blob/master/static/variables/octicon-utf-codes.less
-  .open-new-tab() {
-    font-family: octicons;
-    color: #AC4142;
-    content: "\f07f";
-  }
+// ====== Colors ======
+@dark: #24292e;
+@gray: #6a737d;
+@light: #959da5;
+@blue: #0366d6;
+@accent: #AC4142;
+
+// ====== Icons ======
+// Octotree is bundled with the Octicons font. Steps to add an icon:
+// 1. Add it in this file, see example below.
+// 2. Define the icon class in base.less or github.less
+//    Example: heart-icon in base.less.
+// 3. Add this to the element's class atrribute: "octotree_icon <icon_name>".
+.icon() {
+  font-family: octicons;
+	font-weight: normal;
+	font-style: normal;
+	text-align: center;
+	width: 16px;
+	line-height: 1;
+	position: relative;
+	display: inline-block;
+	-webkit-font-smoothing: antialiased;
+  font-size: 14px;
+}
+
+#octicons {
+  // Icon list: https://octicons.github.com/
+  // Icon codes: https://github.com/atom/atom/blob/master/static/variables/octicon-utf-codes.less
+  .link-external()    {.icon(); content: "\f07f";}
+  .heart()            {.icon(); content: "\2665";}
+  .question()         {.icon(); content: "\f02c";}
+  .chevron-left()     {.icon(); content: "\f0a4";}
+  .chevron-right()    {.icon(); content: "\f078";}
+  .mark-github()      {.icon(); content: "\f00a";}
+  .repo()             {.icon(); content: "\f001";}
+  .git-branch()       {.icon(); content: "\f020";}
+  .gear()             {.icon(); content: "\f02f";}
+  .file-directory()   {.icon(); content: "\f016";}
+  .file-text()        {.icon(); content: "\f011";}
+  .file-submodule()   {.icon(); content: "\f017";}
 }
