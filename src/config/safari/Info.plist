@@ -41,7 +41,6 @@
 			</array>
 			<key>Whitelist</key>
 			<array>
-				<string>https://bitbucket.org/*</string>
 				<string>https://github.com/*</string>
 			</array>
 		</dict>
@@ -55,7 +54,6 @@
 			<dict>
 				<key>Allowed Domains</key>
 				<array>
-					<string>bitbucket.org</string>
 					<string>github.com</string>
 				</array>
 				<key>Include Secure Pages</key>
