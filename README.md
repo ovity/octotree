@@ -80,6 +80,13 @@ By default, Octotree only works on `github.com`. To support enterprise version (
 1. Install unpacked extentions in the `tmp` folder (check specific browser instructions)
 1. Please follow existing style for new code
 
+Notes:
+
+- Guide for using icons:
+
+  - [Icons loaded](https://github.com/ovity/octotree/blob/c8819379c9cc60b3c2124440766906028891120d/libs/file-icons.css#L100-L133)
+  - [Notes for using icons](https://github.com/ovity/octotree/pull/547)
+
 ## Credits
 * [@crashbell](https://github.com/crashbell) for helping with GitLab and others
 * [@Ephemera](https://github.com/Ephemera) for fixing many bugs
@@ -89,8 +96,3 @@ By default, Octotree only works on `github.com`. To support enterprise version (
 ## Donate
 
 Loving Octotree? [Donating](https://opencollective.com/octotree) to help us continue working on it.
-
-
-Below are icons loaded in octotree
-https://github.com/ovity/octotree/blob/c8819379c9cc60b3c2124440766906028891120d/libs/file-icons.css#L100-L133, see some notes for using icons at https://github.com/ovity/octotree/pull/547
-
