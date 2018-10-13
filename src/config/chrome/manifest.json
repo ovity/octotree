@@ -10,7 +10,6 @@
   },
   "permissions": [
     "https://github.com/*",
-    "https://bitbucket.org/*",
     "storage"
   ],
   "optional_permissions": [

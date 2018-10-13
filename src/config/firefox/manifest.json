@@ -11,15 +11,13 @@
   },
   "permissions": [
     "https://*.github.com/*",
-    "https://*.bitbucket.org/*",
     "storage"
   ],
   "web_accessible_resources": ["*.woff2"],
   "content_scripts": [
     {
       "matches": [
-        "https://github.com/*",
-        "https://bitbucket.org/*"
+        "https://github.com/*"
       ],
       "js": [
         "file-icons.js",

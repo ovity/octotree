@@ -180,7 +180,6 @@ function buildJs(overrides, ctx) {
     './src/constants.js',
     './src/adapters/adapter.js',
     './src/adapters/pjax.js',
-    './src/adapters/bitbucket.js',
     './src/adapters/github.js',
     './src/view.help.js',
     './src/view.error.js',

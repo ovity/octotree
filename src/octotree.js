@@ -17,13 +17,10 @@ $(document).ready(() => {
       .map(normalizeUrl)
       .concat('https://github.com')
 
-    const bitbucketUrls = ['https://bitbucket.org']
     const currentUrl = `${location.protocol}//${location.host}`
 
     if (~githubUrls.indexOf(currentUrl)) {
       return new GitHub(store)
-    } else if (~bitbucketUrls.indexOf(currentUrl)) {
-      return new Bitbucket(store)
     }
   }
 
