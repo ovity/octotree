@@ -1,4 +1,5 @@
 import gulp from 'gulp'
+import gutil from 'gulp-util'
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
@@ -40,6 +41,7 @@ gulp.task('styles', () => {
     $.plumber(),
     $.less({relativeUrls: true}),
     $.autoprefixer({cascade: true}),
+    gutil.env.production && $.cssmin(),
     './tmp'
   )
 })
@@ -71,7 +73,7 @@ gulp.task('chrome', ['chrome:js'], () => {
     pipe('./icons/**/*', './tmp/chrome/icons'),
     pipe(['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'], './tmp/chrome/'),
     pipe('./libs/file-icons.css', $.replace('../fonts', 'chrome-extension://__MSG_@@extension_id__/fonts'), './tmp/chrome/'),
-    pipe('./src/config/chrome/background.js', $.babel(), './tmp/chrome/'),
+    pipe('./src/config/chrome/background.js', $.babel(), gutil.env.production && $.uglify(), './tmp/chrome/'),
     pipe('./src/config/chrome/manifest.json', $.replace('$VERSION', getVersion()), './tmp/chrome/')
   )
 })
@@ -118,7 +120,6 @@ gulp.task('firefox', ['firefox:js'], () => {
     pipe('./icons/**/*', './tmp/firefox/icons'),
     pipe(['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'], './tmp/firefox'),
     pipe('./libs/file-icons.css', $.replace('../fonts', 'moz-extension://__MSG_@@extension_id__/fonts'), './tmp/firefox/'),
-    pipe('./src/config/firefox/background.js', $.babel(), './tmp/firefox/'),
     pipe('./src/config/firefox/manifest.json', $.replace('$VERSION', getVersion()), './tmp/firefox')
   )
 })
@@ -150,7 +151,7 @@ gulp.task('safari', ['safari:js'], () => {
 
 // Helpers
 function pipe(src, ...transforms) {
-  return transforms.reduce((stream, transform) => {
+  return transforms.filter((t) => !!t).reduce((stream, transform) => {
     const isDest = typeof transform === 'string'
     return stream.pipe(isDest ? gulp.dest(transform) : transform)
   }, gulp.src(src))
@@ -197,6 +198,7 @@ function buildJs(overrides, ctx) {
     $.babel(),
     $.concat('octotree.js'),
     $.preprocess({context: ctx}),
+    gutil.env.production && $.uglify(),
     './tmp'
   )
 }
