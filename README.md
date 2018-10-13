@@ -81,3 +81,8 @@ By default, Octotree only works on `github.com`. To support enterprise version (
 ## Donate
 
 Loving Octotree? [Donating](https://opencollective.com/octotree) to help us continue working on it.
+
+
+Below are icons loaded in octotree
+https://github.com/ovity/octotree/blob/c8819379c9cc60b3c2124440766906028891120d/libs/file-icons.css#L100-L133, see some notes for using icons at https://github.com/ovity/octotree/pull/547
+
