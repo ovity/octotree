@@ -99,7 +99,7 @@
 
       .jstree-icon.tree, .jstree-icon.commit, .jstree-icon.file-generic {
         margin-top: 0;
-        margin-right: 3px !important;
+        margin-right: 2px;
       }
       .jstree-icon.tree:before {
         #octicons.file-directory();
@@ -110,13 +110,9 @@
         color: @gray;
       }
       .jstree-node.jstree-leaf:hover {
-        .jstree-icon.blob {
-          margin-top: 1px;
-
-          &:before {
-            #octicons.link-external();
-            color: @accent;
-          }
+        .jstree-icon.blob:before {
+          #octicons.link-external();
+          color: @accent;
         }
       }
       .jstree-icon.commit:before {
