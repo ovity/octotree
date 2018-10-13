@@ -154,6 +154,7 @@ $(document).ready(() => {
     function toggleSidebarAndSave() {
       store.set(STORE.SHOWN, !isSidebarVisible(), () => {
         toggleSidebar()
+
         if (isSidebarVisible()) {
           tryLoadRepo()
         }
@@ -168,6 +169,13 @@ $(document).ready(() => {
       else {
         $html.toggleClass(SHOW_CLASS)
         $document.trigger(EVENT.TOGGLE, isSidebarVisible())
+        // when showing the tree, give it focus ELSE blur
+        if (isSidebarVisible()) {
+          treeView.$jstree.get_container().focus()
+          treeView.syncSelection()
+        } else {
+          treeView.$jstree.get_container().blur()
+        }
       }
     }
 
