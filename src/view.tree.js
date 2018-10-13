@@ -120,10 +120,12 @@ class TreeView {
     if (!$target.is('a.jstree-anchor')) return
 
     // refocus after complete so that keyboard navigation works, fix #158
+    // `scroll` event fires when selecting files in PR which scrolls to new #href in page
     const refocusAfterCompletion = () => {
-      $(document).one('pjax:success page:load', () => {
-        this.$jstree.get_container().focus()
-      })
+      $(document)
+        .one('pjax:success page:load scroll', () => {
+          this.$jstree.get_container().focus();
+        })
     }
 
     const adapter = this.adapter
