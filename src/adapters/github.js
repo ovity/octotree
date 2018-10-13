@@ -149,8 +149,7 @@ class GitHub extends PjaxAdapter {
 
   // @override
   selectFile(path) {
-    const $pjaxContainer = $(GH_PJAX_CONTAINER_SEL)
-    super.selectFile(path, {'$pjaxContainer': $pjaxContainer})
+    super.selectFile(path, {pjaxContainerSel: GH_PJAX_CONTAINER_SEL})
   }
 
   // @override

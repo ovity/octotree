@@ -63,19 +63,22 @@ class PjaxAdapter extends Adapter {
   // @api public
   selectFile(path, opts) {
     opts = opts || {}
-    const $pjaxContainer = opts.$pjaxContainer
 
-    // if we're on the same page and just navigating to a different anchor
+    // Do nothing if file is already selected.
+    if (location.pathname === path) return
+
+    // If we're on the same page and just navigating to a different anchor
     // don't bother fetching the page with pjax
     const pathWithoutAnchor = path.replace(/#.*$/, '')
     const isSamePage = location.pathname === pathWithoutAnchor
-    const loadWithPjax = $pjaxContainer.length && !isSamePage
+    const pjaxContainerSel = opts.pjaxContainerSel
+    const loadWithPjax = $(pjaxContainerSel).length && !isSamePage
 
     if (loadWithPjax) {
       $.pjax({
         // needs full path for pjax to work with Firefox as per cross-domain-content setting
         url: location.protocol + '//' + location.host + path,
-        container: $pjaxContainer,
+        container: pjaxContainerSel,
         timeout: 0 // global timeout doesn't seem to work, use this instead
       })
     }
