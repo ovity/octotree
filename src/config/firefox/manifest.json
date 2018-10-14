@@ -13,7 +13,7 @@
     "https://*.github.com/*",
     "storage"
   ],
-  "web_accessible_resources": ["*.woff2"],
+  "web_accessible_resources": ["*.woff2", "*.png", "*.gif"],
   "content_scripts": [
     {
       "matches": [

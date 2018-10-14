@@ -15,7 +15,7 @@
   "optional_permissions": [
     "<all_urls>"
   ],
-  "web_accessible_resources": ["*.woff2"],
+  "web_accessible_resources": ["*.woff2", "*.png", "*.gif"],
   "background": {
     "scripts": ["background.js"],
     "persistent": false

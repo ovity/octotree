@@ -69,12 +69,19 @@ gulp.task('chrome:js', ['chrome:template', 'lib:ondemand'], () => {
 })
 
 gulp.task('chrome', ['chrome:js'], () => {
+  const dest = './tmp/chrome'
+  const extRoot = 'chrome-extension://__MSG_@@extension_id__';
   return merge(
-    pipe('./icons/**/*', './tmp/chrome/icons'),
-    pipe(['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'], './tmp/chrome/'),
-    pipe('./libs/file-icons.css', $.replace('../fonts', 'chrome-extension://__MSG_@@extension_id__/fonts'), './tmp/chrome/'),
-    pipe('./src/config/chrome/background.js', $.babel(), gutil.env.production && $.uglify(), './tmp/chrome/'),
-    pipe('./src/config/chrome/manifest.json', $.replace('$VERSION', getVersion()), './tmp/chrome/')
+    pipe('./icons/**/*', `${dest}/icons`),
+    pipe(['./libs/**/*', '!./libs/file-icon.css', '!./libs/jstree.css', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'], dest),
+    pipe('./libs/file-icons.css', $.replace('../fonts', `${extRoot}/fonts`), dest),
+    pipe('./libs/jstree.css',
+      $.replace('url("32px.png")', `url("${extRoot}/images/32px.png")`),
+      $.replace('url("40px.png")', `url("${extRoot}/images/40px.png")`),
+      $.replace('url("throbber.gif")', `url("${extRoot}/images/throbber.gif")`),
+      dest),
+    pipe('./src/config/chrome/background.js', $.babel(), gutil.env.production && $.uglify(), dest),
+    pipe('./src/config/chrome/manifest.json', $.replace('$VERSION', getVersion()), dest)
   )
 })
 
@@ -116,11 +123,18 @@ gulp.task('firefox:js', ['firefox:template', 'lib:ondemand'], () => {
 })
 
 gulp.task('firefox', ['firefox:js'], () => {
+  const dest = './tmp/firefox'
+  const extRoot = 'moz-extension://__MSG_@@extension_id__'
   return merge(
-    pipe('./icons/**/*', './tmp/firefox/icons'),
-    pipe(['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'], './tmp/firefox'),
-    pipe('./libs/file-icons.css', $.replace('../fonts', 'moz-extension://__MSG_@@extension_id__/fonts'), './tmp/firefox/'),
-    pipe('./src/config/firefox/manifest.json', $.replace('$VERSION', getVersion()), './tmp/firefox')
+    pipe('./icons/**/*', `${dest}/icons`),
+    pipe(['./libs/**/*', '!./libs/file-icon.css', '!./libs/jstree.css', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'], dest),
+    pipe('./libs/file-icons.css', $.replace('../fonts', `${extRoot}/fonts`), dest),
+    pipe('./libs/jstree.css',
+      $.replace('url("32px.png")', `url("${extRoot}/images/32px.png")`),
+      $.replace('url("40px.png")', `url("${extRoot}/images/40px.png")`),
+      $.replace('url("throbber.gif")', `url("${extRoot}/images/throbber.gif")`),
+      dest),
+    pipe('./src/config/firefox/manifest.json', $.replace('$VERSION', getVersion()), dest)
   )
 })
 
@@ -138,14 +152,17 @@ gulp.task('safari:js', ['safari:template', 'lib:ondemand'], () => {
 })
 
 gulp.task('safari', ['safari:js'], () => {
+  const dest = './tmp/safari/octotree.safariextension/'
   return merge(
-    pipe('./icons/icon64.png', $.rename('Icon-64.png'), './tmp/safari/octotree.safariextension'),
-    pipe(
-      ['./libs/**/*', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'],
-      './tmp/safari/octotree.safariextension/'
-    ),
-    pipe('./libs/file-icons.css', $.replace('../fonts', 'fonts'), './tmp/safari/octotree.safariextension/'),
-    pipe('./src/config/safari/Info.plist', $.replace('$VERSION', getVersion()), './tmp/safari/octotree.safariextension')
+    pipe('./icons/icon64.png', $.rename('Icon-64.png'), dest),
+    pipe(['./libs/**/*', '!./libs/file-icon.css', '!./libs/jstree.css', '!./libs/ondemand{,/**}', './tmp/octotree.*', './tmp/ondemand.js'], dest),
+    pipe('./libs/file-icons.css', $.replace('../fonts', 'fonts'), dest),
+    pipe('./libs/jstree.css',
+      $.replace('url("32px.png")', 'url("images/32px.png")'),
+      $.replace('url("40px.png")', 'url("images/40px.png")'),
+      $.replace('url("throbber.gif")', 'url("images/throbber.gif")'),
+      dest),
+    pipe('./src/config/safari/Info.plist', $.replace('$VERSION', getVersion()), dest)
   )
 })
 
