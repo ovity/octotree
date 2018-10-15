@@ -24,4 +24,10 @@ class Storage {
       }
     }
   }
+
+  setIfNull(key, val, cb) {
+    this.get(key, (existingVal) => {
+      this.set(key, existingVal == null ? val : existingVal, cb);
+    });
+  }
 }

@@ -1,28 +1,11 @@
 $(document).ready(() => {
-  const store = new Storage()
+  const store = new Storage();
 
-  parallel(Object.keys(STORE), setDefault, loadExtension)
-
-  function setDefault(key, cb) {
-    const storeKey = STORE[key]
-    store.get(storeKey, (val) => {
-      store.set(storeKey, val == null ? DEFAULTS[key] : val, cb)
-    })
-  }
-
-  function createAdapter() {
-    const normalizeUrl = (url) => url.replace(/(.*?:\/\/[^/]+)(.*)/, '$1')
-
-    const githubUrls = store.get(STORE.GHEURLS).split(/\n/)
-      .map(normalizeUrl)
-      .concat('https://github.com')
-
-    const currentUrl = `${location.protocol}//${location.host}`
-
-    if (~githubUrls.indexOf(currentUrl)) {
-      return new GitHub(store)
-    }
-  }
+  parallel(
+    Object.keys(STORE),
+    (key, cb) => store.setIfNull(STORE[key], DEFAULTS[key], cb),
+    loadExtension
+  );
 
   function loadExtension() {
     const $html = $('html')
@@ -49,8 +32,7 @@ $(document).ready(() => {
     key.filter = () => $toggler.is(':visible')
     key(store.get(STORE.HOTKEYS), toggleSidebarAndSave)
 
-    const views = [treeView, errorView, optsView]
-    views.forEach((view) => {
+    for (const view of [treeView, errorView, optsView]) {
       $(view)
         .on(EVENT.VIEW_READY, function (event) {
           if (this !== optsView) {
@@ -61,7 +43,7 @@ $(document).ready(() => {
         .on(EVENT.VIEW_CLOSE, () => showView(hasError ? errorView.$view : treeView.$view))
         .on(EVENT.OPTS_CHANGE, optionsChanged)
         .on(EVENT.FETCH_ERROR, (event, err) => showError(err))
-    })
+    }
 
     $document
       .on(EVENT.REQ_START, () => $toggler.addClass('octotree_loading'))
@@ -75,30 +57,55 @@ $(document).ready(() => {
       .resize(() => layoutChanged(true))
       .appendTo($('body'))
 
-    adapter.init($sidebar)
-    return tryLoadRepo()
+    adapter.init($sidebar);
+    pluginManager.activate({
+      store, adapter,
+      $sidebar, $toggler, $views,
+      treeView, optsView, errorView,
+    });
+    return tryLoadRepo();
 
+    /**
+     * Creates the platform adapter. Currently only support GitHub.
+     */
+    function createAdapter() {
+      const normalizeUrl = (url) => url.replace(/(.*?:\/\/[^/]+)(.*)/, '$1')
+      const currentUrl = `${location.protocol}//${location.host}`
+      const githubUrls = store.get(STORE.GHEURLS).split(/\n/)
+        .map(normalizeUrl)
+        .concat('https://github.com')
+
+      if (~githubUrls.indexOf(currentUrl)) {
+        return new GitHub(store)
+      }
+    }
+
+    /**
+     * Invoked when the user saves the option changes in the option view.
+     * @param {!string} event
+     * @param {!Object<!string, [(string|boolean), (string|boolean)]>} changes
+     */
     function optionsChanged(event, changes) {
-      let reload = false
+      let reload = false;
 
       Object.keys(changes).forEach((storeKey) => {
-        const value = changes[storeKey]
+        const value = changes[storeKey];
 
         switch (storeKey) {
           case STORE.TOKEN:
           case STORE.LOADALL:
           case STORE.ICONS:
-            reload = true
+            reload = true;
             break
           case STORE.HOTKEYS:
-            key.unbind(value[0])
-            key(value[1], toggleSidebar)
-            break
+            key.unbind(value[0]);
+            key(value[1], toggleSidebar);
+            break;
         }
       })
 
-      if (reload) {
-        tryLoadRepo(true)
+      if (pluginManager.optionsChanged(changes) || reload) {
+        tryLoadRepo(true);
       }
     }
 
@@ -187,4 +194,4 @@ $(document).ready(() => {
       return $toggler.is(':visible')
     }
   }
-})
+});

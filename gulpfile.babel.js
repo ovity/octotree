@@ -195,7 +195,11 @@ function html2js(template) {
 function buildJs(overrides, ctx) {
   const src = [
     './tmp/template.js',
-    './src/constants.js',
+    './src/util.module.js',
+    './src/util.async.js',
+    './src/core.constants.js',
+    './src/core.storage.js',
+    './src/core.plugins.js',
     './src/adapters/adapter.js',
     './src/adapters/pjax.js',
     './src/adapters/github.js',
@@ -203,10 +207,6 @@ function buildJs(overrides, ctx) {
     './src/view.error.js',
     './src/view.tree.js',
     './src/view.options.js',
-    './src/util.location.js',
-    './src/util.module.js',
-    './src/util.async.js',
-    './src/util.storage.js'
   ].concat(overrides)
    .concat('./src/octotree.js')
 
