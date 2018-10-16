@@ -6,30 +6,19 @@ class PluginManager {
    * @constructor
    */
   constructor() {
-    this._pluginClasses = [];
     this._plugins = [];
-
     this._forward({
-      optionsChanged: (res) => res.some((val) => !!val),
+      activate: null,
+      applyOptions: (results) => results.some((shouldReload) => !!shouldReload)
     });
   }
 
   /**
    * Registers a plugin class.
-   * @param {function(): Plugin} pluginClass.
+   * @param {!Plugin} pluginClass.
    */
-  register(PluginClass) {
-    this._pluginClasses.push(PluginClass);
-  }
-
-  /**
-   * Activates the plugins.
-   * @param {!Object} opts
-   */
-  activate(opts) {
-    this._pluginClasses.forEach((PluginClass) => {
-      this._plugins.push(new PluginClass(opts));
-    });
+  register(plugin) {
+    this._plugins.push(plugin);
   }
 
   /**
@@ -40,10 +29,13 @@ class PluginManager {
    */
   _forward(methods) {
     for (const method of Object.keys(methods)) {
-      this[method] = (...args) => {
-        const results = this._plugins.map((plugin) => plugin[method](...args));
+      this[method] = async (...args) => {
+        const promises = this._plugins.map((plugin) => plugin[method](...args));
+        const results = await Promise.all(promises);
         const resultHandler = methods[method];
-        return resultHandler(results);
+
+        if (!resultHandler) return results;
+        else return resultHandler(results);
       };
     }
   }
@@ -54,11 +46,29 @@ class PluginManager {
  */
 class Plugin {
   /**
-   * Invoked when the user saves the option changes in the option view.
-   * @param {!Object<!string, [(string|boolean), (string|boolean)]>} changes
-   * @return {boolean} iff the tree should be reloaded.
+   * Activates the plugin.
+   * @param {!{
+   *   store: !Storage,
+   *   adapter: !Adapter,
+   *   $sidebar: !JQuery,
+   *   $toggler: !JQuery,
+   *   $views: !JQuery,
+   *   treeView: !TreeView,
+   *   optsView: !OptionsView,
+   *   errorView: !ErrorView,
+   * }}
+   * @return {!Promise<undefined>}
    */
-  optionsChanged(changes) {
+  async activate(opts) {
+    return undefined;
+  }
+
+  /**
+   * Applies the option changes user has made.
+   * @param {!Object<!string, [(string|boolean), (string|boolean)]>} changes
+   * @return {!Promise<boolean>} iff the tree should be reloaded.
+   */
+  async applyOptions(changes) {
     return false;
   }
 }

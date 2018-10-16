@@ -1,12 +1,12 @@
-import gulp from 'gulp'
-import gutil from 'gulp-util'
-import fs from 'fs'
-import os from 'os'
-import path from 'path'
-import {merge} from 'event-stream'
-import map from 'map-stream'
-import {spawn} from 'child_process'
-const $ = require('gulp-load-plugins')()
+const gulp = require('gulp');
+const gutil = require('gulp-util');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+const {merge} = require('event-stream');
+const map = require('map-stream');
+const {spawn} = require('child_process');
+const $ = require('gulp-load-plugins')();
 
 // Tasks
 gulp.task('clean', () => {
@@ -80,7 +80,7 @@ gulp.task('chrome', ['chrome:js'], () => {
       $.replace('url("40px.png")', `url("${extRoot}/images/40px.png")`),
       $.replace('url("throbber.gif")', `url("${extRoot}/images/throbber.gif")`),
       dest),
-    pipe('./src/config/chrome/background.js', $.babel(), gutil.env.production && $.uglify(), dest),
+    pipe('./src/config/chrome/background.js', gutil.env.production && $.uglify(), dest),
     pipe('./src/config/chrome/manifest.json', $.replace('$VERSION', getVersion()), dest)
   )
 })
@@ -180,10 +180,12 @@ function html2js(template) {
   function escape(file, cb) {
     const path = $.util.replaceExtension(file.path, '.js')
     const content = file.contents.toString()
+    /* eslint-disable quotes */
     const escaped = content
       .replace(/\\/g, "\\\\")
       .replace(/'/g, "\\'")
       .replace(/\r?\n/g, "\\n' +\n    '")
+    /* eslint-enable */
     const body = template.replace('$$', escaped)
 
     file.path = path
@@ -212,7 +214,6 @@ function buildJs(overrides, ctx) {
 
   return pipe(
     src,
-    $.babel(),
     $.concat('octotree.js'),
     $.preprocess({context: ctx}),
     gutil.env.production && $.uglify(),

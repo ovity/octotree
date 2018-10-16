@@ -1,0 +1,15 @@
+{
+  "env": {
+    "browser": true
+  },
+  "globals": {
+    "pluginManager": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017
+  },
+  "rules": {
+    "semi": "off",
+    "quotes": ["error", "single"]
+  }
+}

@@ -7,7 +7,7 @@ $(document).ready(() => {
     loadExtension
   );
 
-  function loadExtension() {
+  async function loadExtension() {
     const $html = $('html')
     const $document = $(document)
     const $dom = $(TEMPLATE)
@@ -58,11 +58,13 @@ $(document).ready(() => {
       .appendTo($('body'))
 
     adapter.init($sidebar);
-    pluginManager.activate({
+
+    await pluginManager.activate({
       store, adapter,
       $sidebar, $toggler, $views,
       treeView, optsView, errorView,
     });
+
     return tryLoadRepo();
 
     /**
@@ -85,7 +87,7 @@ $(document).ready(() => {
      * @param {!string} event
      * @param {!Object<!string, [(string|boolean), (string|boolean)]>} changes
      */
-    function optionsChanged(event, changes) {
+    async function optionsChanged(event, changes) {
       let reload = false;
 
       Object.keys(changes).forEach((storeKey) => {
@@ -104,7 +106,11 @@ $(document).ready(() => {
         }
       })
 
-      if (pluginManager.optionsChanged(changes) || reload) {
+      if (await pluginManager.applyOptions(changes)) {
+        reload = true;
+      }
+
+      if (reload) {
         tryLoadRepo(true);
       }
     }
