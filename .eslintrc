@@ -10,6 +10,14 @@
   },
   "rules": {
     "semi": "off",
-    "quotes": ["error", "single"]
+    "quotes": ["error", "single"],
+    "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+    "eqeqeq": ["error", "always", { "null": "ignore" }],
+    "arrow-parens": ["error", "always"],
+    "max-len": [2, {
+      code: 120,
+      tabWidth: 2,
+      ignoreUrls: true,
+    }],
   }
 }

@@ -23,6 +23,7 @@
     "async": "~0.9.0",
     "chromedriver": "^2.21.2",
     "crx": "^0.4.4",
+    "eslint": "^5.7.0",
     "event-stream": "*",
     "firefox-profile": "~0.3.6",
     "gulp": "^3.9.1",

@@ -124,8 +124,7 @@ $(document).ready(() => {
       adapter.getRepoFromPath(currRepo, token, (err, repo) => {
         if (err) {
           showError(err)
-        }
-        else if (repo) {
+        } else if (repo) {
           $toggler.show()
 
           if (remember && shown) {
@@ -139,13 +138,11 @@ $(document).ready(() => {
               $document.trigger(EVENT.REQ_START)
               currRepo = repo
               treeView.show(repo, token)
-            }
-            else {
+            } else {
               treeView.syncSelection()
             }
           }
-        }
-        else {
+        } else {
           $toggler.hide()
           toggleSidebar(false)
         }
@@ -177,8 +174,7 @@ $(document).ready(() => {
       if (visibility !== undefined) {
         if (isSidebarVisible() === visibility) return
         toggleSidebar()
-      }
-      else {
+      } else {
         $html.toggleClass(SHOW_CLASS)
         $document.trigger(EVENT.TOGGLE, isSidebarVisible())
       }

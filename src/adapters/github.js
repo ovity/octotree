@@ -59,7 +59,8 @@ class GitHub extends PjaxAdapter {
 
   // @override
   getCreateTokenUrl() {
-    return `${location.protocol}//${location.host}/settings/tokens/new?scopes=repo&description=Octotree%20browser%20extension`
+    return `${location.protocol}//${location.host}/settings/tokens/new?` +
+      'scopes=repo&description=Octotree%20browser%20extension';
   }
 
   // @override
@@ -137,8 +138,7 @@ class GitHub extends PjaxAdapter {
     const repo = {username: username, reponame: reponame, branch: branch, pullNumber: pullNumber}
     if (repo.branch) {
       cb(null, repo)
-    }
-    else {
+    } else {
       this._get(null, {repo, token}, (err, data) => {
         if (err) return cb(err)
         repo.branch = this._defaultBranch[username + '/' + reponame] = data.default_branch || 'master'
@@ -164,8 +164,7 @@ class GitHub extends PjaxAdapter {
   _getTree(path, opts, cb) {
     if (opts.repo.pullNumber) {
       this._getPatch(opts, cb)
-    }
-    else {
+    } else {
       this._get(`/git/trees/${path}`, opts, (err, res) => {
         // console.log('****', res.tree);
         if (err) cb(err)
@@ -226,8 +225,7 @@ class GitHub extends PjaxAdapter {
                 additions: file.additions,
                 deletions: file.deletions
               }
-            }
-            else {
+            } else {
               diffMap[path].additions += file.additions
               diffMap[path].deletions += file.deletions
               diffMap[path].filesChanged++
@@ -237,7 +235,7 @@ class GitHub extends PjaxAdapter {
         })
 
         // transform to emulate response from get `tree`
-        const tree = Object.keys(diffMap).map(fileName => {
+        const tree = Object.keys(diffMap).map((fileName) => {
           const patch = diffMap[fileName]
           return {
             patch,
@@ -283,8 +281,7 @@ class GitHub extends PjaxAdapter {
       .done((data) => {
         if (path && path.indexOf('/git/trees') === 0 && data.truncated) {
           this._handleError({status: 206}, cb)
-        }
-        else cb(null, data)
+        } else cb(null, data)
       })
       .fail((jqXHR) => this._handleError(jqXHR, cb))
   }

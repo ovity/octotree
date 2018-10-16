@@ -31,8 +31,7 @@ class PjaxAdapter extends Adapter {
       pageChangeObserver.observe(pjaxContainer, {
         childList: true,
       })
-    }
-    else { // Fall back if DOM has been changed
+    } else { // Fall back if DOM has been changed
       let firstLoad = true, href, hash
 
       function detectLocChange() {
@@ -44,8 +43,7 @@ class PjaxAdapter extends Adapter {
           // Octotree does its own initialization after loading options.
           if (firstLoad) {
             firstLoad = false
-          }
-          else {
+          } else {
             setTimeout(() => {
               $(document).trigger(EVENT.LOC_CHANGE)
             }, 300) // Wait a bit for pjax DOM change
@@ -81,8 +79,7 @@ class PjaxAdapter extends Adapter {
         container: pjaxContainerSel,
         timeout: 0 // global timeout doesn't seem to work, use this instead
       })
-    }
-    else {
+    } else {
       super.selectFile(path)
     }
   }

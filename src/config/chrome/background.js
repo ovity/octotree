@@ -52,8 +52,7 @@ chrome.runtime.onMessage.addListener((req, sender, sendRes) => {
       if (urls.length === 0) {
         sendRes(true)
         removeUnnecessaryPermissions()
-      }
-      else {
+      } else {
         chrome.permissions.request({ origins: urls }, (granted) => {
           sendRes(granted)
           removeUnnecessaryPermissions()

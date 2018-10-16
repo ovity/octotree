@@ -1,6 +1,6 @@
 class Adapter {
   constructor(deps, store) {
-    deps.forEach(dep => window[dep]())
+    deps.forEach((dep) => window[dep]())
     this._defaultBranch = {}
     this.store = store
   }
@@ -69,8 +69,7 @@ class Adapter {
               if (this.store.get(STORE.ICONS)) {
                 const className = FileIcons.getClassWithColor(name)
                 item.icon += ' ' + (className || 'file-generic')
-              }
-              else {
+              } else {
                 item.icon += ' file-generic'
               }
             }
@@ -116,8 +115,7 @@ class Adapter {
 
             if (node) {
               folders[''].push(item)
-            }
-            else {
+            } else {
               folders[path.substring(0, index)].push(item)
             }
 
@@ -145,8 +143,7 @@ class Adapter {
                   'data-download-filename': name,
                 }
               }
-            }
-            else if (type === 'commit') {
+            } else if (type === 'commit') {
               let moduleUrl = submodules[item.path]
 
               if (moduleUrl) { // fixes #105
@@ -155,9 +152,10 @@ class Adapter {
                   moduleUrl = moduleUrl.replace(/^git(:\/\/|@)/, window.location.protocol + '//')
                                        .replace('github.com:', 'github.com/')
                                        .replace(/.git$/, '')
-                  item.text = `<a href="${moduleUrl}" class="jstree-anchor">${name}</a>
-                               <span>@ </span>
-                               <a href="${moduleUrl}/tree/${item.sha}" class="jstree-anchor">${item.sha.substr(0, 7)}</a>`
+                  item.text =
+                    `<a href="${moduleUrl}" class="jstree-anchor">${name}</a>` +
+                    '<span>@ </span>' +
+                    `<a href="${moduleUrl}/tree/${item.sha}" class="jstree-anchor">${item.sha.substr(0, 7)}</a>`;
                 }
                 item.a_attr = { href: moduleUrl }
               }
@@ -191,8 +189,8 @@ class Adapter {
       case 206:
         error = 'Repo too large'
         message =
-          `This repository is too large to be retrieved at once.
-           If you frequently work with this repository, go to Settings and uncheck the "Load entire tree at once" option.`
+          `This repository is too large to loaded in a single request. If you frequently work with this repository,
+           go to Settings and uncheck the "Load entire tree at once" option.`
         break
       case 401:
         error = 'Invalid token'
@@ -224,8 +222,7 @@ class Adapter {
              to create one and paste it below.`
           needAuth = true
           break
-        }
-        else {
+        } else {
           error = 'Forbidden'
           message =
             `You are not allowed to access the API.

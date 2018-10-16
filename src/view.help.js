@@ -27,8 +27,7 @@ class HelpPopup {
       store.set(STORE.POPUP, true)
       if ($view.hasClass('show')) {
         $view.removeClass('show').one('transitionend', () => $view.remove())
-      }
-      else {
+      } else {
         $view.remove()
       }
     }

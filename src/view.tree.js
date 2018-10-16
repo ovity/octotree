@@ -29,8 +29,7 @@ class TreeView {
       this.adapter.loadCodeTree({repo, token, node}, (err, treeData) => {
         if (err) {
           $(this).trigger(EVENT.FETCH_ERROR, [err])
-        }
-        else {
+        } else {
           treeData = this._sort(treeData)
           if (loadAll) {
             treeData = this._collapse(treeData)
@@ -54,18 +53,19 @@ class TreeView {
 
     this.$view.find('.octotree_view_header')
       .html(
-        '<div class="octotree_header_repo">' +
-           '<a href="/' + repo.username + '">' + repo.username +'</a>'  +
-           ' / ' +
-           '<a data-pjax href="/' + repo.username + '/' + repo.reponame + '">' + repo.reponame +'</a>' +
-         '</div>' +
-         '<div class="octotree_header_branch">' +
-           this._deXss(repo.branch.toString()) +
-         '</div>'
+        `<div class="octotree_header_repo">
+           <a href="/${repo.username}">${repo.username}</a>
+           /
+           <a data-pjax href="/${repo.username}/${repo.reponame}">${repo.reponame}</a>
+         </div>
+         <div class="octotree_header_branch">
+           ${this._deXss(repo.branch.toString())}
+         </div>`
       )
       .on('click', 'a[data-pjax]', function (event) {
         event.preventDefault()
-        const href = $(this).attr('href'); /* a.href always return absolute URL, don't want that */
+        // a.href always return absolute URL, don't want that
+        const href = $(this).attr('href');
         const newTab = event.shiftKey || event.ctrlKey || event.metaKey
         newTab ? adapter.openInNewTab(href) : adapter.selectFile(href)
       })
@@ -136,14 +136,12 @@ class TreeView {
     if ($icon.hasClass('commit')) {
       refocusAfterCompletion()
       newTab ? adapter.openInNewTab(href) : adapter.selectSubmodule(href)
-    }
-    else if ($icon.hasClass('blob')) {
+    } else if ($icon.hasClass('blob')) {
       if (download) {
         const downloadUrl = $target.attr('data-download-url')
         const downloadFileName = $target.attr('data-download-filename')
         adapter.downloadFile(downloadUrl, downloadFileName)
-      }
-      else {
+      } else {
         refocusAfterCompletion()
         newTab ? adapter.openInNewTab(href) : adapter.selectFile(href)
       }

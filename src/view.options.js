@@ -20,8 +20,7 @@ class OptionsView {
     if (this.$toggler.hasClass('selected')) {
       this.$toggler.removeClass('selected')
       $(this).trigger(EVENT.VIEW_CLOSE)
-    }
-    else {
+    } else {
       this._load()
     }
   }

@@ -20,8 +20,7 @@ class ErrorView {
       $token.show()
       $help.show()
       if (token) $token.val(token)
-    }
-    else {
+    } else {
       $submit.hide()
       $token.hide()
       $help.hide()
