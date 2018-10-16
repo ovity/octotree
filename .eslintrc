@@ -11,13 +11,19 @@
   "rules": {
     "semi": "off",
     "quotes": ["error", "single"],
-    "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
-    "eqeqeq": ["error", "always", { "null": "ignore" }],
+    "brace-style": ["error", "1tbs", {"allowSingleLine": true}],
+    "eqeqeq": ["error", "always", {"null": "ignore"}],
     "arrow-parens": ["error", "always"],
-    "max-len": [2, {
-      code: 120,
-      tabWidth: 2,
-      ignoreUrls: true,
-    }],
+    "max-len": [
+      2,
+      {
+        "code": 120,
+        "tabWidth": 2,
+        "ignoreUrls": true
+      }
+    ],
+    "object-curly-spacing": ["error", "never"],
+    "array-bracket-spacing": ["error", "never"],
+    "capitalized-comments": ["error"]
   }
 }
