@@ -118,14 +118,14 @@ class GitHub extends PjaxAdapter {
     const pullNumber = isPR && showOnlyChangedInPR ? typeId : null
 
     // Skip non-code page unless showInNonCodePage is true
-    if (!showInNonCodePage && type && !~['tree', 'blob', 'commit'].indexOf(type)) {
+    const isCodePage = ['tree', 'blob', 'commit'].indexOf(type) >= 0
+    if (!showInNonCodePage && type && !isCodePage) {
       return cb()
     }
 
-    const isBranchOrSha = ['tree', 'blob', 'commit'].indexOf(type) >= 0 && typeId
-    const branchOrSha = isBranchOrSha && typeId ? typeId : null
-
     // Get branch by inspecting page, quite fragile so provide multiple fallbacks
+    const isBranchOrSha = isCodePage && typeId
+    const branchOrSha = isBranchOrSha && typeId ? typeId : null
     const branch =
       // Branch/Tag/Commit from URL
       branchOrSha ||
