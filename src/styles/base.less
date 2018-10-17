@@ -1,17 +1,14 @@
-* {
-  box-sizing: border-box;
-}
-
 .octotree_sidebar {
   position: fixed !important;
   overflow: visible;
+  box-sizing: border-box;
   top: 0;
   right: 0;
   left: 0;
   bottom: 0;
   border-right: 1px solid #ddd;
   z-index: 1000001;
-  transition: transform .2s ease;
+  transition: transform 0.2s ease;
   transform: translate3d(-100%, 0, 0);
 
   .ui-resizable-e {
@@ -32,6 +29,7 @@
     line-height: 14px;
     padding: 5px;
     bottom: 0;
+    box-sizing: border-box;
     overflow: hidden;
     white-space: nowrap;
     width: 100%;
@@ -56,9 +54,11 @@
   height: 100%;
   overflow: auto;
   padding-bottom: 25px;
+  box-sizing: border-box;
 
   .octotree_view {
     display: none;
+    box-sizing: border-box;
 
     &.current {
       display: block;
@@ -87,12 +87,15 @@
   .octotree_treeview {
     .octotree_view_header {
       padding-left: 13px;
+      box-sizing: border-box;
     }
-    .octotree_header_repo, .octotree_header_branch {
+    .octotree_header_repo,
+    .octotree_header_branch {
       width: 100%;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+      box-sizing: border-box;
     }
     .octotree_header_repo {
       font-weight: bold;
@@ -139,13 +142,17 @@
       }
     }
 
-    .jstree-icon.tree, .jstree-icon.blob, .jstree-icon.commit {
+    .jstree-icon.tree,
+    .jstree-icon.blob,
+    .jstree-icon.commit {
       display: inline-block;
       margin-right: 3px;
       text-decoration: none;
       font-smoothing: antialiased;
     }
-    .jstree-default .jstree-icon, .jstree-default .jstree-icon:empty, .jstree-default .jstree-anchor {
+    .jstree-default .jstree-icon,
+    .jstree-default .jstree-icon:empty,
+    .jstree-default .jstree-anchor {
       line-height: 24px !important;
       font-style: normal;
     }
@@ -193,7 +200,8 @@
       label.disabled {
         color: gray;
       }
-      input[type=text], textarea {
+      input[type='text'],
+      textarea {
         width: 100%;
       }
       textarea {
@@ -217,7 +225,8 @@
   }
 }
 
-a.octotree_toggle, a.octotree_opts {
+a.octotree_toggle,
+a.octotree_opts {
   position: absolute !important;
   text-align: center;
   line-height: 1;
@@ -249,23 +258,27 @@ a.octotree_toggle {
     .loader {
       border-radius: 50%;
       border: 2px solid #000;
-      border-top: 2px solid rgba(0,0,0,0);
-      border-left: 2px solid rgba(0,0,0,0);
+      border-top: 2px solid rgba(0, 0, 0, 0);
+      border-left: 2px solid rgba(0, 0, 0, 0);
       width: 16px;
       height: 16px;
-      animation: loading .5s infinite linear;
+      animation: loading 0.5s infinite linear;
     }
   }
 
   @keyframes loading {
-    0%   { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 
   .popup {
     position: absolute;
     left: 0;
-    top: calc(~"100% + 2px");
+    top: calc(~'100% + 2px');
     cursor: pointer;
     opacity: 0;
     z-index: 1000004;
@@ -274,11 +287,11 @@ a.octotree_toggle {
     text-transform: none;
     background-color: #fff;
     background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,0.15);
+    border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 5px;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
     white-space: normal;
-    transition: opacity .3s linear;
+    transition: opacity 0.3s linear;
     font-weight: 400;
     line-height: 20px;
 
@@ -288,7 +301,8 @@ a.octotree_toggle {
     &.show {
       opacity: 1;
     }
-    & > .arrow, & > .arrow:after {
+    & > .arrow,
+    & > .arrow:after {
       position: absolute;
       display: block;
       width: 0;
@@ -302,7 +316,7 @@ a.octotree_toggle {
       border-width: 6px;
       margin-left: -6px;
       border-top-width: 0;
-      border-bottom-color: rgba(0, 0, 0, .25);
+      border-bottom-color: rgba(0, 0, 0, 0.25);
     }
     & > .arrow:after {
       border-width: 5px;
@@ -320,11 +334,11 @@ a.octotree_toggle {
 }
 
 @media print {
-   a.octotree_toggle {
-     display: none;
-   }
+  a.octotree_toggle {
+    display: none;
+  }
   .octotree_sidebar {
-     display: none;
+    display: none;
   }
 }
 
