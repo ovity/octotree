@@ -4,10 +4,10 @@
   "description": "Code tree for GitHub",
   "main": "inject.js",
   "scripts": {
-    "build": "gulp",
+    "start": "gulp",
+    "build": "gulp build",
     "test": "gulp test",
-    "dist": "gulp dist --production",
-    "ff": "cd ./tmp/firefox && jpm run"
+    "dist": "gulp dist --production"
   },
   "repository": {
     "type": "git",
