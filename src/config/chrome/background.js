@@ -1,96 +1,101 @@
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.status !== 'loading') return
+  if (changeInfo.status !== 'loading') {
+    return;
+  }
 
-  chrome.tabs.executeScript(tabId, {
-    code: 'var injected = window.octotreeInjected; window.octotreeInjected = true; injected;',
-    runAt: 'document_start'
-  }, (res) => {
-    if (chrome.runtime.lastError || // don't continue if error (i.e. page isn't in permission list)
-        res[0]) // value of `injected` above: don't inject twice
-      return
+  chrome.tabs.executeScript(
+    tabId,
+    {
+      code: 'var injected = window.octotreeInjected; window.octotreeInjected = true; injected;',
+      runAt: 'document_start'
+    },
+    (res) => {
+      // If page isn't in the permission list (lastError is set) or injected is true, do nothing
+      if (chrome.runtime.lastError || res[0]) {
+        return;
+      }
 
-    const cssFiles = [
-      'jstree.css',
-      'file-icons.css',
-      'octotree.css'
-    ]
+      const cssFiles = ['jstree.css', 'file-icons.css', 'octotree.css'];
 
-    const jsFiles = [
-      'file-icons.js',
-      'jquery.js',
-      'jquery-ui.js',
-      'jstree.js',
-      'keymaster.js',
-      'ondemand.js',
-      'octotree.js'
-    ]
+      const jsFiles = [
+        'file-icons.js',
+        'jquery.js',
+        'jquery-ui.js',
+        'jstree.js',
+        'keymaster.js',
+        'ondemand.js',
+        'octotree.js'
+      ];
 
-    eachTask([
-      (cb) => eachItem(cssFiles, inject('insertCSS'), cb),
-      (cb) => eachItem(jsFiles, inject('executeScript'), cb)
-    ])
+      eachTask([
+        (cb) => eachItem(cssFiles, inject('insertCSS'), cb),
+        (cb) => eachItem(jsFiles, inject('executeScript'), cb)
+      ]);
 
-    function inject(fn) {
-      return (file, cb) => {
-        chrome.tabs[fn](tabId, { file: file, runAt: 'document_start' }, cb)
+      function inject(fn) {
+        return (file, cb) => {
+          chrome.tabs[fn](tabId, {file: file, runAt: 'document_start'}, cb);
+        };
       }
     }
-  })
-})
+  );
+});
 
 chrome.runtime.onMessage.addListener((req, sender, sendRes) => {
   const handler = {
     requestPermissions: () => {
-      const urls = (req.urls || [])
-        .filter((url) => url.trim() !== '')
-        .map((url) => {
-          if (url.slice(-2) === '/*') return url
-          if (url.slice(-1) === '/') return url + '*'
-          return url + '/*'
-        })
+      const urls = (req.urls || []).filter((url) => url.trim() !== '').map((url) => {
+        if (url.slice(-2) === '/*') {
+          return url;
+        }
+        if (url.slice(-1) === '/') {
+          return url + '*';
+        }
+        return url + '/*';
+      });
 
       if (urls.length === 0) {
-        sendRes(true)
-        removeUnnecessaryPermissions()
+        sendRes(true);
+        removeUnnecessaryPermissions();
+      } else {
+        chrome.permissions.request({origins: urls}, (granted) => {
+          sendRes(granted);
+          removeUnnecessaryPermissions();
+        });
       }
-      else {
-        chrome.permissions.request({ origins: urls }, (granted) => {
-          sendRes(granted)
-          removeUnnecessaryPermissions()
-        })
-      }
-      return true
+      return true;
 
       function removeUnnecessaryPermissions() {
-        const whitelist = urls.concat([
-          'https://github.com/*'
-        ])
+        const whitelist = urls.concat(['https://github.com/*']);
         chrome.permissions.getAll((permissions) => {
           const toBeRemovedUrls = permissions.origins.filter((url) => {
-            return !~whitelist.indexOf(url)
-          })
+            return !~whitelist.indexOf(url);
+          });
 
           if (toBeRemovedUrls.length) {
-            chrome.permissions.remove({ origins: toBeRemovedUrls })
+            chrome.permissions.remove({origins: toBeRemovedUrls});
           }
-        })
+        });
       }
     }
-  }
+  };
 
-  return handler[req.type]()
-})
+  return handler[req.type]();
+});
 
 function eachTask(tasks, done) {
   (function next(index = 0) {
-    if (index === tasks.length) done && done()
-    else tasks[index](() => next(++index))
-  })()
+    if (index === tasks.length) {
+      done && done();
+    } else {
+      tasks[index](() => next(++index));
+    }
+  })();
 }
 
 function eachItem(arr, iter, done) {
   const tasks = arr.map((item) => {
-    return (cb) => iter(item, cb)
-  })
-  return eachTask(tasks, done)
+    return (cb) => iter(item, cb);
+  });
+  return eachTask(tasks, done);
 }

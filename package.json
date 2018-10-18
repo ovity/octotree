@@ -4,10 +4,10 @@
   "description": "Code tree for GitHub",
   "main": "inject.js",
   "scripts": {
-    "build": "gulp",
+    "start": "gulp",
+    "build": "gulp build",
     "test": "gulp test",
-    "dist": "gulp dist --production",
-    "ff": "cd ./tmp/firefox && jpm run"
+    "dist": "gulp dist --production"
   },
   "repository": {
     "type": "git",
@@ -21,15 +21,13 @@
   "homepage": "https://github.com/ovity/octotree",
   "devDependencies": {
     "async": "~0.9.0",
-    "babel-core": "^6.1.2",
-    "babel-preset-es2015": "^6.1.2",
     "chromedriver": "^2.21.2",
     "crx": "^0.4.4",
+    "eslint": "^5.7.0",
     "event-stream": "*",
     "firefox-profile": "~0.3.6",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "0.0.8",
-    "gulp-babel": "^6.1.0",
     "gulp-clean": "^0.3.1",
     "gulp-concat": "*",
     "gulp-crx-pack": "^1.0.1",
@@ -50,7 +48,7 @@
     "jpm": "^1.0.4",
     "map-stream": "*",
     "mocha": "2.0.1",
-    "request": "~2.48.0",
+    "request": "^2.88.0",
     "selenium-webdriver": "2.44.0",
     "starx": "~0.1.7",
     "stream-series": "*",
