@@ -9,6 +9,7 @@ class PluginManager {
     this._plugins = [];
     this._forward({
       activate: null,
+      on: null,
       applyOptions: (results) => results.some((shouldReload) => !!shouldReload)
     });
   }

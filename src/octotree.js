@@ -35,8 +35,14 @@ $(document).ready(() => {
             $document.trigger(EVENT.REQ_END);
           }
           showView(this.$view);
+
+          pluginManager.on(EVENT.VIEW_READY, event);
         })
-        .on(EVENT.VIEW_CLOSE, () => showView(hasError ? errorView.$view : treeView.$view))
+        .on(EVENT.VIEW_CLOSE, () => {
+          showView(hasError ? errorView.$view : treeView.$view)
+
+          pluginManager.on(EVENT.VIEW_CLOSE);
+        })
         .on(EVENT.OPTS_CHANGE, optionsChanged)
         .on(EVENT.FETCH_ERROR, (event, err) => showError(err));
     }
@@ -58,6 +64,7 @@ $(document).ready(() => {
     await pluginManager.activate({
       store,
       adapter,
+      $document,
       $sidebar,
       $toggler,
       $views,
