@@ -58,6 +58,8 @@ $(document).ready(() => {
     await pluginManager.activate({
       store,
       adapter,
+      $document,
+      $dom,
       $sidebar,
       $toggler,
       $views,
