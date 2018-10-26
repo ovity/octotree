@@ -121,9 +121,9 @@ class GitHub extends PjaxAdapter {
     }
 
     // (username)/(reponame)[/(type)][/(typeId1)][/(typeId2)][...]
-    const match = window.location.pathname.split('/').filter((part) => (!!part))
+    const match = window.location.pathname.split('/').filter((part) => (!!part));
 
-    if (!!match.length) {
+    if (!match.length) {
       return cb();
     }
 
@@ -140,7 +140,7 @@ class GitHub extends PjaxAdapter {
     // Check if this is a PR and whether we should show changes
     const isPR = type === 'pull';
     const pullNumber = isPR && showOnlyChangedInPR ? typeId : null;
-    const isCodePage = !!type && ['tree', 'blob', 'commit'].indexOf(type) >= 0;
+    const isCodePage = !type || ['tree', 'blob', 'commit'].indexOf(type) >= 0;
 
     // Skip non-code page if showInNonCodePage is false
     if (!showInNonCodePage && !isCodePage) {
@@ -162,21 +162,51 @@ class GitHub extends PjaxAdapter {
 
     const repo = {username, reponame, branch, pullNumber};
     if (repo.branch) {
-      if (isCodePage && type !== 'commit') {
+      if (isCodePage && type && type !== 'commit') {
         // The window.location.pathname would be one of below forms:
         //  - /username/repo/tree (or blob)/branch1
         //  - /username/repo/tree (or blob)/branch1/folder1
         //  - /username/repo/tree (or blob)/features/a (Gitflow workflow)
         //  - /username/repo/tree (or blob)/features/a/folder1
-        // Find the branch name
-        const typeIdWithPath = match.slice(3)
-        this._get(null, {repo, token}, (err, data) => {
+        // Reserve the branch name which is possibly mixing with the file path
+        const typeIdWithPath = match.slice(3);
+        let repoBranches, repoTags;
+
+        this._get('/branches', {repo, token}, (err, data) => {
+          repoBranches = err ? [] : data.map((item) => (item.name));
+
+          onResponseAvailable(err);
+        });
+
+        this._get('/tags', {repo, token}, (err, data) => {
+          repoTags = err ? [] : data.map((item) => (item.name));
+
+          onResponseAvailable(err);
+        });
+
+        function onResponseAvailable(err) {
+          if (!repoBranches || !repoTags) return;
+
           if (err) return cb(err);
 
-          console.log(data);
+          const gitSnapshotNames = repoBranches.concat(repoTags);
+
+          let branchNameToTry = '';
+          let foundBranch = false;
+
+          // Verify the branch name by comparing with all available branches and tags
+          typeIdWithPath.forEach((typeIdPart, index) => {
+            if (foundBranch) return;
+
+            branchNameToTry += (index > 0 ? '/' : '') + typeIdPart;
+
+            foundBranch = gitSnapshotNames.find((name) => (name === branchNameToTry));
+          })
+
+          if (foundBranch) repo.branch = branchNameToTry;
 
           cb(null, repo);
-        });
+        }
       }
       else {
         cb(null, repo);
