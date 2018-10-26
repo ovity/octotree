@@ -120,16 +120,17 @@ class GitHub extends PjaxAdapter {
       return cb();
     }
 
-    // (username)/(reponame)[/(type)][/(typeId)]
-    const match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?(?:\/([^\/]+))?/);
-    if (!match) {
+    // (username)/(reponame)[/(type)][/(typeId1)][/(typeId2)][...]
+    const match = window.location.pathname.split('/').filter((part) => (!!part));
+
+    if (!match.length) {
       return cb();
     }
 
-    let username = match[1];
-    let reponame = match[2];
-    let type = match[3];
-    let typeId = match[4];
+    let username = match[0];
+    let reponame = match[1];
+    let type = match[2];
+    let typeId = match[3];
 
     // Not a repository, skip
     if (~GH_RESERVED_USER_NAMES.indexOf(username) || ~GH_RESERVED_REPO_NAMES.indexOf(reponame)) {
@@ -161,7 +162,57 @@ class GitHub extends PjaxAdapter {
 
     const repo = {username, reponame, branch, pullNumber};
     if (repo.branch) {
-      cb(null, repo);
+      if (isCodePage && type && type !== 'commit') {
+        // The window.location.pathname would be one of below forms:
+        //  - /username/repo/tree (or blob)/branch1
+        //  - /username/repo/tree (or blob)/branch1/folder1
+        //  - /username/repo/tree (or blob)/features/a (Gitflow workflow)
+        //  - /username/repo/tree (or blob)/features/a/folder1
+        // Reserve the branch name which is possibly mixing with the file path
+        const typeIdWithPath = match.slice(3);
+        let repoBranches, repoTags;
+
+        this._get('/branches', {repo, token}, (err, data) => {
+          repoBranches = err ? [] : data.map((item) => (item.name));
+
+          onResponseAvailable(err);
+        });
+
+        this._get('/tags', {repo, token}, (err, data) => {
+          repoTags = err ? [] : data.map((item) => (item.name));
+
+          onResponseAvailable(err);
+        });
+
+        function onResponseAvailable(err) {
+          if (!repoBranches || !repoTags) return;
+
+          if (err) return cb(err);
+
+          const gitSnapshotNames = repoBranches.concat(repoTags);
+
+          let branchNameToTry = '';
+          let foundBranch = false;
+
+          // Verify the branch / tag name by comparing with all branches and tags from the repo
+          typeIdWithPath.forEach((typeIdPart, index) => {
+            if (foundBranch) return;
+
+            branchNameToTry += (index > 0 ? '/' : '') + typeIdPart;
+
+            foundBranch = gitSnapshotNames.find((name) => (name === branchNameToTry));
+          })
+
+          if (foundBranch) {
+            repo.branch = branchNameToTry;
+          }
+
+          cb(null, repo);
+        }
+      }
+      else {
+        cb(null, repo);
+      }
     } else {
       // Still no luck, get default branch for real
       this._get(null, {repo, token}, (err, data) => {
