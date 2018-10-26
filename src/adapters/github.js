@@ -120,16 +120,17 @@ class GitHub extends PjaxAdapter {
       return cb();
     }
 
-    // (username)/(reponame)[/(type)][/(typeId)]
-    const match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?(?:\/([^\/]+))?/);
-    if (!match) {
+    // (username)/(reponame)[/(type)][/(typeId1)][/(typeId2)][...]
+    const match = window.location.pathname.split('/').filter((part) => (!!part))
+
+    if (!!match.length) {
       return cb();
     }
 
-    let username = match[1];
-    let reponame = match[2];
-    let type = match[3];
-    let typeId = match[4];
+    let username = match[0];
+    let reponame = match[1];
+    let type = match[2];
+    let typeId = match[3];
 
     // Not a repository, skip
     if (~GH_RESERVED_USER_NAMES.indexOf(username) || ~GH_RESERVED_REPO_NAMES.indexOf(reponame)) {
@@ -139,7 +140,7 @@ class GitHub extends PjaxAdapter {
     // Check if this is a PR and whether we should show changes
     const isPR = type === 'pull';
     const pullNumber = isPR && showOnlyChangedInPR ? typeId : null;
-    const isCodePage = !type || ['tree', 'blob', 'commit'].indexOf(type) >= 0;
+    const isCodePage = !!type && ['tree', 'blob', 'commit'].indexOf(type) >= 0;
 
     // Skip non-code page if showInNonCodePage is false
     if (!showInNonCodePage && !isCodePage) {
@@ -161,7 +162,25 @@ class GitHub extends PjaxAdapter {
 
     const repo = {username, reponame, branch, pullNumber};
     if (repo.branch) {
-      cb(null, repo);
+      if (isCodePage && type !== 'commit') {
+        // The window.location.pathname would be one of below forms:
+        //  - /username/repo/tree (or blob)/branch1
+        //  - /username/repo/tree (or blob)/branch1/folder1
+        //  - /username/repo/tree (or blob)/features/a (Gitflow workflow)
+        //  - /username/repo/tree (or blob)/features/a/folder1
+        // Find the branch name
+        const typeIdWithPath = match.slice(3)
+        this._get(null, {repo, token}, (err, data) => {
+          if (err) return cb(err);
+
+          console.log(data);
+
+          cb(null, repo);
+        });
+      }
+      else {
+        cb(null, repo);
+      }
     } else {
       // Still no luck, get default branch for real
       this._get(null, {repo, token}, (err, data) => {
