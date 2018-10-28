@@ -146,15 +146,12 @@ class GitHub extends PjaxAdapter {
       return cb();
     }
 
-    const branchOnMenu = $('.branch-select-menu .select-menu-item.selected').data('name') || '';
-
     // Get branch by inspecting URL or DOM, quite fragile so provide multiple fallbacks
     const branch =
-      // Branch/tag/commit from URL
-      // Exclude edge case: branch name has slash '/'
-      (!branchOnMenu.includes('/') && isCodePage && typeId) ||
+      // Code page with commit ID
+      (isCodePage && typeId && typeId.match(/[a-z, 0-9]{40}/)) ||
       // Code page
-      branchOnMenu ||
+      $('.branch-select-menu .select-menu-item.selected').data('name') ||
       // Pull requests page
       ($('.commit-ref.base-ref').attr('title') || ':').match(/:(.*)/)[1] ||
       // Reuse last selected branch if exist
