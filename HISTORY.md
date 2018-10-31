@@ -1,3 +1,7 @@
+### v2.5.1
+
+- Fix bug not working when branch names contain slashes
+
 ### v2.5.0
 
 - Remove BitBucket experiment feature

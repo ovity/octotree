@@ -1,6 +1,6 @@
 {
   "name": "octotree",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "Code tree for GitHub",
   "main": "inject.js",
   "scripts": {
@@ -42,7 +42,7 @@
     "gulp-replace": "^0.5.4",
     "gulp-run": "^1.6.4",
     "gulp-run-sequence": "*",
-    "gulp-uglify": "^3.0.1",
+    "gulp-uglify-es": "^1.0.4",
     "gulp-util": "^2.2.20",
     "gulp-zip": "^2.0.3",
     "jpm": "^1.0.4",
