@@ -7,6 +7,7 @@ const {merge} = require('event-stream');
 const map = require('map-stream');
 const {spawn} = require('child_process');
 const $ = require('gulp-load-plugins')();
+const uglify = require('gulp-uglify-es').default;
 
 // Tasks
 gulp.task('clean', () => {
@@ -112,7 +113,7 @@ gulp.task('chrome', ['chrome:js'], () => {
     ),
     pipe(
       './src/config/chrome/background.js',
-      gutil.env.production && $.uglify(),
+      gutil.env.production && uglify(),
       dest
     ),
     pipe(
@@ -272,10 +273,14 @@ gulp.task('safari', ['safari:js'], () => {
 
 // Helpers
 function pipe(src, ...transforms) {
-  return transforms.filter((t) => !!t).reduce((stream, transform) => {
+  const work = transforms.filter((t) => !!t).reduce((stream, transform) => {
     const isDest = typeof transform === 'string';
-    return stream.pipe(isDest ? gulp.dest(transform) : transform);
+    return stream.pipe(isDest ? gulp.dest(transform) : transform).on('error', (err) => {
+      gutil.log(gutil.colors.red('[Error]'), err.toString());
+    });
   }, gulp.src(src));
+
+  return work;
 }
 
 function html2js(template) {
@@ -321,7 +326,7 @@ function buildJs(overrides, ctx) {
     src,
     $.concat('octotree.js'),
     $.preprocess({context: ctx}),
-    gutil.env.production && $.uglify(),
+    gutil.env.production && uglify(),
     './tmp'
   );
 }
