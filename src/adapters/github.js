@@ -146,16 +146,25 @@ class GitHub extends PjaxAdapter {
       return cb();
     }
 
+    const branchDropdownMenu = $('.branch-select-menu')
+
     // Get branch by inspecting URL or DOM, quite fragile so provide multiple fallbacks
     const branch =
-      // Branch/tag/commit from URL
-      (isCodePage && typeId) ||
-      // Code page
-      $('.branch-select-menu .select-menu-item.selected').data('name') ||
+      // Pick the commit ID as branch name when the code page is listing tree in a particular commit
+      (type === 'commit' && typeId) ||
+
+      // Pick the commit ID or branch name from the Branch dropdown menu
+      // Note: getting the branch name from Branch dropdown menu helps us cover a corner case when the
+      //       branch name is in git flow format e.g. features/hotfix-1
+      $('.select-menu-item.selected', branchDropdownMenu).data('name') ||
+      $('.select-menu-button span', branchDropdownMenu).text() ||
+
       // Pull requests page
       ($('.commit-ref.base-ref').attr('title') || ':').match(/:(.*)/)[1] ||
+
       // Reuse last selected branch if exist
       (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch) ||
+
       // Get default branch from cache
       this._defaultBranch[username + '/' + reponame];
 
