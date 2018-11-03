@@ -226,7 +226,9 @@
 }
 
 a.octotree_toggle,
-a.octotree_opts {
+a.octotree_opts,
+a.octotree_pin,
+a.octotree_spin, {
   position: absolute !important;
   text-align: center;
   line-height: 1;
@@ -249,31 +251,6 @@ a.octotree_toggle {
   width: 30px;
   height: 30px;
   padding: 6px 6px !important;
-
-  &.octotree_loading {
-    & > span:after {
-      content: '';
-    }
-
-    .loader {
-      border-radius: 50%;
-      border: 2px solid #000;
-      border-top: 2px solid rgba(0, 0, 0, 0);
-      border-left: 2px solid rgba(0, 0, 0, 0);
-      width: 16px;
-      height: 16px;
-      animation: loading 0.5s infinite linear;
-    }
-  }
-
-  @keyframes loading {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
 
   .popup {
     position: absolute;
