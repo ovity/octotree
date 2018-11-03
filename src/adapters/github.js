@@ -123,10 +123,10 @@ class GitHub extends PjaxAdapter {
       return cb();
     }
 
-    let username = match[1];
-    let reponame = match[2];
-    let type = match[3];
-    let typeId = match[4];
+    const username = match[1];
+    const reponame = match[2];
+    const type = match[3];
+    const typeId = match[4];
 
     // Not a repository, skip
     if (~GH_RESERVED_USER_NAMES.indexOf(username) || ~GH_RESERVED_REPO_NAMES.indexOf(reponame)) {
