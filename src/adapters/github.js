@@ -107,9 +107,6 @@ class GitHub extends PjaxAdapter {
 
   // @override
   getRepoFromPath(currentRepo, token, cb) {
-    const showInNonCodePage = this.store.get(STORE.NONCODE);
-    const showOnlyChangedInPR = this.store.get(STORE.PR);
-
     // 404 page, skip
     if ($(GH_404_SEL).length) {
       return cb();
@@ -136,38 +133,32 @@ class GitHub extends PjaxAdapter {
       return cb();
     }
 
-    // Check if this is a PR and whether we should show changes
+    // Check if we should show in non-code pages
     const isPR = type === 'pull';
-    const pullNumber = isPR && showOnlyChangedInPR ? typeId : null;
-    const isCodePage = !type || ['tree', 'blob', 'commit'].indexOf(type) >= 0;
-
-    // Skip non-code page if showInNonCodePage is false
+    const isCodePage = !type || isPR || ['tree', 'blob', 'commit'].indexOf(type) >= 0;
+    const showInNonCodePage = this.store.get(STORE.NONCODE);
     if (!showInNonCodePage && !isCodePage) {
       return cb();
     }
 
-    const branchDropdownMenu = $('.branch-select-menu')
-
     // Get branch by inspecting URL or DOM, quite fragile so provide multiple fallbacks
+    const branchDropdownMenu = $('.branch-select-menu');
     const branch =
       // Pick the commit ID as branch name when the code page is listing tree in a particular commit
       (type === 'commit' && typeId) ||
-
       // Pick the commit ID or branch name from the Branch dropdown menu
-      // Note: getting the branch name from Branch dropdown menu helps us cover a corner case when the
-      //       branch name is in git flow format e.g. features/hotfix-1
+      // Note: we can't use URL as it would not work with branches with slashes, e.g. features/hotfix-1
       $('.select-menu-item.selected', branchDropdownMenu).data('name') ||
       $('.select-menu-button span', branchDropdownMenu).text() ||
-
       // Pull requests page
       ($('.commit-ref.base-ref').attr('title') || ':').match(/:(.*)/)[1] ||
-
       // Reuse last selected branch if exist
       (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch) ||
-
       // Get default branch from cache
       this._defaultBranch[username + '/' + reponame];
 
+    const showOnlyChangedInPR = this.store.get(STORE.PR);
+    const pullNumber = isPR && showOnlyChangedInPR ? typeId : null;
     const repo = {username, reponame, branch, pullNumber};
     if (repo.branch) {
       cb(null, repo);
