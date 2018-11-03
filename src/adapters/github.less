@@ -5,13 +5,38 @@
 
   .octotree_github_sidebar {
     a.octotree_toggle {
-      right: 12px;
-      top: 14px;
+      visibility: hidden;
+    }
 
-      &:not(.octotree_loading) > span:after,
-      &:not(.octotree_loading):hover > span:after {
-        #octicons.chevron-left();
-        font-size: 15px;
+    a.octotree_spin {
+      right: 12px;
+      top: 65px;
+      &.octotree_loading {
+        & > span:after {
+          content: '';
+        }
+
+        .loader {
+          border-radius: 50%;
+          border: 2px solid #000;
+          border-top: 2px solid rgba(0, 0, 0, 0);
+          border-left: 2px solid rgba(0, 0, 0, 0);
+          width: 16px;
+          height: 16px;
+          animation: loading 0.5s infinite linear;
+        }
+      }
+        @keyframes loading {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      &:not(.octotree_loading) {
+        visibility: hidden;
       }
     }
   }
@@ -160,7 +185,7 @@
 
   a.octotree_opts {
     top: 21px;
-    right: 48px;
+    right: 12px;
     width: 14px;
     height: 16px;
 
@@ -175,19 +200,41 @@
     }
   }
 
+  a.octotree_pin {
+    top: 21px;
+    right: 36px;
+    width: 14px;
+    height: 16px;
+
+    &:hover i:before {
+      color: @blue;
+    }
+
+    & i:before {
+      #octicons.pin();
+      color: @dark;
+      font-size: 15px;
+    }
+  }
+
+  a.octotree_pinned i:before {
+    #octicons.pin();
+    transform: rotate(-45deg);
+  }
+
   a.octotree_toggle {
-    top: 14px;
+    top: 50%;
     right: -35px;
 
-    &:not(.octotree_loading) > span:after,
-    &:not(.octotree_loading):hover > span:after {
+    & > span:after,
+    &:hover > span:after {
       #octicons.chevron-right();
       font-size: 15px;
       position: relative;
       left: 3px;
     }
 
-    &:not(.octotree_loading):hover > span:after {
+    &:hover > span:after {
       color: @blue;
     }
   }

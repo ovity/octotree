@@ -35,7 +35,6 @@ When that happens, Octotree will ask for your [GitHub personal access token](htt
 ### Others
 
 - **Hotkeys**: Octotree uses [keymaster](https://github.com/madrobby/keymaster) to register hotkeys. Check out the [supported keys](https://github.com/madrobby/keymaster#supported-keys).
-- **Remember sidebar visibility**: if checked, show or hide Octotree based on its last visibility.
 - **Show in non-code pages**: if checked, allow Octotree to show in non-code pages such as Issues and Pull Requests.
 - **Load entire tree at once**: if checked, load and render the entire code tree at once. To avoid long loading, this should be unchecked if you frequently work with very large repos.
 - **Show only pull request changes** _(new!)_: if checked and in "Pull requests" page, only show the change set of the pull request.
