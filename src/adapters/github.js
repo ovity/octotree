@@ -38,6 +38,7 @@ const GH_PJAX_CONTAINER_SEL = '#js-repo-pjax-container, .context-loader-containe
 const GH_CONTAINERS = '.container, .container-lg, .container-responsive';
 const GH_HEADER = '.js-header-wrapper > header';
 const GH_RAW_CONTENT = 'body > pre';
+const GH_PULLS_API_MAX_RESULTS = 100;
 
 class GitHub extends PjaxAdapter {
   constructor(store) {
@@ -211,17 +212,46 @@ class GitHub extends PjaxAdapter {
    */
   _getPatch(opts, cb) {
     const {pullNumber} = opts.repo;
+    const diffMap = {};
 
-    this._get(`/pulls/${pullNumber}/files?per_page=300`, opts, (err, res) => {
+    this._getPatchRecursively(pullNumber, 1, opts, diffMap, (err) => {
       if (err) cb(err);
       else {
-        const diffMap = {};
+        // Transform to emulate response from get `tree`
+        const tree = Object.keys(diffMap).map((fileName) => {
+          const patch = diffMap[fileName];
+          return {
+            patch,
+            path: fileName,
+            sha: patch.sha,
+            type: patch.type,
+            url: patch.blob_url
+          };
+        });
 
+        // Sort by path, needs to be alphabetical order (so parent folders come before children)
+        // Note: this is still part of the above transform to mimic the behavior of get tree
+        tree.sort((a, b) => a.path.localeCompare(b.path));
+
+        cb(null, tree);
+      }
+    });
+  }
+
+  _getPatchRecursively(pullNumber, pageNumber, opts, diffMap, cb) {
+    const url = `/pulls/${pullNumber}/files?per_page=${GH_PULLS_API_MAX_RESULTS}&page=${pageNumber}`;
+    this._get(url, opts, (err, res) => {
+      if (err) cb(err);
+      else {
+        let numResults = 0;
+        let offset = GH_PULLS_API_MAX_RESULTS * (pageNumber - 1);
         res.forEach((file, index) => {
+          numResults++;
+
           // Record file patch info
           diffMap[file.filename] = {
             type: 'blob',
-            diffId: index,
+            diffId: index + offset,
             action: file.status,
             additions: file.additions,
             blob_url: file.blob_url,
@@ -260,23 +290,11 @@ class GitHub extends PjaxAdapter {
           }, '');
         });
 
-        // Transform to emulate response from get `tree`
-        const tree = Object.keys(diffMap).map((fileName) => {
-          const patch = diffMap[fileName];
-          return {
-            patch,
-            path: fileName,
-            sha: patch.sha,
-            type: patch.type,
-            url: patch.blob_url
-          };
-        });
-
-        // Sort by path, needs to be alphabetical order (so parent folders come before children)
-        // Note: this is still part of the above transform to mimic the behavior of get tree
-        tree.sort((a, b) => a.path.localeCompare(b.path));
-
-        cb(null, tree);
+        if (numResults === GH_PULLS_API_MAX_RESULTS) {
+          this._getPatchRecursively(pullNumber, pageNumber + 1, opts, diffMap, cb);
+        } else {
+          cb(null);
+        }
       }
     });
   }
