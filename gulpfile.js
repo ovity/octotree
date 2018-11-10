@@ -18,7 +18,7 @@ gulp.task('clean', () => {
 });
 
 gulp.task('build', (cb) => {
-  $.runSequence('clean', 'css', 'wex', 'chrome', 'opera', 'firefox', 'safari', cb);
+  $.runSequence('clean', 'css', 'wex', 'chrome', 'opera', 'firefox', cb);
 });
 
 gulp.task('default', ['build'], () => {
@@ -144,7 +144,7 @@ gulp.task('opera:nex', () => {
 });
 
 // Helpers
-exports.pipe = function pipe(src, ...transforms) {
+function pipe(src, ...transforms) {
   const work = transforms.filter((t) => !!t).reduce((stream, transform) => {
     const isDest = typeof transform === 'string';
     return stream.pipe(isDest ? gulp.dest(transform) : transform).on('error', (err) => {
@@ -153,7 +153,7 @@ exports.pipe = function pipe(src, ...transforms) {
   }, gulp.src(src));
 
   return work;
-};
+}
 
 function html2js(template) {
   return map(escape);
@@ -175,7 +175,7 @@ function html2js(template) {
   }
 }
 
-exports.buildJs = function buildJs(prefix = '.', ctx = {}) {
+function buildJs(prefix = '.', ctx = {}) {
   const src = [
     `${prefix}/tmp/template.js`,
     `${prefix}/src/util.module.js`,
@@ -199,9 +199,9 @@ exports.buildJs = function buildJs(prefix = '.', ctx = {}) {
     $.concat('octotree.js'),
     './tmp'
   );
-};
+}
 
-exports.buildCssLibs = function buildCssLibs(prefix = '.', targetPrefix = '') {
+function buildCssLibs(prefix = '.', targetPrefix = '') {
   return merge(
     pipe(
       `${prefix}/libs/file-icons.css`,
@@ -216,17 +216,17 @@ exports.buildCssLibs = function buildCssLibs(prefix = '.', targetPrefix = '') {
       './tmp'
     )
   );
-};
+}
 
-exports.buildCss = function buildCss(prefix = '.') {
+function buildCss(prefix = '.') {
   return pipe(
     [`${prefix}/tmp/file-icons.css`, `${prefix}/tmp/jstree.css`, `${prefix}/tmp/octotree.css`],
     $.concat('content.css'),
     './tmp'
   );
-};
+}
 
-exports.buildTemplate = function buildTemplate(prefix = '.', ctx = {}) {
+function buildTemplate(prefix = '.', ctx = {}) {
   const LOTS_OF_SPACES = new Array(500).join(' ');
 
   return pipe(
@@ -236,7 +236,7 @@ exports.buildTemplate = function buildTemplate(prefix = '.', ctx = {}) {
     html2js('const TEMPLATE = \'$$\''),
     './tmp'
   );
-};
+}
 
 function prepareWexFolder(dest) {
   return merge(
@@ -273,3 +273,11 @@ function getVersion() {
   delete require.cache[require.resolve('./package.json')];
   return require('./package.json').version;
 }
+
+module.exports = {
+  pipe,
+  buildTemplate,
+  buildJs,
+  buildCssLibs,
+  buildCss
+};
