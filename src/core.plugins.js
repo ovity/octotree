@@ -73,4 +73,4 @@ class Plugin {
   }
 }
 
-const pluginManager = new PluginManager();
+window.pluginManager = new PluginManager();
