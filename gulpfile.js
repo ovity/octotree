@@ -71,6 +71,7 @@ gulp.task('wex:js', ['wex:js:ext'], () => {
   ];
   return pipe(
     src,
+    $.wrap('(function(){\n<%= contents %>\n})();'),
     $.concat('content.js'),
     gutil.env.production && uglify(),
     './tmp'

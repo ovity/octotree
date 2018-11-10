@@ -43,6 +43,7 @@
     "gulp-run-sequence": "*",
     "gulp-uglify-es": "^1.0.4",
     "gulp-util": "^2.2.20",
+    "gulp-wrap": "^0.14.0",
     "gulp-zip": "^2.0.3",
     "jpm": "^1.0.4",
     "map-stream": "*",
