@@ -1,0 +1,33 @@
+{
+  "name": "Octotree",
+  "version": "$VERSION",
+  "description": "Code tree for GitHub",
+  "homepage_url": "https://github.com/ovity/octotree",
+  "author": "Buu Nguyen",
+  "manifest_version": 2,
+  "minimum_chrome_version": "60",
+  "applications": {
+    "gecko": {
+      "id": "{a6fc3490-8a75-4150-a0e5-96089f947efd}",
+      "strict_min_version": "55.0"
+    }
+  },
+  "icons": {
+    "128": "icons/icon128.png"
+  },
+  "permissions": ["https://api.github.com/*", "storage"],
+  "optional_permissions": ["<all_urls>"],
+  "web_accessible_resources": ["*.woff2", "*.png", "*.gif"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "content_scripts": [
+    {
+      "run_at": "document_start",
+      "matches": ["https://github.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ]
+}

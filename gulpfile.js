@@ -9,7 +9,7 @@ const {spawn} = require('child_process');
 const $ = require('gulp-load-plugins')();
 const uglify = require('gulp-uglify-es').default;
 
-// Tasks
+// Shared
 gulp.task('clean', () => {
   return pipe(
     './tmp',
@@ -18,7 +18,7 @@ gulp.task('clean', () => {
 });
 
 gulp.task('build', (cb) => {
-  $.runSequence('clean', 'styles', 'chrome', 'opera', 'safari', 'firefox', cb);
+  $.runSequence('clean', 'css', 'wex', 'chrome', 'opera', 'firefox', 'safari', cb);
 });
 
 gulp.task('default', ['build'], () => {
@@ -26,25 +26,10 @@ gulp.task('default', ['build'], () => {
 });
 
 gulp.task('dist', ['build'], (cb) => {
-  $.runSequence('firefox:zip', 'chrome:zip', 'chrome:crx', 'opera:nex', cb);
+  $.runSequence('chrome:zip', 'chrome:crx', 'opera:nex', 'firefox:zip', cb);
 });
 
-gulp.task('test', ['build'], (cb) => {
-  const ps = spawn('./node_modules/.bin/mocha', [
-    '--harmony',
-    '--reporter',
-    'spec',
-    '--bail',
-    '--recursive',
-    '--timeout',
-    '-1'
-  ]);
-  ps.stdout.pipe(process.stdout);
-  ps.stderr.pipe(process.stderr);
-  ps.on('close', cb);
-});
-
-gulp.task('styles', () => {
+gulp.task('css', () => {
   return pipe(
     './src/styles/octotree.less',
     $.plumber(),
@@ -66,63 +51,58 @@ gulp.task('lib:ondemand', (cb) => {
     })
     .join('');
 
-  fs.writeFileSync('./tmp/ondemand.js', code);
-
+  fs.writeFileSync('./tmp/ondemand.js', code, {flag: 'w'});
   cb();
 });
 
-// Chrome
-gulp.task('chrome:template', () => {
-  return buildTemplate({SUPPORT_FILE_ICONS: true, SUPPORT_GHE: true});
+// WebExtensions
+gulp.task('wex:template', () => {
+  return buildTemplate({SUPPORT_GHE: true});
 });
 
-gulp.task('chrome:js', ['chrome:template', 'lib:ondemand'], () => {
-  return buildJs(['./src/config/chrome/overrides.js'], {SUPPORT_FILE_ICONS: true, SUPPORT_GHE: true});
+gulp.task('wex:js:ext', ['wex:template', 'lib:ondemand'], () => {
+  return buildJs(['./src/config/wex/overrides.js'], {SUPPORT_GHE: true});
 });
 
-gulp.task('chrome', ['chrome:js'], () => {
-  const dest = './tmp/chrome';
-  const extRoot = 'chrome-extension://__MSG_@@extension_id__';
-  return merge(
-    pipe(
-      './icons/**/*',
-      `${dest}/icons`
-    ),
-    pipe(
-      [
-        './libs/**/*',
-        '!./libs/file-icon.css',
-        '!./libs/jstree.css',
-        '!./libs/ondemand{,/**}',
-        './tmp/octotree.*',
-        './tmp/ondemand.js'
-      ],
-      dest
-    ),
-    pipe(
-      './libs/file-icons.css',
-      $.replace('../fonts', `${extRoot}/fonts`),
-      dest
-    ),
-    pipe(
-      './libs/jstree.css',
-      $.replace('url("32px.png")', `url("${extRoot}/images/32px.png")`),
-      $.replace('url("40px.png")', `url("${extRoot}/images/40px.png")`),
-      $.replace('url("throbber.gif")', `url("${extRoot}/images/throbber.gif")`),
-      dest
-    ),
-    pipe(
-      './src/config/chrome/background.js',
-      gutil.env.production && uglify(),
-      dest
-    ),
-    pipe(
-      './src/config/chrome/manifest.json',
-      $.replace('$VERSION', getVersion()),
-      dest
-    )
+gulp.task('wex:js', ['wex:js:ext'], () => {
+  const src = [
+    './libs/file-icons.js',
+    './libs/jquery.js',
+    './libs/jquery-ui.js',
+    './libs/jstree.js',
+    './libs/keymaster.js',
+    './tmp/ondemand.js',
+    './tmp/octotree.js'
+  ];
+  return pipe(
+    src,
+    $.concat('content.js'),
+    gutil.env.production && uglify(),
+    './tmp'
   );
 });
+
+gulp.task('wex', ['wex:js']);
+
+// Firefox
+gulp.task('firefox:css:libs', () => buildCssLibs('moz-extension://__MSG_@@extension_id__/'));
+gulp.task('firefox:css', ['firefox:css:libs'], () => buildCss());
+
+gulp.task('firefox', ['firefox:css'], () => prepareWexFolder('./tmp/firefox'));
+
+gulp.task('firefox:zip', () => {
+  return pipe(
+    './tmp/firefox/**/*',
+    $.zip('firefox.zip'),
+    './dist'
+  );
+});
+
+// Chrome
+gulp.task('chrome:css:libs', () => buildCssLibs('chrome-extension://__MSG_@@extension_id__/'));
+gulp.task('chrome:css', ['chrome:css:libs'], () => buildCss());
+
+gulp.task('chrome', ['chrome:css'], () => prepareWexFolder('./tmp/chrome'));
 
 gulp.task('chrome:zip', () => {
   return pipe(
@@ -161,78 +141,20 @@ gulp.task('opera', ['chrome'], () => {
 
 gulp.task('opera:nex', () => {
   return pipe(
-    './dist/chrome.crx',
-    $.rename('opera.nex'),
-    './dist'
-  );
-});
-
-// Firefox
-gulp.task('firefox:template', () => {
-  return buildTemplate({SUPPORT_FILE_ICONS: true});
-});
-
-gulp.task('firefox:js', ['firefox:template', 'lib:ondemand'], () => {
-  return buildJs([], {SUPPORT_FILE_ICONS: true});
-});
-
-gulp.task('firefox', ['firefox:js'], () => {
-  const dest = './tmp/firefox';
-  const extRoot = 'moz-extension://__MSG_@@extension_id__';
-  return merge(
-    pipe(
-      './icons/**/*',
-      `${dest}/icons`
-    ),
-    pipe(
-      [
-        './libs/**/*',
-        '!./libs/file-icon.css',
-        '!./libs/jstree.css',
-        '!./libs/ondemand{,/**}',
-        './tmp/octotree.*',
-        './tmp/ondemand.js'
-      ],
-      dest
-    ),
-    pipe(
-      './libs/file-icons.css',
-      $.replace('../fonts', `${extRoot}/fonts`),
-      dest
-    ),
-    pipe(
-      './libs/jstree.css',
-      $.replace('url("32px.png")', `url("${extRoot}/images/32px.png")`),
-      $.replace('url("40px.png")', `url("${extRoot}/images/40px.png")`),
-      $.replace('url("throbber.gif")', `url("${extRoot}/images/throbber.gif")`),
-      dest
-    ),
-    pipe(
-      './src/config/firefox/manifest.json',
-      $.replace('$VERSION', getVersion()),
-      dest
-    )
-  );
-});
-
-gulp.task('firefox:zip', () => {
-  return pipe(
-    './tmp/firefox/**/*',
-    $.zip('firefox.zip'),
+    './tmp/opera/**/*',
+    $.zip('opera.nex'),
     './dist'
   );
 });
 
 // Safari
-gulp.task('safari:template', () => {
-  return buildTemplate({SUPPORT_FILE_ICONS: true});
-});
+gulp.task('safari:template', () => buildTemplate());
+gulp.task('safari:js', ['safari:template'], () => buildJs());
 
-gulp.task('safari:js', ['safari:template', 'lib:ondemand'], () => {
-  return buildJs([], {SUPPORT_FILE_ICONS: true});
-});
+gulp.task('safari:css:libs', () => buildCssLibs());
+gulp.task('safari:css', ['safari:css:libs'], () => buildCss());
 
-gulp.task('safari', ['safari:js'], () => {
+gulp.task('safari', ['safari:js', 'safari:css'], () => {
   const dest = './tmp/safari/octotree.safariextension/';
   return merge(
     pipe(
@@ -241,26 +163,15 @@ gulp.task('safari', ['safari:js'], () => {
       dest
     ),
     pipe(
-      [
-        './libs/**/*',
-        '!./libs/file-icon.css',
-        '!./libs/jstree.css',
-        '!./libs/ondemand{,/**}',
-        './tmp/octotree.*',
-        './tmp/ondemand.js'
-      ],
-      dest
+      './libs/fonts/**/*',
+      `${dest}/fonts`
     ),
     pipe(
-      './libs/file-icons.css',
-      $.replace('../fonts', 'fonts'),
-      dest
+      './libs/images/**/*',
+      `${dest}/images`
     ),
     pipe(
-      './libs/jstree.css',
-      $.replace('url("32px.png")', 'url("images/32px.png")'),
-      $.replace('url("40px.png")', 'url("images/40px.png")'),
-      $.replace('url("throbber.gif")', 'url("images/throbber.gif")'),
+      './tmp/content.*',
       dest
     ),
     pipe(
@@ -303,7 +214,7 @@ function html2js(template) {
   }
 }
 
-function buildJs(overrides, ctx) {
+function buildJs(overrides = [], ctx = {}) {
   const src = [
     './tmp/template.js',
     './src/util.module.js',
@@ -320,18 +231,73 @@ function buildJs(overrides, ctx) {
     './src/view.options.js'
   ]
     .concat(overrides)
-    .concat('./src/octotree.js');
+    .concat('./src/main.js');
 
   return pipe(
     src,
-    $.concat('octotree.js'),
     $.preprocess({context: ctx}),
-    gutil.env.production && uglify(),
+    $.concat('octotree.js'),
     './tmp'
   );
 }
 
-function buildTemplate(ctx) {
+function buildCssLibs(targetPrefix = '') {
+  return merge(
+    pipe(
+      './libs/file-icons.css',
+      $.replace('../fonts', `${targetPrefix}fonts`),
+      './tmp'
+    ),
+    pipe(
+      './libs/jstree.css',
+      $.replace('url("32px.png")', `url("${targetPrefix}images/32px.png")`),
+      $.replace('url("40px.png")', `url("${targetPrefix}images/40px.png")`),
+      $.replace('url("throbber.gif")', `url("${targetPrefix}images/throbber.gif")`),
+      './tmp'
+    )
+  );
+}
+
+function buildCss() {
+  return pipe(
+    ['./tmp/file-icons.css', './tmp/jstree.css', './tmp/octotree.css'],
+    $.concat('content.css'),
+    './tmp'
+  );
+}
+
+function prepareWexFolder(dest) {
+  return merge(
+    pipe(
+      './icons/**/*',
+      `${dest}/icons`
+    ),
+    pipe(
+      './libs/fonts/**/*',
+      `${dest}/fonts`
+    ),
+    pipe(
+      './libs/images/**/*',
+      `${dest}/images`
+    ),
+    pipe(
+      './tmp/content.*',
+      dest
+    ),
+    pipe(
+      './src/config/wex/background.js',
+      gutil.env.production && uglify(),
+      dest
+    ),
+    pipe(
+      './src/config/wex/manifest.json',
+      $.replace('$VERSION', getVersion()),
+      dest
+    )
+  );
+}
+
+function buildTemplate(ctx = {}) {
   const LOTS_OF_SPACES = new Array(500).join(' ');
 
   return pipe(
