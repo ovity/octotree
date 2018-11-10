@@ -10,7 +10,7 @@ $(document).ready(() => {
     const $sidebar = $dom.find('.octotree_sidebar');
     const $toggler = $sidebar.find('.octotree_toggle');
     const $views = $sidebar.find('.octotree_view');
-    const adapter = createAdapter();
+    const adapter = new GitHub(store);
     const treeView = new TreeView($dom, store, adapter);
     const optsView = new OptionsView($dom, store);
     const helpPopup = new HelpPopup($dom, store);
@@ -69,23 +69,6 @@ $(document).ready(() => {
     });
 
     return tryLoadRepo();
-
-    /**
-     * Creates the platform adapter. Currently only support GitHub.
-     */
-    function createAdapter() {
-      const normalizeUrl = (url) => url.replace(/(.*?:\/\/[^/]+)(.*)/, '$1');
-      const currentUrl = `${location.protocol}//${location.host}`;
-      const githubUrls = store
-        .get(STORE.GHEURLS)
-        .split(/\n/)
-        .map(normalizeUrl)
-        .concat('https://github.com');
-
-      if (~githubUrls.indexOf(currentUrl)) {
-        return new GitHub(store);
-      }
-    }
 
     /**
      * Invoked when the user saves the option changes in the option view.

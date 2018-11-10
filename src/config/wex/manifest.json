@@ -1,7 +1,7 @@
 {
   "name": "Octotree",
   "version": "$VERSION",
-  "description": "Code tree for GitHub",
+  "description": "GitHub code tree on steroids",
   "homepage_url": "https://github.com/ovity/octotree",
   "author": "Buu Nguyen",
   "manifest_version": 2,
@@ -18,10 +18,6 @@
   "permissions": ["https://api.github.com/*", "storage"],
   "optional_permissions": ["<all_urls>"],
   "web_accessible_resources": ["*.woff2", "*.png", "*.gif"],
-  "background": {
-    "scripts": ["background.js"],
-    "persistent": true
-  },
   "content_scripts": [
     {
       "run_at": "document_start",

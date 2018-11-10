@@ -56,13 +56,8 @@ gulp.task('lib:ondemand', (cb) => {
 });
 
 // WebExtensions
-gulp.task('wex:template', () => {
-  return buildTemplate({SUPPORT_GHE: true});
-});
-
-gulp.task('wex:js:ext', ['wex:template', 'lib:ondemand'], () => {
-  return buildJs(['./src/config/wex/overrides.js'], {SUPPORT_GHE: true});
-});
+gulp.task('wex:template', () => buildTemplate());
+gulp.task('wex:js:ext', ['wex:template', 'lib:ondemand'], () => buildJs());
 
 gulp.task('wex:js', ['wex:js:ext'], () => {
   const src = [
@@ -214,7 +209,7 @@ function html2js(template) {
   }
 }
 
-function buildJs(overrides = [], ctx = {}) {
+function buildJs(ctx = {}) {
   const src = [
     './tmp/template.js',
     './src/util.module.js',
@@ -228,10 +223,9 @@ function buildJs(overrides = [], ctx = {}) {
     './src/view.help.js',
     './src/view.error.js',
     './src/view.tree.js',
-    './src/view.options.js'
-  ]
-    .concat(overrides)
-    .concat('./src/main.js');
+    './src/view.options.js',
+    './src/main.js'
+  ];
 
   return pipe(
     src,
