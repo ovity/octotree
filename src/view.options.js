@@ -42,36 +42,6 @@ class OptionsView {
   _save(event) {
     event.preventDefault();
 
-    /*
-     * Certainly not a good place to put this logic but Chrome requires
-     * permissions to be requested only in response of user input. So...
-     */
-    // @ifdef SUPPORT_GHE
-    const $ta = this.$view.find('[data-store$=EURLS]').filter(':visible');
-    if ($ta.length > 0) {
-      const storeKey = $ta.data('store');
-      const urls = $ta
-        .val()
-        .split(/\n/)
-        .filter((url) => url !== '');
-
-      if (urls.length > 0) {
-        chrome.runtime.sendMessage({type: 'requestPermissions', urls: urls}, (granted) => {
-          if (!granted) {
-            // Permissions not granted (by user or error), reset value
-            $ta.val(this.store.get(STORE[storeKey]));
-          }
-          this._saveOptions();
-        });
-        return;
-      }
-    }
-    // @endif
-
-    return this._saveOptions();
-  }
-
-  _saveOptions() {
     const changes = {};
     this._eachOption(
       ($elm, key, value, cb) => {
