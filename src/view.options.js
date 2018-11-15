@@ -1,9 +1,11 @@
 class OptionsView {
   constructor($dom, store) {
+    this.$this = $(this);
     this.store = store;
-    this.$view = $dom.find('.octotree_optsview').submit(this._save.bind(this));
+    this.$view = $dom.find('.octotree_optsview');
     this.$toggler = $dom.find('.octotree_opts').click(this._toggle.bind(this));
     this.elements = this.$view.find('[data-store]').toArray();
+    this.optionChanges = {};
 
     // Hide options view when sidebar is hidden
     $(document).on(EVENT.TOGGLE, (event, visible) => {
@@ -19,7 +21,12 @@ class OptionsView {
 
     if (this.$toggler.hasClass('selected')) {
       this.$toggler.removeClass('selected');
-      $(this).trigger(EVENT.VIEW_CLOSE);
+
+      // The close event of option view is a hint that options don't change any more.
+      // Broadcasts the event so that other places can response with new option values
+      this.$this.trigger(EVENT.OPTS_CHANGE, this.optionChanges);
+
+      this.$this.trigger(EVENT.VIEW_CLOSE);
     } else {
       this._load();
     }
@@ -28,65 +35,78 @@ class OptionsView {
   _load() {
     this._eachOption(
       ($elm, key, value, cb) => {
-        if ($elm.is(':checkbox')) $elm.prop('checked', value);
+        const checkboxElement = $elm.is(':checkbox')
+
+        if (checkboxElement) $elm.prop('checked', value);
         else $elm.val(value);
+
+        // Attaches (once) on value change event
+        if (!$elm.data('octotree-on-change-event-attached')) {
+          $elm.data('octotree-on-change-event-attached', true);
+          const boundOnChange = this._saveOption.bind(this, $elm, key);
+
+          if (checkboxElement) {
+            $elm.change(boundOnChange);
+          }
+          else {
+            $elm.blur(() => {
+              /*
+               * Certainly not a good place to put this logic but Chrome requires
+               * permissions to be requested only in response of user input. So...
+               */
+              // @ifdef SUPPORT_GHE
+              if ($elm.data('store') === 'GHEURLS') {
+                const $ta = this.$view.find('[data-store$=EURLS]').filter(':visible');
+                if ($ta.length > 0) {
+                  const storeKey = $ta.data('store');
+                  const urls = $ta
+                    .val()
+                    .split(/\n/)
+                    .filter((url) => url !== '');
+
+                  if (urls.length > 0) {
+                    chrome.runtime.sendMessage({type: 'requestPermissions', urls: urls}, (granted) => {
+                      if (!granted) {
+                        // Permissions not granted (by user or error), reset value
+                        $ta.val(this.store.get(STORE[storeKey]));
+                      }
+
+                      boundOnChange();
+                    });
+
+                    return;
+                  }
+                }
+              }
+              // @endif
+
+              boundOnChange();
+            });
+          }
+        }
+
         cb();
       },
       () => {
+        this.optionChanges = {}; // begins recording changes
         this.$toggler.addClass('selected');
-        $(this).trigger(EVENT.VIEW_READY);
+        this.$this.trigger(EVENT.VIEW_READY);
       }
     );
   }
 
-  _save(event) {
-    event.preventDefault();
+  _saveOption($elm, key) {
+    this.store.get(key, (value) => {
+      const newValue = $elm.is(':checkbox') ? $elm.is(':checked') : $elm.val();
 
-    /*
-     * Certainly not a good place to put this logic but Chrome requires
-     * permissions to be requested only in response of user input. So...
-     */
-    // @ifdef SUPPORT_GHE
-    const $ta = this.$view.find('[data-store$=EURLS]').filter(':visible');
-    if ($ta.length > 0) {
-      const storeKey = $ta.data('store');
-      const urls = $ta
-        .val()
-        .split(/\n/)
-        .filter((url) => url !== '');
+      if (value === newValue) return;
 
-      if (urls.length > 0) {
-        chrome.runtime.sendMessage({type: 'requestPermissions', urls: urls}, (granted) => {
-          if (!granted) {
-            // Permissions not granted (by user or error), reset value
-            $ta.val(this.store.get(STORE[storeKey]));
-          }
-          this._saveOptions();
-        });
-        return;
-      }
-    }
-    // @endif
+      this.optionChanges[key] = [value, newValue] // saves the latest change of an option
 
-    return this._saveOptions();
-  }
-
-  _saveOptions() {
-    const changes = {};
-    this._eachOption(
-      ($elm, key, value, cb) => {
-        const newValue = $elm.is(':checkbox') ? $elm.is(':checked') : $elm.val();
-        if (value === newValue) return cb();
-        changes[key] = [value, newValue];
-        this.store.set(key, newValue, cb);
-      },
-      () => {
-        this._toggle(false);
-        if (Object.keys(changes).length) {
-          $(this).trigger(EVENT.OPTS_CHANGE, changes);
-        }
-      }
-    );
+      this.store.set(key, newValue, () => {
+        this.$this.trigger(EVENT.OPT_ITEM_CHANGE, {key, value, newValue});
+      });
+    });
   }
 
   _eachOption(processFn, completeFn) {
