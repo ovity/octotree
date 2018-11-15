@@ -53,7 +53,8 @@
         }
       }
 
-      input[type=text], textarea {
+      input[type='text'],
+      textarea {
         padding: 4px 8px;
         color: #24292e;
         background-color: #fafbfc;
@@ -64,7 +65,7 @@
 
         &:focus {
           border-color: #2188ff;
-          box-shadow: inset 0 1px 2px rgba(27,31,35,0.075), 0 0 0 0.2em rgba(3,102,214,0.3);
+          box-shadow: inset 0 1px 2px rgba(27, 31, 35, 0.075), 0 0 0 0.2em rgba(3, 102, 214, 0.3);
         }
       }
 
@@ -97,13 +98,15 @@
         }
       }
 
-      .jstree-icon.tree, .jstree-icon.commit, .jstree-icon.file-generic {
+      .jstree-icon.tree,
+      .jstree-icon.commit,
+      .jstree-icon.file-generic {
         margin-top: 0;
         margin-right: 2px;
       }
       .jstree-icon.tree:before {
         #octicons.file-directory();
-        color: #8197B1;
+        color: #8197b1;
       }
       .jstree-icon.file-generic:before {
         #octicons.file-text();
@@ -121,7 +124,7 @@
         color: @gray;
       }
       .jstree-anchor {
-        color: #0366d6 !important;
+        color: #0366d6;
         & > span {
           color: black;
         }
@@ -149,10 +152,12 @@
     }
   }
 
-  a.octotree_toggle, a.octotree_opts {
+  a.octotree_toggle,
+  a.octotree_opts {
     color: black !important;
 
-    &:hover, &.selected {
+    &:hover,
+    &.selected {
       color: #0366d6 !important;
     }
   }
