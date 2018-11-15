@@ -83,8 +83,7 @@ gulp.task('wex', ['wex:js']);
 // Firefox
 gulp.task('firefox:css:libs', () => buildCssLibs('.', 'moz-extension://__MSG_@@extension_id__/'));
 gulp.task('firefox:css', ['firefox:css:libs'], () => buildCss());
-
-gulp.task('firefox', ['firefox:css'], () => prepareWexFolder('./tmp/firefox'));
+gulp.task('firefox', ['firefox:css'], () => prepareWexFolder('firefox'));
 
 gulp.task('firefox:zip', () => {
   return pipe(
@@ -97,8 +96,7 @@ gulp.task('firefox:zip', () => {
 // Chrome
 gulp.task('chrome:css:libs', () => buildCssLibs('.', 'chrome-extension://__MSG_@@extension_id__/'));
 gulp.task('chrome:css', ['chrome:css:libs'], () => buildCss());
-
-gulp.task('chrome', ['chrome:css'], () => prepareWexFolder('./tmp/chrome'));
+gulp.task('chrome', ['chrome:css'], () => prepareWexFolder('chrome'));
 
 gulp.task('chrome:zip', () => {
   return pipe(
@@ -238,33 +236,29 @@ function buildTemplate(prefix = '.', ctx = {}) {
   );
 }
 
-function prepareWexFolder(dest) {
+function prepareWexFolder(browser) {
   return merge(
     pipe(
       './icons/**/*',
-      `${dest}/icons`
+      `./tmp/${browser}/icons`
     ),
     pipe(
       './libs/fonts/**/*',
-      `${dest}/fonts`
+      `./tmp/${browser}/fonts`
     ),
     pipe(
       './libs/images/**/*',
-      `${dest}/images`
+      `./tmp/${browser}/images`
     ),
     pipe(
       './tmp/content.*',
-      dest
-    ),
-    pipe(
-      './src/config/wex/background.js',
-      gutil.env.production && uglify(),
-      dest
+      `./tmp/${browser}`
     ),
     pipe(
       './src/config/wex/manifest.json',
+      $.preprocess({context: {browser}}),
       $.replace('$VERSION', getVersion()),
-      dest
+      `./tmp/${browser}`
     )
   );
 }

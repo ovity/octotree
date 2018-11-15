@@ -6,12 +6,14 @@
   "author": "Buu Nguyen",
   "manifest_version": 2,
   "minimum_chrome_version": "60",
+  <!-- @if browser='firefox' -->
   "applications": {
     "gecko": {
       "id": "{a6fc3490-8a75-4150-a0e5-96089f947efd}",
       "strict_min_version": "55.0"
     }
   },
+  <!-- @endif -->
   "icons": {
     "128": "icons/icon128.png"
   },
