@@ -1,14 +1,26 @@
 class OptionsView {
   constructor($dom, store) {
     this.store = store;
-    this.$view = $dom.find('.octotree_optsview').submit(this._save.bind(this));
     this.$toggler = $dom.find('.octotree_opts').click(this._toggle.bind(this));
-    this.elements = this.$view.find('[data-store]').toArray();
+    this.$view = $dom.find('.octotree_optsview').submit((event) => {
+      event.preventDefault();
+      this._toggle(false);
+    });
+
+    this.loadElements();
 
     // Hide options view when sidebar is hidden
     $(document).on(EVENT.TOGGLE, (event, visible) => {
       if (!visible) this._toggle(false);
     });
+  }
+
+  /**
+   * Load elements with [data-store] attributes. Invoke this if there are dynamically
+   * added elements, so that they can be loaded and saved.
+   */
+  loadElements() {
+    this.elements = this.$view.find('[data-store]').toArray();
   }
 
   _toggle(visibility) {
@@ -18,6 +30,7 @@ class OptionsView {
     }
 
     if (this.$toggler.hasClass('selected')) {
+      this._save();
       this.$toggler.removeClass('selected');
       $(this).trigger(EVENT.VIEW_CLOSE);
     } else {
@@ -39,9 +52,7 @@ class OptionsView {
     );
   }
 
-  _save(event) {
-    event.preventDefault();
-
+  _save() {
     const changes = {};
     this._eachOption(
       ($elm, key, value, cb) => {
@@ -51,7 +62,6 @@ class OptionsView {
         this.store.set(key, newValue, cb);
       },
       () => {
-        this._toggle(false);
         if (Object.keys(changes).length) {
           $(this).trigger(EVENT.OPTS_CHANGE, changes);
         }

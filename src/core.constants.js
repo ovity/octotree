@@ -39,3 +39,7 @@ const EVENT = {
   VIEW_CLOSE: 'octotree:close',
   FETCH_ERROR: 'octotree:error'
 };
+
+window.STORE = STORE;
+window.DEFAULTS = DEFAULTS;
+window.EVENT = EVENT;
