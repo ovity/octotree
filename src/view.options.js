@@ -1,17 +1,18 @@
 class OptionsView {
-  constructor($dom, store) {
+  constructor($dom, store, adapter) {
     this.store = store;
-    this.$toggler = $dom.find('.octotree_opts').click(this._toggle.bind(this));
+    this.adapter = adapter;
+    this.$toggler = $dom.find('.octotree_opts').click(this.toggle.bind(this));
     this.$view = $dom.find('.octotree_optsview').submit((event) => {
       event.preventDefault();
-      this._toggle(false);
+      this.toggle(false);
     });
 
     this.loadElements();
 
     // Hide options view when sidebar is hidden
     $(document).on(EVENT.TOGGLE, (event, visible) => {
-      if (!visible) this._toggle(false);
+      if (!visible) this.toggle(false);
     });
   }
 
@@ -23,13 +24,14 @@ class OptionsView {
     this.elements = this.$view.find('[data-store]').toArray();
   }
 
-  _toggle(visibility) {
+  toggle(visibility) {
     if (visibility !== undefined) {
       if (this.$view.hasClass('current') === visibility) return;
-      return this._toggle();
+      return this.toggle();
     }
 
     if (this.$toggler.hasClass('selected')) {
+
       this._save();
       this.$toggler.removeClass('selected');
       $(this).trigger(EVENT.VIEW_CLOSE);
@@ -39,6 +41,9 @@ class OptionsView {
   }
 
   _load() {
+    const getTokenLink = this.$view.find('a[data-id="getLinkGenToken"]');
+    getTokenLink.attr("href", this.adapter.getCreateTokenUrl());
+
     this._eachOption(
       ($elm, key, value, cb) => {
         if ($elm.is(':checkbox')) $elm.prop('checked', value);

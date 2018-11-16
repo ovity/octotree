@@ -29,16 +29,11 @@
         <form class="octotree_view_body">
           <div class="message"></div>
           <div>
-            <input name="token" type="text" placeholder="Paste access token here" autocomplete="off">
-          </div>
-          <div>
-            <button type="submit" class="btn">Save</button>
-            <a href="https://github.com/ovity/octotree#access-token" target="_blank" tabIndex="-1">Why is this required?</a>
+            <button type="submit" class="btn">Go to Settings</button>
           </div>
           <div class="error"></div>
         </form>
       </div>
-
       <div class="octotree_view octotree_optsview">
         <div class="octotree_view_header">Settings</div>
         <form class="octotree_view_body">
@@ -47,6 +42,8 @@
             <a class="octotree_help" href="https://github.com/ovity/octotree#settings" target="_blank" tabIndex="-1">
               <span></span>
             </a>
+            <a href="javascript:void(0)">&nbsp;</a>
+            <a target="_blank" data-id="getLinkGenToken">Create the token</a>
             <input type="text" data-store="TOKEN" data-perhost="true">
           </div>
 
