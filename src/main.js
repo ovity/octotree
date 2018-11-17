@@ -25,7 +25,7 @@ $(document).ready(() => {
     });
 
     handleSidebarAutoToggling();
-    handleHotKeys(store.get(STORE.HOTKEYS));
+    updateHotkey(store.get(STORE.HOTKEYS));
 
     $html.addClass(ADDON_CLASS);
 
@@ -56,7 +56,7 @@ $(document).ready(() => {
       .on(EVENT.REQ_START, () => $spinner.addClass('octotree_loading'))
       .on(EVENT.REQ_END, () => $spinner.removeClass('octotree_loading'))
       .on(EVENT.LAYOUT_CHANGE, layoutChanged)
-      .on(EVENT.PIN, layoutChanged)
+      .on(EVENT.TOGGLE_PIN, layoutChanged)
       .on(EVENT.LOC_CHANGE, () => tryLoadRepo());
 
     $sidebar
@@ -100,7 +100,7 @@ $(document).ready(() => {
             reload = true;
             break;
           case STORE.HOTKEYS:
-            handleHotKeys(newKeys, oldKeys);
+            updateHotkey(newKeys, oldKeys);
             break;
         }
       });
@@ -165,7 +165,7 @@ $(document).ready(() => {
       } else {
         $html.toggleClass(SHOW_CLASS);
         $document.trigger(EVENT.TOGGLE, isSidebarVisible());
-        // Load repo when the page first loaded in the layout mode
+        // Ensure the repo being loaded when openning the sidebar in the float mode
         if (isSidebarVisible()) tryLoadRepo();
       }
 
@@ -182,11 +182,11 @@ $(document).ready(() => {
       const sidebarPinned = isSidebarPinned();
       $pinner.find('.tooltipped').attr('aria-label', `${sidebarPinned ? 'Pin' : 'Unpin'} octotree to the page`);
 
-      $document.trigger(EVENT.PIN, sidebarPinned);
+      $document.trigger(EVENT.TOGGLE_PIN, sidebarPinned);
 
       store.set(STORE.PINNED, sidebarPinned);
 
-      if (sidebarPinned) toggleSidebar(true);
+      toggleSidebar(sidebarPinned);
 
       return sidebarPinned;
     }
@@ -221,7 +221,6 @@ $(document).ready(() => {
 
       $sidebar.on('keyup mouseleave', () => resetTimer(SIDEBAR_HIDING_DELAY));
       $sidebar.on('mousemove', clearTimer);
-      $sidebar.on(EVENT.HOTKEYS_CHANGED, () => resetTimer(0));
     }
 
     /**
@@ -229,13 +228,13 @@ $(document).ready(() => {
      * @param {string} newKeys
      * @param {string?} oldKeys
      */
-    function handleHotKeys(newKeys, oldKeys) {
+    function updateHotkey(newKeys, oldKeys) {
+      key.filter = () => $sidebar.is(':visible');
+
       if (oldKeys) key.unbind(oldKeys);
 
-      key.filter = () => $toggler.is(':visible');
       key(newKeys, () => {
-        togglePin() && treeView.focus();
-        $sidebar.trigger(EVENT.HOTKEYS_CHANGED);
+        if (togglePin()) treeView.focus();
       });
     }
 

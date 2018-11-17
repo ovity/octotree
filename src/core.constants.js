@@ -14,7 +14,6 @@ const STORE = {
   POPUP: 'octotree.popup_shown',
   WIDTH: 'octotree.sidebar_width',
   SHOWN: 'octotree.sidebar_shown',
-  GHEURLS: 'octotree.gheurls.shared',
   PINNED: 'octotree.sidebar_pinned'
 };
 
@@ -32,7 +31,7 @@ const DEFAULTS = {
 
 const EVENT = {
   TOGGLE: 'octotree:toggle',
-  PIN: 'octotree:pin',
+  TOGGLE_PIN: 'octotree:pin',
   LOC_CHANGE: 'octotree:location',
   LAYOUT_CHANGE: 'octotree:layout',
   REQ_START: 'octotree:start',
@@ -40,8 +39,7 @@ const EVENT = {
   OPTS_CHANGE: 'octotree:change',
   VIEW_READY: 'octotree:ready',
   VIEW_CLOSE: 'octotree:close',
-  FETCH_ERROR: 'octotree:error',
-  HOTKEYS_CHANGED: 'octotree:change'
+  FETCH_ERROR: 'octotree:error'
 };
 
 window.STORE = STORE;
