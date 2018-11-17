@@ -7,6 +7,7 @@ class OptionsView {
       event.preventDefault();
       this.toggle(false);
     });
+    this.$view.find('a.create-new-token').attr('href', this.adapter.getCreateTokenUrl());
 
     this.loadElements();
 
@@ -24,6 +25,9 @@ class OptionsView {
     this.elements = this.$view.find('[data-store]').toArray();
   }
 
+  /**
+   * Toggles the visibility of this screen.
+   */
   toggle(visibility) {
     if (visibility !== undefined) {
       if (this.$view.hasClass('current') === visibility) return;
@@ -31,7 +35,6 @@ class OptionsView {
     }
 
     if (this.$toggler.hasClass('selected')) {
-
       this._save();
       this.$toggler.removeClass('selected');
       $(this).trigger(EVENT.VIEW_CLOSE);
@@ -41,9 +44,6 @@ class OptionsView {
   }
 
   _load() {
-    const getTokenLink = this.$view.find('a[data-id="getLinkGenToken"]');
-    getTokenLink.attr("href", this.adapter.getCreateTokenUrl());
-
     this._eachOption(
       ($elm, key, value, cb) => {
         if ($elm.is(':checkbox')) $elm.prop('checked', value);

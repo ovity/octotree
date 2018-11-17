@@ -35,12 +35,9 @@ $(document).ready(() => {
           showView(this.$view);
         })
         .on(EVENT.VIEW_CLOSE, (event, data) => {
-          const dataWithDefault = {optionView: false, ...data};
-
-          if (dataWithDefault.optionView) {
+          if (data && data.showSettings) {
             optsView.toggle(true);
-          }
-          else {
+          } else {
             showView(hasError ? errorView.$view : treeView.$view);
           }
         })

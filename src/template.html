@@ -28,23 +28,20 @@
         <div class="octotree_view_header"></div>
         <form class="octotree_view_body">
           <div class="message"></div>
-          <div>
-            <button type="submit" class="btn">Go to Settings</button>
-          </div>
-          <div class="error"></div>
         </form>
       </div>
+
       <div class="octotree_view octotree_optsview">
         <div class="octotree_view_header">Settings</div>
         <form class="octotree_view_body">
           <div>
-            <label>Site access token</label>
+            <label>GitHub access token</label>
             <a class="octotree_help" href="https://github.com/ovity/octotree#settings" target="_blank" tabIndex="-1">
               <span></span>
             </a>
             <a href="javascript:void(0)">&nbsp;</a>
-            <a target="_blank" data-id="getLinkGenToken">Create the token</a>
-            <input type="text" data-store="TOKEN" data-perhost="true">
+            <a target="_blank" class="create-new-token">Create new</a>
+            <input type="text" data-store="TOKEN">
           </div>
 
           <div>

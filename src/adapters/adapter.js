@@ -172,7 +172,8 @@ class Adapter {
    * @api protected
    */
   _handleError(jqXHR, cb) {
-    let error, message, needAuth;
+    let error;
+    let message;
 
     switch (jqXHR.status) {
       case 0:
@@ -180,51 +181,53 @@ class Adapter {
         message = `Cannot connect to website.
           If your network connection to this website is fine, maybe there is an outage of the API.
           Please try again later.`;
-        needAuth = false;
-        break;
-      case 206:
-        error = 'Repo too large';
-        message = `This repository is too large to loaded in a single request.
-          If you frequently work with this repository,
-          go to Settings and uncheck the "Load entire tree at once" option.`;
-        break;
-      case 401:
-        error = 'Invalid token';
-        message = 'The token is invalid. Please update it on Settings.';
-        needAuth = true;
         break;
       case 409:
         error = 'Empty repository';
         message = 'This repository is empty.';
         break;
+      case 206:
+        error = 'Repo too large';
+        message = 'This repository is too large to load in a single request. ';
+        'If you frequently work with this repository, go to the ' +
+          '<a class="settings-btn" href="javascript:void(0)">Settings</a> screen ' +
+          'and uncheck the "Load entire tree at once" option.';
+        break;
+      case 401:
+        error = 'Invalid token';
+        message =
+          'The GitHub access token is invalid. ' +
+          'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and update the token.';
+        break;
       case 404:
         error = 'Private repository';
-        message = `Accessing private repositories requires an access token. Please update it on Settings.`;
-        needAuth = true;
+        message =
+          'Accessing private repositories requires a GitHub access token. ' +
+          'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and enter a token.';
         break;
       case 403:
         if (~jqXHR.getAllResponseHeaders().indexOf('X-RateLimit-Remaining: 0')) {
           // It's kinda specific for GitHub
           error = 'API limit exceeded';
-          message = `You have exceeded the GitHub API hourly limit and need GitHub access token
-            to make extra requests. Please update it on Settings.`;
-          needAuth = true;
+          message =
+            'You have exceeded the <a href="https://developer.github.com/v3/#rate-limiting">GitHub API rate limit</a>. ' +
+            'To continue using Octotree, you need to provide a GitHub access token. ' +
+            'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and enter a token.';
           break;
         } else {
           error = 'Forbidden';
-          message = `You are not allowed to access the API. Please update your GitHub access token on Settings.`;
-          needAuth = true;
+          message =
+            'Accessing private repositories requires a GitHub access token. ' +
+            'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and enter a token.';
           break;
         }
       default:
         error = message = jqXHR.statusText;
-        needAuth = false;
         break;
     }
     cb({
       error: `Error: ${error}`,
-      message: message,
-      needAuth: needAuth
+      message: message
     });
   }
 
