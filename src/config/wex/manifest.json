@@ -20,6 +20,10 @@
   "permissions": ["https://api.github.com/*", "storage"],
   "optional_permissions": ["<all_urls>"],
   "web_accessible_resources": ["*.woff2", "*.png", "*.gif"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
   "content_scripts": [
     {
       "run_at": "document_start",

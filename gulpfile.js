@@ -259,6 +259,12 @@ function prepareWexFolder(browser) {
       $.preprocess({context: {browser}}),
       $.replace('$VERSION', getVersion()),
       `./tmp/${browser}`
+    ),
+    pipe(
+      './src/config/wex/background.js',
+      $.preprocess({context: {browser}}),
+      gutil.env.production && uglify(),
+      `./tmp/${browser}`
     )
   );
 }
