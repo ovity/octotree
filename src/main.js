@@ -109,7 +109,6 @@ $(document).ready(() => {
     }
 
     function tryLoadRepo(reload) {
-      hasError = false;
       const remember = store.get(STORE.REMEMBER);
       const shown = store.get(STORE.SHOWN);
       const token = store.get(STORE.TOKEN);
@@ -128,6 +127,7 @@ $(document).ready(() => {
             const replacer = ['username', 'reponame', 'branch', 'pullNumber'];
             const repoChanged = JSON.stringify(repo, replacer) !== JSON.stringify(currRepo, replacer);
             if (repoChanged || reload === true) {
+              hasError = false;
               $document.trigger(EVENT.REQ_START);
               currRepo = repo;
               treeView.show(repo, token);
@@ -152,6 +152,7 @@ $(document).ready(() => {
     function showError(err) {
       hasError = true;
       errorView.show(err);
+      toggleSidebar(true);
     }
 
     function toggleSidebarAndSave() {
