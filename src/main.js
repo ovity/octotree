@@ -10,7 +10,7 @@ $(document).ready(() => {
     const $views = $sidebar.find('.octotree_view');
     const adapter = new GitHub(store);
     const treeView = new TreeView($dom, store, adapter);
-    const optsView = new OptionsView($dom, store);
+    const optsView = new OptionsView($dom, store, adapter);
     const helpPopup = new HelpPopup($dom, store);
     const errorView = new ErrorView($dom, store);
     let currRepo = false;
@@ -34,7 +34,16 @@ $(document).ready(() => {
           }
           showView(this.$view);
         })
-        .on(EVENT.VIEW_CLOSE, () => showView(hasError ? errorView.$view : treeView.$view))
+        .on(EVENT.VIEW_CLOSE, (event, data) => {
+          const dataWithDefault = {optionView: false, ...data};
+
+          if (dataWithDefault.optionView) {
+            optsView.toggle(true);
+          }
+          else {
+            showView(hasError ? errorView.$view : treeView.$view);
+          }
+        })
         .on(EVENT.OPTS_CHANGE, optionsChanged)
         .on(EVENT.FETCH_ERROR, (event, err) => showError(err));
     }

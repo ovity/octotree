@@ -190,9 +190,7 @@ class Adapter {
         break;
       case 401:
         error = 'Invalid token';
-        message = `The token is invalid.
-          Follow <a href="${this.getCreateTokenUrl()}" target="_blank">this link</a>
-          to create a new token and paste it below.`;
+        message = 'The token is invalid. Please update it on Settings.';
         needAuth = true;
         break;
       case 409:
@@ -201,9 +199,7 @@ class Adapter {
         break;
       case 404:
         error = 'Private repository';
-        message = `Accessing private repositories requires an access token.
-          Follow <a href="${this.getCreateTokenUrl()}" target="_blank">this link</a>
-          to create one and paste it below.`;
+        message = `Accessing private repositories requires an access token. Please update it on Settings.`;
         needAuth = true;
         break;
       case 403:
@@ -211,16 +207,12 @@ class Adapter {
           // It's kinda specific for GitHub
           error = 'API limit exceeded';
           message = `You have exceeded the GitHub API hourly limit and need GitHub access token
-            to make extra requests. Follow <a href="${this.getCreateTokenUrl()}" target="_blank">this link</a>
-            to create one and paste it below.`;
+            to make extra requests. Please update it on Settings.`;
           needAuth = true;
           break;
         } else {
           error = 'Forbidden';
-          message = `You are not allowed to access the API.
-            You might need to provide an access token.
-            Follow <a href="${this.getCreateTokenUrl()}" target="_blank">this link</a>
-            to create one and paste it below.`;
+          message = `You are not allowed to access the API. Please update your GitHub access token on Settings.`;
           needAuth = true;
           break;
         }
