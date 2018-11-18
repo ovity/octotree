@@ -2,13 +2,13 @@
 
 Browser extension (Chrome, Firefox, Opera and Safari) to show a code tree on GitHub. Awesome for exploring project source without having to pull every single repository to your machine.
 
-Features:
+**Features**
 
 - Easy-to-navigate code tree, just like in IDEs
 - Fast browsing with pjax
 - Support private repositories (see [instructions](#access-token))
 
-Features of Octotree Plus (_require subscription_)
+**Features of Octotree Plus (_require subscription_)**
 
 - Dark mode
 - File search
