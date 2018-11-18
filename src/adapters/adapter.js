@@ -193,34 +193,28 @@ class Adapter {
           '<a class="settings-btn" href="javascript:void(0)">Settings</a> screen ' +
           'and uncheck the "Load entire tree at once" option.';
         break;
+
+      // Errors for access token
       case 401:
         error = 'Invalid token';
-        message =
-          'The GitHub access token is invalid. ' +
-          'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and update the token.';
+        message = window.octotreeService.getAccessTokenErrorMessage(jqXHR);
         break;
       case 404:
         error = 'Private repository';
-        message =
-          'Accessing private repositories requires a GitHub access token. ' +
-          'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and enter a token.';
+        message = window.octotreeService.getAccessTokenErrorMessage(jqXHR);
         break;
       case 403:
         if (~jqXHR.getAllResponseHeaders().indexOf('X-RateLimit-Remaining: 0')) {
           // It's kinda specific for GitHub
           error = 'API limit exceeded';
-          message =
-            'You have exceeded the <a href="https://developer.github.com/v3/#rate-limiting">GitHub API rate limit</a>. ' +
-            'To continue using Octotree, you need to provide a GitHub access token. ' +
-            'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and enter a token.';
-          break;
         } else {
           error = 'Forbidden';
-          message =
-            'Accessing private repositories requires a GitHub access token. ' +
-            'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and enter a token.';
-          break;
         }
+
+        message = window.octotreeService.getAccessTokenErrorMessage(jqXHR);
+        break;
+
+      // Fallback message
       default:
         error = message = jqXHR.statusText;
         break;

@@ -112,6 +112,7 @@ $(document).ready(() => {
     function tryLoadRepo(reload) {
       const token = store.get(STORE.TOKEN);
       const pinned = store.get(STORE.PINNED);
+      const token = octotreeService.getAccessToken();
 
       adapter.getRepoFromPath(currRepo, token, (err, repo) => {
         if (err) {
