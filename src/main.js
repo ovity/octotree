@@ -24,6 +24,20 @@ $(document).ready(() => {
 
     $html.addClass(ADDON_CLASS);
 
+    const pluginOpts = {
+      adapter,
+      $document,
+      $dom,
+      $sidebar,
+      $toggler,
+      $views,
+      treeView,
+      optsView,
+      errorView
+    }
+
+    await pluginManager.initialize(pluginOpts);
+
     $(window).resize((event) => {
       if (event.target === window) layoutChanged();
     });
@@ -61,18 +75,7 @@ $(document).ready(() => {
 
     adapter.init($sidebar);
 
-    await pluginManager.activate({
-      store,
-      adapter,
-      $document,
-      $dom,
-      $sidebar,
-      $toggler,
-      $views,
-      treeView,
-      optsView,
-      errorView
-    });
+    await pluginManager.activate(pluginOpts);
 
     return tryLoadRepo();
 
