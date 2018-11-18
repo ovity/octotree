@@ -1,21 +1,31 @@
 <div>
   <nav class="octotree_sidebar">
     <a class="octotree_toggle btn">
-      <div class="loader"></div>
       <span></span>
-
       <div class="popup">
         <div class="arrow"></div>
         <div class="content">
-          Octotree is enabled on this page. Click this button or press
+          Octotree is enabled on this page. Hover this handle
           <kbd>cmd shift s</kbd> (or <kbd>ctrl shift s</kbd>)
           to show it.
         </div>
       </div>
     </a>
 
+    <a class="octotree_pin" aria-label="Pin/Unpin" data-store="PINNED" href="javascript:void(0)">
+      <span class="tooltipped tooltipped-s" aria-label="Unpin octotree to the page">
+        <i></i>
+      </span>
+    </a>
+
     <a class="octotree_opts" href="javascript:void(0)">
-      <i class="settings"></i>
+      <span class="tooltipped tooltipped-s" aria-label="Settings">
+        <i class="settings"></i>
+      </span>
+    </a>
+
+    <a class="octotree_spin">
+      <span class="loader"></span>
     </a>
 
     <div class="octotree_views">
@@ -60,10 +70,6 @@
 
           <div>
             <label><input type="checkbox" data-store="ICONS"> Show file-specific icons</label>
-          </div>
-
-          <div>
-            <label><input type="checkbox" data-store="REMEMBER"> Remember sidebar visibility</label>
           </div>
 
           <div>

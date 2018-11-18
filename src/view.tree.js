@@ -18,6 +18,10 @@ class TreeView {
     return this.$tree.jstree(true);
   }
 
+  focus() {
+    this.$jstree.get_container().focus();
+  }
+
   show(repo, token) {
     const $jstree = this.$jstree;
 
