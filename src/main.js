@@ -122,8 +122,6 @@ $(document).ready(() => {
         if (err) {
           showError(err);
         } else if (repo) {
-          $toggler.show();
-
           if (pinned) togglePin(true);
 
           if (isSidebarVisible()) {
@@ -166,7 +164,12 @@ $(document).ready(() => {
         $html.toggleClass(SHOW_CLASS);
         $document.trigger(EVENT.TOGGLE, isSidebarVisible());
         // Ensure the repo being loaded when openning the sidebar in the float mode
-        if (isSidebarVisible()) tryLoadRepo();
+        if (isSidebarVisible()) {
+          $toggler.hide();
+          tryLoadRepo();
+        } else {
+          $toggler.show();
+        }
       }
 
       return visibility;
