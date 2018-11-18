@@ -36,11 +36,18 @@
         <form class="octotree_view_body">
           <div>
             <label>GitHub access token</label>
-            <a class="octotree_help" href="https://github.com/ovity/octotree#settings" target="_blank" tabIndex="-1">
-              <span></span>
+            <a class="octotree_help tooltipped tooltipped-sw"
+              href="https://github.com/ovity/octotree#settings"
+              target="_blank" aria-label="For private repos or more API use"
+              tabIndex="-1">
+              <i class="octotree-icon octotree-icon-help"></i>
             </a>
-            <a href="javascript:void(0)">&nbsp;</a>
-            <a target="_blank" class="create-new-token">Create new</a>
+            <a href="javascript:void(0)" tabIndex="-1">&nbsp</a>
+            <a class="octotree-create-token tooltipped tooltipped-sw"
+              target="_blank" aria-label="Generate a GitHub access token"
+              tabIndex="-1">
+              <i class="octotree-icon octotree-icon-key"></i>
+            </a>
             <input type="text" data-store="TOKEN">
           </div>
 
@@ -83,12 +90,8 @@
     </div>
 
     <div class="octotree_bottom">
-      <a href="https://opencollective.com/octotree" target="_blank">
-        <i class="support"></i>Support us
-      </a>
-      &nbsp;•&nbsp;
-      <a href="https://github.com/ovity/octotree/issues/new" target="_blank">
-        <i class="github"></i>Feedback?
+      <a href="https://octotree.io" target="_blank">
+        <i class="octotree-icon octotree-icon-github"></i>Upgrade to Octotree Plus
       </a>
     </div>
   </nav>

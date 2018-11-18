@@ -7,7 +7,7 @@ class OptionsView {
       event.preventDefault();
       this.toggle(false);
     });
-    this.$view.find('a.create-new-token').attr('href', this.adapter.getCreateTokenUrl());
+    this.$view.find('a.octotree-create-token').attr('href', this.adapter.getCreateTokenUrl());
 
     this.loadElements();
 

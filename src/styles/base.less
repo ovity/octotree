@@ -14,7 +14,7 @@
   .ui-resizable-e {
     position: absolute;
     cursor: col-resize;
-    width: 5px;
+    width: 8px;
     right: 0;
     top: 0;
     bottom: 0;
@@ -81,6 +81,13 @@
       outline: 0;
       cursor: pointer;
       text-decoration: none;
+    }
+    .octotree_help {
+      outline: 0;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .octotree-create-token {
     }
   }
 
@@ -342,26 +349,20 @@ a.octotree_toggle {
   }
 }
 
-.octotree_bottom {
-  i:before {
-    color: @gray;
-    top: 2px;
-  }
+.octotree-icon-github {
+  position: relative;
+  top: 1px;
+  margin-right: 3px;
 
-  a:hover i:before {
-    color: @blue;
+  &:before {
+    #octicons.mark-github();
   }
+}
 
-  i.support:before {
-    #octicons.heart();
-  }
+.octotree-icon-key:before {
+  #octicons.key();
+}
 
-  i.github {
-    position: relative;
-    top: -1px;
-    margin-right: 3px;
-    &:before {
-      #octicons.mark-github();
-    }
-  }
+.octotree-icon-help:before {
+  #octicons.question();
 }
