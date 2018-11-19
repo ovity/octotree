@@ -171,7 +171,7 @@ class Adapter {
    * Generic error handler.
    * @api protected
    */
-  _handleError(jqXHR, cb) {
+  _handleError(settings, jqXHR, cb) {
     let error;
     let message;
 
@@ -197,11 +197,11 @@ class Adapter {
       // Errors for access token
       case 401:
         error = 'Invalid token';
-        message = window.octotreeService.getAccessTokenErrorMessage(jqXHR);
+        message = window.octotreeService.getAccessTokenErrorMessage(settings, jqXHR);
         break;
       case 404:
         error = 'Private repository';
-        message = window.octotreeService.getAccessTokenErrorMessage(jqXHR);
+        message = window.octotreeService.getAccessTokenErrorMessage(settings, jqXHR);
         break;
       case 403:
         if (~jqXHR.getAllResponseHeaders().indexOf('X-RateLimit-Remaining: 0')) {
@@ -211,7 +211,7 @@ class Adapter {
           error = 'Forbidden';
         }
 
-        message = window.octotreeService.getAccessTokenErrorMessage(jqXHR);
+        message = window.octotreeService.getAccessTokenErrorMessage(settings, jqXHR);
         break;
 
       // Fallback message

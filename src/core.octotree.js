@@ -3,7 +3,7 @@ class OctotreeService {
     return window.store.get(window.STORE.TOKEN);
   }
 
-  getAccessTokenErrorMessage(jqXHR) {
+  getAccessTokenErrorMessage(settings, jqXHR) {
     let message = '';
 
     switch (jqXHR.status) {
