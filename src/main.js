@@ -24,20 +24,6 @@ $(document).ready(() => {
 
     $html.addClass(ADDON_CLASS);
 
-    const pluginOpts = {
-      adapter,
-      $document,
-      $dom,
-      $sidebar,
-      $toggler,
-      $views,
-      treeView,
-      optsView,
-      errorView
-    }
-
-    await pluginManager.initialize(pluginOpts);
-
     $(window).resize((event) => {
       if (event.target === window) layoutChanged();
     });
@@ -75,7 +61,17 @@ $(document).ready(() => {
 
     adapter.init($sidebar);
 
-    await pluginManager.activate(pluginOpts);
+    await pluginManager.activate({
+      adapter,
+      $document,
+      $dom,
+      $sidebar,
+      $toggler,
+      $views,
+      treeView,
+      optsView,
+      errorView
+    });
 
     return tryLoadRepo();
 
@@ -113,9 +109,8 @@ $(document).ready(() => {
     }
 
     function tryLoadRepo(reload) {
-      const token = store.get(STORE.TOKEN);
       const pinned = store.get(STORE.PINNED);
-      const token = octotreeService.getAccessToken();
+      const token = octotree.getAccessToken();
 
       adapter.getRepoFromPath(currRepo, token, (err, repo) => {
         if (err) {

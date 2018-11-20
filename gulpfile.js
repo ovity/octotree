@@ -181,7 +181,7 @@ function buildJs(prefix = '.', ctx = {}) {
     `${prefix}/src/core.constants.js`,
     `${prefix}/src/core.storage.js`,
     `${prefix}/src/core.plugins.js`,
-    `${prefix}/src/core.octotree.js`,
+    `${prefix}/src/core.api.js`,
     `${prefix}/src/adapters/adapter.js`,
     `${prefix}/src/adapters/pjax.js`,
     `${prefix}/src/adapters/github.js`,

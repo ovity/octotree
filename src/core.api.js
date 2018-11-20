@@ -3,10 +3,10 @@ class OctotreeService {
     return window.store.get(window.STORE.TOKEN);
   }
 
-  getAccessTokenErrorMessage(settings, jqXHR) {
+  getInvalidTokenMessage({responseStatus, requestHeaders}) {
     let message = '';
 
-    switch (jqXHR.status) {
+    switch (responseStatus) {
       case 401:
         message =
           'The GitHub access token is invalid. ' +
@@ -18,4 +18,4 @@ class OctotreeService {
   }
 }
 
-window.octotreeService = new OctotreeService();
+window.octotree = new OctotreeService();

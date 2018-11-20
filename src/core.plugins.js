@@ -9,7 +9,6 @@ class PluginManager {
     this._plugins = [];
     this._forward({
       activate: null,
-      initialize: null,
       applyOptions: (results) => results.some((shouldReload) => !!shouldReload)
     });
   }
@@ -60,23 +59,6 @@ class Plugin {
    * @return {!Promise<undefined>}
    */
   async activate(opts) {
-    return undefined;
-  }
-
-  /**
-   * Initializes the plugin.
-   * @param {!{
-   *   adapter: !Adapter,
-   *   $sidebar: !JQuery,
-   *   $toggler: !JQuery,
-   *   $views: !JQuery,
-   *   treeView: !TreeView,
-   *   optsView: !OptionsView,
-   *   errorView: !ErrorView,
-   * }}
-   * @return {!Promise<undefined>}
-   */
-  async initialize(opts) {
     return undefined;
   }
 

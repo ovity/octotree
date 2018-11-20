@@ -197,7 +197,10 @@ class Adapter {
       // Errors for access token
       case 401:
         error = 'Invalid token';
-        message = window.octotreeService.getAccessTokenErrorMessage(settings, jqXHR);
+        message = octotree.getInvalidTokenMessage({
+          responseStatus: jqXHR.status,
+          requestHeaders: settings.headers
+        });
         break;
       case 404:
         error = 'Private repository';
