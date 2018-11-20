@@ -12,7 +12,7 @@
 //    See example: octotree-icon-key
 // 3. Add this to the element's class atrribute: "octotree-icon octotree-icon-<name>".
 // Note there are many icons that don't follow this approach. We should eventually migrate them when possible for consistency.
-.icon() {
+.icon(@code) {
   font-family: octicons;
   font-weight: normal;
   font-style: normal;
@@ -23,66 +23,53 @@
   display: inline-block;
   -webkit-font-smoothing: antialiased;
   font-size: 14px;
+  content: @code;
 }
 
 #octicons {
   // Icon list: https://octicons.github.com/
   // Icon codes: https://github.com/atom/atom/blob/master/static/variables/octicon-utf-codes.less
   .link-external() {
-    .icon();
-    content: '\f07f';
+    .icon('\f07f');
   }
   .heart() {
-    .icon();
-    content: '\2665';
+    .icon('\2665');
   }
   .question() {
-    .icon();
-    content: '\f02c';
+    .icon('\f02c');
   }
   .chevron-left() {
-    .icon();
-    content: '\f0a4';
+    .icon('\f0a4');
   }
   .chevron-right() {
-    .icon();
-    content: '\f078';
+    .icon('\f078');
   }
   .mark-github() {
-    .icon();
-    content: '\f00a';
+    .icon('\f00a');
   }
   .repo() {
-    .icon();
-    content: '\f001';
+    .icon('\f001');
   }
   .git-branch() {
-    .icon();
-    content: '\f020';
+    .icon('\f020');
   }
   .gear() {
-    .icon();
-    content: '\f02f';
+    .icon('\f02f');
   }
   .file-directory() {
-    .icon();
-    content: '\f016';
+    .icon('\f016');
   }
   .file-text() {
-    .icon();
-    content: '\f011';
+    .icon('\f011');
   }
   .file-submodule() {
-    .icon();
-    content: '\f017';
+    .icon('\f017');
   }
   .key() {
-    .icon();
-    content: '\f049';
+    .icon('\f049');
   }
   .pin() {
-    .icon();
-    content: "\f041";
+    .icon('\f041');
   }
 }
 
