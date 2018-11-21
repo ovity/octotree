@@ -6,12 +6,8 @@
 @accent: #ac4142;
 
 // ====== Icons ======
-// Octotree is bundled with the Octicons font. Steps to add an icon:
-// 1. Add it in this file, see example below.
-// 2. Define the icon class in base.less or github.less
-//    See example: octotree-icon-key
-// 3. Add this to the element's class atrribute: "octotree-icon octotree-icon-<name>".
-// Note there are many icons that don't follow this approach. We should eventually migrate them when possible for consistency.
+// The .icon() mixin is deprecated, please use .icon-v2() below for new icons
+// TODO: move .icon() to .icon-v2()
 .icon(@code) {
   font-family: octicons;
   font-weight: normal;
@@ -24,6 +20,38 @@
   -webkit-font-smoothing: antialiased;
   font-size: 14px;
   content: @code;
+}
+
+// Octotree is bundled with many font icons (see list of fonts at /libs/fonts). Steps to add an icon:
+// 1. Create new mixin using base .icon-v2() mixin and namespace it (as font name).
+//    See less code
+//      #awesome-icons {
+//        .github() {
+//          .icon-v2('\f112'; @fontFamily: fontawesome); // '\f112' is just a dummy code
+//        }
+//      }
+// 2. Define the icon class in base.less or github.less
+//    See example: octotree-icon-key
+// 3. Add this to the element's class atrribute: "octotree-icon-<name>".
+.icon-v2(@code; @fontFamily: octicons; @color: @gray; @hoverColor: @blue; @fontSize: 14px) {
+  &:before {
+    content: @code;
+    font-family: @fontFamily;
+    color: @color;
+    font-size: @fontSize;
+    font-weight: normal;
+    font-style: normal;
+    text-align: center;
+    width: 16px;
+    line-height: 1;
+    position: relative;
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  &:hover {
+    color: @hoverColor;
+  }
 }
 
 #octicons {
