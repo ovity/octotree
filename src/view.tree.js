@@ -60,11 +60,12 @@ class TreeView {
       .find('.octotree_view_header')
       .html(
         `<div class="octotree_header_repo">
-           <a href="/${repo.username}">${repo.username}</a>
-           /
+           <i class="octotree-icon-repo"></i>
+           <a href="/${repo.username}">${repo.username}</a> /
            <a data-pjax href="/${repo.username}/${repo.reponame}">${repo.reponame}</a>
          </div>
          <div class="octotree_header_branch">
+           <i class="octotree-icon-branch"></i>
            ${this._deXss(repo.branch.toString())}
          </div>`
       )

@@ -12,15 +12,15 @@
       </div>
     </a>
 
-    <a class="octotree_pin" aria-label="Pin/Unpin" data-store="PINNED" href="javascript:void(0)">
+    <a class="octotree_pin" data-store="PINNED" href="javascript:void(0)">
       <span class="tooltipped tooltipped-s" aria-label="Unpin octotree to the page">
-        <i></i>
+        <i class="octotree-icon-pin"></i>
       </span>
     </a>
 
     <a class="octotree_opts" href="javascript:void(0)">
       <span class="tooltipped tooltipped-s" aria-label="Settings">
-        <i class="settings"></i>
+        <i class="octotree-icon-settings"></i>
       </span>
     </a>
 
@@ -46,17 +46,16 @@
         <form class="octotree_view_body">
           <div>
             <label>GitHub access token</label>
-            <a class="octotree_help tooltipped tooltipped-sw"
-              href="https://github.com/ovity/octotree#settings"
-              target="_blank" aria-label="Why is this needed?"
-              tabIndex="-1">
-              <i class="octotree-icon octotree-icon-help"></i>
+            <a class="octotree_help" href="https://github.com/ovity/octotree#settings" target="_blank" tabIndex="-1">
+              <span class="tooltipped tooltipped-sw" aria-label="Why is this needed?">
+                <i class="octotree-icon-help"></i>
+              </span>
             </a>
             <a href="javascript:void(0)" tabIndex="-1">&nbsp</a>
-            <a class="octotree-create-token tooltipped tooltipped-sw"
-              target="_blank" aria-label="Generate new token"
-              tabIndex="-1">
-              <i class="octotree-icon octotree-icon-key"></i>
+            <a class="octotree-create-token" target="_blank" tabIndex="-1">
+              <span class="tooltipped tooltipped-sw" aria-label="Generate new token">
+                <i class="octotree-icon-key"></i>
+              </span>
             </a>
             <input type="text" data-store="TOKEN">
           </div>
@@ -97,7 +96,7 @@
 
     <div class="octotree_bottom">
       <a href="https://octotree.io" target="_blank">
-        <i class="octotree-icon octotree-icon-github"></i>Upgrade to Octotree Plus
+        <i class="octotree-icon-github"></i>Upgrade to Octotree Plus
       </a>
     </div>
   </nav>

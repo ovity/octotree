@@ -5,9 +5,51 @@
 @blue: #0366d6;
 @accent: #ac4142;
 
+// ====== Icon names ======
+// Octicons: https://octicons.github.com/
+// Octicons codes: https://github.com/atom/atom/blob/master/static/variables/octicon-utf-codes.less
+@octicons-mark-github: '\f00a';
+@octicons-question: '\f02c';
+@octicons-key: '\f049';
+@octicons-pin: '\f041';
+@octicons-gear: '\f02f';
+@octicons-link-external: '\f07f';
+@octicons-heart: '\2665';
+@octicons-chevron-left: '\f0a4';
+@octicons-chevron-right: '\f078';
+@octicons-repo: '\f001';
+@octicons-git-branch: '\f020';
+@octicons-file-directory: '\f016';
+@octicons-file-text: '\f011';
+@octicons-file-submodule: '\f017';
+
 // ====== Icons ======
-// The .icon() mixin is deprecated, please use .icon-v2() below for new icons
-// TODO: move .icon() to .icon-v2()
+.icon-v2(@code; @font-family: octicons; @color: @gray; @hover-color: @blue; @font-size: 14px) {
+  position: relative;
+
+  &:before {
+    content: @code;
+    font-family: @font-family;
+    color: @color;
+    font-size: @font-size;
+    font-weight: normal;
+    font-style: normal;
+    text-align: center;
+    width: 16px;
+    line-height: 1;
+    position: relative;
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  &:hover:before,
+  a:hover > &:before,
+  a:hover > span > &:before {
+    color: @hover-color;
+  }
+}
+
+// !!! LEGACY ICON: migrate this to use icon-v2 when updating the toggler UI.
 .icon(@code) {
   font-family: octicons;
   font-weight: normal;
@@ -22,91 +64,11 @@
   content: @code;
 }
 
-// Octotree is bundled with many font icons (see list of fonts at /libs/fonts). Steps to add an icon:
-// 1. Create new mixin using base .icon-v2() mixin and namespace it (as font name).
-//    See less code
-//      #awesome-icons {
-//        .github() {
-//          .icon-v2('\f112'; @fontFamily: fontawesome); // '\f112' is just a dummy code
-//        }
-//      }
-// 2. Define the icon class in base.less or github.less
-//    See example: octotree-icon-key
-// 3. Add this to the element's class atrribute: "octotree-icon-<name>".
-.icon-v2(@code; @fontFamily: octicons; @color: @gray; @hoverColor: @blue; @fontSize: 14px) {
-  &:before {
-    content: @code;
-    font-family: @fontFamily;
-    color: @color;
-    font-size: @fontSize;
-    font-weight: normal;
-    font-style: normal;
-    text-align: center;
-    width: 16px;
-    line-height: 1;
-    position: relative;
-    display: inline-block;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  &:hover:before {
-    color: @hoverColor;
-  }
-}
-
 #octicons {
-  // Icon list: https://octicons.github.com/
-  // Icon codes: https://github.com/atom/atom/blob/master/static/variables/octicon-utf-codes.less
-  .link-external() {
-    .icon('\f07f');
-  }
-  .heart() {
-    .icon('\2665');
-  }
-  .question() {
-    .icon('\f02c');
-  }
   .chevron-left() {
     .icon('\f0a4');
   }
   .chevron-right() {
     .icon('\f078');
-  }
-  .mark-github() {
-    .icon('\f00a');
-  }
-  .repo() {
-    .icon('\f001');
-  }
-  .git-branch() {
-    .icon('\f020');
-  }
-  .gear() {
-    .icon('\f02f');
-  }
-  .file-directory() {
-    .icon('\f016');
-  }
-  .file-text() {
-    .icon('\f011');
-  }
-  .file-submodule() {
-    .icon('\f017');
-  }
-  .key() {
-    .icon('\f049');
-  }
-  .pin() {
-    .icon('\f041');
-  }
-}
-
-.octotree-icon {
-  &:before {
-    color: @gray;
-  }
-
-  a:hover &:before {
-    color: @blue;
   }
 }
