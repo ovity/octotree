@@ -300,9 +300,9 @@ class GitHub extends PjaxAdapter {
     $.ajax(cfg)
       .done((data) => {
         if (path && path.indexOf('/git/trees') === 0 && data.truncated) {
-          this._handleError({status: 206}, cb);
+          this._handleError(cfg, {status: 206}, cb);
         } else cb(null, data);
       })
-      .fail((jqXHR) => this._handleError(jqXHR, cb));
+      .fail((jqXHR) => this._handleError(cfg, jqXHR, cb));
   }
 }

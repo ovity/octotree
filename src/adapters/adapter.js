@@ -171,7 +171,7 @@ class Adapter {
    * Generic error handler.
    * @api protected
    */
-  _handleError(jqXHR, cb) {
+  _handleError(settings, jqXHR, cb) {
     let error;
     let message;
 
@@ -193,11 +193,14 @@ class Adapter {
           '<a class="settings-btn" href="javascript:void(0)">Settings</a> screen ' +
           'and uncheck the "Load entire tree at once" option.';
         break;
+
+      // Errors for access token
       case 401:
         error = 'Invalid token';
-        message =
-          'The GitHub access token is invalid. ' +
-          'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and update the token.';
+        message = octotree.getInvalidTokenMessage({
+          responseStatus: jqXHR.status,
+          requestHeaders: settings.headers
+        });
         break;
       case 404:
         error = 'Private repository';
@@ -213,14 +216,16 @@ class Adapter {
             'You have exceeded the <a href="https://developer.github.com/v3/#rate-limiting">GitHub API rate limit</a>. ' +
             'To continue using Octotree, you need to provide a GitHub access token. ' +
             'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and enter a token.';
-          break;
         } else {
           error = 'Forbidden';
           message =
             'Accessing private repositories requires a GitHub access token. ' +
             'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and enter a token.';
-          break;
         }
+
+        break;
+
+      // Fallback message
       default:
         error = message = jqXHR.statusText;
         break;

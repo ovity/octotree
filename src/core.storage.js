@@ -2,7 +2,7 @@ class Storage {
   static create(values, defaults) {
     const store = new Storage();
     for (const key of Object.keys(values)) {
-      store._setIfNull(values[key], defaults[key]);
+      store.setIfNull(values[key], defaults[key]);
     }
     return store;
   }
@@ -33,7 +33,7 @@ class Storage {
     }
   }
 
-  _setIfNull(key, val, cb) {
+  setIfNull(key, val, cb) {
     this.get(key, (existingVal) => {
       this.set(key, existingVal == null ? val : existingVal, cb);
     });

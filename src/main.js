@@ -62,7 +62,6 @@ $(document).ready(() => {
     adapter.init($sidebar);
 
     await pluginManager.activate({
-      store,
       adapter,
       $document,
       $dom,
@@ -110,8 +109,8 @@ $(document).ready(() => {
     }
 
     function tryLoadRepo(reload) {
-      const token = store.get(STORE.TOKEN);
       const pinned = store.get(STORE.PINNED);
+      const token = octotree.getAccessToken();
 
       adapter.getRepoFromPath(currRepo, token, (err, repo) => {
         if (err) {
