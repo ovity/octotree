@@ -57,7 +57,6 @@
 
   .octotree_views {
     height: 100%;
-    overflow: visible;
     box-sizing: border-box;
     border-right: 1px solid #dfe2e5;
     background-color: #fafbfc;
@@ -66,6 +65,7 @@
       display: none;
       box-sizing: border-box;
       color: #0f2e47;
+      height: 100%;
 
       &.current {
         display: block;
@@ -122,6 +122,9 @@
     }
 
     .octotree_treeview {
+      overflow: auto;
+      padding-top: 4px;
+
       .octotree_view_header {
         padding-left: 13px;
         box-sizing: border-box;
@@ -266,7 +269,7 @@
     .octotree_errorview,
     .octotree_optsview {
       .octotree_view_header {
-        padding-left: 5px;
+        padding-left: 8px;
         padding-top: 7px !important;
       }
     }
@@ -274,7 +277,7 @@
     .octotree_errorview {
       & > form {
         div {
-          margin: 6px;
+          margin: 8px;
         }
         input {
           width: 100%;
@@ -290,7 +293,7 @@
 
     .octotree_optsview {
       & > form {
-        padding: 6px;
+        padding: 8px;
 
         .octotree-token-actions {
           float: right;
