@@ -39,9 +39,17 @@ When that happens, Octotree will ask for your [GitHub personal access token](htt
 
 Octotree stores access token in your browser local storage and uses it exclusively to authenticate with GitHub (see the code that does that [here](https://github.com/ovity/octotree/blob/559291ed9017f0c3429bc49419d001d9ea0ac510/src/adapters/github.js#L296-L313)). Octotree never transmits access token to any other servers except GitHub itself and the data received is used **only** to render the tree on your local machine. Using access tokens to access private repository and increase API rate limit is a standard practice that many GitHub extensions use.
 
+### Hotkeys
+
+Hotkeys to pin or unpin the sidebar. You can enter multiple hotkeys by separating them with a comma.
+
+- Supported modifiers: `⇧`, `shift`, `option`, `⌥`, `alt`, `ctrl`, `control`, `command`, and `⌘`.
+- Supported special keys: `backspace`, `tab`, `clear`, `enter`, `return`, `esc`, `escape`, `space`, `up`, `down`, `left`, `right`, `home`, `end`, `pageup`, `pagedown`, `del`, `delete` and `f1` through `f19`.
+
+Learn more at [keymaster](https://github.com/madrobby/keymaster#supported-keys).
+
 ### Others
 
-- **Hotkeys**: key combinations to pin/unpin the sidebar. Check out the [supported keys](https://github.com/madrobby/keymaster#supported-keys).
 - **Show in non-code pages**: if checked, show Octotree in non-code pages such as Issues and Wiki.
 - **Load entire tree at once**: if checked, load the entire code tree at once. To avoid long delay, this should be unchecked if you frequently work with very large repos.
 - **Show only pull request changes**: if checked, show only the change set of a pull request.
