@@ -249,7 +249,7 @@ class Adapter {
    * @api protected
    */
   _getMinWidth() {
-    return 200;
+    return 220;
   }
 
   /**
