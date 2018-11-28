@@ -55,6 +55,7 @@ $(document).ready(() => {
       .on(EVENT.LOC_CHANGE, () => tryLoadRepo());
 
     $sidebar
+      .addClass(adapter.getCssClass())
       .width(parseInt(store.get(STORE.WIDTH)))
       .resize(() => layoutChanged(true))
       .appendTo($('body'));

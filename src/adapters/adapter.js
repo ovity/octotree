@@ -209,7 +209,7 @@ class Adapter {
           'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and enter a token.';
         break;
       case 403:
-        if (~jqXHR.getAllResponseHeaders().indexOf('X-RateLimit-Remaining: 0')) {
+        if (jqXHR.getResponseHeader('X-RateLimit-Remaining') === '0') {
           // It's kinda specific for GitHub
           error = 'API limit exceeded';
           message =
@@ -238,9 +238,9 @@ class Adapter {
 
   /**
    * Returns the CSS class to be added to the Octotree sidebar.
-   * @api protected
+   * @api public
    */
-  _getCssClass() {
+  getCssClass() {
     throw new Error('Not implemented');
   }
 
@@ -257,7 +257,7 @@ class Adapter {
    * @api public
    */
   init($sidebar) {
-    $sidebar.resizable({handles: 'e', minWidth: this._getMinWidth()}).addClass(this._getCssClass());
+    $sidebar.resizable({handles: 'e', minWidth: this._getMinWidth()});
   }
 
   /**
