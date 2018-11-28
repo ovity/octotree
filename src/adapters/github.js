@@ -69,7 +69,7 @@ class GitHub extends PjaxAdapter {
 
   // @override
   _getCssClass() {
-    return 'octotree_github_sidebar';
+    return 'octotree-github-sidebar';
   }
 
   // @override

@@ -1,4 +1,4 @@
-.octotree_sidebar.octotree_github_sidebar {
+.octotree-sidebar.octotree-github-sidebar {
   background-color: #f7f7f7;
   border-right: 1px solid #ddd;
   border-right: none;
@@ -27,7 +27,7 @@
 
   .octotree_bottom {
     border-right: 1px solid #dfe2e5;
-    background-color: #fafbfc;
+    background-color: #efefef;
     bottom: 0;
     color: @gray;
     font-size: 11px;
@@ -60,11 +60,12 @@
     overflow: auto;
     box-sizing: border-box;
     border-right: 1px solid #dfe2e5;
-    background-color: white;
+    background-color: #f8f9f9;
 
     .octotree_view {
       display: none;
       box-sizing: border-box;
+      color: #0f2e47;
 
       &.current {
         display: block;
@@ -223,7 +224,7 @@
         margin-right: 2px;
       }
       .jstree-icon.tree {
-        .icon-v2(@octicons-file-directory, @color: #8197b1, @hover-color: #8197b1);
+        .icon-v2(@octicons-file-directory, @color: #6cb5fe, @hover-color: #6cb5fe);
       }
       .jstree-icon.file-generic {
         .icon-v2(@octicons-file-text, @color: @gray, @hover-color: @gray);
@@ -235,9 +236,9 @@
         .icon-v2(@octicons-file-submodule, @color: @gray, @hover-color: @gray);
       }
       .jstree-anchor {
-        color: #0366d6;
+        color: #0f2e47;
         & > span {
-          color: black;
+          color: #0f2e47;
         }
       }
       .jstree-default {
@@ -315,7 +316,7 @@
       }
 
       .octotree_opts_disclaimer {
-        color: gray;
+        color: @gray;
         display: block;
         font-size: 12px;
         margin-left: 17px;
@@ -471,7 +472,7 @@
 // Sidebar showing styles
 //
 .octotree-show {
-  .octotree_sidebar.octotree_github_sidebar {
+  .octotree-sidebar.octotree-github-sidebar {
     transform: translate3d(0, 0, 0);
 
     a.octotree_spin {
@@ -518,7 +519,7 @@
 // Print
 //
 @media print {
-  .octotree_sidebar.octotree_github_sidebar {
+  .octotree-sidebar.octotree-github-sidebar {
     display: none;
 
     a.octotree_toggle {
