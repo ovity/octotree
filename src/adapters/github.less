@@ -57,10 +57,10 @@
 
   .octotree_views {
     height: 100%;
-    overflow: auto;
+    overflow: visible;
     box-sizing: border-box;
     border-right: 1px solid #dfe2e5;
-    background-color: #f8f9f9;
+    background-color: #fafbfc;
 
     .octotree_view {
       display: none;
@@ -266,8 +266,9 @@
     .octotree_errorview {
       .octotree_view_header {
         padding-left: 5px;
-        padding-top: 5px !important;
+        padding-top: 6px !important;
       }
+
       & > form {
         div {
           margin: 6px;
@@ -289,37 +290,42 @@
         padding-left: 5px;
         padding-top: 7px !important;
       }
+
       & > form {
-        margin: 6px;
+        padding: 6px;
+
+        .octotree-token-actions {
+          float: right;
+        }
+
         & > div {
           padding-top: 5px;
           padding-bottom: 12px;
-          a {
-            display: inline-block;
-            float: right;
-          }
         }
+
         label {
           font-weight: normal !important;
+          &.disabled {
+            color: gray;
+          }
         }
-        label.disabled {
-          color: gray;
-        }
+
         input[type='text'],
         textarea {
           width: 100%;
         }
+
         textarea {
           resize: vertical;
           height: 60px;
         }
-      }
 
-      .octotree_opts_disclaimer {
-        color: @gray;
-        display: block;
-        font-size: 12px;
-        margin-left: 17px;
+        .octotree_opts_disclaimer {
+          color: @gray;
+          display: block;
+          font-size: 12px;
+          margin-left: 17px;
+        }
       }
     }
   }

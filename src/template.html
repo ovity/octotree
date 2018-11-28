@@ -46,25 +46,26 @@
         <form class="octotree_view_body">
           <div>
             <label>GitHub access token</label>
-            <a class="octotree_help" href="https://github.com/ovity/octotree#settings" target="_blank" tabIndex="-1">
-              <span class="tooltipped tooltipped-sw" aria-label="Why is this needed?">
-                <i class="octotree-icon-help"></i>
-              </span>
-            </a>
-            <a href="javascript:void(0)" tabIndex="-1">&nbsp</a>
-            <a class="octotree-create-token" target="_blank" tabIndex="-1">
-              <span class="tooltipped tooltipped-sw" aria-label="Generate new token">
-                <i class="octotree-icon-key"></i>
-              </span>
-            </a>
-            <input type="text" data-store="TOKEN">
+            <div class="octotree-token-actions">
+              <a class="octotree_help" href="https://github.com/ovity/octotree#settings" target="_blank" tabIndex="-1">
+                <span class="tooltipped tooltipped-s" aria-label="Why is this needed?">
+                  <i class="octotree-icon-help"></i>
+                </span>
+              </a>
+              <a class="octotree-create-token" target="_blank" tabIndex="-1">
+                <span class="tooltipped tooltipped-s" aria-label="Generate new token">
+                  <i class="octotree-icon-key"></i>
+                </span>
+              </a>
+            </div>
+            <input type="password" class="form-control input-block" data-store="TOKEN">
           </div>
 
           <div>
             <div>
               <label>Hotkeys</label>
             </div>
-            <input type="text" data-store="HOTKEYS">
+            <input type="text" class="form-control input-block" data-store="HOTKEYS">
           </div>
 
           <div>
@@ -82,7 +83,7 @@
           <div>
             <label>
               <input type="checkbox" data-store="PR">
-                Show only pull request changes
+                Show pull request changes
               <span class="octotree_opts_disclaimer">Note: maximum of 300 files</span>
             </label>
           </div>
