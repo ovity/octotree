@@ -26,29 +26,29 @@
   }
 
   .octotree_bottom {
-    border-right: 1px solid #dfe2e5;
-    background-color: #efefef;
+    border-right: 1px solid #04a9ff;
+    background-color: #04a9ff;
     bottom: 0;
     color: @gray;
     font-size: 11px;
     height: 32px;
     padding-left: 5px;
-    padding-top: 10px;
+    padding-top: 9px;
     position: absolute;
     width: 100%;
 
     a {
-      color: @gray;
+      color: rgba(255, 255, 255, 0.8);
       &:hover {
-        color: @blue;
+        color: white;
         text-decoration: none;
         i:before {
-          color: @blue;
+          color: white;
         }
       }
 
       .octotree-icon-github {
-        .icon-v2(@octicons-mark-github, @font-size: 13px, @color: @gray, @hover-color: @blue);
+        .icon-v2(@octicons-mark-github, @font-size: 13px, @color: rgba(255, 255, 255, 0.8), @hover-color: white);
         top: 1px;
         margin-right: 3px;
       }
@@ -354,8 +354,8 @@
         position: absolute;
         bottom: 0;
         z-index: 1; // hide the small ad
-        background-color: #de4450;
-        background-image: linear-gradient(-180deg, #de4450, #cb2431 90%);
+        background-color: #04a9ff;
+        background-image: linear-gradient(-180deg, #04a9ff, #1c74d9 90%);
         color: white;
         font-size: 12px;
         padding: 12px;
