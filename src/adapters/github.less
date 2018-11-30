@@ -125,7 +125,7 @@
       overflow: auto;
 
       .octotree_view_header {
-        padding-left: 13px;
+        padding-left: 5px;
         box-sizing: border-box;
 
         .octotree_header_repo,
@@ -183,24 +183,66 @@
       }
 
       .jstree-anchor {
-        text-decoration: none;
+        color: #0f2e47;
         outline: none;
         padding-right: 0;
+        text-decoration: none;
+        & > span {
+          color: #0f2e47;
+        }
+        &:hover {
+          text-decoration: none !important;
+        }
       }
-      .jstree-anchor:hover {
-        text-decoration: none !important;
-      }
+
       .jstree-default {
-        .jstree-wholerow {
-          height: auto;
+        .jstree-container-ul > .jstree-node {
+          margin-left: 0px;
         }
         .jstree-node {
           line-height: 24px;
-          margin-left: 12px;
+          margin-left: 16px;
         }
-        .jstree-icon.jstree-ocl {
-          margin-right: -6px;
-          margin-top: -1px;
+
+        .jstree-wholerow {
+          height: auto;
+          &-hovered {
+            background: #eff0f1;
+          }
+          &-clicked {
+            background: #dbeeff;
+          }
+        }
+
+        .jstree-icon {
+          width: 16px;
+        }
+
+        .jstree-icon,
+        .jstree-icon:empty,
+        .jstree-anchor {
+          line-height: 24px !important;
+          font-style: normal;
+        }
+
+        // Override the arrow icons & position
+        .jstree-no-dots {
+          .jstree-ocl {
+            margin-top: -1px;
+            width: 20px;
+          }
+          .jstree-open > .jstree-ocl,
+          .jstree-closed > .jstree-ocl {
+            background: none;
+            position: relative;
+            left: 3px;
+          }
+          .jstree-open > .jstree-ocl {
+            .icon-v2(@octicons-chevron-down, @color: #0f2e47, @hover-color: #0f2e47, @font-size: 12px);
+          }
+          .jstree-closed > .jstree-ocl {
+            .icon-v2(@octicons-chevron-right, @color: #0f2e47, @hover-color: #0f2e47, @font-size: 12px);
+          }
         }
       }
 
@@ -212,13 +254,6 @@
         text-decoration: none;
         font-smoothing: antialiased;
       }
-      .jstree-default .jstree-icon,
-      .jstree-default .jstree-icon:empty,
-      .jstree-default .jstree-anchor {
-        line-height: 24px !important;
-        font-style: normal;
-      }
-
       .jstree-icon.tree,
       .jstree-icon.commit,
       .jstree-icon.file-generic {
@@ -228,28 +263,15 @@
       .jstree-icon.tree {
         .icon-v2(@octicons-file-directory, @color: #6cb5fe, @hover-color: #6cb5fe);
       }
-      .jstree-icon.file-generic {
-        .icon-v2(@octicons-file-text, @color: @gray, @hover-color: @gray);
-      }
-      .jstree-node.jstree-leaf:hover .jstree-icon.blob {
-        .icon-v2(@octicons-link-external, @color: @accent, @hover-color: @accent, @font-size: 15px);
-      }
       .jstree-icon.commit {
         .icon-v2(@octicons-file-submodule, @color: @gray, @hover-color: @gray);
       }
-      .jstree-anchor {
-        color: #0f2e47;
-        & > span {
-          color: #0f2e47;
-        }
+      .jstree-icon.file-generic {
+        .icon-v2(@octicons-file-text, @color: @gray, @hover-color: @gray);
       }
-      .jstree-default {
-        .jstree-wholerow-hovered {
-          background: #eff0f1;
-        }
-        .jstree-wholerow-clicked {
-          background: #dbeeff;
-        }
+
+      .jstree-node.jstree-leaf:hover .jstree-icon.blob {
+        .icon-v2(@octicons-link-external, @color: @accent, @hover-color: @accent, @font-size: 15px);
       }
 
       .patch {
@@ -326,6 +348,13 @@
           font-size: 12px;
           margin-left: 17px;
         }
+      }
+
+      & > .octotree-ad-big {
+        position: absolute;
+        bottom: 0;
+        background-color: @dark-v2;
+        color: white;
       }
     }
   }
