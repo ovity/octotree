@@ -353,8 +353,28 @@
       & > .octotree-ad-big {
         position: absolute;
         bottom: 0;
-        background-color: @dark-v2;
+        z-index: 1; // hide the small ad
+        background-color: #de4450;
+        background-image: linear-gradient(-180deg, #de4450, #cb2431 90%);
         color: white;
+        font-size: 12px;
+        padding: 12px;
+        width: 100%;
+
+        ul {
+          list-style: inside;
+
+          li {
+            font-weight: bold;
+          }
+        }
+
+        a {
+          color: white;
+          &:hover {
+            color: white;
+          }
+        }
       }
     }
   }
