@@ -2,9 +2,9 @@ class TreeView {
   constructor($dom, store, adapter) {
     this.store = store;
     this.adapter = adapter;
-    this.$view = $dom.find('.octotree_treeview');
+    this.$view = $dom.find('.octotree-tree-view');
     this.$tree = this.$view
-      .find('.octotree_view_body')
+      .find('.octotree-view-body')
       .on('click.jstree', '.jstree-open>a', ({target}) => this.$jstree.close_node(target))
       .on('click.jstree', '.jstree-closed>a', ({target}) => this.$jstree.open_node(target))
       .on('click', this._onItemClick.bind(this))
@@ -57,14 +57,14 @@ class TreeView {
     const adapter = this.adapter;
 
     this.$view
-      .find('.octotree_view_header')
+      .find('.octotree-view-header')
       .html(
         `<div class="octotree_header_repo">
            <i class="octotree-icon-repo"></i>
            <a href="/${repo.username}">${repo.username}</a> /
            <a data-pjax href="/${repo.username}/${repo.reponame}">${repo.reponame}</a>
          </div>
-         <div class="octotree_header_branch">
+         <div class="octotree-header-branch">
            <i class="octotree-icon-branch"></i>
            ${this._deXss(repo.branch.toString())}
          </div>`

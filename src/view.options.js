@@ -2,8 +2,8 @@ class OptionsView {
   constructor($dom, store, adapter) {
     this.store = store;
     this.adapter = adapter;
-    this.$toggler = $dom.find('.octotree_opts').click(this.toggle.bind(this));
-    this.$view = $dom.find('.octotree_optsview').submit((event) => {
+    this.$toggler = $dom.find('.octotree-settings').click(this.toggle.bind(this));
+    this.$view = $dom.find('.octotree-settings-view').submit((event) => {
       event.preventDefault();
       this.toggle(false);
     });
