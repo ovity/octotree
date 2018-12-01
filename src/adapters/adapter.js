@@ -74,35 +74,17 @@ class Adapter {
             }
 
             if (item.patch) {
-              let patch_html = '';
-
-              switch (item.patch.action) {
-                case 'added':
-                  patch_html += '<span class="text-green">added</span>';
-                  break;
-                case 'renamed':
-                  patch_html += `<span class="text-green" title="${item.patch.previous}">renamed</span>`;
-                  break;
-                case 'removed':
-                  patch_html += `<span class="text-red" title="${item.patch.previous}">removed</span>`;
-                  break;
-                default:
-                  break;
-              }
-
-              if (item.patch.filesChanged) {
-                const fileString = item.patch.filesChanged === 1 ? 'file' : 'files';
-                patch_html += `<span>${item.patch.filesChanged} ${fileString}</span>`;
-              }
-
-              if (item.patch.additions !== 0) {
-                patch_html += `<span class="text-green">+${item.patch.additions}</span>`;
-              }
-              if (item.patch.deletions !== 0) {
-                patch_html += `<span class="text-red">-${item.patch.deletions}</span>`;
-              }
-
-              item.text += `<span class="patch">${patch_html}</span>`;
+              const {action, previous, filesChanged: files, additions, deletions} = item.patch;
+              let patch = '';
+              patch += action === 'added' ? '<span class="text-green">added</span>' : '';
+              patch += action === 'renamed' ? `<span class="text-green" title="${previous}">renamed</span>` : '';
+              patch += action === 'removed' ? `<span class="text-red" title="${previous}">removed</span>` : '';
+              patch += files
+                ? `<span class='octotree-patch-files'>${files} ${files === 1 ? 'file' : 'files'}</span>`
+                : '';
+              patch += additions !== 0 ? `<span class="text-green">+${additions}</span>` : '';
+              patch += deletions !== 0 ? `<span class="text-red">-${deletions}</span>` : '';
+              item.text += `<span class="octotree-patch">${patch}</span>`;
             }
 
             if (node) {
