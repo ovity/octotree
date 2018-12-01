@@ -181,7 +181,7 @@ $(document).ready(() => {
       $pinner.toggleClass(PINNED_CLASS);
 
       const sidebarPinned = isSidebarPinned();
-      $pinner.find('.tooltipped').attr('aria-label', `${sidebarPinned ? 'Pin' : 'Unpin'} octotree to the page`);
+      $pinner.find('.tooltipped').attr('aria-label', `${sidebarPinned ? 'Pin' : 'Unpin'} Octotree sidebar`);
       $document.trigger(EVENT.TOGGLE_PIN, sidebarPinned);
       store.set(STORE.PINNED, sidebarPinned);
       toggleSidebar(sidebarPinned);
