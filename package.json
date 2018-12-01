@@ -24,7 +24,7 @@
     "chromedriver": "^2.21.2",
     "crx": "^0.4.4",
     "eslint": "^5.7.0",
-    "event-stream": "*",
+    "event-stream": "3.3.4",
     "firefox-profile": "~0.3.6",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "0.0.8",
