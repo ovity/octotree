@@ -50,9 +50,30 @@ Learn more at [keymaster](https://github.com/madrobby/keymaster#supported-keys).
 
 ### Others
 
-- **Show in non-code pages**: if checked, show Octotree in non-code pages such as Issues and Wiki.
 - **Load entire tree at once**: if checked, load the entire code tree at once. To avoid long delay, this should be unchecked if you frequently work with very large repos.
+- **Show in non-code pages**: if checked, show Octotree in non-code pages such as Issues and Wiki.
+- **Show file-specific icons**: if checked, show different icons for different file types.
 - **Show only pull request changes**: if checked, show only the change set of a pull request.
+
+### Octotree Plus Settings
+
+#### GitHub Enterprise
+
+After installing Octotree Plus, navigate to a GitHub Enterprise domain. Right-click Octotree extension icon in the browser bar and select "Enable Octotree Plus on this domain". The page should refresh and Octotree Plus sidebar should show. Alternatively, you can disable by selecting "Disable Octotree plus on this domain".
+
+_Note_: GitHub Enterprise is not supported on Safari.
+
+#### Multiple GitHub Accounts
+
+Click the Add Token button to add more user name and token pairs. When you login with a specific GitHub account, the corresponding token will be used to make API requests. If you don't login or there's no matching user name, the default access token is used to make API requests.
+
+#### Change Docking Position
+
+Click the dock button to switch the Octotree sidebar to the right or left of the screen.
+
+#### Dark Mode
+
+Click the dark mode button to toggle dark mode.
 
 ## Contribution
 
