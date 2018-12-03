@@ -1,6 +1,6 @@
 ## Octotree
 
-Browser extension (Chrome, Firefox, Opera and Safari) to show a code tree on GitHub. Awesome for exploring project source without having to pull every single repository to your machine.
+Browser extension (Chrome, Firefox, Opera and Safari) to show a code tree on GitHub. Awesome for exploring project source without having to pull every single repository to your machine. Available as both a free and open-source community version and a commercial premium version.
 
 **Features**
 
@@ -8,7 +8,7 @@ Browser extension (Chrome, Firefox, Opera and Safari) to show a code tree on Git
 - Fast browsing with pjax
 - Support private repositories (see [instructions](#access-token))
 
-**Features of Octotree Plus (_require subscription_)**
+**Features of Octotree Plus**
 
 - Dark mode
 - File search
@@ -61,7 +61,7 @@ Learn more at [keymaster](https://github.com/madrobby/keymaster#supported-keys).
 
 After installing Octotree Plus, navigate to a GitHub Enterprise domain. Right-click Octotree extension icon in the browser bar and select "Enable Octotree Plus on this domain". The page should refresh and Octotree Plus sidebar should show. Alternatively, you can disable by selecting "Disable Octotree plus on this domain".
 
-_Note_: GitHub Enterprise is not supported on Safari.
+_Note: GitHub Enterprise is not supported on Safari._
 
 #### Multiple GitHub Accounts
 
@@ -69,7 +69,7 @@ Click the Add Token button to add more user name and token pairs. When you login
 
 #### Change Docking Position
 
-Click the dock button to switch the Octotree sidebar to the right or left of the screen.
+Click the dock button to move Octotree to left or right of the screen.
 
 #### Dark Mode
 
