@@ -17,7 +17,7 @@ class HelpPopup {
     $(document).one(EVENT.TOGGLE, hideAndDestroy);
 
     setTimeout(() => {
-      setTimeout(hideAndDestroy, 6000);
+      setTimeout(hideAndDestroy, 10000);
       $view.addClass('show').click(hideAndDestroy);
     }, 500);
 
