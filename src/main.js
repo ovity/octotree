@@ -220,8 +220,12 @@ $(document).ready(() => {
         }
       };
       const clearTimer = () => timerId && clearTimeout(timerId);
+
       $sidebar.on('keyup mouseleave', () => resetTimer(SIDEBAR_HIDING_DELAY));
-      $sidebar.on('mousemove', clearTimer);
+      $sidebar.on('mousemove', () => {
+        clearTimer();
+        if (!isSidebarVisible()) toggleSidebar(true);
+      });
     }
 
     /**
