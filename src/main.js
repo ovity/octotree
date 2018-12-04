@@ -247,7 +247,8 @@ $(document).ready(() => {
     }
 
     function isOutsideSidebar(selector) {
-      return !$(selector).closest($sidebar).length;
+      const $elm = $(selector);
+      return $elm.attr('class').indexOf('octotree') < 0 && $elm.closest($sidebar).length === 0;
     }
   }
 });
