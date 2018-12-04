@@ -162,10 +162,7 @@ $(document).ready(() => {
         // Ensure the repo is loaded when the sidebar shows for the first time.
         // Note that tryLoadRepo() already takes care of not reloading if nothing changes.
         if (isSidebarVisible()) {
-          $toggler.hide();
           tryLoadRepo();
-        } else {
-          $toggler.show();
         }
       }
 

@@ -12,7 +12,7 @@
   right: 0;
   top: 0;
   transform: translate3d(-100%, 0, 0);
-  transition: transform 0.2s ease;
+  transition: transform 0.5s ease-in;
   z-index: 1000000001;
 
   // jQuery resizer
@@ -394,7 +394,6 @@
   //
   // Common buttons
   //
-  a.octotree-toggle,
   a.octotree-settings,
   a.octotree_pin,
   a.octotree_spin {
@@ -411,29 +410,40 @@
     }
   }
 
-  a.octotree-toggle {
-    top: 50%;
-    right: -35px;
+  .octotree-toggle {
+    background-color: #f2f5f7;
+    border-radius: 0 4px 4px 0;
+    border: 1px solid #e0e4e7;
+    box-shadow: 2px 0 5px 0 rgba(118, 118, 118, 0.11);
     color: black;
-    width: 30px;
-    height: 30px;
+    opacity: 1;
+    height: 94px;
+    line-height: 1;
     padding: 6px 6px;
+    position: absolute !important;
+    right: -30px;
+    text-align: center;
+    top: 35%;
+    width: 30px;
+    z-index: 1000003;
+    transition: right 0.4s ease-in 0.3s, opacity 0.5s ease-in 0.3s;
 
-    &:hover,
-    &.selected i:before {
-      color: @blue;
-    }
-
-    & > span:after,
-    &:hover > span:after {
-      #octicons.chevron-right();
-      font-size: 15px;
-      position: relative;
+    > .octotree-toggle-icon {
+      .icon-v2(@octicons-chevron-right, @font-size: 15px, @color: #0f2e47, @hover-color: #0f2e47);
       left: 3px;
+      top: 5px;
     }
 
-    &:hover > span:after {
-      color: @blue;
+    > span {
+      color: #0f2e47;
+      display: inline-block;
+      font-size: 12px;
+      left: -1px;
+      line-height: 14px;
+      position: relative;
+      top: 10px;
+      transform: rotate(-180deg);
+      writing-mode: tb-rl;
     }
 
     .popup {
@@ -541,6 +551,13 @@
 .octotree-show {
   .octotree-sidebar.octotree-github-sidebar {
     transform: translate3d(0, 0, 0);
+    transition: transform 0.3s ease;
+
+    .octotree-toggle {
+      opacity: 0;
+      right: 10px;
+      transition: right 0s, opacity 0s;
+    }
 
     a.octotree_spin {
       right: 12px;
@@ -589,7 +606,7 @@
   .octotree-sidebar.octotree-github-sidebar {
     display: none;
 
-    a.octotree-toggle {
+    .octotree-toggle {
       display: none;
     }
   }
