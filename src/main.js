@@ -248,7 +248,9 @@ $(document).ready(() => {
 
     function isOutsideSidebar(selector) {
       const $elm = $(selector);
-      return ($elm.attr('class') || '').indexOf('octotree') < 0 && $elm.closest($sidebar).length === 0;
+      return (
+        $elm.is('html') || (($elm.attr('class') || '').indexOf('octotree') < 0 && $elm.closest($sidebar).length === 0)
+      );
     }
   }
 });
