@@ -395,8 +395,8 @@
   // Common buttons
   //
   a.octotree-settings,
-  a.octotree_pin,
-  a.octotree_spin {
+  a.octotree-pin,
+  a.octotree-spin {
     position: absolute !important;
     text-align: center;
     line-height: 1;
@@ -505,7 +505,7 @@
     }
   }
 
-  a.octotree_pin {
+  a.octotree-pin {
     top: 21px;
     right: 12px;
     width: 16px;
@@ -515,7 +515,7 @@
       .icon-v2(@octicons-pin, @font-size: 16px, @color: rgba(255, 255, 255, 0.65), @hover-color: white);
     }
 
-    &.octotree_pinned .octotree-icon-pin:before {
+    &.octotree-pinned .octotree-icon-pin:before {
       transform: rotate(-45deg);
       color: white;
     }
@@ -561,7 +561,7 @@
       transition: right 0s, opacity 0s;
     }
 
-    a.octotree_spin {
+    a.octotree-spin {
       right: 12px;
       top: 65px;
 

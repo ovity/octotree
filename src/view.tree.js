@@ -10,7 +10,7 @@ class TreeView {
       .on('click', this._onItemClick.bind(this))
       .jstree({
         core: {multiple: false, animation: false, worker: false, themes: {responsive: false}},
-        plugins: ['wholerow']
+        plugins: ['wholerow', 'search']
       });
   }
 
