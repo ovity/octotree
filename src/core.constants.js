@@ -26,7 +26,8 @@ const DEFAULTS = {
   ICONS: true,
   POPUP: false,
   WIDTH: 232,
-  SHOWN: false
+  SHOWN: false,
+  PINNED: false
 };
 
 const EVENT = {

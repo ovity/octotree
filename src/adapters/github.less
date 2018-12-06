@@ -1,19 +1,17 @@
 .octotree-sidebar.octotree-github-sidebar {
-  background-color: #f7f7f7;
-  border-right: 1px solid #ddd;
-  border-right: none;
-  bottom: 0;
   box-sizing: border-box;
-  left: 0;
-  overflow: visible;
-  padding-top: 60px;
-  padding-bottom: 30px;
-  position: fixed !important;
   right: 0;
   top: 0;
+  bottom: 0;
+  left: 0;
+  width: 232;
+  overflow: visible;
+  padding-bottom: @footer-height;
+  padding-top: @header-height;
+  position: fixed;
   transform: translate3d(-100%, 0, 0);
   transition: transform 0.5s ease-in;
-  z-index: 1000000001;
+  z-index: @index-base;
 
   // jQuery resizer
   .ui-resizable-e {
@@ -25,11 +23,11 @@
     width: 8px;
   }
 
-  .octotree-bottom {
-    background-color: #04a9ff;
+  .octotree-footer {
+    background-color: @accent;
     bottom: 0;
     font-size: 11px;
-    height: 30px;
+    height: @footer-height;
     padding: 6px 5px;
     position: absolute;
     width: 100%;
@@ -53,13 +51,13 @@
   .octotree-views {
     height: 100%;
     box-sizing: border-box;
-    border-right: 1px solid #dfe2e5;
+    border-right: 1px solid @gray-less;
     background-color: #fafbfc;
 
     .octotree-view {
       display: none;
       box-sizing: border-box;
-      color: #0f2e47;
+      color: @dark;
       height: 100%;
 
       &.current {
@@ -69,17 +67,9 @@
       input[type='text'],
       textarea {
         padding: 4px 8px;
-        color: #24292e;
-        background-color: #fafbfc;
-        border: 1px solid #d1d5da;
+        color: @dark;
         border-radius: 3px;
         outline: none;
-        box-shadow: rgba(27, 31, 35, 0.075) 0px 1px 2px inset;
-
-        &:focus {
-          border-color: #2188ff;
-          box-shadow: inset 0 1px 2px rgba(27, 31, 35, 0.075), 0 0 0 0.2em rgba(3, 102, 214, 0.3);
-        }
       }
 
       textarea {
@@ -87,26 +77,23 @@
       }
 
       .octotree-view-header {
-        background-color: @dark-v2;
+        position: absolute;
+        background-color: @dark-less;
         border-right: 1px @dark solid;
         color: white;
         font-size: 16px;
         font-weight: normal;
-        height: 60px;
+        top: 0;
         left: 0;
         line-height: 2.8;
+        width: 100%;
+        height: @header-height;
         margin: 0;
-        overflow: hidden;
         padding-right: 65px;
         padding-top: 2px;
-        position: absolute;
+        overflow: hidden;
         text-overflow: ellipsis;
-        text-shadow: 0 1px 0 #fff;
-        text-shadow: none;
-        top: 0;
         white-space: nowrap;
-        width: 100%;
-        z-index: 1000002;
       }
 
       .octotree-help {
@@ -138,7 +125,6 @@
           color: white;
 
           &:before {
-            color: #bbb;
             margin-right: 6px;
             line-height: 28px;
           }
@@ -178,12 +164,12 @@
       }
 
       .jstree-anchor {
-        color: #0f2e47;
+        color: @dark;
         outline: none;
         padding-right: 0;
         text-decoration: none;
         & > span {
-          color: #0f2e47;
+          color: @dark;
         }
         &:hover {
           text-decoration: none !important;
@@ -233,10 +219,10 @@
             left: 3px;
           }
           .jstree-open > .jstree-ocl {
-            .icon-v2(@octicons-chevron-down, @color: #0f2e47, @hover-color: #0f2e47, @font-size: 12px);
+            .icon-v2(@octicons-chevron-down, @color: @dark, @hover-color: @dark, @font-size: 12px);
           }
           .jstree-closed > .jstree-ocl {
-            .icon-v2(@octicons-chevron-right, @color: #0f2e47, @hover-color: #0f2e47, @font-size: 12px);
+            .icon-v2(@octicons-chevron-right, @color: @dark, @hover-color: @dark, @font-size: 12px);
           }
         }
       }
@@ -256,7 +242,7 @@
         margin-right: 2px;
       }
       .jstree-icon.tree {
-        .icon-v2(@octicons-file-directory, @color: #6cb5fe, @hover-color: #6cb5fe);
+        .icon-v2(@octicons-file-directory, @color: @blue, @hover-color: @blue);
       }
       .jstree-icon.commit {
         .icon-v2(@octicons-file-submodule, @color: @gray, @hover-color: @gray);
@@ -266,7 +252,7 @@
       }
 
       .jstree-node.jstree-leaf:hover .jstree-icon.blob {
-        .icon-v2(@octicons-link-external, @color: @accent, @hover-color: @accent, @font-size: 15px);
+        .icon-v2(@octicons-link-external, @color: @error, @hover-color: @error, @font-size: 15px);
       }
 
       .octotree-patch {
@@ -299,7 +285,7 @@
           width: 100%;
         }
         .error {
-          color: #900;
+          color: @error;
         }
         .button {
           margin-right: 5px;
@@ -323,7 +309,7 @@
         label {
           font-weight: normal !important;
           &.disabled {
-            color: gray;
+            color: @gray-less;
           }
         }
 
@@ -349,7 +335,7 @@
         position: absolute;
         bottom: 0;
         z-index: 1; // hide the small ad
-        background-color: #04a9ff;
+        background-color: @accent;
         color: white;
         font-size: 12px;
         padding: 12px;
@@ -401,7 +387,7 @@
     text-align: center;
     line-height: 1;
     cursor: pointer;
-    z-index: 1000003;
+    z-index: 1; // these are float, show above header view
 
     & > span {
       line-height: 1;
@@ -416,27 +402,26 @@
     border: 1px solid #e0e4e7;
     border-left: none;
     box-shadow: 2px 0 5px 0 rgba(118, 118, 118, 0.11);
-    color: black;
     opacity: 1;
     height: 94px;
     line-height: 1;
     padding: 6px 6px;
-    position: absolute !important;
+    position: absolute;
     right: -30px;
     text-align: center;
     top: 33%;
     width: 30px;
-    z-index: 1000003;
+    z-index: @index-base;
     transition: right 0.4s ease-in 0.3s, opacity 0.5s ease-in 0.3s;
 
     > .octotree-toggle-icon {
-      .icon-v2(@octicons-chevron-right, @font-size: 15px, @color: #0f2e47, @hover-color: #0f2e47);
+      .icon-v2(@octicons-chevron-right, @font-size: 15px, @color: @dark, @hover-color: @dark);
       left: 3px;
       top: 5px;
     }
 
     > span {
-      color: #0f2e47;
+      color: @dark;
       display: inline-block;
       font-size: 12px;
       left: -1px;
@@ -448,24 +433,24 @@
     }
 
     .popup {
-      position: absolute;
-      left: 0;
-      top: calc(~'100% + 2px');
+      background-clip: padding-box;
+      background-color: white;
+      border-radius: 5px;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
       cursor: pointer;
+      font-weight: 400;
+      left: 0;
+      line-height: 20px;
       opacity: 0;
-      z-index: 1000004;
-      width: 260px;
+      position: absolute;
       text-align: left;
       text-transform: none;
-      background-color: #fff;
-      background-clip: padding-box;
-      border: 1px solid rgba(0, 0, 0, 0.15);
-      border-radius: 5px;
-      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
-      white-space: normal;
+      top: calc(~'100% + 2px');
       transition: opacity 0.3s linear;
-      font-weight: 400;
-      line-height: 20px;
+      white-space: normal;
+      width: 260px;
+      z-index: @index-popup;
 
       &:hover {
         color: black;
@@ -496,7 +481,7 @@
         top: 1px;
         margin-left: -5px;
         border-top-width: 0;
-        border-bottom-color: #fff;
+        border-bottom-color: white;
       }
       & > .content {
         padding: 9px 14px;
@@ -512,7 +497,7 @@
     height: 16px;
 
     .octotree-icon-pin {
-      .icon-v2(@octicons-pin, @font-size: 16px, @color: rgba(255, 255, 255, 0.65), @hover-color: white);
+      .icon-v2(@octicons-pin, @font-size: 16px, @color: @gray, @hover-color: white);
     }
 
     &.octotree-pinned .octotree-icon-pin:before {
@@ -528,7 +513,7 @@
     height: 17px;
 
     .octotree-icon-settings {
-      .icon-v2(@octicons-gear, @font-size: 17px, @color: rgba(255, 255, 255, 0.65), @hover-color: white);
+      .icon-v2(@octicons-gear, @font-size: 17px, @color: @gray, @hover-color: white);
       top: -1px;
     }
 
@@ -561,7 +546,7 @@
       transition: right 0s, opacity 0s;
     }
 
-    a.octotree-spin {
+    .octotree-spin {
       right: 8px;
       top: 65px;
       display: none;

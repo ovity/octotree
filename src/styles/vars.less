@@ -1,10 +1,20 @@
 // ====== Colors ======
-@dark: #24292e;
+@dark: #0f2e47;
+@dark-less: #373e43;
 @gray: #6a737d;
+@gray-less: #dfe2e5;
 @light: #959da5;
-@blue: #0366d6;
-@accent: #ac4142;
-@dark-v2: #373e43;
+@blue: #6cb5fe;
+@error: #ac4142;
+@accent: #04a9ff;
+
+// ====== Z-indices ======
+@index-base: 1000000001;
+@index-popup: 1000000002;
+
+// ====== Sizing ======
+@header-height: 60px;
+@footer-height: 30px;
 
 // ====== Icon names ======
 // Octicons: https://octicons.github.com/
@@ -26,7 +36,7 @@
 @octicons-file-submodule: '\f017';
 
 // ====== Icons ======
-.icon-v2(@code; @font-family: octicons; @color: @gray; @hover-color: @blue; @font-size: 14px) {
+.icon-v2(@code; @font-family: octicons; @color: @gray; @hover-color: @error; @font-size: 14px) {
   position: relative;
 
   &:before {
@@ -46,29 +56,5 @@
 
   &:hover:before {
     color: @hover-color;
-  }
-}
-
-// !!! LEGACY ICON: migrate this to use icon-v2 when updating the toggler UI.
-.icon(@code) {
-  font-family: octicons;
-  font-weight: normal;
-  font-style: normal;
-  text-align: center;
-  width: 16px;
-  line-height: 1;
-  position: relative;
-  display: inline-block;
-  -webkit-font-smoothing: antialiased;
-  font-size: 14px;
-  content: @code;
-}
-
-#octicons {
-  .chevron-left() {
-    .icon('\f0a4');
-  }
-  .chevron-right() {
-    .icon('\f078');
   }
 }
