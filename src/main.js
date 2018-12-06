@@ -48,8 +48,8 @@ $(document).ready(() => {
     }
 
     $document
-      .on(EVENT.REQ_START, () => $spinner.addClass('octotree_loading'))
-      .on(EVENT.REQ_END, () => $spinner.removeClass('octotree_loading'))
+      .on(EVENT.REQ_START, () => $spinner.addClass('octotree-spin--loading'))
+      .on(EVENT.REQ_END, () => $spinner.removeClass('octotree-spin--loading'))
       .on(EVENT.LAYOUT_CHANGE, layoutChanged)
       .on(EVENT.TOGGLE_PIN, layoutChanged)
       .on(EVENT.LOC_CHANGE, () => tryLoadRepo());

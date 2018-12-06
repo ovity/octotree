@@ -562,36 +562,35 @@
     }
 
     a.octotree-spin {
-      right: 12px;
+      right: 8px;
       top: 65px;
+      display: none;
 
-      &.octotree_loading {
-        & > span:after {
+      &.octotree-spin--loading {
+        display: block;
+      }
+
+      .octotree-spin--loader {
+        border-radius: 50%;
+        border: 2px solid @gray;
+        border-top: 2px solid rgba(0, 0, 0, 0);
+        border-left: 2px solid rgba(0, 0, 0, 0);
+        width: 16px;
+        height: 16px;
+        animation: loading 0.5s infinite linear;
+
+        &:after {
           content: '';
         }
 
-        .loader {
-          border-radius: 50%;
-          border: 2px solid @gray;
-          border-top: 2px solid rgba(0, 0, 0, 0);
-          border-left: 2px solid rgba(0, 0, 0, 0);
-          width: 16px;
-          height: 16px;
-          animation: loading 0.5s infinite linear;
+        @keyframes loading {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
         }
-      }
-
-      @keyframes loading {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-
-      &:not(.octotree_loading) {
-        visibility: hidden;
       }
     }
   }
