@@ -110,16 +110,17 @@ $(document).ready(() => {
     }
 
     function tryLoadRepo(reload) {
-      const pinned = store.get(STORE.PINNED);
       const token = octotree.getAccessToken();
-
       adapter.getRepoFromPath(currRepo, token, (err, repo) => {
         if (err) {
           showError(err);
         } else if (repo) {
-          if (pinned) togglePin(true);
-
-          if (isSidebarVisible()) {
+          if (store.get(STORE.PINNED) && !isSidebarVisible()) {
+            // If we're in pin mode but sidebar doesn't show yet, show it.
+            // Note if we're from another page back to code page, sidebar is "pinned", but not visible.
+            if (isSidebarPinned()) toggleSidebar();
+            else togglePin();
+          } else if (isSidebarVisible()) {
             const replacer = ['username', 'reponame', 'branch', 'pullNumber'];
             const repoChanged = JSON.stringify(repo, replacer) !== JSON.stringify(currRepo, replacer);
             if (repoChanged || reload === true) {
@@ -130,8 +131,12 @@ $(document).ready(() => {
             } else {
               treeView.syncSelection();
             }
+          } else {
+            // Sidebar not visible (because it's not pinned), show the toggler
+            $toggler.show();
           }
         } else {
+          // Not a repo and not show in non-code page
           $toggler.hide();
           toggleSidebar(false);
         }
@@ -159,13 +164,11 @@ $(document).ready(() => {
         $html.toggleClass(SHOW_CLASS);
         $document.trigger(EVENT.TOGGLE, isSidebarVisible());
 
-        // Ensure the repo is loaded when the sidebar shows for the first time.
+        // Ensure the repo is loaded when the sidebar shows after being hidden.
         // Note that tryLoadRepo() already takes care of not reloading if nothing changes.
         if (isSidebarVisible()) {
-          $toggler.hide();
-          tryLoadRepo();
-        } else {
           $toggler.show();
+          tryLoadRepo();
         }
       }
 
