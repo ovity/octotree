@@ -66,14 +66,22 @@ _Note: GitHub Enterprise is not supported on Safari._
 #### Multiple GitHub Accounts
 
 Click the Add Token button to add more user name and token pairs. When you login with a specific GitHub account, the corresponding token will be used to make API requests. If you don't login or there's no matching user name, the default access token is used to make API requests.
+TODO
 
 #### Change Docking Position
 
 Click the dock button to move Octotree to left or right of the screen.
+TODO
 
 #### Dark Mode
 
 Click the dark mode button to toggle dark mode.
+TODO
+
+#### File Search
+
+Click the search icon and type in search query.
+TODO
 
 ## Contribution
 
