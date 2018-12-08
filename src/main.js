@@ -56,7 +56,7 @@ $(document).ready(() => {
 
     $sidebar
       .addClass(adapter.getCssClass())
-      .width(parseInt(store.get(STORE.WIDTH)))
+      .width(Math.max(parseInt(store.get(STORE.WIDTH)), 1000))
       .resize(() => layoutChanged(true))
       .appendTo($('body'));
 

@@ -230,7 +230,7 @@ class Adapter {
    * Returns the minimum width acceptable for the sidebar.
    * @api protected
    */
-  _getMinWidth() {
+  getMinWidth() {
     return 220;
   }
 
@@ -239,7 +239,7 @@ class Adapter {
    * @api public
    */
   init($sidebar) {
-    $sidebar.resizable({handles: 'e', minWidth: this._getMinWidth()});
+    $sidebar.resizable({handles: 'e', minWidth: this.getMinWidth()});
   }
 
   /**
