@@ -492,12 +492,12 @@
 
   a.octotree-pin {
     top: 21px;
-    right: 12px;
-    width: 16px;
-    height: 16px;
+    right: 6px;
+    width: @header-icon-size;
+    height: @header-icon-size;
 
     .octotree-icon-pin {
-      .icon-v2(@octicons-pin, @font-size: 16px, @color: @gray, @hover-color: white);
+      .icon-v2(@octicons-pin, @font-size: @header-icon-size, @color: @gray, @hover-color: white);
     }
 
     &.octotree-pinned .octotree-icon-pin:before {
@@ -508,12 +508,12 @@
 
   a.octotree-settings {
     top: 22px;
-    right: 36px;
-    width: 17px;
-    height: 17px;
+    right: @header-icon-size + 10px; // 4 for padding with octotree-pin
+    width: @header-icon-size;
+    height: @header-icon-size;
 
     .octotree-icon-settings {
-      .icon-v2(@octicons-gear, @font-size: 17px, @color: @gray, @hover-color: white);
+      .icon-v2(@octicons-gear, @font-size: @header-icon-size, @color: @gray, @hover-color: white);
       top: -1px;
     }
 
