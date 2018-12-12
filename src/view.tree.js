@@ -59,7 +59,7 @@ class TreeView {
     this.$view
       .find('.octotree-view-header')
       .html(
-        `<div class="octotree_header_repo">
+        `<div class="octotree-header-repo">
            <i class="octotree-icon-repo"></i>
            <a href="/${repo.username}">${repo.username}</a> /
            <a data-pjax href="/${repo.username}/${repo.reponame}">${repo.reponame}</a>
