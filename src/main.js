@@ -34,13 +34,13 @@ $(document).ready(() => {
           if (this !== optsView) {
             $document.trigger(EVENT.REQ_END);
           }
-          showView(this.$view);
+          showView(this);
         })
         .on(EVENT.VIEW_CLOSE, (event, data) => {
           if (data && data.showSettings) {
             optsView.toggle(true);
           } else {
-            showView(hasError ? errorView.$view : treeView.$view);
+            showView(hasError ? errorView : treeView);
           }
         })
         .on(EVENT.OPTS_CHANGE, optionsChanged)
@@ -147,7 +147,8 @@ $(document).ready(() => {
 
     function showView(view) {
       $views.removeClass('current');
-      view.addClass('current');
+      view.$view.addClass('current');
+      $(view).trigger(EVENT.VIEW_SHOW);
     }
 
     function showError(err) {
