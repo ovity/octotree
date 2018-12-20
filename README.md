@@ -91,11 +91,10 @@ TODO
 1.  Load the unpacked extensions in the `tmp` folder (check instructions of the specific browser)
 1.  Please follow existing style for new code
 
-## Core Team
+## Team
 
 - [Buu Nguyen](https://github.com/buunguyen)
 - [Duy Lam](https://github.com/duylam)
-- [Phi Nguyen](https://github.com/nphi1212)
 - [An Nguyen](https://github.com/crashbell)
 
 ### Credits

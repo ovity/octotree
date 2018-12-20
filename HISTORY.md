@@ -20,7 +20,7 @@ Learn more about Octotree Plus on the [official Octotree website](https://octotr
 
 **Why 2 versions?**
 
-I have been working on Octotree for the last 5 years in my spare time. For the past year or so, I started accepting donation, but that didn't work out too well. I need a sustainable source of income to fund further development cost of Octotree. This is more important than ever as a few other developers have joined me in the core team to help maintain and improve Octotree. Octotree Plus, a paid, premium version of Octotree, is my experiment in creating a sustainable source of income for the Octotree development team.
+I have been working on Octotree for the last 5 years in my spare time. For the past year or so, I started accepting donation, but that didn't work out too well. I need a sustainable source of income to fund the on-going development cost of Octotree. This is more important than ever as a few other developers have joined me to help maintain and improve Octotree.
 
 Make no mistake, we will not abandon the free version of Octotree. We commit to keep updating and improving it with features that the majority of users need. We removed Chrome GitHub Enterprise support in this release because we had to rewrite this feature from scratch to support Firefox and we consider this an advanced feature that most users don't need. If you need this feature, please consider upgrading to Octotree Plus to support the developers and enjoy other premium features only available in Octotree Plus.
 
