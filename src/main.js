@@ -204,29 +204,36 @@ $(document).ready(() => {
      * Controls how the sidebar behaves in float mode (i.e. non-pinned).
      */
     function setupSidebarFloatingBehaviors() {
+      const MOUSE_LEAVE_DELAY = 2000;
+      const KEY_PRESS_DELAY = 4000;
+      let isMouseInSidebar = false;
+
       // Opens when mouse is over the handle.
       $toggler.mouseenter(() => toggleSidebar(true));
 
       // Immediately closes if click outside the sidebar.
-      $document.on('click', (event) => {
-        if (!isSidebarPinned() && isSidebarVisible() && isOutsideSidebar(event.target)) {
+      $document.on('click', () => {
+        if (!isMouseInSidebar && !isSidebarPinned() && isSidebarVisible()) {
           toggleSidebar(false);
         }
       });
 
-      // Starts a timer when users leave the sidebar or navigate the tree using keyboard.
-      // Clear the timer when users move mouse on the sidebar (don't use mouse enter, won't work).
       let timerId = null;
-      const resetTimer = (delay) => {
-        if (!isSidebarPinned()) {
+      const startTimer = (delay) => {
+        if (!isMouseInSidebar && !isSidebarPinned()) {
           clearTimer();
           timerId = setTimeout(() => toggleSidebar(isSidebarPinned()), delay);
         }
       };
       const clearTimer = () => timerId && clearTimeout(timerId);
 
-      $sidebar.on('keyup mouseleave', () => resetTimer(SIDEBAR_HIDING_DELAY));
-      $sidebar.on('mousemove', () => {
+      $sidebar.on('keyup', () => startTimer(KEY_PRESS_DELAY));
+      $sidebar.on('mouseleave', () => {
+        isMouseInSidebar = false;
+        startTimer(MOUSE_LEAVE_DELAY);
+      });
+      $sidebar.on('mouseenter mousemove', () => {
+        isMouseInSidebar = true;
         clearTimer();
         if (!isSidebarVisible()) toggleSidebar(true);
       });
@@ -251,13 +258,6 @@ $(document).ready(() => {
 
     function isSidebarPinned() {
       return $pinner.hasClass(PINNED_CLASS);
-    }
-
-    function isOutsideSidebar(selector) {
-      const $elm = $(selector);
-      return (
-        $elm.is('html') || (($elm.attr('class') || '').indexOf('octotree') < 0 && $elm.closest($sidebar).length === 0)
-      );
     }
   }
 });

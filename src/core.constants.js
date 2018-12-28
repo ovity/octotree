@@ -2,7 +2,6 @@ const NODE_PREFIX = 'octotree';
 const ADDON_CLASS = 'octotree';
 const SHOW_CLASS = 'octotree-show';
 const PINNED_CLASS = 'octotree-pinned';
-const SIDEBAR_HIDING_DELAY = 2000;
 
 const STORE = {
   TOKEN: 'octotree.access_token',
