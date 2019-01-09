@@ -48,6 +48,10 @@ $(document).ready(() => {
       .on(EVENT.TOGGLE, layoutChanged)
       .on(EVENT.LOC_CHANGE, () => tryLoadRepo());
 
+    if (!store.get(STORE.ANIMATIONS)) {
+      $sidebar.css('transition', 'none');
+    }
+
     $sidebar
       .width(parseInt(store.get(STORE.WIDTH)))
       .resize(() => layoutChanged(true))
