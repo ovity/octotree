@@ -28,9 +28,7 @@ $(document).ready(() => {
     key.filter = () => $toggler.is(':visible');
     key(store.get(STORE.HOTKEYS), toggleSidebarAndSave);
 
-    if (store.get(STORE.DARKHEADER)) {
-      $sidebar.addClass('dark');
-    }
+    applyTheme(store.get(STORE.DARKHEADER));
 
     for (const view of [treeView, errorView, optsView]) {
       $(view)
@@ -91,6 +89,14 @@ $(document).ready(() => {
       }
     }
 
+    function applyTheme(useDarkTheme) {
+      if (useDarkTheme) {
+        $sidebar.addClass('dark');
+      } else {
+        $sidebar.removeClass('dark');
+      }
+    }
+
     /**
      * Invoked when the user saves the option changes in the option view.
      * @param {!string} event
@@ -98,6 +104,8 @@ $(document).ready(() => {
      */
     async function optionsChanged(event, changes) {
       let reload = false;
+
+      applyTheme(store.get(STORE.DARKHEADER));
 
       Object.keys(changes).forEach((storeKey) => {
         const value = changes[storeKey];
@@ -107,7 +115,6 @@ $(document).ready(() => {
           case STORE.LOADALL:
           case STORE.ICONS:
           case STORE.PR:
-          case STORE.DARKHEADER:
             reload = true;
             break;
           case STORE.HOTKEYS:
