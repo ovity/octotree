@@ -28,6 +28,10 @@ $(document).ready(() => {
     key.filter = () => $toggler.is(':visible');
     key(store.get(STORE.HOTKEYS), toggleSidebarAndSave);
 
+    if (store.get(STORE.DARKHEADER)) {
+      $sidebar.addClass('dark');
+    }
+
     for (const view of [treeView, errorView, optsView]) {
       $(view)
         .on(EVENT.VIEW_READY, function(event) {
@@ -103,6 +107,7 @@ $(document).ready(() => {
           case STORE.LOADALL:
           case STORE.ICONS:
           case STORE.PR:
+          case STORE.DARKHEADER:
             reload = true;
             break;
           case STORE.HOTKEYS:

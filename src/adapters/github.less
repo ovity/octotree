@@ -38,7 +38,7 @@
       .octotree_view_header {
         font-weight: normal;
         text-shadow: none;
-        height: 60px;
+        height: 61px;
         line-height: 2.8;
         background: #fafbfc none;
         border-right: 1px solid #e1e4e8;
@@ -188,6 +188,44 @@
 
     &:not(.octotree_loading):hover > span:after {
       color: @blue;
+    }
+  }
+
+  &.dark {
+    .octotree_views .octotree_view .octotree_view_header {
+      background: #24292e none;
+      border-right: 1px solid #24292e;
+      color: #fff;
+
+      a {
+        color: #fff;
+      }
+    }
+
+    a.octotree_opts {
+      .settings:before  {
+        color: #fff !important;
+      }
+
+      &:hover .settings:before {
+        color: hsla(0,0%,100%,.75) !important;
+      }
+    }
+
+    a.octotree_toggle {
+      color: #fff !important;
+      background-color: #3d4447;
+      background-image: none;
+
+      &.octotree_loading > .loader {
+        border-color: transparent;
+        border-top-color: #fff;
+        border-left-color: #fff;
+      }
+
+      &:not(.octotree_loading):hover > span::after {
+        color: hsla(0,0%,100%,.75);
+      }
     }
   }
 }

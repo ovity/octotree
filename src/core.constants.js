@@ -13,7 +13,8 @@ const STORE = {
   POPUP: 'octotree.popup_shown',
   WIDTH: 'octotree.sidebar_width',
   SHOWN: 'octotree.sidebar_shown',
-  GHEURLS: 'octotree.gheurls.shared'
+  GHEURLS: 'octotree.gheurls.shared',
+  DARKHEADER: 'octotree.header.dark'
 };
 
 const DEFAULTS = {
@@ -27,7 +28,8 @@ const DEFAULTS = {
   POPUP: false,
   WIDTH: 232,
   SHOWN: false,
-  GHEURLS: ''
+  GHEURLS: '',
+  DARKHEADER: false
 };
 
 const EVENT = {
