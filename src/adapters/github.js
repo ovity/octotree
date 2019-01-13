@@ -149,7 +149,7 @@ class GitHub extends PjaxAdapter {
       // Pick the commit ID or branch name from the Branch dropdown menu
       // Note: we can't use URL as it would not work with branches with slashes, e.g. features/hotfix-1
       $('.select-menu-item.selected', branchDropdownMenu).data('name') ||
-      $('.select-menu-button span', branchDropdownMenu).text() ||
+      (!$('.select-menu-button span', branchDropdownMenu).text().includes('…') && $('.select-menu-button span', branchDropdownMenu).text()) ||
       // Pull requests page
       ($('.commit-ref.base-ref').attr('title') || ':').match(/:(.*)/)[1] ||
       // Reuse last selected branch if exist
