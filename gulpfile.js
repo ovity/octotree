@@ -30,7 +30,10 @@ gulp.task('dist', ['build'], (cb) => {
 });
 
 gulp.task('test', ['build'], (cb) => {
-  const ps = spawn('./node_modules/.bin/mocha', [
+  var isWindowsEnvironment = process.platform === "win32";
+  var mochaBinPath = isWindowsEnvironment?'.\\node_modules\\.bin\\mocha.cmd':'./node_modules/.bin/mocha';
+
+  const ps = spawn(mochaBinPath, [
     '--harmony',
     '--reporter',
     'spec',
