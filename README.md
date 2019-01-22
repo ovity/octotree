@@ -82,7 +82,7 @@ By default, Octotree only works on `github.com`. To support GitHub Enterprise on
 
 ### [v1.4.1](https://github.com/buunguyen/octotree/issues?q=milestone%3A1.4.1+is%3Aclosed)
 * New header to match new GitHub design
-* Bug fixes
+* Bug fixess
 
 ### [v1.4](https://github.com/buunguyen/octotree/issues?labels=&milestone=4&page=1&state=closed)
 * Support GitHub enterprise
