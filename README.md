@@ -37,7 +37,9 @@ Octotree uses the [GitHub API](https://developer.github.com/v3/) to retrieve rep
 
 When that happens, Octotree will ask for your [GitHub personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use). If you don't already have one, [create one](https://github.com/settings/tokens/new?scopes=repo&description=Octotree%20browser%20extension), then copy and paste it into the token textbox in the Settings screen. Note that the minimal scopes that should be granted are `public_repo` and `repo` (if you need access to private repositories).
 
-Octotree stores access token in your browser local storage and uses it exclusively to authenticate with GitHub (see the code that does that [here](https://github.com/ovity/octotree/blob/559291ed9017f0c3429bc49419d001d9ea0ac510/src/adapters/github.js#L296-L313)). Octotree never transmits access token to any other servers except GitHub itself and the data received is used **only** to render the tree on your local machine. Using access tokens to access private repository and increase API rate limit is a standard practice that many GitHub extensions use.
+Octotree stores access token in your browser local storage and uses it only to communicate with GitHub API (see the code that does that [here](https://github.com/ovity/octotree/blob/559291ed9017f0c3429bc49419d001d9ea0ac510/src/adapters/github.js#L296-L313)). Using access tokens to access private repository and increase API rate limit is a common practice that many GitHub extensions use.
+
+**Access tokens are stored in the browser's local storage, do NOT provide access tokens if you use public computers.**
 
 ### Hotkeys
 
