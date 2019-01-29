@@ -122,7 +122,6 @@ $(document).ready(() => {
     }
 
     function tryLoadRepo(reload) {
-      hasError = false;
       const remember = store.get(STORE.REMEMBER);
       const shown = store.get(STORE.SHOWN);
       const token = store.get(STORE.TOKEN);
