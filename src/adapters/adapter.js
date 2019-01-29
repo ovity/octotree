@@ -236,7 +236,7 @@ class Adapter {
         break;
     }
     cb({
-      error: `Error: ${error}`,
+      error: `Error: <br/>${error}`,
       message: message,
       needAuth: needAuth
     });
