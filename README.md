@@ -18,7 +18,7 @@ Browser extension (Chrome, Firefox, Opera and Safari) to show a code tree on Git
 
 __Note__: to configure Octotree for GitHub Enterprise, see [instructions](#enterprise-urls)
 
-### Install on Safari
+### Install on Safari (without using docker)
 
 Octotree is not available on the Safari gallery. You have to build from source.  Download this repo and run the following command:
 
@@ -27,6 +27,43 @@ gulp safari
 ```
 
 Find the extension folder in `tmp/safari`. Follow Apple instructions to install the extension to your browser.
+
+### Install on Safari (build in a docker container)
+
+If you don't have the necessary software (such as the correct version of `node` or `gulp`) to build the extension, you can build within a docker container (requires [docker](https://docs.docker.com/docker-for-mac/install/)).
+
+First, run interactive bash in a container that has all the required tools:
+
+```bash
+docker run -it --name octotree-build gabrielaraujof/nodejs-gulp-bower bash
+```
+
+Within the container:
+
+```bash
+git clone https://github.com/ovity/octotree.git
+cd octotree/
+npm install
+npm install gulp
+gulp safari
+```
+
+If the last command fails, run it again.
+
+Next, exit the container (but don't delete it yet). From outside the container, run:
+
+```bash
+docker cp octotree-build:/home/workspace/octotree/tmp/safari/octotree.safariextension ~/Desktop/octotree.safariextension
+```
+
+Finally, delete the container:
+
+```bash
+docker rm -fv octotree-build
+```
+
+The built extension can be found at `~/Desktop/octotree.safariextension`.
+
 
 ### Install from prebuilt packages (all browsers)
 
