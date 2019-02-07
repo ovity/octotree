@@ -23,7 +23,7 @@ class TreeView {
 
     $jstree.settings.core.data = (node, cb) => {
       const prMode = this.store.get(STORE.PR) && repo.pullNumber;
-      const loadAll = this.adapter.canLoadEntireTree() && (prMode || this.store.get(STORE.LOADALL));
+      const loadAll = this.adapter.canLoadEntireTree(repo) && (prMode || this.store.get(STORE.LOADALL));
 
       node = !loadAll && (node.id === '#' ? {path: ''} : node.original);
 
@@ -41,7 +41,7 @@ class TreeView {
     };
 
     this.$tree.one('refresh.jstree', () => {
-      this.syncSelection();
+      this.syncSelection(repo);
       $(this).trigger(EVENT.VIEW_READY);
     });
 
@@ -149,7 +149,7 @@ class TreeView {
     }
   }
 
-  syncSelection() {
+  syncSelection(repo) {
     const $jstree = this.$jstree;
     if (!$jstree) return;
 
@@ -159,7 +159,7 @@ class TreeView {
     if (!match) return;
 
     const currentPath = match[1];
-    const loadAll = this.adapter.canLoadEntireTree() && this.store.get(STORE.LOADALL);
+    const loadAll = this.adapter.canLoadEntireTree(repo) && this.store.get(STORE.LOADALL);
 
     selectPath(loadAll ? [currentPath] : breakPath(currentPath));
 

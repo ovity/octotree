@@ -145,7 +145,7 @@ $(document).ready(() => {
               currRepo = repo;
               treeView.show(repo, token);
             } else {
-              treeView.syncSelection();
+              treeView.syncSelection(repo);
             }
           }
         } else {

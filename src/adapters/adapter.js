@@ -191,8 +191,7 @@ class Adapter {
       case 206:
         error = 'Repo too large';
         message = `This repository is too large to loaded in a single request.
-          If you frequently work with this repository,
-          go to Settings and uncheck the "Load entire tree at once" option.`;
+          For subsequent requests the repository will be loaded lazily. Please refresh the page to see the results.`;
         break;
       case 401:
         error = 'Invalid token';
@@ -271,7 +270,7 @@ class Adapter {
    * a single request. This is usually determined by the underlying the API.
    * @api public
    */
-  canLoadEntireTree() {
+  canLoadEntireTree(opts) {
     return false;
   }
 

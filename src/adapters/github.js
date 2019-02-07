@@ -73,8 +73,10 @@ class GitHub extends PjaxAdapter {
   }
 
   // @override
-  canLoadEntireTree() {
-    return true;
+  canLoadEntireTree(repo) {
+    const key = `${repo.username}/${repo.reponame}`;
+    const hugeRepos = this.store.get(STORE.HUGE_REPOS);
+    return !(hugeRepos[key] === true);
   }
 
   // @override
@@ -306,6 +308,12 @@ class GitHub extends PjaxAdapter {
     $.ajax(cfg)
       .done((data) => {
         if (path && path.indexOf('/git/trees') === 0 && data.truncated) {
+          const hugeRepos = this.store.get(STORE.HUGE_REPOS);
+          const repo = `${opts.repo.username}/${opts.repo.reponame}`;
+          if (undefined === hugeRepos[repo]) {
+            hugeRepos[repo] = true;
+            this.store.set(STORE.HUGE_REPOS, hugeRepos);
+          }
           this._handleError({status: 206}, cb);
         } else cb(null, data);
       })
