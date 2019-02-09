@@ -65,31 +65,31 @@ _Note: GitHub Enterprise is not supported on Safari._
 
 After installing Octotree Plus, navigate to a GitHub Enterprise domain. Right-click Octotree extension icon in the browser bar and select "Enable Octotree Plus on this domain". The page should refresh and Octotree Plus sidebar should show. Alternatively, you can disable by selecting "Disable Octotree Plus on this domain".
 
-![GitHub Enterprise](docs/plus-ghe.jpg)
+![GitHub Enterprise](docs/plus-ghe.png)
 
 #### Multiple GitHub Accounts
 
 Go to Settings and click the Add Token button to add more accounts, each including a username and corresponding access token. When you login with a specific GitHub account, the corresponding token will be used to make API requests. If you don't login or there's no matching account, the default access token is used to make API requests.
 
-![Multiple GitHub accounts](docs/plus-multi.jpg)
+![Multiple GitHub accounts](docs/plus-multi.png)
 
 #### Change Docking Position
 
 Click the dock button to move Octotree to left or right of the screen.
 
-![Change docking position](docs/dock.jpg)
+![Change docking position](docs/dock.png)
 
 #### Dark Mode
 
 Click the dark mode button to toggle dark mode.
 
-![Dark mode](docs/dark.jpg)
+![Dark mode](docs/dark.png)
 
 #### File Search
 
 Click the search icon and type in search query.
 
-![File search](docs/search.jpg)
+![File search](docs/search.png)
 
 ## Contribution
 
