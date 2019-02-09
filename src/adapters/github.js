@@ -146,11 +146,16 @@ class GitHub extends PjaxAdapter {
       // Note: we can't use URL as it would not work with branches with slashes, e.g. features/hotfix-1
       ($('.overall-summary .numbers-summary .commits a').attr('href') || '').split('/').slice(-1)[0] ||
       $('.select-menu-item[aria-checked="true"] span', branchDropdownMenu).text() ||
-      $('.select-menu-button span', branchDropdownMenu).text() ||
+
+      // We use "title" since it contains full name (branch or tag)
+      $('summary', branchDropdownMenu).attr('title') ||
+
       // Pull requests page
       ($('.commit-ref.base-ref').attr('title') || ':').match(/:(.*)/)[1] ||
+
       // Reuse last selected branch if exist
       (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch) ||
+
       // Get default branch from cache
       this._defaultBranch[username + '/' + reponame];
 
