@@ -19,7 +19,7 @@ Browser extension (Chrome, Firefox, Opera and Safari) to show a code tree on Git
 
 Learn more about these features from [our website](https://www.octotree.io).
 
-![Octotree on GitHub](docs/chrome-github.jpg)
+![Octotree on GitHub](docs/chrome-github.png)
 
 ### Install Octotree
 
@@ -77,19 +77,19 @@ Go to Settings and click the Add Token button to add more accounts, each includi
 
 Click the dock button to move Octotree to left or right of the screen.
 
-![Change docking position](docs/dock.png)
+![Change docking position](docs/plus-dock.png)
 
 #### Dark Mode
 
 Click the dark mode button to toggle dark mode.
 
-![Dark mode](docs/dark.png)
+![Dark mode](docs/plus-dark.png)
 
 #### File Search
 
 Click the search icon and type in search query.
 
-![File search](docs/search.png)
+![File search](docs/plus-search.png)
 
 ## Contribution
 
