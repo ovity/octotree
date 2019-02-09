@@ -1,3 +1,8 @@
+### v2.5.2
+
+- Fix branch retrieval due to GitHub DOM changes
+- Fix bug folder closing/opening repeat
+
 ### v2.5.1
 
 - Fix bug not working when branch names contain slashes

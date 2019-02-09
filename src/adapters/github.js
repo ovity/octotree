@@ -100,8 +100,8 @@ class GitHub extends PjaxAdapter {
       shouldPushEverything || (!togglerVisible && !sidebarVisible)
         ? '' // Nothing is visible or already pushed, leave as-is
         : !sidebarVisible
-          ? 25 // Sidebar is collapsed, move the logo to avoid hiding the toggler
-          : sidebarWidth; // Otherwise, move the header from the sidebar
+        ? 25 // Sidebar is collapsed, move the logo to avoid hiding the toggler
+        : sidebarWidth; // Otherwise, move the header from the sidebar
     $header.css('padding-left', headerPadding);
   }
 
@@ -141,15 +141,16 @@ class GitHub extends PjaxAdapter {
       return cb();
     }
 
-    // Get branch by inspecting URL or DOM, quite fragile so provide multiple fallbacks
+    // Get branch by inspecting URL or DOM, quite fragile so provide multiple fallbacks.
+    // TODO would be great if there's a more robust way to do this
     const branchDropdownMenu = $('.branch-select-menu');
     const branch =
       // Pick the commit ID as branch name when the code page is listing tree in a particular commit
       (type === 'commit' && typeId) ||
-      // Pick the commit ID or branch name from the Branch dropdown menu
+      // Pick the commit ID or branch name from the DOM
       // Note: we can't use URL as it would not work with branches with slashes, e.g. features/hotfix-1
-      $('.select-menu-item.selected', branchDropdownMenu).data('name') ||
-      $('.select-menu-button', branchDropdownMenu).attr('title') ||
+      ($('.overall-summary .numbers-summary .commits a').attr('href') || '').split('/').slice(-1)[0] ||
+      $('.select-menu-item[aria-checked="true"] span', branchDropdownMenu).text() ||
       $('.select-menu-button span', branchDropdownMenu).text() ||
       // Pull requests page
       ($('.commit-ref.base-ref').attr('title') || ':').match(/:(.*)/)[1] ||
