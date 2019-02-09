@@ -61,29 +61,35 @@ Learn more at [keymaster](https://github.com/madrobby/keymaster#supported-keys).
 
 #### GitHub Enterprise
 
-After installing Octotree Plus, navigate to a GitHub Enterprise domain. Right-click Octotree extension icon in the browser bar and select "Enable Octotree Plus on this domain". The page should refresh and Octotree Plus sidebar should show. Alternatively, you can disable by selecting "Disable Octotree plus on this domain".
-
 _Note: GitHub Enterprise is not supported on Safari._
+
+After installing Octotree Plus, navigate to a GitHub Enterprise domain. Right-click Octotree extension icon in the browser bar and select "Enable Octotree Plus on this domain". The page should refresh and Octotree Plus sidebar should show. Alternatively, you can disable by selecting "Disable Octotree Plus on this domain".
+
+![GitHub Enterprise](docs/plus-ghe.jpg)
 
 #### Multiple GitHub Accounts
 
-Click the Add Token button to add more user name and token pairs. When you login with a specific GitHub account, the corresponding token will be used to make API requests. If you don't login or there's no matching user name, the default access token is used to make API requests.
-TODO
+Go to Settings and click the Add Token button to add more accounts, each including a username and corresponding access token. When you login with a specific GitHub account, the corresponding token will be used to make API requests. If you don't login or there's no matching account, the default access token is used to make API requests.
+
+![Multiple GitHub accounts](docs/plus-multi.jpg)
 
 #### Change Docking Position
 
 Click the dock button to move Octotree to left or right of the screen.
-TODO
+
+![Change docking position](docs/dock.jpg)
 
 #### Dark Mode
 
 Click the dark mode button to toggle dark mode.
-TODO
+
+![Dark mode](docs/dark.jpg)
 
 #### File Search
 
 Click the search icon and type in search query.
-TODO
+
+![File search](docs/search.jpg)
 
 ## Contribution
 
