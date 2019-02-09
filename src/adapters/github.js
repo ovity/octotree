@@ -139,18 +139,41 @@ class GitHub extends PjaxAdapter {
     // Get branch by inspecting URL or DOM, quite fragile so provide multiple fallbacks.
     // TODO would be great if there's a more robust way to do this
     const branchDropdownMenu = $('.branch-select-menu');
+
+    const branchDropdownMenuSummary = $('summary', branchDropdownMenu);
+    const branchNameInSpan = branchDropdownMenuSummary.find('span').text();
+    const branchNameInTitle = branchDropdownMenuSummary.attr('title');
+
     const branch =
       // Pick the commit ID as branch name when the code page is listing tree in a particular commit
       (type === 'commit' && typeId) ||
+
+      /**
+       * Github renders the branch name in one of below structure depending on the length
+       * of branch name
+       *
+       * Option 1: when the length is short enough
+       * <summary title="Switch branches or tags">
+       *   <span class="css-truncate-target">feature/1/2/3</span>
+       * </summary>
+       *
+       * Option 2: when the length is too long
+       * <summary title="feature/1/2/3/4/5/6/7/8">
+       *   <span class="css-truncate-target">feature/1/2/3...</span>
+       * </summary>
+       */
+      (branchNameInTitle.toLowerCase().startsWith('switch branches') ? branchNameInSpan : branchNameInTitle) ||
+
       // Pick the commit ID or branch name from the DOM
       // Note: we can't use URL as it would not work with branches with slashes, e.g. features/hotfix-1
       ($('.overall-summary .numbers-summary .commits a').attr('href') || '').split('/').slice(-1)[0] ||
-      $('.select-menu-item[aria-checked="true"] span', branchDropdownMenu).text() ||
-      $('.select-menu-button span', branchDropdownMenu).text() ||
+
       // Pull requests page
       ($('.commit-ref.base-ref').attr('title') || ':').match(/:(.*)/)[1] ||
+
       // Reuse last selected branch if exist
       (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch) ||
+
       // Get default branch from cache
       this._defaultBranch[username + '/' + reponame];
 
