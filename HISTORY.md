@@ -1,4 +1,4 @@
-### v2.5.2
+### v2.5.3
 
 - Fix branch retrieval due to GitHub DOM changes
 - Fix bug folder closing/opening repeat
