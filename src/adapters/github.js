@@ -160,6 +160,10 @@ class GitHub extends PjaxAdapter {
     const branchDropdownMenuSummary = $('.branch-select-menu summary');
     const branchNameInTitle = branchDropdownMenuSummary.attr('title');
     const branchNameInSpan = branchDropdownMenuSummary.find('span').text();
+    const branchFromSummary =
+      branchNameInTitle && branchNameInTitle.toLowerCase().startsWith('switch branches')
+        ? branchNameInSpan
+        : branchNameInTitle;
 
     const branch =
       // Pick the commit ID as branch name when the code page is listing tree in a particular commit
@@ -167,7 +171,7 @@ class GitHub extends PjaxAdapter {
       // Pick the commit ID or branch name from the DOM
       // Note: we can't use URL as it would not work with branches with slashes, e.g. features/hotfix-1
       ($('.overall-summary .numbers-summary .commits a').attr('href') || '').split('/').slice(-1)[0] ||
-      (branchNameInTitle.toLowerCase().startsWith('switch branches') ? branchNameInSpan : branchNameInTitle) ||
+      branchFromSummary ||
       // Pull requests page
       ($('.commit-ref.base-ref').attr('title') || ':').match(/:(.*)/)[1] ||
       // Reuse last selected branch if exist
