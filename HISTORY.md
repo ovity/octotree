@@ -1,3 +1,7 @@
+### v2.5.5
+
+- Update jstree to get rid of Chrome warning
+
 ### v2.5.4
 
 - Fix branch retrieval due to GitHub DOM changes
