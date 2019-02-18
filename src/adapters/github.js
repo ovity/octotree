@@ -170,8 +170,9 @@ class GitHub extends PjaxAdapter {
       (type === 'commit' && typeId) ||
       // Pick the commit ID or branch name from the DOM
       // Note: we can't use URL as it would not work with branches with slashes, e.g. features/hotfix-1
-      ($('.overall-summary .numbers-summary .commits a').attr('href') || '').split('/').slice(-1)[0] ||
       branchFromSummary ||
+      ($('.overall-summary .numbers-summary .commits a').attr('href') || '')
+        .replace(`/${username}/${reponame}/commits/`, '') ||
       // Pull requests page
       ($('.commit-ref.base-ref').attr('title') || ':').match(/:(.*)/)[1] ||
       // Reuse last selected branch if exist
