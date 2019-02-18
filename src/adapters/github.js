@@ -169,10 +169,11 @@ class GitHub extends PjaxAdapter {
       // Pick the commit ID as branch name when the code page is listing tree in a particular commit
       (type === 'commit' && typeId) ||
       // Pick the commit ID or branch name from the DOM
-      // Note: we can't use URL as it would not work with branches with slashes, e.g. features/hotfix-1
       branchFromSummary ||
-      ($('.overall-summary .numbers-summary .commits a').attr('href') || '')
-        .replace(`/${username}/${reponame}/commits/`, '') ||
+      ($('.overall-summary .numbers-summary .commits a').attr('href') || '').replace(
+        `/${username}/${reponame}/commits/`,
+        ''
+      ) ||
       // Pull requests page
       ($('.commit-ref.base-ref').attr('title') || ':').match(/:(.*)/)[1] ||
       // Reuse last selected branch if exist

@@ -1,3 +1,7 @@
+### v2.5.6
+
+- Fix issue branch with slashes
+
 ### v2.5.5
 
 - Update jstree to get rid of Chrome warning
