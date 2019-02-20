@@ -29,7 +29,11 @@ class TreeView {
 
       this.adapter.loadCodeTree({repo, token, node}, (err, treeData) => {
         if (err) {
-          $(this).trigger(EVENT.FETCH_ERROR, [err]);
+          if (err.status === 206 && loadAll) { // The repo is too big to load all, need to retry
+            $jstree.refresh(true);
+          } else {
+            $(this).trigger(EVENT.FETCH_ERROR, [err]);
+          }
         } else {
           treeData = this._sort(treeData);
           if (loadAll) {
