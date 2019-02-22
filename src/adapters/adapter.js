@@ -188,11 +188,6 @@ class Adapter {
           Please try again later.`;
         needAuth = false;
         break;
-      case 206:
-        error = 'Repo too large';
-        message = `This repository is too large to loaded in a single request.
-          For subsequent requests the repository will be loaded lazily. Please refresh the page to see the results.`;
-        break;
       case 401:
         error = 'Invalid token';
         message = `The token is invalid.
