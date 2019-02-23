@@ -168,15 +168,6 @@ class Adapter {
         error = 'Empty repository';
         message = 'This repository is empty.';
         break;
-      case 206:
-        error = 'Repo too large';
-        message = 'This repository is too large to load in a single request. ';
-        'If you frequently work with this repository, go to the ' +
-          '<a class="settings-btn" href="javascript:void(0)">Settings</a> screen ' +
-          'and uncheck the "Load entire tree at once" option.';
-        break;
-
-      // Errors for access token
       case 401:
         error = 'Invalid token';
         message = octotree.getInvalidTokenMessage({
@@ -214,7 +205,9 @@ class Adapter {
     }
     cb({
       error: `Error: ${error}`,
-      message: message
+      message: message,
+      needAuth: needAuth,
+      status: jqXHR.status
     });
   }
 
@@ -247,7 +240,7 @@ class Adapter {
    * a single request. This is usually determined by the underlying the API.
    * @api public
    */
-  canLoadEntireTree() {
+  canLoadEntireTree(opts) {
     return false;
   }
 

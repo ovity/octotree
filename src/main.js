@@ -129,7 +129,7 @@ $(document).ready(() => {
               currRepo = repo;
               treeView.show(repo, token);
             } else {
-              treeView.syncSelection();
+              treeView.syncSelection(repo);
             }
           } else {
             // Sidebar not visible (because it's not pinned), show the toggler
