@@ -31,13 +31,17 @@ class TreeView {
 
     $jstree.settings.core.data = (node, cb) => {
       const prMode = this.store.get(STORE.PR) && repo.pullNumber;
-      const loadAll = this.adapter.canLoadEntireTree() && (prMode || this.store.get(STORE.LOADALL));
+      const loadAll = this.adapter.canLoadEntireTree(repo) && (prMode || this.store.get(STORE.LOADALL));
 
       node = !loadAll && (node.id === '#' ? {path: ''} : node.original);
 
       this.adapter.loadCodeTree({repo, token, node}, (err, treeData) => {
         if (err) {
-          $(this).trigger(EVENT.FETCH_ERROR, [err]);
+          if (err.status === 206 && loadAll) { // The repo is too big to load all, need to retry
+            $jstree.refresh(true);
+          } else {
+            $(this).trigger(EVENT.FETCH_ERROR, [err]);
+          }
         } else {
           treeData = this._sort(treeData);
           if (loadAll) {
@@ -49,7 +53,7 @@ class TreeView {
     };
 
     this.$tree.one('refresh.jstree', () => {
-      this.syncSelection();
+      this.syncSelection(repo);
       $(this).trigger(EVENT.VIEW_READY);
     });
 
@@ -157,7 +161,7 @@ class TreeView {
     }
   }
 
-  syncSelection() {
+  syncSelection(repo) {
     const $jstree = this.$jstree;
     if (!$jstree) return;
 
@@ -167,7 +171,7 @@ class TreeView {
     if (!match) return;
 
     const currentPath = match[1];
-    const loadAll = this.adapter.canLoadEntireTree() && this.store.get(STORE.LOADALL);
+    const loadAll = this.adapter.canLoadEntireTree(repo) && this.store.get(STORE.LOADALL);
 
     selectPath(loadAll ? [currentPath] : breakPath(currentPath));
 

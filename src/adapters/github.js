@@ -38,6 +38,7 @@ const GH_PJAX_CONTAINER_SEL = '#js-repo-pjax-container, .context-loader-containe
 const GH_CONTAINERS = '.container, .container-lg, .container-responsive';
 const GH_HEADER = '.js-header-wrapper > header';
 const GH_RAW_CONTENT = 'body > pre';
+const GH_MAX_HUGE_REPOS_SIZE = 50;
 
 class GitHub extends PjaxAdapter {
   constructor(store) {
@@ -73,8 +74,15 @@ class GitHub extends PjaxAdapter {
   }
 
   // @override
-  canLoadEntireTree() {
-    return true;
+  canLoadEntireTree(repo) {
+    const key = `${repo.username}/${repo.reponame}`;
+    const hugeRepos = this.store.get(STORE.HUGE_REPOS);
+    if (hugeRepos[key]) {
+      // Update the last load time of the repo
+      hugeRepos[key] = new Date().getTime();
+      this.store.set(STORE.HUGE_REPOS, hugeRepos);
+    }
+    return !hugeRepos[key];
   }
 
   // @override
@@ -330,6 +338,18 @@ class GitHub extends PjaxAdapter {
     $.ajax(cfg)
       .done((data) => {
         if (path && path.indexOf('/git/trees') === 0 && data.truncated) {
+          const hugeRepos = this.store.get(STORE.HUGE_REPOS);
+          const repo = `${opts.repo.username}/${opts.repo.reponame}`;
+          const repos = Object.keys(hugeRepos);
+          if (!hugeRepos[repo]) {
+            // If there are too many repos memoized, delete the oldest one
+            if (repos.length >= GH_MAX_HUGE_REPOS_SIZE) {
+              const oldestRepo = repos.reduce((min, p) => hugeRepos[p] < hugeRepos[min] ? p : min);
+              delete hugeRepos[oldestRepo];
+            }
+            hugeRepos[repo] = new Date().getTime();
+            this.store.set(STORE.HUGE_REPOS, hugeRepos);
+          }
           this._handleError({status: 206}, cb);
         } else cb(null, data);
       })

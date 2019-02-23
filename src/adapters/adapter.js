@@ -188,12 +188,6 @@ class Adapter {
           Please try again later.`;
         needAuth = false;
         break;
-      case 206:
-        error = 'Repo too large';
-        message = `This repository is too large to loaded in a single request.
-          If you frequently work with this repository,
-          go to Settings and uncheck the "Load entire tree at once" option.`;
-        break;
       case 401:
         error = 'Invalid token';
         message = `The token is invalid.
@@ -238,7 +232,8 @@ class Adapter {
     cb({
       error: `Error: ${error}`,
       message: message,
-      needAuth: needAuth
+      needAuth: needAuth,
+      status: jqXHR.status
     });
   }
 
@@ -271,7 +266,7 @@ class Adapter {
    * a single request. This is usually determined by the underlying the API.
    * @api public
    */
-  canLoadEntireTree() {
+  canLoadEntireTree(opts) {
     return false;
   }
 
