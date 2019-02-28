@@ -37,7 +37,7 @@ Octotree uses the [GitHub API](https://developer.github.com/v3/) to retrieve rep
 
 When that happens, Octotree will ask for your [GitHub personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use). If you don't already have one, [create one](https://github.com/settings/tokens/new?scopes=repo&description=Octotree%20browser%20extension), then copy and paste it into the token textbox in the Settings screen. Note that the minimal scopes that should be granted are `public_repo` and `repo` (if you need access to private repositories).
 
-**No BS Policy**: Octotree doesn't collect/share/care about your data at all. It stores the access token in your browser local storage and uses it only to communicate with GitHub API (see the code that does that [here](https://github.com/ovity/octotree/blob/559291ed9017f0c3429bc49419d001d9ea0ac510/src/adapters/github.js#L296-L313)). Using access tokens to access private repository and increase API rate limit is a common practice that many GitHub extensions use.
+**No BS Policy**: Octotree doesn't collect/share/care about your data at all. It stores the access token in your browser local storage and uses it only to communicate with GitHub API (see the code that does that [here](https://github.com/ovity/octotree/blob/559291ed9017f0c3429bc49419d001d9ea0ac510/src/adapters/github.js#L296-L313)).
 
 **Access tokens are stored in the browser's local storage, do NOT provide access tokens if you use public computers.**
 
@@ -63,7 +63,7 @@ Learn more at [keymaster](https://github.com/madrobby/keymaster#supported-keys).
 
 _Note: GitHub Enterprise is not supported on Safari._
 
-After installing Octotree Plus, navigate to a GitHub Enterprise domain. Right-click Octotree extension icon in the browser bar and select "Enable Octotree Plus on this domain". The page should refresh and Octotree Plus sidebar should show. Alternatively, you can disable by selecting "Disable Octotree Plus on this domain".
+After installing Octotree Plus, navigate to a your GitHub Enterprise URL. Right-click the Octotree Plus icon in the browser bar (see the image below) and select "Enable Octotree Plus on this domain". The page should refresh and Octotree Plus sidebar should show up. Alternatively, you can disable Octotree Plus on a domain by selecting "Disable Octotree Plus on this domain".
 
 ![GitHub Enterprise](docs/plus-ghe.png)
 
