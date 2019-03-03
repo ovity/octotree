@@ -74,7 +74,7 @@ This feature allows you to enter additional GitHub accounts and corresponding to
 
 Go to Settings and click the + button to add more accounts.
 
-![Multiple GitHub accounts](docs/plus-multi.png)
+![Multiple GitHub accounts](docs/plus-ma.png)
 
 #### Change Docking Position
 
