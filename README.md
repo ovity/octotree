@@ -52,7 +52,7 @@ Learn more at [keymaster](https://github.com/madrobby/keymaster#supported-keys).
 
 ### Others
 
-- **Load entire tree at once**: if checked, load the entire code tree at once. To avoid long delay, this should be unchecked if you frequently work with very large repos.
+- **Load entire tree at once**: if checked, load the entire code tree at once. For large repos where Octotree can't load it in a single request, Octotree ignores this settings and lazily-loads the repo.
 - **Show in non-code pages**: if checked, show Octotree in non-code pages such as Issues and Wiki.
 - **Show file-specific icons**: if checked, show different icons for different file types.
 - **Show only pull request changes**: if checked, show only the change set of a pull request.
@@ -63,31 +63,34 @@ Learn more at [keymaster](https://github.com/madrobby/keymaster#supported-keys).
 
 _Note: GitHub Enterprise is not supported on Safari._
 
-After installing Octotree Plus, navigate to a your GitHub Enterprise URL. Right-click the Octotree Plus icon in the browser bar (see the image below) and select "Enable Octotree Plus on this domain". The page should refresh and Octotree Plus sidebar should show up. Alternatively, you can disable Octotree Plus on a domain by selecting "Disable Octotree Plus on this domain".
+After installing Octotree Plus, navigate to your GitHub Enterprise site. Right-click the Octotree Plus icon in the browser bar (see the image below) and select "Enable Octotree Plus on this domain". The page should refresh and Octotree Plus sidebar should show up. Alternatively, you can disable Octotree Plus on a domain by selecting "Disable Octotree Plus on this domain".
 
 ![GitHub Enterprise](docs/plus-ghe.png)
 
 #### Multiple GitHub Accounts
 
-Go to Settings and click the Add Token button to add more accounts, each including a username and corresponding access token. When you login with a specific GitHub account, the corresponding token will be used to make API requests. If you don't login or there's no matching account, the default access token is used to make API requests.
+If you have multiple GitHub accounts with access to different private repositories, you will need to let Octotree know which access token to use for which account.
+This feature allows you to enter additional GitHub accounts and corresponding tokens. When you login to GitHub with an account, Octotree will use the matching token to make API requests to GitHub. If you don't login to GitHub or if the account you login is not in the account list, Octotree will use the default access token.
+
+Go to Settings and click the + button to add more accounts.
 
 ![Multiple GitHub accounts](docs/plus-multi.png)
 
 #### Change Docking Position
 
-Click the dock button to move Octotree to left or right of the screen.
+You can change the location of the Octotree sidebar to either the left or right side of the screen. Click the dock button located at the bottom of Octotree to toggle the sidebar location.
 
 ![Change docking position](docs/plus-dock.png)
 
 #### Dark Mode
 
-Click the dark mode button to toggle dark mode.
+Click the dark mode button located at the bottom of Octotree to toggle dark mode.
 
 ![Dark mode](docs/plus-dark.png)
 
 #### File Search
 
-Click the search icon and type in search query.
+Click the search icon and type in search query. **Note:** this feature requires the "Load entire tree at once" option to be selected.
 
 ![File search](docs/plus-search.png)
 
