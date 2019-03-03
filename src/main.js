@@ -233,7 +233,12 @@ $(document).ready(() => {
         startTimer(MOUSE_LEAVE_DELAY);
       });
       $sidebar.on('mouseenter mousemove', (event) => {
-        // Mouse is out
+        /**
+         * When loading a new file, the page is re-rendered,
+         * which triggers the mouseenter event even the mouse is actually out.
+         * Ensure the mouse is in the sidebar before running this event handler.
+         */
+
         if (!event.clientX) return;
 
         isMouseInSidebar = true;
