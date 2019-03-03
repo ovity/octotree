@@ -102,12 +102,6 @@ Click the search icon and type in search query. **Note:** this feature requires 
 1.  Load the unpacked extensions in the `tmp` folder (check instructions of the specific browser)
 1.  Please follow existing style for new code
 
-## Team
-
-- [Buu Nguyen](https://github.com/buunguyen)
-- [Duy Lam](https://github.com/duylam)
-- [An Nguyen](https://github.com/crashbell)
-
 ### Credits
 
 Octotree and Octotree Plus use the following open-source software:
