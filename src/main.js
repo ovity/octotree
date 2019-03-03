@@ -232,7 +232,10 @@ $(document).ready(() => {
         isMouseInSidebar = false;
         startTimer(MOUSE_LEAVE_DELAY);
       });
-      $sidebar.on('mouseenter mousemove', () => {
+      $sidebar.on('mouseenter mousemove', (event) => {
+        // Mouse is out
+        if (!event.clientX) return;
+
         isMouseInSidebar = true;
         clearTimer();
         if (!isSidebarVisible()) toggleSidebar(true);
