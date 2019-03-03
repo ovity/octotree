@@ -238,7 +238,6 @@ $(document).ready(() => {
          * which triggers the mouseenter event even the mouse is actually out.
          * Ensure the mouse is in the sidebar before running this event handler.
          */
-
         if (!event.clientX) return;
 
         isMouseInSidebar = true;
