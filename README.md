@@ -1,6 +1,6 @@
 ## Octotree
 
-Browser extension (Chrome, Firefox, Opera and Safari) to show a code tree on GitHub. Awesome for exploring project source without having to pull every single repository to your machine. Available as both a free and open-source community version and a commercial premium version.
+Browser extension (Chrome, Firefox, Opera and Safari) to show a code tree on GitHub. Great for exploring project source without having to download or pull every single repository to your machine. Available as both a free/open-source community version and a commercial premium version.
 
 **Features**
 
@@ -8,7 +8,7 @@ Browser extension (Chrome, Firefox, Opera and Safari) to show a code tree on Git
 - Fast browsing with pjax
 - Support private repositories (see [instructions](#access-token))
 
-**Features of Octotree Plus**
+**Features of Octotree Plus (premium)**
 
 - Dark mode
 - File search
@@ -17,7 +17,7 @@ Browser extension (Chrome, Firefox, Opera and Safari) to show a code tree on Git
 - Support GitHub Enterprise on Chrome, Opera and Firefox
 - Official Safari version
 
-Learn more about these features from [our website](https://www.octotree.io).
+Learn more on [our website](https://www.octotree.io).
 
 ![Octotree on GitHub](docs/chrome-github.png)
 
@@ -39,7 +39,7 @@ When that happens, Octotree will ask for your [GitHub personal access token](htt
 
 **No BS Policy**: Octotree doesn't collect/share/care about your data at all. It stores the access token in your browser local storage and uses it only to communicate with GitHub API (see the code that does that [here](https://github.com/ovity/octotree/blob/559291ed9017f0c3429bc49419d001d9ea0ac510/src/adapters/github.js#L296-L313)).
 
-**Access tokens are stored in the browser's local storage, do NOT provide access tokens if you use public computers.**
+**Access tokens are stored in the browser's local storage, only enter access tokens when you use a trusted computer.**
 
 ### Hotkeys
 
@@ -72,25 +72,26 @@ After installing Octotree Plus, navigate to your GitHub Enterprise site. Right-c
 If you have multiple GitHub accounts with access to different private repositories, you will need to let Octotree know which access token to use for which account.
 This feature allows you to enter additional GitHub accounts and corresponding tokens. When you login to GitHub with an account, Octotree will use the matching token to make API requests to GitHub. If you don't login to GitHub or if the account you login is not in the account list, Octotree will use the default access token.
 
-Go to Settings and click the + button to add more accounts.
+Go to Settings and click the + icon to add more accounts.
 
 ![Multiple GitHub accounts](docs/plus-ma.jpg)
 
 #### Change Docking Position
 
-You can change the location of the Octotree sidebar to either the left or right side of the screen. Click the dock button located at the bottom of Octotree to toggle the sidebar location.
+You can change the location of the Octotree sidebar to either the left or right side of the screen. Click the dock icon located at the bottom of Octotree to toggle the sidebar location.
 
 ![Change docking position](docs/plus-dock.png)
 
 #### Dark Mode
 
-Click the dark mode button located at the bottom of Octotree to toggle dark mode.
+Click the dark mode icon located at the bottom of Octotree to toggle dark mode.
 
 ![Dark mode](docs/plus-dark.png)
 
 #### File Search
 
-Click the search icon and type in search query. **Note:** this feature requires the "Load entire tree at once" option to be selected.
+Click the search icon and type in search query.
+**Note:** this feature requires the "Load entire tree at once" option to be selected.
 
 ![File search](docs/plus-search.png)
 
