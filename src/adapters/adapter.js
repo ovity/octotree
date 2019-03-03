@@ -206,7 +206,6 @@ class Adapter {
     cb({
       error: `Error: ${error}`,
       message: message,
-      needAuth: needAuth,
       status: jqXHR.status
     });
   }
