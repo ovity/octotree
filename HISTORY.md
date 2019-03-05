@@ -1,13 +1,13 @@
 ### v3.0.0
 
-Since this release, we have 2 version of Octotree: an open-source, community version that has been and will forever remain free and a commercial version, Octotree Plus, that has many advanced features.
+Since this release, we have 2 version of Octotree: an open-source, community version that has been and will forever remain free and a commercial version, Octotree Pro, that contains many advanced features.
 
 **Changes to Octotree**
 
 - Improved UI: more elegant and easy to use
 - No longer support GitHub Enterprise on Chrome and Opera
 
-**Octotree Plus**
+**Octotree Pro**
 
 - Dark mode
 - File search
@@ -16,13 +16,13 @@ Since this release, we have 2 version of Octotree: an open-source, community ver
 - GitHub Enterprise on Chrome, Opera and Firefox (at last!)
 - Official Safari extension
 
-Learn more about Octotree Plus on the [official Octotree website](https://www.octotree.io).
+Learn more about Octotree Pro on the [official Octotree website](https://www.octotree.io).
 
 **Why 2 versions?**
 
 I have been working on Octotree for the last 5 years in my spare time. For the past year or so, I started accepting donation, but that didn't work out too well. I need a sustainable source of income to fund the on-going development cost of Octotree. This is more important than ever as a few other developers have joined me to help maintain and improve Octotree.
 
-Make no mistake, we will not abandon the free version of Octotree. We commit to keep updating and improving it with features that the majority of users need. We removed Chrome GitHub Enterprise support in this release because we had to rewrite this feature from scratch to support Firefox and we consider this an advanced feature that most users don't need. If you need this feature, please consider upgrading to Octotree Plus to support the developers and enjoy other premium features only available in Octotree Plus.
+Make no mistake, we will not abandon the free version of Octotree. We commit to keep updating and improving it with features that the majority of users need. We removed Chrome GitHub Enterprise support in this release because we had to rewrite this feature from scratch to support Firefox and we consider this an advanced feature that most users don't need. If you need this feature, please consider upgrading to Octotree Pro to support the developers and enjoy other premium features.
 
 ### v2.5.1
 

@@ -8,7 +8,7 @@ Browser extension (Chrome, Firefox, Opera and Safari) to show a code tree on Git
 - Fast browsing with pjax
 - Support private repositories (see [instructions](#access-token))
 
-**Features of Octotree Plus (premium)**
+**Features of Octotree Pro (premium)**
 
 - Dark mode
 - File search
@@ -24,7 +24,7 @@ Learn more on [our website](https://www.octotree.io).
 ### Install Octotree
 
 - Octotree: [Chrome](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/octotree/), [Opera](https://addons.opera.com/en/extensions/details/octotree/)
-- Octotree Plus: [Chrome](), [Firefox](), [Opera](), [Safari]()
+- Octotree Pro: [Chrome](), [Firefox](), [Opera](), [Safari]()
 
 ## Settings
 
@@ -57,15 +57,15 @@ Learn more at [keymaster](https://github.com/madrobby/keymaster#supported-keys).
 - **Show file-specific icons**: if checked, show different icons for different file types.
 - **Show only pull request changes**: if checked, show only the change set of a pull request.
 
-### Octotree Plus Settings
+### Octotree Pro Settings
 
 #### GitHub Enterprise
 
 _Note: GitHub Enterprise is not supported on Safari._
 
-After installing Octotree Plus, navigate to your GitHub Enterprise site. Right-click the Octotree Plus icon in the browser bar (see the image below) and select "Enable Octotree Plus on this domain". The page should refresh and Octotree Plus sidebar should show up. Alternatively, you can disable Octotree Plus on a domain by selecting "Disable Octotree Plus on this domain".
+After installing Octotree Pro, navigate to your GitHub Enterprise site. Right-click the Octotree Pro icon in the browser bar (see the image below) and select "Enable Octotree Pro on this domain". The page should refresh and Octotree Pro sidebar should show up. Alternatively, you can disable Octotree Pro on a domain by selecting "Disable Octotree Pro on this domain".
 
-![GitHub Enterprise](docs/plus-ghe.png)
+![GitHub Enterprise](docs/pro-ghe.png)
 
 #### Multiple GitHub Accounts
 
@@ -74,26 +74,26 @@ This feature allows you to enter additional GitHub accounts and corresponding to
 
 Go to Settings and click the + icon to add more accounts.
 
-![Multiple GitHub accounts](docs/plus-ma.jpg)
+![Multiple GitHub accounts](docs/pro-ma.jpg)
 
 #### Change Docking Position
 
 You can change the location of the Octotree sidebar to either the left or right side of the screen. Click the dock icon located at the bottom of Octotree to toggle the sidebar location.
 
-![Change docking position](docs/plus-dock.png)
+![Change docking position](docs/pro-dock.png)
 
 #### Dark Mode
 
 Click the dark mode icon located at the bottom of Octotree to toggle dark mode.
 
-![Dark mode](docs/plus-dark.png)
+![Dark mode](docs/pro-dark.png)
 
 #### File Search
 
 Click the search icon and type in search query.
 **Note:** this feature requires the "Load entire tree at once" option to be selected.
 
-![File search](docs/plus-search.png)
+![File search](docs/pro-search.png)
 
 ## Contribution
 
@@ -105,7 +105,7 @@ Click the search icon and type in search query.
 
 ### Credits
 
-Octotree and Octotree Plus use the following open-source software:
+Octotree and Octotree Pro use the following open-source software:
 
 - [jQuery](https://github.com/jquery/jquery)
 - [jQuery UI](https://github.com/jquery/jquery-ui)
