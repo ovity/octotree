@@ -212,8 +212,13 @@ $(document).ready(() => {
       $toggler.mouseenter(() => toggleSidebar(true));
 
       // Immediately closes if click outside the sidebar.
-      $document.on('click', () => {
-        if (!isMouseInSidebar && !isSidebarPinned() && isSidebarVisible()) {
+      $document.on('click', (event) => {
+        /**
+         * Ensure the event click being triggered outside the sidebar
+         */
+        const notInSidebar = !$sidebar.find(event.target).length;
+
+        if (notInSidebar && !isSidebarPinned() && isSidebarVisible()) {
           toggleSidebar(false);
         }
       });
