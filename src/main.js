@@ -206,7 +206,7 @@ $(document).ready(() => {
     function setupSidebarFloatingBehaviors() {
       const MOUSE_LEAVE_DELAY = 2000;
       const KEY_PRESS_DELAY = 4000;
-      let isMouseInSidebar = false;
+      const notInSidebar = (event) => !$sidebar.find(event.target).length;
 
       // Opens when mouse is over the handle.
       $toggler.mouseenter(() => toggleSidebar(true));
@@ -216,27 +216,22 @@ $(document).ready(() => {
         /**
          * Ensure the event click being triggered outside the sidebar
          */
-        const notInSidebar = !$sidebar.find(event.target).length;
-
-        if (notInSidebar && !isSidebarPinned() && isSidebarVisible()) {
+        if (notInSidebar(event) && !isSidebarPinned() && isSidebarVisible()) {
           toggleSidebar(false);
         }
       });
 
       let timerId = null;
-      const startTimer = (delay) => {
-        if (!isMouseInSidebar && !isSidebarPinned()) {
+      const startTimer = (delay, isNotInSidebar) => {
+        if (isNotInSidebar && !isSidebarPinned()) {
           clearTimer();
           timerId = setTimeout(() => toggleSidebar(isSidebarPinned()), delay);
         }
       };
       const clearTimer = () => timerId && clearTimeout(timerId);
 
-      $sidebar.on('keyup', () => startTimer(KEY_PRESS_DELAY));
-      $sidebar.on('mouseleave', () => {
-        isMouseInSidebar = false;
-        startTimer(MOUSE_LEAVE_DELAY);
-      });
+      $sidebar.on('keyup', () => startTimer(KEY_PRESS_DELAY, false));
+      $sidebar.on('mouseleave', () => startTimer(MOUSE_LEAVE_DELAY, true));
       $sidebar.on('mouseenter mousemove', (event) => {
         /**
          * When loading a new file, the page is re-rendered,
@@ -245,7 +240,6 @@ $(document).ready(() => {
          */
         if (!event.clientX) return;
 
-        isMouseInSidebar = true;
         clearTimer();
         if (!isSidebarVisible()) toggleSidebar(true);
       });
