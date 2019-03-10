@@ -218,6 +218,11 @@ $(document).ready(() => {
         }
       });
 
+      $document.on('mousemove', (event) => {
+        isMouseInSidebar = false;
+        startTimer(MOUSE_LEAVE_DELAY);
+      });
+
       let timerId = null;
       const startTimer = (delay) => {
         if (!isMouseInSidebar && !isSidebarPinned()) {
@@ -228,17 +233,11 @@ $(document).ready(() => {
       const clearTimer = () => timerId && clearTimeout(timerId);
 
       $sidebar.on('keyup', () => startTimer(KEY_PRESS_DELAY));
-      $sidebar.on('mouseleave', () => {
-        isMouseInSidebar = false;
-        startTimer(MOUSE_LEAVE_DELAY);
-      });
       $sidebar.on('mouseenter mousemove', (event) => {
         /**
-         * When loading a new file, the page is re-rendered,
-         * which triggers the mouseenter event even the mouse is actually out.
-         * Ensure the mouse is in the sidebar before running this event handler.
+         * Stop propagating up to the document so that we are able to distinguish 2 events
          */
-        if (!event.clientX) return;
+        event.stopPropagation();
 
         isMouseInSidebar = true;
         clearTimer();
