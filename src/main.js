@@ -22,7 +22,7 @@ $(document).ready(() => {
     setupSidebarFloatingBehaviors();
     setHotkeys(store.get(STORE.HOTKEYS));
 
-    $html.hasClass(ADDON_CLASS) ? helpPopup.showUninstall() : $html.addClass(ADDON_CLASS);
+    $html.hasClass(ADDON_CLASS) ? helpPopup.setShowInstallationWarning() : $html.addClass(ADDON_CLASS);
 
     $(window).resize((event) => {
       if (event.target === window) layoutChanged();
@@ -61,6 +61,7 @@ $(document).ready(() => {
       .appendTo($('body'));
 
     adapter.init($sidebar);
+    helpPopup.init();
 
     await pluginManager.activate({
       adapter,
@@ -140,7 +141,6 @@ $(document).ready(() => {
           $toggler.hide();
           toggleSidebar(false);
         }
-        helpPopup.init();
         layoutChanged();
       });
     }

@@ -2,6 +2,7 @@ class HelpPopup {
   constructor($dom, store) {
     this.$view = $dom.find('.popup');
     this.store = store;
+    this.showInstallationWarning = false;
   }
 
   init() {
@@ -10,7 +11,9 @@ class HelpPopup {
     const popupShown = store.get(STORE.POPUP);
     const sidebarVisible = $('html').hasClass(SHOW_CLASS);
 
-    if (popupShown || sidebarVisible) {
+    if (this.showInstallationWarning) {
+      $view.find('.content').text('Uninstall the Octotree Lite to avoid unexpected behaviors.');
+    } else if (popupShown || sidebarVisible) {
       return hideAndDestroy();
     }
 
@@ -31,11 +34,7 @@ class HelpPopup {
     }
   }
 
-  showUninstall() {
-    const $unisntallPopup = $(document).find('.uninstalled-popup');
-
-    setTimeout(() => {
-      $unisntallPopup.addClass('show');
-    }, 500);
+  setShowInstallationWarning() {
+    this.showInstallationWarning = true;
   }
 }
