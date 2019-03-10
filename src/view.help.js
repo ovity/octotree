@@ -12,7 +12,9 @@ class HelpPopup {
     const sidebarVisible = $('html').hasClass(SHOW_CLASS);
 
     if (this.showInstallationWarning) {
-      $view.find('.content').text('Uninstall the Octotree Lite to avoid unexpected behaviors.');
+      $view
+        .find('.content')
+        .text('You currently have 2 versions of Octotree installed. Please uninstall one of the them.');
     } else if (popupShown || sidebarVisible) {
       return hideAndDestroy();
     }
