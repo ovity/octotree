@@ -30,4 +30,12 @@ class HelpPopup {
       }
     }
   }
+
+  showUninstall() {
+    const $unisntallPopup = $(document).find('.uninstalled-popup');
+
+    setTimeout(() => {
+      $unisntallPopup.addClass('show');
+    }, 500);
+  }
 }

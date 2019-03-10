@@ -22,7 +22,7 @@ $(document).ready(() => {
     setupSidebarFloatingBehaviors();
     setHotkeys(store.get(STORE.HOTKEYS));
 
-    $html.addClass(ADDON_CLASS);
+    $html.hasClass(ADDON_CLASS) ? helpPopup.showUninstall() : $html.addClass(ADDON_CLASS);
 
     $(window).resize((event) => {
       if (event.target === window) layoutChanged();
