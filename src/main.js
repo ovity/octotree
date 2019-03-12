@@ -218,31 +218,50 @@ $(document).ready(() => {
         }
       });
 
-      $document.on('mousemove', (event) => {
-        isMouseInSidebar = false;
-        startTimer(MOUSE_LEAVE_DELAY);
+      $document.on('mouseover', () => {
+        // Ensure startTimer being executed only once when mouse is moving outside the sidebar
+        if (!timerId) {
+          isMouseInSidebar = false;
+          startTimer(MOUSE_LEAVE_DELAY);
+        }
       });
 
       let timerId = null;
+
       const startTimer = (delay) => {
         if (!isMouseInSidebar && !isSidebarPinned()) {
           clearTimer();
           timerId = setTimeout(() => toggleSidebar(isSidebarPinned()), delay);
         }
       };
-      const clearTimer = () => timerId && clearTimeout(timerId);
+      const clearTimer = () => {
+        if (timerId) {
+          clearTimeout(timerId);
+          timerId = null;
+        }
+      };
 
-      $sidebar.on('keyup', () => startTimer(KEY_PRESS_DELAY));
-      $sidebar.on('mouseenter mousemove', (event) => {
-        /**
-         * Stop propagating up to the document so that we are able to distinguish 2 events
-         */
-        event.stopPropagation();
+      $sidebar
+        .on('keyup', () => startTimer(KEY_PRESS_DELAY))
+        .on('focusin mousemove', (event) => {
+          /**
+           * Using focusin instead mouseenter to ensure that clicking on a file:
+           *  - the sidebar is opened when mouse is inside the sidebar
+           *  - the sidebar is closed when mouse is outside the sidebar
+           *
+           * Event order when clicking on a file
+           * Mouse inside: mouseleave -> dom mouseover -> mouseenter -> focusin
+           * Mouse outside: mouseleave -> dom mouseover -> mouseenter
+           */
 
-        isMouseInSidebar = true;
-        clearTimer();
-        if (!isSidebarVisible()) toggleSidebar(true);
-      });
+          isMouseInSidebar = true;
+          clearTimer();
+          if (!isSidebarVisible()) toggleSidebar(true);
+        })
+        .on('mouseleave', (event) => {
+          isMouseInSidebar = false;
+          startTimer(MOUSE_LEAVE_DELAY);
+        });
     }
 
     /**
