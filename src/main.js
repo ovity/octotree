@@ -245,15 +245,9 @@ $(document).ready(() => {
         .on('keyup', () => startTimer(KEY_PRESS_DELAY))
         .on('focusin mousemove', (event) => {
           /**
-           * Using focusin instead mouseenter to ensure that clicking on a file:
-           *  - the sidebar is opened when mouse is inside the sidebar
-           *  - the sidebar is closed when mouse is outside the sidebar
-           *
-           * Event order when clicking on a file
-           * Mouse inside: mouseleave -> dom mouseover -> mouseenter -> focusin
-           * Mouse outside: mouseleave -> dom mouseover -> mouseenter
+           * Use 'focusin' instead of 'mouseenter' to handle the case when clicking a file in the sidebar then move
+           * outside -> 'mouseenter' is triggered in sidebar, clear the timer and keep sidebar open.
            */
-
           isMouseInSidebar = true;
           clearTimer();
           if (!isSidebarVisible()) toggleSidebar(true);
