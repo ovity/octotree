@@ -16,7 +16,7 @@ Since this release, we have 2 version of Octotree: an open-source, community ver
 - GitHub Enterprise on Chrome, Opera and Firefox (at last!)
 - Official Safari extension
 
-Learn more about Octotree Pro on the [official Octotree website](https://www.octotree.io).
+Learn more about Octotree Pro on the [official Octotree website](https://www.octotree.io/?utm_source=github).
 
 **Why 2 versions?**
 
