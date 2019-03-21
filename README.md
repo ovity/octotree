@@ -1,6 +1,6 @@
 ## Octotree
 
-Browser extension (Chrome, Firefox, Opera and Safari) to show a code tree on GitHub. Great for exploring project source without having to download or pull every single repository to your machine. Available as both a free/open-source community version and a commercial premium version.
+Browser extension (Chrome, Firefox, Opera and Safari) that displays a code tree on GitHub. Great for exploring project source code without having to download many repositories to your machine.
 
 **Features**
 
