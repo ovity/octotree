@@ -35,7 +35,6 @@ gulp.task('css', () => {
     $.plumber(),
     $.less({relativeUrls: true}),
     $.autoprefixer({cascade: true}),
-    gutil.env.production && $.cssmin(),
     './tmp'
   );
 });
