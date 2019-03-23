@@ -204,6 +204,7 @@ function buildCss(prefix = '.') {
   return pipe(
     [`${prefix}/tmp/file-icons.css`, `${prefix}/tmp/jstree.css`, `${prefix}/tmp/octotree.css`],
     $.concat('content.css'),
+    gutil.env.production && $.cssmin(),
     './tmp'
   );
 }
