@@ -24,7 +24,7 @@ Learn more on [our website](https://www.octotree.io?utm_source=github).
 ### Install Octotree
 
 - Octotree: [Chrome](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/octotree/), [Opera](https://addons.opera.com/en/extensions/details/octotree/)
-- Octotree Pro: [Chrome](), [Firefox](), [Opera](), [Safari]()
+- Octotree Pro: [Chrome](https://chrome.google.com/webstore/detail/fjcahddnekkgihjnjnimgiggdmlgcnbc), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/octotree-pro/), [Opera](https://addons.opera.com/en/extensions/details/octotree-pro/), [Safari]()
 
 ## Settings
 
