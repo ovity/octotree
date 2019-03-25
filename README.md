@@ -15,9 +15,9 @@ Browser extension (Chrome, Firefox, Opera and Safari) that displays a code tree 
 - Change docking position
 - Multiple GitHub accounts
 - Support GitHub Enterprise on Chrome, Opera and Firefox
-- Official Safari version
+- Official Safari version (Safari doesn't support GitHub Enterprise)
 
-Learn more on [our website](https://www.octotree.io?utm_source=github).
+Learn more on [our website](https://www.octotree.io).
 
 ![Octotree on GitHub](docs/chrome-github.png)
 
