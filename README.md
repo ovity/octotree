@@ -8,7 +8,7 @@ Browser extension (Chrome, Firefox, Opera and Safari) that displays a code tree 
 - Fast browsing with pjax
 - Support private repositories (see [instructions](#access-token))
 
-**Features of Octotree Pro (premium)**
+**Features of Octotree Pro**
 
 - Dark mode
 - File search
@@ -17,7 +17,7 @@ Browser extension (Chrome, Firefox, Opera and Safari) that displays a code tree 
 - Support GitHub Enterprise on Chrome, Opera and Firefox
 - Official Safari version (Safari doesn't support GitHub Enterprise)
 
-Learn more on [our website](https://www.octotree.io)
+Learn why we build Octotree Pro [here](HISTORY.md#v300). Subscribe to Octotree Pro on [our website](https://www.octotree.io).
 
 ![Octotree on GitHub](docs/chrome-github.png)
 
