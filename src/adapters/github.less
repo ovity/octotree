@@ -78,6 +78,8 @@
 
       .octotree-view-header {
         position: absolute;
+        display: flex;
+        align-items: center;
         background-color: @dark-less;
         border-right: 1px @dark solid;
         color: white;
@@ -85,12 +87,11 @@
         font-weight: normal;
         top: 0;
         left: 0;
-        line-height: 2.8;
+        line-height: 1;
         width: 100%;
         height: @header-height;
         margin: 0;
         padding-right: 65px;
-        padding-top: 2px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -110,6 +111,10 @@
         padding-left: 5px;
         box-sizing: border-box;
 
+        .octotree-header-summary {
+          height: @header-height / 2;
+        }
+
         .octotree-header-repo,
         .octotree-header-branch {
           width: 100%;
@@ -120,6 +125,8 @@
         }
 
         .octotree-header-repo {
+          margin-bottom: 3px;
+
           font-size: 13px;
           font-weight: normal;
           color: white;
@@ -144,9 +151,7 @@
 
         .octotree-header-branch {
           line-height: 1;
-          margin-bottom: 5px;
           margin-left: -1px;
-          margin-top: -6px;
           font-size: 11px;
           color: white;
 
@@ -272,7 +277,6 @@
     .octotree-settings-view {
       .octotree-view-header {
         padding-left: 8px;
-        padding-top: 7px !important;
       }
     }
 
@@ -491,30 +495,29 @@
   }
 
   a.octotree-pin {
-    top: 22px;
+    top: (@header-height - @icon-size) / 2;
     right: 6px;
-    width: 15px;
-    height: 15px;
+    width: @icon-size;
+    height: @icon-size;
 
     .octotree-icon-pin {
-      .icon-v2(@octicons-pin, @font-size: 15px, @color: @gray, @hover-color: white);
+      .icon-v2(@octicons-pin, @font-size: @icon-size, @color: @gray, @hover-color: white);
     }
 
     &.octotree-pinned .octotree-icon-pin:before {
-      transform: rotate(-45deg);
+      transform: rotate(-45deg) scale(0.9);
       color: white;
     }
   }
 
   a.octotree-settings {
-    top: 22px;
+    top: (@header-height - @icon-size) / 2;
     right: 26px;
-    width: 16px;
-    height: 16px;
+    width: @icon-size;
+    height: @icon-size;
 
     .octotree-icon-settings {
-      .icon-v2(@octicons-gear, @font-size: 16px, @color: @gray, @hover-color: white);
-      top: -1px;
+      .icon-v2(@octicons-gear, @font-size: @icon-size, @color: @gray, @hover-color: white);
     }
 
     &.selected .octotree-icon-settings:before {
@@ -548,7 +551,7 @@
 
     .octotree-spin {
       right: 8px;
-      top: 65px;
+      top: @header-height + 5;
       display: none;
 
       &.octotree-spin--loading {
