@@ -37,7 +37,8 @@ class TreeView {
 
       this.adapter.loadCodeTree({repo, token, node}, (err, treeData) => {
         if (err) {
-          if (err.status === 206 && loadAll) { // The repo is too big to load all, need to retry
+          if (err.status === 206 && loadAll) {
+            // The repo is too big to load all, need to retry
             $jstree.refresh(true);
           } else {
             $(this).trigger(EVENT.FETCH_ERROR, [err]);
@@ -67,15 +68,17 @@ class TreeView {
     this.$view
       .find('.octotree-view-header')
       .html(
-        `<div class="octotree-header-repo">
-           <i class="octotree-icon-repo"></i>
-           <a href="/${repo.username}">${repo.username}</a> /
-           <a data-pjax href="/${repo.username}/${repo.reponame}">${repo.reponame}</a>
-         </div>
-         <div class="octotree-header-branch">
-           <i class="octotree-icon-branch"></i>
-           ${this._deXss(repo.branch.toString())}
-         </div>`
+        `<div class="octotree-header-summary">
+          <div class="octotree-header-repo">
+            <i class="octotree-icon-repo"></i>
+            <a href="/${repo.username}">${repo.username}</a> /
+            <a data-pjax href="/${repo.username}/${repo.reponame}">${repo.reponame}</a>
+          </div>
+          <div class="octotree-header-branch">
+            <i class="octotree-icon-branch"></i>
+            ${this._deXss(repo.branch.toString())}
+          </div>
+        </div>`
       )
       .on('click', 'a[data-pjax]', function(event) {
         event.preventDefault();
