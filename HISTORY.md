@@ -1,3 +1,8 @@
+### v3.0.1
+
+- Add option to show sidebar upon hover
+- Fix bug sidebar shows when mouse over screen border
+
 ### v3.0.0
 
 Since this release, we have 2 version of Octotree: an open-source, community version that has been and will forever remain free and a commercial version, Octotree Pro, that contains many advanced features.
