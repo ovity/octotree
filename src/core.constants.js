@@ -5,6 +5,7 @@ const PINNED_CLASS = 'octotree-pinned';
 
 const STORE = {
   TOKEN: 'octotree.access_token',
+  HOVEROPEN: 'octotree.hover_open',
   NONCODE: 'octotree.noncode_shown',
   PR: 'octotree.pr_shown',
   HOTKEYS: 'octotree.hotkeys',
@@ -19,6 +20,7 @@ const STORE = {
 
 const DEFAULTS = {
   TOKEN: '',
+  HOVEROPEN: true,
   NONCODE: true,
   PR: true,
   LOADALL: true,

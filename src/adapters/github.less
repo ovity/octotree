@@ -20,7 +20,6 @@
     position: absolute;
     right: -4px;
     top: 0;
-    width: 8px;
   }
 
   .octotree-footer {
@@ -418,6 +417,7 @@
     width: 30px;
     z-index: @index-base;
     transition: right 0.4s ease-in 0.3s, opacity 0.5s ease-in 0.3s;
+    cursor: pointer;
 
     > .octotree-toggle-icon {
       .icon-v2(@octicons-chevron-right, @font-size: 15px, @color: @dark, @hover-color: @dark);
@@ -542,6 +542,10 @@
   .octotree-sidebar.octotree-github-sidebar {
     transform: translate3d(0, 0, 0);
     transition: transform 0.3s ease;
+
+    .ui-resizable-e {
+      width: 8px;
+    }
 
     .octotree-toggle {
       opacity: 0;
