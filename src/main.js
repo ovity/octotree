@@ -86,7 +86,7 @@ $(document).ready(() => {
       let reload = false;
 
       Object.keys(changes).forEach((storeKey) => {
-        const [oldKeys, newKeys] = changes[storeKey];
+        const [oldValue, newValue] = changes[storeKey];
 
         switch (storeKey) {
           case STORE.TOKEN:
@@ -95,8 +95,11 @@ $(document).ready(() => {
           case STORE.PR:
             reload = true;
             break;
+          case STORE.HOVEROPEN:
+            handleHoverOpenOption(newValue);
+            break;
           case STORE.HOTKEYS:
-            setHotkeys(newKeys, oldKeys);
+            setHotkeys(newValue, oldValue);
             break;
         }
       });
@@ -208,8 +211,7 @@ $(document).ready(() => {
       const KEY_PRESS_DELAY = 4000;
       let isMouseInSidebar = false;
 
-      // Opens when mouse is over the handle.
-      $toggler.mouseenter(() => toggleSidebar(true));
+      handleHoverOpenOption(this.store.get(STORE.HOVEROPEN));
 
       // Immediately closes if click outside the sidebar.
       $document.on('click', () => {
@@ -250,12 +252,35 @@ $(document).ready(() => {
            */
           isMouseInSidebar = true;
           clearTimer();
-          if (!isSidebarVisible()) toggleSidebar(true);
+
+          // Only re-show the sidebar when hovering inside the sidebar except the toggler
+          const isHoveringToggler = $toggler.is(event.target) || $toggler.has(event.target).length;
+
+          if (!isHoveringToggler && !isSidebarVisible()) toggleSidebar(true);
         })
         .on('mouseleave', (event) => {
           isMouseInSidebar = false;
           startTimer(MOUSE_LEAVE_DELAY);
         });
+    }
+
+    function onTogglerHovered() {
+      toggleSidebar(true);
+    }
+
+    function onTogglerClicked(event) {
+      event.stopPropagation();
+      toggleSidebar(true);
+    }
+
+    function handleHoverOpenOption(enableHoverOpen) {
+      if (enableHoverOpen) {
+        $toggler.off('click', onTogglerClicked);
+        $toggler.on('mouseenter', onTogglerHovered);
+      } else {
+        $toggler.off('mouseenter', onTogglerHovered);
+        $toggler.on('click', onTogglerClicked);
+      }
     }
 
     /**
