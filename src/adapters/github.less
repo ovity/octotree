@@ -240,6 +240,12 @@
         margin-right: 3px;
         text-decoration: none;
         font-smoothing: antialiased;
+
+        // Disable "Github File Icons" extension when it also renders file icon on jstree node
+        // See code how it renders icon https://github.com/lvarayut/github-file-icons/blob/9ded9e6b66e11e613eee9977b96df9902d1d41a7/src/injections/octotree.js#L20
+        span {
+          display: none;
+        }
       }
       .jstree-icon.tree,
       .jstree-icon.commit,
