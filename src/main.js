@@ -157,7 +157,8 @@ $(document).ready(() => {
     function showError(err) {
       hasError = true;
       errorView.show(err);
-      toggleSidebar(true);
+
+      if (store.get(STORE.PINNED)) togglePin(true);
     }
 
     function toggleSidebar(visibility) {
