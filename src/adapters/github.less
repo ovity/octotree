@@ -14,12 +14,15 @@
   z-index: @index-base;
 
   // jQuery resizer
-  .ui-resizable-e {
+  .ui-resizable-handle {
     bottom: 0;
     cursor: col-resize;
     position: absolute;
-    right: -4px;
     top: 0;
+  }
+
+  .ui-resizable-e {
+    right: -4px;
   }
 
   .octotree-footer {
@@ -543,7 +546,7 @@
     transform: translate3d(0, 0, 0);
     transition: transform 0.3s ease;
 
-    .ui-resizable-e {
+    .ui-resizable-handle {
       width: 8px;
     }
 
