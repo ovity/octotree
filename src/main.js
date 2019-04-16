@@ -254,10 +254,12 @@ $(document).ready(() => {
           isMouseInSidebar = true;
           clearTimer();
 
-          // Only re-show the sidebar when hovering inside the sidebar except the toggler
-          const isHoveringToggler = $toggler.is(event.target) || $toggler.has(event.target).length;
+          if (event.type === 'mousemove') {
+            // Only re-show the sidebar when hovering inside the sidebar except the toggler
+            const isHoveringToggler = $toggler.is(event.target) || $toggler.has(event.target).length;
 
-          if (!isHoveringToggler && !isSidebarVisible()) toggleSidebar(true);
+            if (!isHoveringToggler && !isSidebarVisible()) toggleSidebar(true);
+          }
         })
         .on('mouseleave', (event) => {
           isMouseInSidebar = false;
