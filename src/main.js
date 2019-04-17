@@ -215,8 +215,10 @@ $(document).ready(() => {
       handleHoverOpenOption(this.store.get(STORE.HOVEROPEN));
 
       // Immediately closes if click outside the sidebar.
-      $document.on('click', () => {
-        if (!isMouseInSidebar && !isSidebarPinned() && isSidebarVisible()) {
+      $document.on('click keyup', (e) => {
+        const isEscape = e.type === 'keyup' && e.key === 'Escape';
+
+        if (!isSidebarPinned() && (isEscape || (!isMouseInSidebar && isSidebarVisible()))) {
           toggleSidebar(false);
         }
       });
@@ -232,7 +234,7 @@ $(document).ready(() => {
       let timerId = null;
 
       const startTimer = (delay) => {
-        if (!isMouseInSidebar && !isSidebarPinned()) {
+        if (this.store.get(STORE.HOVEROPEN) && !isMouseInSidebar && !isSidebarPinned()) {
           clearTimer();
           timerId = setTimeout(() => toggleSidebar(isSidebarPinned()), delay);
         }
