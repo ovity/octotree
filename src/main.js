@@ -248,16 +248,16 @@ $(document).ready(() => {
         .on('keyup', () => startTimer(KEY_PRESS_DELAY))
         .on('focusin mousemove', (event) => {
           /**
-           * Use 'focusin' instead of 'mouseenter' to handle the case when clicking a file in the sidebar then move
-           * outside -> 'mouseenter' is triggered in sidebar, clear the timer and keep sidebar open.
+           * Use 'focusin' instead of 'mouseenter' to handle the case when clicking a file in the
+           * sidebar then move outside -> 'mouseenter' is triggered in sidebar, clear the timer
+           * and keep sidebar open.
            */
           isMouseInSidebar = true;
           clearTimer();
 
+          // Only re-show the sidebar when hovering inside the sidebar except the toggler
           if (event.type === 'mousemove') {
-            // Only re-show the sidebar when hovering inside the sidebar except the toggler
             const isHoveringToggler = $toggler.is(event.target) || $toggler.has(event.target).length;
-
             if (!isHoveringToggler && !isSidebarVisible()) toggleSidebar(true);
           }
         })
