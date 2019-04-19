@@ -35,7 +35,14 @@ const GH_RESERVED_USER_NAMES = [
 ];
 const GH_RESERVED_REPO_NAMES = ['followers', 'following', 'repositories'];
 const GH_404_SEL = '#parallax_wrapper';
-const GH_PJAX_CONTAINER_SEL = '#js-repo-pjax-container, .context-loader-container, [data-pjax-container]';
+
+// When Github page loads at repo path e.g. https://github.com/jquery/jquery, the HTML tree has
+// <main id="js-repo-pjax-container"> to contain server-rendered HTML in response of pjax.
+// However, that <main> element doesn't have "id" attribute if the Github page loads at specific
+// file e.g. https://github.com/jquery/jquery/blob/master/.editorconfig.
+// Therefore, the below selector uses many path but only points to the same <main> element
+const GH_PJAX_CONTAINER_SEL = '#js-repo-pjax-container, div[itemtype="http://schema.org/SoftwareSourceCode"] main, [data-pjax-container]';
+
 const GH_CONTAINERS = '.container, .container-lg, .container-responsive';
 const GH_HEADER = '.js-header-wrapper > header';
 const GH_RAW_CONTENT = 'body > pre';
