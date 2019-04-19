@@ -208,7 +208,7 @@ $(document).ready(() => {
      * Controls how the sidebar behaves in float mode (i.e. non-pinned).
      */
     function setupSidebarFloatingBehaviors() {
-      const MOUSE_LEAVE_DELAY = 2000;
+      const MOUSE_LEAVE_DELAY = 500;
       const KEY_PRESS_DELAY = 4000;
       let isMouseInSidebar = false;
 
