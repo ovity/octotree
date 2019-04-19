@@ -260,10 +260,6 @@ $(document).ready(() => {
             const isHoveringToggler = $toggler.is(event.target) || $toggler.has(event.target).length;
             if (!isHoveringToggler && !isSidebarVisible()) toggleSidebar(true);
           }
-        })
-        .on('mouseleave', (event) => {
-          isMouseInSidebar = false;
-          startTimer(MOUSE_LEAVE_DELAY);
         });
     }
 
