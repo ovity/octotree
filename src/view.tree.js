@@ -37,7 +37,7 @@ class TreeView {
 
       this.adapter.loadCodeTree({repo, token, node}, (err, treeData) => {
         if (err) {
-          if (err.status === 206 && loadAll) {
+          if (err.status === 206 && !err.message && loadAll) {
             // The repo is too big to load all, need to retry
             $jstree.refresh(true);
           } else {
