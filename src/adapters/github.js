@@ -112,7 +112,7 @@ class GitHub extends PjaxAdapter {
 
     $('html').css('margin-left', shouldPushEverything && smallScreen ? sidebarWidth : '');
     $containers.css('margin-left', shouldPushEverything && smallScreen ? SPACING : '');
-    $header.css('padding-left', shouldPushEverything && !smallScreen ? sidebarWidth : '');
+    $header.css('padding-left', shouldPushEverything && !smallScreen ? sidebarWidth + SPACING : '');
   }
 
   // @override
