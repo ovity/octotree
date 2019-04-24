@@ -39,9 +39,10 @@ const GH_404_SEL = '#parallax_wrapper';
 // When Github page loads at repo path e.g. https://github.com/jquery/jquery, the HTML tree has
 // <main id="js-repo-pjax-container"> to contain server-rendered HTML in response of pjax.
 // However, that <main> element doesn't have "id" attribute if the Github page loads at specific
-// file e.g. https://github.com/jquery/jquery/blob/master/.editorconfig.
+// File e.g. https://github.com/jquery/jquery/blob/master/.editorconfig.
 // Therefore, the below selector uses many path but only points to the same <main> element
-const GH_PJAX_CONTAINER_SEL = '#js-repo-pjax-container, div[itemtype="http://schema.org/SoftwareSourceCode"] main, [data-pjax-container]';
+const GH_PJAX_CONTAINER_SEL =
+  '#js-repo-pjax-container, div[itemtype="http://schema.org/SoftwareSourceCode"] main, [data-pjax-container]';
 
 const GH_CONTAINERS = '.container, .container-lg, .container-responsive';
 const GH_HEADER = '.js-header-wrapper > header';
@@ -85,12 +86,16 @@ class GitHub extends PjaxAdapter {
   canLoadEntireTree(repo) {
     const key = `${repo.username}/${repo.reponame}`;
     const hugeRepos = this.store.get(STORE.HUGE_REPOS);
-    if (hugeRepos[key]) {
+    const isHugeRepo = hugeRepos && hugeRepos[key];
+
+    if (isHugeRepo) {
       // Update the last load time of the repo
       hugeRepos[key] = new Date().getTime();
       this.store.set(STORE.HUGE_REPOS, hugeRepos);
+      return false;
     }
-    return !hugeRepos[key];
+
+    return true;
   }
 
   // @override
@@ -342,16 +347,22 @@ class GitHub extends PjaxAdapter {
           const hugeRepos = this.store.get(STORE.HUGE_REPOS);
           const repo = `${opts.repo.username}/${opts.repo.reponame}`;
           const repos = Object.keys(hugeRepos);
-          if (!hugeRepos[repo]) {
-            // If there are too many repos memoized, delete the oldest one
-            if (repos.length >= GH_MAX_HUGE_REPOS_SIZE) {
-              const oldestRepo = repos.reduce((min, p) => (hugeRepos[p] < hugeRepos[min] ? p : min));
-              delete hugeRepos[oldestRepo];
-            }
-            hugeRepos[repo] = new Date().getTime();
-            this.store.set(STORE.HUGE_REPOS, hugeRepos);
+
+          const handleHugeRepo = (isFullStorage) => this._handleError(cfg, {status: isFullStorage ? 600 : 206}, cb);
+
+          // The hugeRepos isn't a default {} due to the full Local Storage
+          if (!hugeRepos) return handleHugeRepo(true);
+          // The hugeRepo in cache
+          else if (hugeRepos[repo]) return handleHugeRepo(false);
+
+          // If there are too many repos memoized, delete the oldest one
+          if (repos.length >= GH_MAX_HUGE_REPOS_SIZE) {
+            const oldestRepo = repos.reduce((min, p) => (hugeRepos[p] < hugeRepos[min] ? p : min));
+            delete hugeRepos[oldestRepo];
           }
-          this._handleError(cfg, {status: 206}, cb);
+          hugeRepos[repo] = new Date().getTime();
+
+          return this.store.set(STORE.HUGE_REPOS, hugeRepos, handleHugeRepo);
         } else cb(null, data);
       })
       .fail((jqXHR) => this._handleError(cfg, jqXHR, cb));

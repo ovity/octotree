@@ -197,7 +197,11 @@ class Adapter {
         }
 
         break;
+      case 600:
+        error = 'Full Local Storage';
+        message = 'The local storage is full. You need to clear it and retry.';
 
+        break;
       // Fallback message
       default:
         error = message = jqXHR.statusText;

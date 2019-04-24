@@ -10,13 +10,16 @@ class Storage {
   set(key, val, cb) {
     try {
       localStorage.setItem(key, JSON.stringify(val));
+
+      if (cb) cb();
     } catch (e) {
       const msg =
         'Octotree cannot save its settings. ' +
         'If the local storage for this domain is full, please clean it up and try again.';
       console.error(msg, e);
+
+      if (cb) cb(e);
     }
-    if (cb) cb();
   }
 
   get(key, cb) {
