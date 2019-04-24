@@ -263,7 +263,7 @@ class Adapter {
    * Updates the layout based on sidebar visibility and width.
    * @api public
    */
-  updateLayout(sidebarPinned, sidebarVisible, sidebarWidth) {
+  updateLayout(sidebarPinned, sidebarVisible, sidebarWidth, side) {
     throw new Error('Not implemented');
   }
 
