@@ -103,7 +103,7 @@ class GitHub extends PjaxAdapter {
   }
 
   // @override
-  updateLayout(sidebarPinned, sidebarVisible, sidebarWidth, side = 'left') {
+  updateLayout(sidebarPinned, sidebarVisible, sidebarWidth) {
     const SPACING = 10;
     const $header = $(GH_HEADER);
     const $containers = $(GH_CONTAINERS);
@@ -111,16 +111,12 @@ class GitHub extends PjaxAdapter {
     const shouldPushEverything = sidebarPinned && sidebarVisible;
     const smallScreen = autoMarginLeft <= sidebarWidth + SPACING;
 
-    $('html').removeAttr('style');
-    $containers.removeAttr('style');
-    $header.removeAttr('style');
-
-    $('html').css(`margin-${side}`, shouldPushEverything && smallScreen ? sidebarWidth : '');
-    $containers.css(`margin-${side}`, shouldPushEverything && smallScreen ? SPACING : '');
+    $('html').css('margin-left', shouldPushEverything && smallScreen ? sidebarWidth : '');
+    $containers.css('margin-left', shouldPushEverything && smallScreen ? SPACING : '');
 
     if (shouldPushEverything && !smallScreen) {
       // Override important in Github Header class in large screen
-      $header.attr('style', `padding-${side}: ${sidebarWidth + SPACING}px !important`);
+      $header.attr('style', `padding-left: ${sidebarWidth + SPACING}px !important`);
     }
   }
 
