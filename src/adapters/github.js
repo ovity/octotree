@@ -39,9 +39,10 @@ const GH_404_SEL = '#parallax_wrapper';
 // When Github page loads at repo path e.g. https://github.com/jquery/jquery, the HTML tree has
 // <main id="js-repo-pjax-container"> to contain server-rendered HTML in response of pjax.
 // However, that <main> element doesn't have "id" attribute if the Github page loads at specific
-// file e.g. https://github.com/jquery/jquery/blob/master/.editorconfig.
+// File e.g. https://github.com/jquery/jquery/blob/master/.editorconfig.
 // Therefore, the below selector uses many path but only points to the same <main> element
-const GH_PJAX_CONTAINER_SEL = '#js-repo-pjax-container, div[itemtype="http://schema.org/SoftwareSourceCode"] main, [data-pjax-container]';
+const GH_PJAX_CONTAINER_SEL =
+  '#js-repo-pjax-container, div[itemtype="http://schema.org/SoftwareSourceCode"] main, [data-pjax-container]';
 
 const GH_CONTAINERS = '.container, .container-lg, .container-responsive';
 const GH_HEADER = '.js-header-wrapper > header';
@@ -112,7 +113,11 @@ class GitHub extends PjaxAdapter {
 
     $('html').css('margin-left', shouldPushEverything && smallScreen ? sidebarWidth : '');
     $containers.css('margin-left', shouldPushEverything && smallScreen ? SPACING : '');
-    $header.css('padding-left', shouldPushEverything && !smallScreen ? sidebarWidth : '');
+
+    if (shouldPushEverything && !smallScreen) {
+      // Override important in Github Header class in large screen
+      $header.attr('style', `padding-left: ${sidebarWidth + SPACING}px !important`);
+    }
   }
 
   // @override
