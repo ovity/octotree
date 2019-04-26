@@ -117,6 +117,8 @@ class GitHub extends PjaxAdapter {
     if (shouldPushEverything && !smallScreen) {
       // Override important in Github Header class in large screen
       $header.attr('style', `padding-left: ${sidebarWidth + SPACING}px !important`);
+    } else {
+      $header.removeAttr('style');
     }
   }
 
