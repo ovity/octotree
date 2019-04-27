@@ -17,7 +17,7 @@ Browser extension (Chrome, Firefox, Opera and Safari) that displays a code tree 
 - Support GitHub Enterprise on Chrome, Opera and Firefox
 - Official Safari version (Safari doesn't support GitHub Enterprise)
 
-Learn why we build Octotree Pro [here](HISTORY.md#v300). Subscribe to Octotree Pro on [our website](https://www.octotree.io).
+Learn why we build Octotree Pro [here](CHANGELOG.md#v300). Subscribe to Octotree Pro on [our website](https://www.octotree.io).
 
 ![Octotree on GitHub](docs/chrome-github.png)
 
