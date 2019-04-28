@@ -48,6 +48,8 @@ const GH_CONTAINERS = '.container, .container-lg, .container-responsive';
 const GH_HEADER = '.js-header-wrapper > header';
 const GH_RAW_CONTENT = 'body > pre';
 const GH_MAX_HUGE_REPOS_SIZE = 50;
+const GH_HIDDEN_RESPONSIVE_CLASS = '.d-none';
+const GH_RESPONSIVE_BREAKPOINT = 1010;
 
 class GitHub extends PjaxAdapter {
   constructor(store) {
@@ -106,7 +108,11 @@ class GitHub extends PjaxAdapter {
   updateLayout(sidebarPinned, sidebarVisible, sidebarWidth) {
     const SPACING = 10;
     const $header = $(GH_HEADER);
-    const $containers = $(GH_CONTAINERS);
+    const $containers =
+      $('html').width() <= GH_RESPONSIVE_BREAKPOINT
+        ? $(GH_CONTAINERS).not(GH_HIDDEN_RESPONSIVE_CLASS)
+        : $(GH_CONTAINERS);
+
     const autoMarginLeft = ($(document).width() - $containers.width()) / 2;
     const shouldPushEverything = sidebarPinned && sidebarVisible;
     const smallScreen = autoMarginLeft <= sidebarWidth + SPACING;
