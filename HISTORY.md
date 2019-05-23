@@ -1,3 +1,9 @@
+### v3.0.2 - v3.0.8
+
+- Many improvements to sidebar behavior
+- Fix bug page reload when clicking a file
+- Hide Octotree in Topics page
+
 ### v3.0.1
 
 - Add option to show sidebar upon hover
