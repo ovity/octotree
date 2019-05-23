@@ -34,6 +34,11 @@ $(document).ready(() => {
           if (this !== optsView) {
             $document.trigger(EVENT.REQ_END);
           }
+
+          if (this !== treeView) {
+            closeProAd();
+          }
+
           showView(this);
         })
         .on(EVENT.VIEW_CLOSE, (event, data) => {
@@ -74,6 +79,8 @@ $(document).ready(() => {
       optsView,
       errorView
     });
+
+    showProAd();
 
     return tryLoadRepo();
 
@@ -306,6 +313,41 @@ $(document).ready(() => {
 
     function isSidebarPinned() {
       return $pinner.hasClass(PINNED_CLASS);
+    }
+
+    function closeProAd() {
+      $sidebar.find('.octotree-footer').removeAttr('hidden');
+      $sidebar.find('.octotree-pro-tree-ad').attr('hidden', true);
+    }
+
+    function showProAd() {
+      const LAST_DISPLAY_TIMESTAMP_KEY = 'octotree.ldts';
+      const NO_AD_PERIOD = 1000*60*60*24*7*6;
+
+      const now = Date.now();
+      const noAdPeriodBegin = now - NO_AD_PERIOD;
+      const noAdPeriodEnd = now;
+      let shouldShowAd = true;
+
+      const lastDisplayTimestampText = this.store.get(LAST_DISPLAY_TIMESTAMP_KEY);
+      let lastDisplayTimestamp = parseInt(lastDisplayTimestampText);
+
+      if (
+        !isNaN(lastDisplayTimestamp) &&
+        noAdPeriodBegin < lastDisplayTimestamp &&
+        lastDisplayTimestamp < noAdPeriodEnd) {
+        shouldShowAd = false;
+      }
+
+      if (shouldShowAd) {
+        const $adContainer = $sidebar.find('.octotree-pro-tree-ad');
+
+        $adContainer.removeAttr('hidden');
+        $sidebar.find('.octotree-footer').attr('hidden', true);
+        this.store.set(LAST_DISPLAY_TIMESTAMP_KEY, now);
+
+        $adContainer.find('div.col-1 a').click(closeProAd);
+      }
     }
   }
 });
