@@ -5,6 +5,24 @@ class Adapter {
     this.store = store;
   }
 
+  _setCacheTime(storeName, cacheKey){
+    if(!this.store.get(storeName)){
+        this.store.set(storeName, {});
+    }
+    const cachedRepos = this.store.get(storeName);
+    cachedRepos[cacheKey] = new Date().getTime();
+    this.store.set(storeName, cachedRepos);
+  }
+
+  _reloadCache(storeName, cacheKey, cb, reloadAfterDay = 29){
+    const cachedRepos = this.store.get(storeName);
+    const cachedRepoTime = cachedRepos[cacheKey];
+    const timeDiff = (cachedRepoTime - new Date().getTime()) / (1000 * 60 * 60 * 24);
+    if(timeDiff > reloadAfterDay){
+      cb()
+    }
+  }
+
   /**
    * Loads the code tree of a repository.
    * @param {Object} opts: {
@@ -24,6 +42,17 @@ class Adapter {
 
     opts.encodedBranch = opts.encodedBranch || encodeURIComponent(decodeURIComponent(repo.branch));
 
+    const host =
+      location.protocol + '//' + (location.host === 'github.com' ? 'api.github.com' : location.host + '/api/v3');
+    const CACHE_KEY = `${host}/repos/${opts.repo.username}/${opts.repo.reponame}${path || ''}`;
+    const CACHE_NAME = 'loaded-tree';
+    const STORE_NAME = 'loaded-tree-storage';
+    let force;
+    if(location.hash.search('frc=') !== -1){
+        force = true;
+    }
+    let globalCache;
+
     this._getTree(path, opts, (err, tree) => {
       if (err) return cb(err);
 
@@ -40,6 +69,9 @@ class Adapter {
 
             // We're done
             if (item === undefined) {
+              this._setCacheTime(STORE_NAME, CACHE_KEY);
+              globalCache.put(CACHE_KEY, new Response(JSON.stringify(folders[''])));
+
               return cb(null, folders['']);
             }
 
@@ -144,7 +176,19 @@ class Adapter {
           setTimeout(() => nextChunk(iteration + 1));
         };
 
-        nextChunk();
+        caches.open(CACHE_NAME).then(cache => {
+          globalCache = cache
+          cache.match(CACHE_KEY).then(currentMatch => {
+            if(typeof currentMatch === "undefined" || force){
+                nextChunk();
+            } else {
+              currentMatch.text().then(function(data){
+                return cb(null, JSON.parse(data))
+              });
+              this._reloadCache(STORE_NAME, CACHE_KEY, nextChunk);
+            }
+          })
+        });
       });
     });
   }
