@@ -340,7 +340,7 @@ class GitHub extends PjaxAdapter {
     });
   }
 
-  _get(path, opts, cb) {
+  _get(path, opts, cb, force) {
     const host =
       location.protocol + '//' + (location.host === 'github.com' ? 'api.github.com' : location.host + '/api/v3');
     const url = `${host}/repos/${opts.repo.username}/${opts.repo.reponame}${path || ''}`;
@@ -350,24 +350,51 @@ class GitHub extends PjaxAdapter {
       cfg.headers = {Authorization: 'token ' + opts.token};
     }
 
-    $.ajax(cfg)
-      .done((data) => {
-        if (path && path.indexOf('/git/trees') === 0 && data.truncated) {
-          const hugeRepos = this.store.get(STORE.HUGE_REPOS);
-          const repo = `${opts.repo.username}/${opts.repo.reponame}`;
-          const repos = Object.keys(hugeRepos);
-          if (!hugeRepos[repo]) {
-            // If there are too many repos memoized, delete the oldest one
-            if (repos.length >= GH_MAX_HUGE_REPOS_SIZE) {
-              const oldestRepo = repos.reduce((min, p) => (hugeRepos[p] < hugeRepos[min] ? p : min));
-              delete hugeRepos[oldestRepo];
-            }
-            hugeRepos[repo] = new Date().getTime();
-            this.store.set(STORE.HUGE_REPOS, hugeRepos);
-          }
-          this._handleError(cfg, {status: 206}, cb);
-        } else cb(null, data);
+    const CACHE_NAME = 'cached-repo-v1';
+    const STORE_NAME = 'cached-repo-time';
+    const CACHE_KEY = url;
+    if(location.hash.search('frc=') !== -1){
+        force = true;
+    }
+    caches.open(CACHE_NAME).then(cache => {
+      cache.match(CACHE_KEY).then(currentMatch => {
+        if(typeof currentMatch === "undefined" || force){
+            $.ajax(cfg)
+              .done((data) => {
+                if (path && path.indexOf('/git/trees') === 0 && data.truncated) {
+                  const hugeRepos = this.store.get(STORE.HUGE_REPOS);
+                  const repo = `${opts.repo.username}/${opts.repo.reponame}`;
+                  const repos = Object.keys(hugeRepos);
+                  if (!hugeRepos[repo]) {
+                    // If there are too many repos memoized, delete the oldest one
+                    if (repos.length >= GH_MAX_HUGE_REPOS_SIZE) {
+                      const oldestRepo = repos.reduce((min, p) => (hugeRepos[p] < hugeRepos[min] ? p : min));
+                      delete hugeRepos[oldestRepo];
+                    }
+                    hugeRepos[repo] = new Date().getTime();
+                    this.store.set(STORE.HUGE_REPOS, hugeRepos);
+                  }
+                  this._handleError(cfg, {status: 206}, cb);
+                } else {
+                    this._setCacheTime(STORE_NAME, CACHE_KEY);
+                    cache.put(CACHE_KEY, new Response(JSON.stringify(data)));
+                    if(!document.querySelector('.octotree-view-body .jstree-container-ul').children.length){
+                        cb(null, data);
+                    }
+                }
+              })
+              .fail((jqXHR) => this._handleError(cfg, jqXHR, cb));
+        } else {
+          currentMatch.text().then(function(data){
+            cb(null, JSON.parse(data))
+          });
+          this._reloadCache(
+            STORE_NAME,
+            CACHE_KEY,
+            _ => this._get(path, opts, cb, true)
+          );
+        }
       })
-      .fail((jqXHR) => this._handleError(cfg, jqXHR, cb));
+    });
   }
 }
