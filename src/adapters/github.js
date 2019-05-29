@@ -32,7 +32,8 @@ const GH_RESERVED_USER_NAMES = [
   'personal',
   'pricing',
   'sessions',
-  'topics'
+  'topics',
+  'users'
 ];
 const GH_RESERVED_REPO_NAMES = ['followers', 'following', 'repositories'];
 const GH_404_SEL = '#parallax_wrapper';
