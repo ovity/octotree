@@ -84,6 +84,9 @@ class Adapter {
                 : '';
               patch += additions !== 0 ? `<span class="text-green">+${additions}</span>` : '';
               patch += deletions !== 0 ? `<span class="text-red">-${deletions}</span>` : '';
+
+              patch = this.editPatch(path, item);
+
               item.text += `<span class="octotree-patch">${patch}</span>`;
             }
 
@@ -318,6 +321,15 @@ class Adapter {
     link.setAttribute('target', '_blank');
 
     link.click();
+  }
+
+  /**
+   * Edit the current tree patch and return the new one
+   * @param {HTML Text} patch
+   * @param {Object} treeItem
+   */
+  editPatch(patch = '', treeItem = {}) {
+    return patch;
   }
 
   /**

@@ -122,12 +122,23 @@ class TreeView {
     });
   }
 
+  /**
+   * Intercept the _onItemClick method
+   * return true to stop the current execution
+   * @param {Event} event
+   */
+  onItemClick(event) {
+    return false;
+  }
+
   _onItemClick(event) {
     let $target = $(event.target);
     let download = false;
 
     // Handle middle click
     if (event.which === 2) return;
+
+    if (this.onItemClick(event)) return;
 
     // Handle icon click, fix #122
     if ($target.is('i.jstree-icon')) {
