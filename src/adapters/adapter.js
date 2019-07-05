@@ -74,17 +74,7 @@ class Adapter {
             }
 
             if (item.patch) {
-              const {action, previous, filesChanged: files, additions, deletions} = item.patch;
-              let patch = '';
-              patch += action === 'added' ? '<span class="text-green">added</span>' : '';
-              patch += action === 'renamed' ? `<span class="text-green" title="${previous}">renamed</span>` : '';
-              patch += action === 'removed' ? `<span class="text-red" title="${previous}">removed</span>` : '';
-              patch += files
-                ? `<span class='octotree-patch-files'>${files} ${files === 1 ? 'file' : 'files'}</span>`
-                : '';
-              patch += additions !== 0 ? `<span class="text-green">+${additions}</span>` : '';
-              patch += deletions !== 0 ? `<span class="text-red">-${deletions}</span>` : '';
-              item.text += `<span class="octotree-patch">${patch}</span>`;
+              item.text += `<span class="octotree-patch">${this.buildPatchHtml(item)}</span>`;
             }
 
             if (node) {
@@ -318,6 +308,25 @@ class Adapter {
     link.setAttribute('target', '_blank');
 
     link.click();
+  }
+
+  /**
+   * @param {HTML Text} patch
+   * @param {Object} treeItem
+   *
+   * Return the patch Html for tree item
+   */
+  buildPatchHtml(treeItem = {}) {
+    const {action, previous, filesChanged: files, additions, deletions} = treeItem.patch;
+    let patch = '';
+    patch += action === 'added' ? '<span class="text-green">added</span>' : '';
+    patch += action === 'renamed' ? `<span class="text-green" title="${previous}">renamed</span>` : '';
+    patch += action === 'removed' ? `<span class="text-red" title="${previous}">removed</span>` : '';
+    patch += files ? `<span class='octotree-patch-files'>${files} ${files === 1 ? 'file' : 'files'}</span>` : '';
+    patch += additions !== 0 ? `<span class="text-green">+${additions}</span>` : '';
+    patch += deletions !== 0 ? `<span class="text-red">-${deletions}</span>` : '';
+
+    return patch;
   }
 
   /**
