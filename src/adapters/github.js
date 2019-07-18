@@ -345,7 +345,7 @@ class GitHub extends PjaxAdapter {
   _get(path, opts, cb) {
     let url;
 
-    if (path.startsWith('http')) {
+    if (path && path.startsWith('http')) {
       url = path;
     }
     else {
