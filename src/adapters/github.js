@@ -343,9 +343,17 @@ class GitHub extends PjaxAdapter {
   }
 
   _get(path, opts, cb) {
-    const host =
-      location.protocol + '//' + (location.host === 'github.com' ? 'api.github.com' : location.host + '/api/v3');
-    const url = `${host}/repos/${opts.repo.username}/${opts.repo.reponame}${path || ''}`;
+    let url;
+
+    if (path && path.startsWith('http')) {
+      url = path;
+    }
+    else {
+      const host =
+        location.protocol + '//' + (location.host === 'github.com' ? 'api.github.com' : location.host + '/api/v3');
+      url = `${host}/repos/${opts.repo.username}/${opts.repo.reponame}${path || ''}`;
+    }
+
     const cfg = {url, method: 'GET', cache: false};
 
     if (opts.token) {
@@ -353,7 +361,7 @@ class GitHub extends PjaxAdapter {
     }
 
     $.ajax(cfg)
-      .done((data) => {
+      .done((data, textStatus, jqXHR) => {
         if (path && path.indexOf('/git/trees') === 0 && data.truncated) {
           const hugeRepos = this.store.get(STORE.HUGE_REPOS);
           const repo = `${opts.repo.username}/${opts.repo.reponame}`;
@@ -368,7 +376,7 @@ class GitHub extends PjaxAdapter {
             this.store.set(STORE.HUGE_REPOS, hugeRepos);
           }
           this._handleError(cfg, {status: 206}, cb);
-        } else cb(null, data);
+        } else cb(null, data, jqXHR);
       })
       .fail((jqXHR) => this._handleError(cfg, jqXHR, cb));
   }
