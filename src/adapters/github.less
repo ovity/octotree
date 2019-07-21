@@ -179,6 +179,8 @@
         outline: none;
         padding-right: 0;
         text-decoration: none;
+        width: calc(100% - 20px);
+        display: inline-flex;
         & > span {
           color: @dark !important;
         }
@@ -271,7 +273,9 @@
       }
 
       .octotree-patch:last-of-type {
-        display: inline;
+        display: inline-flex;
+        flex-grow: 1;
+
         font-size: 80%;
         span {
           padding-left: 5px;
