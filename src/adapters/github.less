@@ -179,8 +179,11 @@
         outline: none;
         padding-right: 0;
         text-decoration: none;
-        width: calc(100% - 20px);
+        width: calc(~'100% - 20px');
         display: inline-flex;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
         & > span {
           color: @dark !important;
         }
