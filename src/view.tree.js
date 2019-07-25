@@ -5,19 +5,19 @@ class TreeView {
     this.$view = $dom.find('.octotree_treeview');
     this.$tree = this.$view
       .find('.octotree_view_body')
-      .on('click.jstree', '.jstree-open>a', ({target}) => {
+      .on('click.jstree', '.jstree-open>a', ({ target }) => {
         setTimeout(() => {
           this.$jstree.close_node(target)
         }, 0);
       })
-      .on('click.jstree', '.jstree-closed>a', ({target}) => {
+      .on('click.jstree', '.jstree-closed>a', ({ target }) => {
         setTimeout(() => {
           this.$jstree.open_node(target)
         }, 0);
       })
       .on('click', this._onItemClick.bind(this))
       .jstree({
-        core: {multiple: false, worker: false, themes: {responsive: false}},
+        core: { multiple: false, worker: false, themes: { responsive: false } },
         plugins: ['wholerow']
       });
   }
@@ -33,9 +33,9 @@ class TreeView {
       const prMode = this.store.get(STORE.PR) && repo.pullNumber;
       const loadAll = this.adapter.canLoadEntireTree(repo) && (prMode || this.store.get(STORE.LOADALL));
 
-      node = !loadAll && (node.id === '#' ? {path: ''} : node.original);
+      node = !loadAll && (node.id === '#' ? { path: '' } : node.original);
 
-      this.adapter.loadCodeTree({repo, token, node}, (err, treeData) => {
+      this.adapter.loadCodeTree({ repo, token, node }, (err, treeData) => {
         if (err) {
           if (err.status === 206 && loadAll) { // The repo is too big to load all, need to retry
             $jstree.refresh(true);
@@ -76,7 +76,7 @@ class TreeView {
            ${this._deXss(repo.branch.toString())}
          </div>`
       )
-      .on('click', 'a[data-pjax]', function(event) {
+      .on('click', 'a[data-pjax]', function (event) {
         event.preventDefault();
         // A.href always return absolute URL, don't want that
         const href = $(this).attr('href');
@@ -89,9 +89,25 @@ class TreeView {
     return str && str.replace(/[<>'"&]/g, '-');
   }
 
+  cmpVersions(a, b) {
+    let i, diff;
+    let regExStrip0 = /(\.0+)+$/;
+    let segmentsA = a.replace(regExStrip0, '').split('.');
+    let segmentsB = b.replace(regExStrip0, '').split('.');
+    let l = Math.min(segmentsA.length, segmentsB.length);
+
+    for (i = 0; i < l; i++) {
+      diff = parseInt(segmentsA[i], 10) - parseInt(segmentsB[i], 10);
+      if (diff) {
+        return diff;
+      }
+    }
+    return segmentsA.length - segmentsB.length;
+  }
+
   _sort(folder) {
     folder.sort((a, b) => {
-      if (a.type === b.type) return a.text === b.text ? 0 : a.text < b.text ? -1 : 1;
+      if (a.type === b.type) return this.cmpVersions(a.text, b.text);
       return a.type === 'blob' ? 1 : -1;
     });
 
