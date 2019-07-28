@@ -72,7 +72,8 @@ $(document).ready(() => {
       $views,
       treeView,
       optsView,
-      errorView
+      errorView,
+      utils: {deXss}
     });
 
     return tryLoadRepo();
