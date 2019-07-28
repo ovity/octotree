@@ -37,7 +37,7 @@
 @octicons-file-submodule: '\f017';
 
 // ====== Icons ======
-.icon-v2(@code; @font-family: octicons; @color: @gray; @hover-color: @error; @font-size: 14px; @width: 16px;) {
+.icon-v2(@code; @font-family: octicons; @color: @gray; @hover-color: @error; @font-size: 14px; @width: 16px; @top: 0) {
   position: relative;
 
   &:before {
@@ -51,6 +51,7 @@
     width: @width;
     line-height: 1;
     position: relative;
+    top: @top;
     display: inline-block;
     -webkit-font-smoothing: antialiased;
   }
