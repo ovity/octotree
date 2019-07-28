@@ -118,7 +118,6 @@
 
         .octotree-header-summary {
           width: 100%;
-          height: @header-height / 2;
         }
 
         .octotree-header-repo,
@@ -134,6 +133,7 @@
           margin-bottom: 3px;
 
           font-size: 13px;
+          line-height: 16px;
           font-weight: normal;
           color: white;
 
@@ -144,7 +144,7 @@
 
           .octotree-icon-repo {
             .icon-v2(@octicons-repo, @color: white, @hover-color: white);
-            top: 2px;
+            vertical-align: middle;
           }
 
           a {
