@@ -76,7 +76,7 @@ class TreeView {
           </div>
           <div class="octotree-header-branch">
             <i class="octotree-icon-branch"></i>
-            ${this._deXss(repo.branch.toString())}
+            ${deXss(repo.branch.toString())}
           </div>
         </div>`
       )
@@ -87,10 +87,6 @@ class TreeView {
         const newTab = event.shiftKey || event.ctrlKey || event.metaKey;
         newTab ? adapter.openInNewTab(href) : adapter.selectFile(href);
       });
-  }
-
-  _deXss(str) {
-    return str && str.replace(/[<>'"&]/g, '-');
   }
 
   _sort(folder) {

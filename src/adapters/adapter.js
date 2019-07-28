@@ -19,7 +19,6 @@ class Adapter {
    */
   _loadCodeTreeInternal(opts, transform, cb) {
     const folders = {'': []};
-    const $dummyDiv = $('<div/>');
     const {path, repo, node} = opts;
 
     opts.encodedBranch = opts.encodedBranch || encodeURIComponent(decodeURIComponent(repo.branch));
@@ -56,7 +55,7 @@ class Adapter {
             const path = item.path;
             const type = item.type;
             const index = path.lastIndexOf('/');
-            const name = $dummyDiv.text(path.substring(index + 1)).html(); // Sanitizes, closes #9
+            const name = deXss(path.substring(index + 1)); // Sanitizes, closes #9
 
             item.id = NODE_PREFIX + path;
             item.text = name;
