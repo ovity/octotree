@@ -7,4 +7,4 @@ class _DeXss {
 }
 
 // Singleton
-const deXss = new _DeXss().deXss;
+window.deXss = new _DeXss().deXss;
