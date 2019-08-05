@@ -1,3 +1,7 @@
+### v3.0.10
+
+- Hot fix bug on Windows
+
 ### v3.0.9
 
 - Hide tree in users and marketplace pages
