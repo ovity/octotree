@@ -1,10 +1,7 @@
-class _DeXss {
-  constructor() {
-    this._$dummyDiv = $('<div/>');
-  }
+let $dummyDiv;
 
-  deXss = (str) => this._$dummyDiv.text(str).html();
+window.deXss = (str) => {
+  $dummyDiv = $dummyDiv || $('<div></div>');
+
+  return $dummyDiv.text(str).html();
 }
-
-// Singleton
-const deXss = new _DeXss().deXss;

@@ -15,6 +15,8 @@ $(document).ready(() => {
     const optsView = new OptionsView($dom, store, adapter);
     const helpPopup = new HelpPopup($dom, store);
     const errorView = new ErrorView($dom, store);
+    const footerView = new FooterView($dom);
+
     let currRepo = false;
     let hasError = false;
 
@@ -62,6 +64,7 @@ $(document).ready(() => {
 
     adapter.init($sidebar);
     helpPopup.init();
+    footerView.init();
 
     await pluginManager.activate({
       adapter,

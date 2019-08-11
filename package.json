@@ -1,6 +1,6 @@
 {
   "name": "octotree",
-  "version": "3.0.8",
+  "version": "3.0.10",
   "description": "Code tree for GitHub",
   "scripts": {
     "start": "gulp",

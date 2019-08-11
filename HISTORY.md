@@ -1,3 +1,11 @@
+### v3.0.10
+
+- Hot fix bug on Windows
+
+### v3.0.9
+
+- Hide tree in users and marketplace pages
+
 ### v3.0.2 - v3.0.8
 
 - Many improvements to sidebar behavior
