@@ -159,12 +159,19 @@ class GitHub extends PjaxAdapter {
       return cb();
     }
 
-    // Check if we should show in non-code pages
-    const isPR = type === 'pull';
-    const isCodePage = !type || isPR || ['tree', 'blob', 'commit'].indexOf(type) >= 0;
-    const showInNonCodePage = this.store.get(STORE.NONCODE);
-    if (!showInNonCodePage && !isCodePage) {
-      return cb();
+    if (type) {
+      // To show or not show on the current page.
+      const currentPage = {
+        code: 'CODE',
+        tree: 'CODE',
+        blob: 'CODE',
+        pull: 'PR',
+        commit: 'COMMIT'
+      }[type] || 'OTHER';
+
+      if (!this.store.get(STORE['SHOWIN_' + currentPage])) {
+        return cb();
+      }
     }
 
     // Get branch by inspecting URL or DOM, quite fragile so provide multiple fallbacks.
@@ -207,6 +214,7 @@ class GitHub extends PjaxAdapter {
       // Get default branch from cache
       this._defaultBranch[username + '/' + reponame];
 
+    const isPR = type === 'pull';
     const showOnlyChangedInPR = this.store.get(STORE.PR);
     const pullNumber = isPR && showOnlyChangedInPR ? typeId : null;
     const repo = {username, reponame, branch, pullNumber};
