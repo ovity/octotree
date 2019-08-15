@@ -88,26 +88,27 @@ $(document).ready(() => {
     async function optionsChanged(event, changes) {
       let reload = false;
 
-      const reactions = {
-        [STORE.TOKEN] () {},
-        [STORE.LOADLALL] () {},
-        [STORE.ICONS] () {},
-        [STORE.HOVEROPEN] ([, newValue]) {
-          handleHoverOpenOption(newValue);
-        },
-        [STORE.HOTKEYS] ([oldValue, newValue]) {
-          setHotkeys(newValue, oldValue);
-        }
-      }
-
-      const defaultReaction = () => {
-        reload = true;
-      }
-
       Object.keys(changes).forEach((storeKey) => {
-        const reactToChanges = reactions[storeKey] || defaultReaction;
+        const [oldValue, newValue] = changes[storeKey];
 
-        reactToChanges(changes[storeKey]);
+        switch (storeKey) {
+          case STORE.TOKEN:
+          case STORE.LOADALL:
+          case STORE.ICONS:
+          case STORE.SHOWIN_CODE:
+          case STORE.SHOWIN_PR:
+          case STORE.SHOWIN_COMMIT:
+          case STORE.SHOWIN_OTHER:
+          case STORE.PR:
+            reload = true;
+            break;
+          case STORE.HOVEROPEN:
+            handleHoverOpenOption(newValue);
+            break;
+          case STORE.HOTKEYS:
+            setHotkeys(newValue, oldValue);
+            break;
+        }
       });
 
       if (await pluginManager.applyOptions(changes)) {
