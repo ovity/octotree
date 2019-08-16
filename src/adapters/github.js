@@ -159,12 +159,20 @@ class GitHub extends PjaxAdapter {
       return cb();
     }
 
-    // Check if we should show in non-code pages
     const isPR = type === 'pull';
-    const isCodePage = !type || isPR || ['tree', 'blob', 'commit'].indexOf(type) >= 0;
-    const showInNonCodePage = this.store.get(STORE.NONCODE);
-    if (!showInNonCodePage && !isCodePage) {
-      return cb();
+
+    // Skip rendering the octotree in the unselected pages
+    if (!this.store.get(STORE.SHOWIN_ALL)) {
+      const isCodeCommit = !type || ['tree', 'blob', 'commit'].includes(type);
+      const isCodeCommitPR = isPR || isCodeCommit;
+
+      if (
+        (this.store.get(STORE.SHOWIN_CODE_COMMIT_PR) && !isCodeCommitPR) ||
+        (this.store.get(STORE.SHOWIN_CODE_COMMIT) && !isCodeCommit) ||
+        (this.store.get(STORE.SHOWIN_PR_ONLY) && !isPR)
+      ) {
+        return cb();
+      }
     }
 
     // Get branch by inspecting URL or DOM, quite fragile so provide multiple fallbacks.

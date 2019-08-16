@@ -86,9 +86,6 @@
             <label><input type="checkbox" data-store="LOADALL" /> Load entire tree at once</label>
           </div>
           <div>
-            <label><input type="checkbox" data-store="NONCODE" /> Show in non-code pages</label>
-          </div>
-          <div>
             <label><input type="checkbox" data-store="ICONS" /> Show file-specific icons</label>
           </div>
           <div>
@@ -96,6 +93,22 @@
               <input type="checkbox" data-store="PR" /> Show pull request changes
               <span class="octotree-disclaimer">Note: maximum of 300 files</span>
             </label>
+          </div>
+
+          <div id="settings-showin" class="octotree-settings-showin">
+            <label>Enable Octotree in:</label>
+            <div>
+              <label><input type="radio" name="SHOWIN" data-store="SHOWIN_ALL" /> All pages</label>
+            </div>
+            <div>
+              <label><input type="radio" name="SHOWIN" data-store="SHOWIN_CODE_COMMIT_PR" /> Code/commits & pull requests</label>
+            </div>
+            <div>
+              <label><input type="radio" name="SHOWIN" data-store="SHOWIN_CODE_COMMIT" /> Code/commits</label>
+            </div>
+            <div>
+              <label><input type="radio" name="SHOWIN" data-store="SHOWIN_PR_ONLY" /> Pull requests</label>
+            </div>
           </div>
 
           <div><button class="btn btn-primary">Apply settings</button></div>

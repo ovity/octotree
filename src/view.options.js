@@ -18,8 +18,9 @@ class OptionsView {
   }
 
   /**
-   * Load elements with [data-store] attributes. Invoke this if there are dynamically
-   * added elements, so that they can be loaded and saved.
+   * Load elements with [data-store] attributes & attach enforeShowInRule to the
+   * elements in the show in section. Invoke this if there are dynamically added
+   * elements, so that they can be loaded and saved.
    */
   loadElements() {
     this.elements = this.$view.find('[data-store]').toArray();
@@ -46,7 +47,7 @@ class OptionsView {
   _load() {
     this._eachOption(
       ($elm, key, value, cb) => {
-        if ($elm.is(':checkbox')) $elm.prop('checked', value);
+        if ($elm.is(':checkbox') || $elm.is(':radio')) $elm.prop('checked', value);
         else $elm.val(value);
         cb();
       },
