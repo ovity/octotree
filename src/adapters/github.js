@@ -159,17 +159,18 @@ class GitHub extends PjaxAdapter {
       return cb();
     }
 
-    if (type) {
-      // To show or not show on the current page.
-      const currentPage = {
-        code: 'CODE',
-        tree: 'CODE',
-        blob: 'CODE',
-        pull: 'PR',
-        commit: 'COMMIT'
-      }[type] || 'OTHER';
+    const isPR = type === 'pull';
 
-      if (!this.store.get(STORE['SHOWIN_' + currentPage])) {
+    // Skip rendering the octotree in the unselected pages
+    if (!this.store.get(STORE.SHOWIN_ALL)) {
+      const isCodeCommit = !type || ['tree', 'blob', 'commit'].includes(type);
+      const isCodeCommitPR = isPR || isCodeCommit;
+
+      if (
+        (this.store.get(STORE.SHOWIN_CODE_COMMIT_PR) && !isCodeCommitPR) ||
+        (this.store.get(STORE.SHOWIN_CODE_COMMIT) && isCodeCommit) ||
+        (this.store.get(STORE.SHOWIN_PR_ONLY) && isPR)
+      ) {
         return cb();
       }
     }
@@ -214,7 +215,6 @@ class GitHub extends PjaxAdapter {
       // Get default branch from cache
       this._defaultBranch[username + '/' + reponame];
 
-    const isPR = type === 'pull';
     const showOnlyChangedInPR = this.store.get(STORE.PR);
     const pullNumber = isPR && showOnlyChangedInPR ? typeId : null;
     const repo = {username, reponame, branch, pullNumber};

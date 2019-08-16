@@ -95,10 +95,10 @@ $(document).ready(() => {
           case STORE.TOKEN:
           case STORE.LOADALL:
           case STORE.ICONS:
-          case STORE.SHOWIN_CODE:
-          case STORE.SHOWIN_PR:
-          case STORE.SHOWIN_COMMIT:
-          case STORE.SHOWIN_OTHER:
+          case STORE.SHOWIN_ALL:
+          case STORE.SHOWIN_CODE_COMMIT_PR:
+          case STORE.SHOWIN_CODE_COMMIT:
+          case STORE.SHOWIN_PR_ONLY:
           case STORE.PR:
             reload = true;
             break;

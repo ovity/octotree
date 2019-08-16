@@ -96,18 +96,18 @@
           </div>
 
           <div id="settings-showin" class="octotree-settings-showin">
-            <label>Show only in pages</label>
+            <label>Enable Octotree in:</label>
             <div>
-              <label><input type="checkbox" data-store="SHOWIN_CODE" /> Code</label>
+              <label><input type="radio" name="SHOWIN" data-store="SHOWIN_ALL" /> All pages</label>
             </div>
             <div>
-              <label><input type="checkbox" data-store="SHOWIN_PR" /> Pull Requests</label>
+              <label><input type="radio" name="SHOWIN" data-store="SHOWIN_CODE_COMMIT_PR" /> Code/commits & pull requests</label>
             </div>
             <div>
-              <label><input type="checkbox" data-store="SHOWIN_COMMIT" /> Commits</label>
+              <label><input type="radio" name="SHOWIN" data-store="SHOWIN_CODE_COMMIT" /> Code/commits</label>
             </div>
             <div>
-              <label><input type="checkbox" data-store="SHOWIN_OTHER" /> Others</label>
+              <label><input type="radio" name="SHOWIN" data-store="SHOWIN_PR_ONLY" /> Pull requests</label>
             </div>
           </div>
 

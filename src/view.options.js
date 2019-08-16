@@ -24,43 +24,6 @@ class OptionsView {
    */
   loadElements() {
     this.elements = this.$view.find('[data-store]').toArray();
-
-    this.showInCheckboxes = this.$view.find('#settings-showin [data-store]')
-      .toArray()
-      .map(el => $(el))
-
-    this.showInCheckboxes.forEach($el => $el.change(() => this._enforceShowInRule()))
-  }
-
-  /**
-   * Make sure there's always at least 1 option in the show in section is checked
-   * so that the octotree would not totally vanish.
-   */
-  _enforceShowInRule() {
-    let numberOfChecked = 0;
-    let theOnlyChecked = null;
-    for (const checkbox of this.showInCheckboxes) {
-      if (checkbox.attr('disabled')) {
-        checkbox.removeAttr('disabled');
-      }
-
-      if (!checkbox.is(':checked')) continue;
-
-      if (++numberOfChecked === 1) {
-        theOnlyChecked = checkbox;
-      } else {
-        theOnlyChecked = null;
-        break;
-      }
-    }
-
-    if (!numberOfChecked) {
-      this.showInCheckboxes[0].prop('checked', true);
-    }
-
-    if (theOnlyChecked) {
-      theOnlyChecked.attr('disabled', true);
-    }
   }
 
   /**
@@ -84,12 +47,11 @@ class OptionsView {
   _load() {
     this._eachOption(
       ($elm, key, value, cb) => {
-        if ($elm.is(':checkbox')) $elm.prop('checked', value);
+        if ($elm.is(':checkbox') || $elm.is(':radio')) $elm.prop('checked', value);
         else $elm.val(value);
         cb();
       },
       () => {
-        this._enforceShowInRule();
         this.$toggler.addClass('selected');
         $(this).trigger(EVENT.VIEW_READY);
       }
