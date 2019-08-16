@@ -1,7 +1,7 @@
 {
   "name": "Octotree",
   "version": "$VERSION",
-  "description": "GitHub code tree on steroids",
+  "description": "GitHub on steroids",
   "homepage_url": "https://www.octotree.io",
   "author": "Buu Nguyen",
   "manifest_version": 2,
