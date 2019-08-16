@@ -168,8 +168,8 @@ class GitHub extends PjaxAdapter {
 
       if (
         (this.store.get(STORE.SHOWIN_CODE_COMMIT_PR) && !isCodeCommitPR) ||
-        (this.store.get(STORE.SHOWIN_CODE_COMMIT) && isCodeCommit) ||
-        (this.store.get(STORE.SHOWIN_PR_ONLY) && isPR)
+        (this.store.get(STORE.SHOWIN_CODE_COMMIT) && !isCodeCommit) ||
+        (this.store.get(STORE.SHOWIN_PR_ONLY) && !isPR)
       ) {
         return cb();
       }
