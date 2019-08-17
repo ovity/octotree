@@ -1,7 +1,7 @@
 {
   "name": "octotree",
   "version": "3.0.10",
-  "description": "Code tree for GitHub",
+  "description": "GitHub on steroids",
   "scripts": {
     "start": "gulp",
     "watch": "gulp",

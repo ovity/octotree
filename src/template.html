@@ -79,18 +79,37 @@
             />
           </div>
 
+          <div class="octotree-settings-showin">
+            <label>Enable Octotree in:</label>
+            <div>
+              <label><input type="radio" name="SHOWIN" data-store="SHOWIN_ALL" /> <span>All pages</span></label>
+            </div>
+            <div>
+              <label
+                ><input type="radio" name="SHOWIN" data-store="SHOWIN_CODE_COMMIT_PR" />
+                <span>Code & pull requests</span></label
+              >
+            </div>
+            <div>
+              <label><input type="radio" name="SHOWIN" data-store="SHOWIN_CODE_COMMIT" /> <span>Code</span></label>
+            </div>
+            <div>
+              <label><input type="radio" name="SHOWIN" data-store="SHOWIN_PR_ONLY" /> <span>Pull requests</span></label>
+            </div>
+          </div>
+
           <div>
-            <label><input type="checkbox" data-store="HOVEROPEN" /> Open sidebar on hover</label>
+            <label><input type="checkbox" data-store="HOVEROPEN" /> <span>Show sidebar on hover</span></label>
           </div>
           <div>
-            <label><input type="checkbox" data-store="LOADALL" /> Load entire tree at once</label>
+            <label><input type="checkbox" data-store="LOADALL" /> <span>Load entire tree at once</span></label>
           </div>
           <div>
-            <label><input type="checkbox" data-store="ICONS" /> Show file-specific icons</label>
+            <label><input type="checkbox" data-store="ICONS" /> <span>Show file-specific icons</span></label>
           </div>
           <div>
             <label>
-              <input type="checkbox" data-store="PR" /> Show pull request changes
+              <input type="checkbox" data-store="PR" /> <span>Show pull request changes</span>
               <span class="octotree-disclaimer">Note: maximum of 300 files</span>
             </label>
           </div>
