@@ -78,7 +78,7 @@ class GitHub extends PjaxAdapter {
     diffModeObserver.observe(document.body, {
       attributes: true,
       attributeFilter: ['class'],
-      attributeOldValue: true
+      attributeOldValue: true,
     });
   }
 
@@ -375,8 +375,19 @@ class GitHub extends PjaxAdapter {
     if (opts.token) {
       cfg.headers = {Authorization: 'token ' + opts.token};
     }
-    
+
     const cache = await caches.open(CACHE.CACHENAME);
+    const currentCache = await cache.keys();
+    const isExistCacheKey = currentCache.find((cache) => cache.url === url);
+    
+    if (!isExistCacheKey && currentCache.length > 10) {
+      cache.delete(currentCache[0].url);
+      const currentCacheStore = this.store.get('loaded-resp');
+      if (currentCacheStore) {
+        delete currentCacheStore[currentCache[0].url];
+        this.store.set('loaded-resp', currentCacheStore);
+      }
+    }
 
     if (!opts.node) {
       const currentMatch = await cache.match(url);
@@ -404,9 +415,9 @@ class GitHub extends PjaxAdapter {
           }
           this._handleError(cfg, {status: 206}, cb);
         } else {
-          if(!opts.node) {
+          if (!opts.node) {
             cache.put(url, new Response(JSON.stringify(data)));
-            this.setCacheTime('loaded-resp', url);  
+            this.setCacheTime('loaded-resp', url);
           }
 
           return cb(null, data, url, jqXHR);
