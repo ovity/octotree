@@ -21,6 +21,10 @@ const STORE = {
   HUGE_REPOS: 'octotree.huge_repos'
 };
 
+const CACHE = {
+  CACHENAME: 'octotree.cache'
+};
+
 const DEFAULTS = {
   TOKEN: '',
   HOVEROPEN: true,

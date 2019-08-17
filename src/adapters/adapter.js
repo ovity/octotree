@@ -5,6 +5,19 @@ class Adapter {
     this.store = store;
   }
 
+  async _reloadCache(storeName, cacheKey, nextChunk, force, reloadAfterDay = 29) {
+    const cachedRepos = this.store.get(storeName);
+    const cachedRepoTime = cachedRepos[cacheKey];
+    const timeDiff = (cachedRepoTime - new Date().getTime()) / (1000 * 60 * 60 * 24);
+
+    if (force || timeDiff > reloadAfterDay) {
+      const cache = await caches.open(CACHE.CACHENAME);
+      cache.delete(cacheKey);
+    }
+    
+    nextChunk();
+  }
+
   /**
    * Loads the code tree of a repository.
    * @param {Object} opts: {
@@ -23,7 +36,7 @@ class Adapter {
 
     opts.encodedBranch = opts.encodedBranch || encodeURIComponent(decodeURIComponent(repo.branch));
 
-    this._getTree(path, opts, (err, tree) => {
+    this._getTree(path, opts, (err, tree, cacheKey) => {
       if (err) return cb(err);
 
       this._getSubmodules(tree, opts, (err, submodules) => {
@@ -133,7 +146,7 @@ class Adapter {
           setTimeout(() => nextChunk(iteration + 1));
         };
 
-        nextChunk();
+        this._reloadCache('loaded-resp', cacheKey, nextChunk, false);
       });
     });
   }

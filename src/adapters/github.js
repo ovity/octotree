@@ -34,7 +34,7 @@ const GH_RESERVED_USER_NAMES = [
   'sessions',
   'topics',
   'users',
-  'marketplace'
+  'marketplace',
 ];
 const GH_RESERVED_REPO_NAMES = ['followers', 'following', 'repositories'];
 const GH_404_SEL = '#parallax_wrapper';
@@ -242,14 +242,23 @@ class GitHub extends PjaxAdapter {
     this._loadCodeTreeInternal(opts, null, cb);
   }
 
+  setCacheTime(storeName, cacheKey) {
+    if (!this.store.get(storeName)) {
+      this.store.set(storeName, {});
+    }
+    const cachedRepos = this.store.get(storeName);
+    cachedRepos[cacheKey] = new Date().getTime();
+    this.store.set(storeName, cachedRepos);
+  }
+
   // @override
   _getTree(path, opts, cb) {
     if (opts.repo.pullNumber) {
       this._getPatch(opts, cb);
     } else {
-      this._get(`/git/trees/${path}`, opts, (err, res) => {
+      this._get(`/git/trees/${path}`, opts, (err, res, cacheKey) => {
         if (err) cb(err);
-        else cb(null, res.tree);
+        else cb(null, res.tree, cacheKey);
       });
     }
   }
@@ -285,7 +294,7 @@ class GitHub extends PjaxAdapter {
             deletions: file.deletions,
             filename: file.filename,
             path: file.path,
-            sha: file.sha
+            sha: file.sha,
           };
 
           // Record ancestor folders
@@ -306,7 +315,7 @@ class GitHub extends PjaxAdapter {
                 filename: path,
                 filesChanged: 1,
                 additions: file.additions,
-                deletions: file.deletions
+                deletions: file.deletions,
               };
             } else {
               diffMap[path].additions += file.additions;
@@ -325,7 +334,7 @@ class GitHub extends PjaxAdapter {
             path: fileName,
             sha: patch.sha,
             type: patch.type,
-            url: patch.blob_url
+            url: patch.blob_url,
           };
         });
 
@@ -350,13 +359,12 @@ class GitHub extends PjaxAdapter {
     });
   }
 
-  _get(path, opts, cb) {
+  async _get(path, opts, cb) {
     let url;
 
     if (path && path.startsWith('http')) {
       url = path;
-    }
-    else {
+    } else {
       const host =
         location.protocol + '//' + (location.host === 'github.com' ? 'api.github.com' : location.host + '/api/v3');
       url = `${host}/repos/${opts.repo.username}/${opts.repo.reponame}${path || ''}`;
@@ -366,6 +374,17 @@ class GitHub extends PjaxAdapter {
 
     if (opts.token) {
       cfg.headers = {Authorization: 'token ' + opts.token};
+    }
+    
+    const cache = await caches.open(CACHE.CACHENAME);
+
+    if (!opts.node) {
+      const currentMatch = await cache.match(url);
+
+      if (typeof currentMatch !== 'undefined') {
+        const resp = await currentMatch.text();
+        return cb(null, JSON.parse(resp), url);
+      }
     }
 
     $.ajax(cfg)
@@ -384,7 +403,14 @@ class GitHub extends PjaxAdapter {
             this.store.set(STORE.HUGE_REPOS, hugeRepos);
           }
           this._handleError(cfg, {status: 206}, cb);
-        } else cb(null, data, jqXHR);
+        } else {
+          if(!opts.node) {
+            cache.put(url, new Response(JSON.stringify(data)));
+            this.setCacheTime('loaded-resp', url);  
+          }
+
+          return cb(null, data, url, jqXHR);
+        }
       })
       .fail((jqXHR) => this._handleError(cfg, jqXHR, cb));
   }
