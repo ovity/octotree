@@ -82,19 +82,24 @@
           <div class="octotree-settings-showin">
             <label>Enable Octotree in:</label>
             <div>
-              <label><input type="radio" name="SHOWIN" data-store="SHOWIN_ALL" /> <span>All pages</span></label>
-            </div>
-            <div>
               <label>
-                <input type="radio" name="SHOWIN" data-store="SHOWIN_CODE_COMMIT_PR" />
-                <span>Code & pull requests</span>
+                <input type="radio" name="SHOWIN" value="0" data-store="SHOWIN" /> <span>All pages</span>
               </label>
             </div>
             <div>
-              <label><input type="radio" name="SHOWIN" data-store="SHOWIN_CODE_COMMIT" /> <span>Code</span></label>
+              <label>
+                <input type="radio" name="SHOWIN" value="1" data-store="SHOWIN" /> <span>Code & pull requests</span>
+              </label>
             </div>
             <div>
-              <label><input type="radio" name="SHOWIN" data-store="SHOWIN_PR_ONLY" /> <span>Pull requests</span></label>
+              <label>
+                <input type="radio" name="SHOWIN" value="2" data-store="SHOWIN" /> <span>Code</span>
+              </label>
+            </div>
+            <div>
+              <label>
+                <input type="radio" name="SHOWIN" value="3" data-store="SHOWIN" /> <span>Pull requests</span>
+              </label>
             </div>
           </div>
 

@@ -47,8 +47,13 @@ class OptionsView {
   _load() {
     this._eachOption(
       ($elm, key, value, cb) => {
-        if ($elm.is(':checkbox') || $elm.is(':radio')) $elm.prop('checked', value);
-        else $elm.val(value);
+        if ($elm.is(':checkbox')) {
+          $elm.prop('checked', value);
+        } else if ($elm.is(':radio')) {
+          $elm.prop('checked', $elm.val() == value);
+        } else {
+          $elm.val(value);
+        }
         cb();
       },
       () => {
@@ -62,7 +67,10 @@ class OptionsView {
     const changes = {};
     this._eachOption(
       ($elm, key, value, cb) => {
-        const newValue = $elm.is(':checkbox') || $elm.is(':radio') ? $elm.is(':checked') : $elm.val();
+        if ($elm.is(':radio') && !$elm.is(':checked')) {
+          return cb();
+        }
+        const newValue = $elm.is(':checkbox') ? $elm.is(':checked') : $elm.val();
         if (value === newValue) return cb();
         changes[key] = [value, newValue];
         this.store.set(key, newValue, cb);

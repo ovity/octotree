@@ -6,10 +6,7 @@ const PINNED_CLASS = 'octotree-pinned';
 const STORE = {
   TOKEN: 'octotree.access_token',
   HOVEROPEN: 'octotree.hover_open',
-  SHOWIN_ALL: 'octotree.all_shown',
-  SHOWIN_CODE_COMMIT_PR: 'octotree.code_commit_pr_shown',
-  SHOWIN_CODE_COMMIT: 'octotree.code_commit_shown',
-  SHOWIN_PR_ONLY: 'octotree.pr_shown',
+  SHOWIN: 'octotree.showin',
   PR: 'octotree.prdiff_shown',
   HOTKEYS: 'octotree.hotkeys',
   ICONS: 'octotree.icons',
@@ -24,10 +21,7 @@ const STORE = {
 const DEFAULTS = {
   TOKEN: '',
   HOVEROPEN: true,
-  SHOWIN_ALL: true,
-  SHOWIN_CODE_COMMIT_PR: false,
-  SHOWIN_CODE_COMMIT: false,
-  SHOWIN_PR_ONLY: false,
+  SHOWIN: 0,
   PR: true,
   LOADALL: true,
   HOTKEYS: '⌘+⇧+s, ⌃+⇧+s',
