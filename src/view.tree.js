@@ -142,6 +142,8 @@ class TreeView {
       download = true;
     }
 
+    $target = $target.is('a.jstree-anchor') ? $target : $target.parent();
+
     if (!$target.is('a.jstree-anchor')) return;
 
     // Refocus after complete so that keyboard navigation works, fix #158
