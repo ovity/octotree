@@ -354,8 +354,7 @@ class GitHub extends PjaxAdapter {
 
     if (path && path.startsWith('http')) {
       url = path;
-    }
-    else {
+    } else {
       const host =
         location.protocol + '//' + (location.host === 'github.com' ? 'api.github.com' : location.host + '/api/v3');
       url = `${host}/repos/${opts.repo.username}/${opts.repo.reponame}${path || ''}`;

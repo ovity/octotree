@@ -191,6 +191,10 @@
       }
 
       .jstree-default {
+        .jstree-container-ul {
+          max-width: 100%;
+        }
+
         .jstree-container-ul > .jstree-node {
           margin-left: 0px;
         }
@@ -211,6 +215,7 @@
 
         .jstree-icon {
           width: 16px;
+          flex-shrink: 0;
         }
 
         .jstree-icon,
@@ -271,6 +276,11 @@
 
       .octotree-patch {
         display: none;
+      }
+
+      .octotree-patch-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .octotree-patch:last-of-type {
