@@ -163,15 +163,15 @@ class GitHub extends PjaxAdapter {
     const showIn = this.store.get(STORE.SHOWIN);
 
     // Skip rendering the octotree in the unselected pages
-    if (showIn && showIn != 0) {
+    if (showIn && showIn !== ShowInPage.All) {
       const isCodeCommit = !type || ['tree', 'blob', 'commit'].includes(type);
       const isCodeCommitPR = isPR || isCodeCommit;
       const shouldRender = {
-        '1': isCodeCommitPR,
-        '2': isCodeCommit,
-        '3': isPR
+        [ShowInPage.CodeAndPullRequest]: isCodeCommitPR,
+        [ShowInPage.Code]: isCodeCommit,
+        [ShowInPage.PullRequest]: isPR
       }[showIn];
-      if (!shouldRender) return cb();
+      if (shouldRender !== undefined && !shouldRender) return cb();
     }
 
     // Get branch by inspecting URL or DOM, quite fragile so provide multiple fallbacks.

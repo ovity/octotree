@@ -50,7 +50,7 @@ class OptionsView {
         if ($elm.is(':checkbox')) {
           $elm.prop('checked', value);
         } else if ($elm.is(':radio')) {
-          $elm.prop('checked', $elm.val() == value);
+          $elm.prop('checked', $elm.val() === value);
         } else {
           $elm.val(value);
         }
