@@ -269,8 +269,8 @@ class Adapter {
    * @param {Object} opts - {opts}
    * @api public
    */
-  getBranch(opts) {
-    throw new Error('not implemnited');
+  getBranches(opts) {
+    throw new Error('Not implemented');
   }
 
   /**

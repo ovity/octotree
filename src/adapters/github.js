@@ -108,7 +108,7 @@ class GitHub extends PjaxAdapter {
   }
 
   // @override
-  getBranch(opts) {
+  getBranches(opts) {
     return new Promise((resolve, reject) => {
       this._get('/branches', opts, (err, res) => {
         if (err) reject(err);

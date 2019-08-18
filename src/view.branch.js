@@ -1,7 +1,6 @@
 class BranchSwitch {
-  constructor($dom, store) {
+  constructor($dom) {
     this.$dom = $dom;
-    this.store = store;
     this.branches = [];
     $dom.find('.octotree-views').on('click', '.octotree-header-branch', this._showPopUp.bind(this));
   }
@@ -50,7 +49,6 @@ class BranchSwitch {
   _handleModalClick(event) {
     event.preventDefault();
     const clickedBranch = $(event.target).attr('data-branch-name');
-    
     $(event.currentTarget).trigger(EVENT.BRANCH_SWITCHED, clickedBranch);
     this._closePopUp();
   }

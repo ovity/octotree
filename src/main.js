@@ -12,7 +12,7 @@ $(document).ready(() => {
     const $pinner = $sidebar.find('.octotree-pin');
     const adapter = new GitHub(store);
     const treeView = new TreeView($dom, store, adapter);
-    const branchView = new BranchSwitch($dom, store, adapter);
+    const branchView = new BranchSwitch($dom);
     const optsView = new OptionsView($dom, store, adapter);
     const helpPopup = new HelpPopup($dom, store);
     const errorView = new ErrorView($dom, store);
@@ -123,7 +123,7 @@ $(document).ready(() => {
 
     function tryLoadRepo(reload, isChangedBranch = false, branch) {
       const token = octotree.getAccessToken();
-      adapter.getRepoFromPath(currRepo, token, async (err, repo) => {
+      adapter.getRepoFromPath(currRepo, token, (err, repo) => {
         if (err) {
           showError(err);
         } else if (repo) {
@@ -147,7 +147,7 @@ $(document).ready(() => {
               currRepo = repo;
               treeView.show(repo, token);
               adapter
-                .getBranch({repo, token})
+                .getBranches({repo, token})
                 .then((branches) => {
                   branches = branches.map((branch) => branch.name);
                   branchView.setBranches(branches);
