@@ -45,6 +45,7 @@ const EVENT = {
   TOGGLE_PIN: 'octotree:pin',
   LOC_CHANGE: 'octotree:location',
   LAYOUT_CHANGE: 'octotree:layout',
+  BRANCH_SWITCHED: 'octotree:branch_switched',
   REQ_START: 'octotree:start',
   REQ_END: 'octotree:end',
   OPTS_CHANGE: 'octotree:change',

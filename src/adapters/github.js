@@ -108,6 +108,16 @@ class GitHub extends PjaxAdapter {
   }
 
   // @override
+  getBranch(opts) {
+    return new Promise((resolve, reject) => {
+      this._get('/branches', opts, (err, res) => {
+        if (err) reject(err);
+        else return resolve(res);
+      });
+    });
+  }
+
+  // @override
   updateLayout(sidebarPinned, sidebarVisible, sidebarWidth) {
     const SPACING = 10;
     const $header = $(GH_HEADER);
@@ -354,13 +364,11 @@ class GitHub extends PjaxAdapter {
 
     if (path && path.startsWith('http')) {
       url = path;
-    }
-    else {
+    } else {
       const host =
         location.protocol + '//' + (location.host === 'github.com' ? 'api.github.com' : location.host + '/api/v3');
       url = `${host}/repos/${opts.repo.username}/${opts.repo.reponame}${path || ''}`;
     }
-
     const cfg = {url, method: 'GET', cache: false};
 
     if (opts.token) {

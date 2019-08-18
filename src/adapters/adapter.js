@@ -265,6 +265,15 @@ class Adapter {
   }
 
   /**
+   * Gets repo branches.
+   * @param {Object} opts - {opts}
+   * @api public
+   */
+  getBranch(opts) {
+    throw new Error('not implemnited');
+  }
+
+  /**
    * Selects the file at a specific path.
    * @api public
    */

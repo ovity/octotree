@@ -12,6 +12,7 @@ $(document).ready(() => {
     const $pinner = $sidebar.find('.octotree-pin');
     const adapter = new GitHub(store);
     const treeView = new TreeView($dom, store, adapter);
+    const branchView = new BranchSwitch($dom, store, adapter);
     const optsView = new OptionsView($dom, store, adapter);
     const helpPopup = new HelpPopup($dom, store);
     const errorView = new ErrorView($dom, store);
@@ -54,6 +55,9 @@ $(document).ready(() => {
       .on(EVENT.REQ_END, () => $spinner.removeClass('octotree-spin--loading'))
       .on(EVENT.LAYOUT_CHANGE, layoutChanged)
       .on(EVENT.TOGGLE_PIN, layoutChanged)
+      .on(EVENT.BRANCH_SWITCHED, (event, branch) => {
+        tryLoadRepo(true, true, branch);
+      })
       .on(EVENT.LOC_CHANGE, () => tryLoadRepo());
 
     $sidebar
@@ -117,9 +121,9 @@ $(document).ready(() => {
       }
     }
 
-    function tryLoadRepo(reload) {
+    function tryLoadRepo(reload, isChangedBranch = false, branch) {
       const token = octotree.getAccessToken();
-      adapter.getRepoFromPath(currRepo, token, (err, repo) => {
+      adapter.getRepoFromPath(currRepo, token, async (err, repo) => {
         if (err) {
           showError(err);
         } else if (repo) {
@@ -129,6 +133,12 @@ $(document).ready(() => {
             if (isSidebarPinned()) toggleSidebar();
             else togglePin();
           } else if (isSidebarVisible()) {
+            // @TODO(add current working branch to local store for a certin period of time)
+            // For now this could be not a good approch because when
+            // The page is force reloaded the current branch being navigated will be lost, but for now it works.
+            if (isChangedBranch && typeof branch !== 'undefined') {
+                repo.branch = branch;
+            }
             const replacer = ['username', 'reponame', 'branch', 'pullNumber'];
             const repoChanged = JSON.stringify(repo, replacer) !== JSON.stringify(currRepo, replacer);
             if (repoChanged || reload === true) {
@@ -136,6 +146,13 @@ $(document).ready(() => {
               $document.trigger(EVENT.REQ_START);
               currRepo = repo;
               treeView.show(repo, token);
+              adapter
+                .getBranch({repo, token})
+                .then((branches) => {
+                  branches = branches.map((branch) => branch.name);
+                  branchView.setBranches(branches);
+                })
+                .catch(showError);
             } else {
               treeView.syncSelection(repo);
             }

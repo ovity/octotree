@@ -172,6 +172,7 @@ function buildJs(prefix = '.', ctx = {}) {
     `${prefix}/src/view.error.js`,
     `${prefix}/src/view.tree.js`,
     `${prefix}/src/view.options.js`,
+    `${prefix}/src/view.branch.js`,
     `${prefix}/src/view.footer.js`,
     `${prefix}/src/main.js`
   ];
