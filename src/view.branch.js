@@ -1,6 +1,7 @@
 class BranchSwitch {
-  constructor($dom) {
+  constructor($dom, $html) {
     this.$dom = $dom;
+    this.$html = $html;
     this.branches = [];
     $dom.find('.octotree-views').on('click', '.octotree-header-branch', this._showPopUp.bind(this));
   }
@@ -12,7 +13,7 @@ class BranchSwitch {
   }
 
   _showPopUp() {
-    $('html')
+    this.$html
       .append(
         `
            <div class='modal-root'>

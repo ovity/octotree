@@ -12,7 +12,7 @@ $(document).ready(() => {
     const $pinner = $sidebar.find('.octotree-pin');
     const adapter = new GitHub(store);
     const treeView = new TreeView($dom, store, adapter);
-    const branchView = new BranchSwitch($dom);
+    const branchView = new BranchSwitch($dom, $html);
     const optsView = new OptionsView($dom, store, adapter);
     const helpPopup = new HelpPopup($dom, store);
     const errorView = new ErrorView($dom, store);
@@ -20,6 +20,7 @@ $(document).ready(() => {
 
     let currRepo = false;
     let hasError = false;
+    let currentBranch;
 
     $pinner.click(togglePin);
     setupSidebarFloatingBehaviors();
@@ -133,11 +134,13 @@ $(document).ready(() => {
             if (isSidebarPinned()) toggleSidebar();
             else togglePin();
           } else if (isSidebarVisible()) {
-            // @TODO(add current working branch to local store for a certin period of time)
-            // For now this could be not a good approch because when
-            // The page is force reloaded the current branch being navigated will be lost, but for now it works.
-            if (isChangedBranch && typeof branch !== 'undefined') {
-                repo.branch = branch;
+            if(currentBranch) {
+              repo.branch = currentBranch;
+            }
+
+            if (typeof branch !== 'undefined' && isChangedBranch) {
+              currentBranch = branch;
+              repo.branch = branch;
             }
             const replacer = ['username', 'reponame', 'branch', 'pullNumber'];
             const repoChanged = JSON.stringify(repo, replacer) !== JSON.stringify(currRepo, replacer);
