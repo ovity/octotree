@@ -19,7 +19,7 @@ Browser extension that improves your productivity on GitHub. [www.octotree.io](h
 
 Subscribe to Octotree Pro on [our website](https://www.octotree.io).
 
-![Octotree on GitHub](docs/chrome-github.png)
+![Octotree Pro](docs/pro-dock-search.gif)
 
 ### Install Octotree
 
@@ -71,12 +71,13 @@ Click the theme icon located at the bottom of Octotree to select a color theme.
 
 ![Multiple themes](docs/pro-themes.gif)
 
-#### Change docking position and quick file search
+#### Change docking position
 
-**Note:** search requires the "Load entire tree at once" option to be selected.
+Click the dock icon at the footer of Octotree to switch the sidebar location.
 
-![Dock & Search](docs/pro-dock-search.gif)
+#### Quick file search
 
+Click the search icon to start file search. Note that this requires the "Load entire tree at once" option to be selected.
 
 #### GitHub Enterprise
 
