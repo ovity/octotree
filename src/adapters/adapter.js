@@ -121,9 +121,9 @@ class Adapter {
                     .replace('github.com:', 'github.com/')
                     .replace(/.git$/, '');
                   item.text =
-                    `<a href="${moduleUrl}" class="jstree-anchor">${name}</a>` +
-                    '<span>@ </span>' +
-                    `<a href="${moduleUrl}/tree/${item.sha}" class="jstree-anchor">${item.sha.substr(0, 7)}</a>`;
+                    `<a href="${moduleUrl}/tree/${item.sha}" class="jstree-anchor">
+                      ${name} @ ${item.sha.substr(0, 7)}
+                    </a>`;
                 }
                 item.a_attr = {href: moduleUrl};
               }
