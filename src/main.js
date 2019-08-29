@@ -66,8 +66,18 @@ $(document).ready(() => {
     helpPopup.init();
     footerView.init();
 
-    octotree.activate(
-      {adapter, $document, $dom, $sidebar, $toggler, $views, treeView, optsView, errorView},
+    await pluginManager.activate(
+      {
+        adapter,
+        $document,
+        $dom,
+        $sidebar,
+        $toggler,
+        $views,
+        treeView,
+        optsView,
+        errorView
+      },
       activationOpts
     );
 
@@ -101,7 +111,7 @@ $(document).ready(() => {
         }
       });
 
-      if (await octotree.applyOptions(changes)) {
+      if (await pluginManager.applyOptions(changes)) {
         reload = true;
       }
 

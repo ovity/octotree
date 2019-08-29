@@ -3,6 +3,7 @@
     "browser": true
   },
   "globals": {
+    "pluginManager": true
   },
   "parserOptions": {
     "ecmaVersion": 2017
