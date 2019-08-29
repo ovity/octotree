@@ -1,8 +1,7 @@
 $(document).ready(() => {
+  loadExtension();
 
-  octotree.load(loadExtension);
-
-  async function loadExtension(activationOpts= {}) {
+  async function loadExtension() {
     const $html = $('html');
     const $document = $(document);
     const $dom = $(TEMPLATE);
@@ -67,10 +66,17 @@ $(document).ready(() => {
     helpPopup.init();
     footerView.init();
 
-    octotree.activate(
-      {adapter, $document, $dom, $sidebar, $toggler, $views, treeView, optsView, errorView},
-      activationOpts
-    );
+    await pluginManager.activate({
+      adapter,
+      $document,
+      $dom,
+      $sidebar,
+      $toggler,
+      $views,
+      treeView,
+      optsView,
+      errorView
+    });
 
     return tryLoadRepo();
 
@@ -102,7 +108,7 @@ $(document).ready(() => {
         }
       });
 
-      if (await octotree.applyOptions(changes)) {
+      if (await pluginManager.applyOptions(changes)) {
         reload = true;
       }
 
