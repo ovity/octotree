@@ -58,7 +58,7 @@ class Adapter {
             const name = deXss(path.substring(index + 1)); // Sanitizes, closes #9
 
             item.id = NODE_PREFIX + path;
-            item.text = `<span class="octotree-patch-name">${name}</span>`;
+            item.text = name;
 
             // Uses `type` as class name for tree node
             item.icon = type;
@@ -318,6 +318,7 @@ class Adapter {
   buildPatchHtml(treeItem = {}) {
     const {action, previous, filesChanged: files, additions, deletions} = treeItem.patch;
     let patch = '';
+
     patch += action === 'added' ? '<span class="text-green">added</span>' : '';
     patch += action === 'renamed' ? `<span class="text-green" title="${previous}">renamed</span>` : '';
     patch += action === 'removed' ? `<span class="text-red" title="${previous}">removed</span>` : '';

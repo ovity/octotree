@@ -278,9 +278,13 @@
         display: none;
       }
 
-      .octotree-patch-name {
+      .octotree-patch-container {
         overflow: hidden;
         text-overflow: ellipsis;
+
+        .octotree-patch:last-of-type {
+          display: none;
+        }
       }
 
       .octotree-patch:last-of-type {
