@@ -71,6 +71,13 @@ Click the theme icon located at the bottom of Octotree to select a color theme.
 
 ![Multiple themes](docs/pro-themes.gif)
 
+#### Change docking position and quick file search
+
+**Note:** search requires the "Load entire tree at once" option to be selected.
+
+![Dock & Search](docs/pro-dock-search.gif)
+
+
 #### GitHub Enterprise
 
 _Note: GitHub Enterprise is not supported on Safari._
@@ -88,18 +95,6 @@ Go to Settings and click the + icon to add more accounts.
 
 ![Multiple GitHub accounts](docs/pro-ma.jpg)
 
-#### Change Docking Position
-
-You can change the location of the Octotree sidebar to either the left or right side of the screen. Click the dock icon located at the bottom of Octotree to toggle the sidebar location.
-
-![Change docking position](docs/pro-dock.png)
-
-#### File Search
-
-Click the search icon and type in search query.
-**Note:** this feature requires the "Load entire tree at once" option to be selected.
-
-![File search](docs/pro-search.png)
 
 ### Credits
 
