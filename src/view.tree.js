@@ -108,10 +108,24 @@ class TreeView {
     return folder.map((item) => {
       if (item.type === 'tree') {
         item.children = this._collapse(item.children);
-        if (item.children.length === 1 && item.children[0].type === 'tree') {
+        if (item.children.length === 1 && item.children[0].type === 'tree' && item.a_attr) {
           const onlyChild = item.children[0];
+          const path = item.a_attr['data-download-filename'];
 
-          onlyChild.text = item.a_attr['data-download-filename'] + '/' + onlyChild.text;
+          /**
+           * Using a_attr rather than item.text to concat in order to
+           * avoid the duplication of <div class="octotree-patch">
+           *
+           * For example:
+           *
+           * - item.text + onlyChild.text
+           * 'src/adapters/<span class="octotree-patch">+1</span>' + 'github.js<span class="octotree-patch">+1</span>'
+           *
+           * - path + onlyChild.text
+           * 'src/adapters/' + 'github.js<span class="octotree-patch">+1</span>'
+           *
+           */
+          onlyChild.text = path + '/' + onlyChild.text;
 
           return onlyChild;
         }

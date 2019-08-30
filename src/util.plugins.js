@@ -4,7 +4,7 @@
  * Mimic logic from JSTree
  * https://github.com/vakata/jstree/blob/master/src/misc.js#L148
  *
- * Plugin truncate filename
+ * Plugin truncate path name
  */
 (function($) {
   'use strict';
@@ -17,7 +17,7 @@
           .find('.jstree-anchor')
           .contents()
           .filter(function() {
-            // Get text node which is filename
+            // Get text node which is path name
             return this.nodeType === 3;
           })
           .wrap('<div style="overflow: hidden;text-overflow: ellipsis;"></div>')
