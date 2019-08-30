@@ -58,7 +58,7 @@ class Adapter {
             const name = deXss(path.substring(index + 1)); // Sanitizes, closes #9
 
             item.id = NODE_PREFIX + path;
-            item.text = `<span class="octotree-patch-name">${name}</span>`;
+            item.text = name;
 
             // Uses `type` as class name for tree node
             item.icon = type;
