@@ -14,7 +14,7 @@ class TreeView {
       .on('click', this._onItemClick.bind(this))
       .jstree({
         core: {multiple: false, animation: 50, worker: false, themes: {responsive: false}},
-        plugins: ['wholerow', 'search']
+        plugins: ['wholerow', 'search', 'truncate']
       });
   }
 
@@ -110,7 +110,9 @@ class TreeView {
         item.children = this._collapse(item.children);
         if (item.children.length === 1 && item.children[0].type === 'tree') {
           const onlyChild = item.children[0];
-          onlyChild.text = item.text + '/' + onlyChild.text;
+
+          onlyChild.text = item.a_attr['data-download-filename'] + '/' + onlyChild.text;
+
           return onlyChild;
         }
       }
