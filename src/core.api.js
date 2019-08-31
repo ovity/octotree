@@ -10,9 +10,14 @@ class Plugin {
    *   optsView: !OptionsView,
    *   errorView: !ErrorView,
    * }}
+   *
+   * @param {{
+   *  state: UserState,
+   * }}
+   *
    * @return {!Promise<undefined>}
    */
-  async activate(opts) {
+  async activate(opts, payload) {
     return undefined;
   }
 
@@ -27,13 +32,6 @@ class Plugin {
 }
 
 class OctotreeService {
-  constructor() {
-    this._plugins = [];
-    this._forward({
-      applyOptions: (results) => results.some((shouldReload) => !!shouldReload)
-    });
-  }
-
   getAccessToken() {
     return window.store.get(window.STORE.TOKEN);
   }
@@ -49,11 +47,10 @@ class OctotreeService {
     loadFn();
   }
 
-  activate(opts) {
-  }
+  activate(inputs, opts) {}
 
   applyOptions(opts) {
-    return false
+    return false;
   }
 }
 
