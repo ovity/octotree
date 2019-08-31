@@ -132,6 +132,8 @@ $(document).ready(() => {
             if (isSidebarPinned()) toggleSidebar();
             else togglePin();
           } else if (isSidebarVisible()) {
+            if (store.get(STORE.PINNED)) togglePin(true);
+
             const replacer = ['username', 'reponame', 'branch', 'pullNumber'];
             const repoChanged = JSON.stringify(repo, replacer) !== JSON.stringify(currRepo, replacer);
             if (repoChanged || reload === true) {
