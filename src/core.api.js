@@ -22,4 +22,3 @@ class OctotreeService {
 }
 
 window.octotree = new OctotreeService();
-window.Plugin = Plugin;
