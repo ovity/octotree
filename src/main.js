@@ -122,6 +122,8 @@ $(document).ready(() => {
             if (isSidebarPinned()) toggleSidebar();
             else togglePin();
           } else if (isSidebarVisible()) {
+            // In case trying load Repo when the sidebar is visible and pinned.
+            // Sync the pin status if it lost status
             if (store.get(STORE.PINNED)) togglePin(true);
 
             const replacer = ['username', 'reponame', 'branch', 'pullNumber'];
