@@ -22,6 +22,17 @@ class Plugin {
   }
 
   /**
+   * Deactivate the plugin.
+   *
+   * @param {{
+   *  state: UserState,
+   * }} payload
+   */
+  async deactivate(payload) {
+    return undefined;
+  }
+
+  /**
    * Applies the option changes user has made.
    * @param {!Object<!string, [(string|boolean), (string|boolean)]>} changes
    * @return {!Promise<boolean>} iff the tree should be reloaded.
