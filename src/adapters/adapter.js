@@ -121,7 +121,7 @@ class Adapter {
                     .replace('github.com:', 'github.com/')
                     .replace(/.git$/, '');
                   item.text =
-                    `<a href="${moduleUrl}/tree/${item.sha}" class="jstree-anchor">
+                    `<a data-skip-pjax="true" href="${moduleUrl}/tree/${item.sha}" class="jstree-anchor">
                       ${name} @ ${item.sha.substr(0, 7)}
                     </a>`;
                 }
