@@ -119,13 +119,10 @@ class Adapter {
                   moduleUrl = moduleUrl
                     .replace(/^git(:\/\/|@)/, window.location.protocol + '//')
                     .replace('github.com:', 'github.com/')
-                    .replace(/.git$/, '');
-                  item.text =
-                    `<a data-skip-pjax="true" href="${moduleUrl}/tree/${item.sha}" class="jstree-anchor">
-                      ${name} @ ${item.sha.substr(0, 7)}
-                    </a>`;
+                    .replace(/.git$/, '') + '/tree/' + item.sha;
+                  item.text = `${name} @ ${item.sha.substr(0, 7)}`;
                 }
-                item.a_attr = {href: moduleUrl};
+                item.a_attr = {href: moduleUrl, 'data-skip-pjax': true};
               }
             }
           }
