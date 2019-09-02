@@ -1,8 +1,7 @@
 $(document).ready(() => {
-
   octotree.load(loadExtension);
 
-  async function loadExtension(activationOpts= {}) {
+  async function loadExtension(activationOpts = {}) {
     const $html = $('html');
     const $document = $(document);
     const $dom = $(TEMPLATE);
