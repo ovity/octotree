@@ -144,7 +144,7 @@ $(document).ready(() => {
             $toggler.show();
           }
         } else {
-          // Not a repo and not show in non-code page
+          // Not a repo or not to be shown in this page
           $toggler.hide();
           toggleSidebar(false);
         }

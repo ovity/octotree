@@ -1,7 +1,29 @@
+const browser = chrome || browser;
+const ads = [
+  {
+    url: browser.runtime.getURL('images/4b43f36.png'),
+    title: 'Multiple themes',
+    duration: 2000,
+  },
+  {
+    url: browser.runtime.getURL('images/8cf16fd.png'),
+    title: 'Change sidebar docking',
+    duration: 2000,
+  },
+  {
+    url: browser.runtime.getURL('images/b08f126.gif'),
+    title: 'GitHub on steroids',
+    duration: 2000,
+  },
+];
+
 class OptionsView {
   constructor($dom, store, adapter) {
     this.store = store;
     this.adapter = adapter;
+    this.$adSlides = $dom.find('.octotree-ad-slides').click(this._handleNextSlide.bind(this));
+    this.currentSlideIndex = 0;
+    this.currentSlideTime;
     this.$toggler = $dom.find('.octotree-settings').click(this.toggle.bind(this));
     this.$view = $dom.find('.octotree-settings-view').submit((event) => {
       event.preventDefault();
@@ -10,6 +32,7 @@ class OptionsView {
     this.$view.find('a.octotree-create-token').attr('href', this.adapter.getCreateTokenUrl());
 
     this.loadElements();
+    this._handleSliderShow();
 
     // Hide options view when sidebar is hidden
     $(document).on(EVENT.TOGGLE, (event, visible) => {
@@ -96,5 +119,33 @@ class OptionsView {
       },
       completeFn
     );
+  }
+
+  _handleSliderShow() {
+    $(this)
+      .on(EVENT.VIEW_CLOSE, this._clearSlideTimeOut)
+      .on(EVENT.VIEW_READY, this._nextSlide);
+  }
+
+  _nextSlide() {
+    this.$adSlides.find('img').attr('src', ads[this.currentSlideIndex].url);
+    this.$adSlides.find('.octotree-feature-text').text(ads[this.currentSlideIndex].title);
+    this.currentSlideTime = setTimeout(() => {
+      this._handleNextSlide();
+    }, ads[this.currentSlideIndex].duration);
+  }
+
+  _handleNextSlide() {
+    if (this.currentSlideIndex === ads.length - 1) {
+      this.currentSlideIndex = 0;
+    } else {
+      this.currentSlideIndex++;
+    }
+    this._clearSlideTimeOut();
+    this._nextSlide();
+  }
+
+  _clearSlideTimeOut() {
+    clearTimeout(this.currentSlideTime);
   }
 }

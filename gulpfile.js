@@ -161,6 +161,7 @@ function buildJs(prefix = '.', ctx = {}) {
     `${prefix}/src/util.module.js`,
     `${prefix}/src/util.async.js`,
     `${prefix}/src/util.deXss.js`,
+    `${prefix}/src/util.plugins.js`,
     `${prefix}/src/core.constants.js`,
     `${prefix}/src/core.storage.js`,
     `${prefix}/src/core.plugins.js`,
@@ -227,6 +228,10 @@ function prepareWexFolder(browser) {
     pipe(
       './icons/**/*',
       `./tmp/${browser}/icons`
+    ),
+    pipe(
+      './images/**/*',
+      `./tmp/${browser}/images`
     ),
     pipe(
       './libs/fonts/**/*',

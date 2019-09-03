@@ -1,25 +1,25 @@
 ## Octotree
 
-Browser extension (Chrome, Firefox, Opera and Safari) that helps you explore source code and perform code review effectively on GitHub.
+Browser extension that improves your productivity on GitHub. [www.octotree.io](https://www.octotree.io)
 
 **Features**
 
-- Easy-to-navigate code tree, just like in IDEs
-- Fast browsing with pjax
-- Support private repositories (see [instructions](#access-token))
+- Browse GitHub repos with intuitive code tree
+- See detailed change stats in pull requests
 
 **Features of Octotree Pro**
 
-- Dark mode
-- File search
+- Enhanced code review: see code comments and file view status
+- Many beautiful color themes (and growing)
+- Quick file search
 - Change docking position
 - Multiple GitHub accounts
 - Support GitHub Enterprise on Chrome, Opera and Firefox
 - Official Safari version (Safari doesn't support GitHub Enterprise)
 
-Learn why we build Octotree Pro [here](HISTORY.md#v300). Subscribe to Octotree Pro on [our website](https://www.octotree.io).
+Subscribe to Octotree Pro on [our website](https://www.octotree.io).
 
-![Octotree on GitHub](docs/chrome-github.png)
+![Octotree Pro](docs/pro-dock-search.gif)
 
 ### Install Octotree
 
@@ -59,6 +59,26 @@ Learn more at [keymaster](https://github.com/madrobby/keymaster#supported-keys).
 
 ### Octotree Pro Settings
 
+#### Enhanced pull request review
+
+In the Pull Request page, you will automatically see file comments and file view status.
+
+![Enhanced code review](docs/pro-pr.gif)
+
+#### Multiple themes
+
+Click the theme icon located at the bottom of Octotree to select a color theme.
+
+![Multiple themes](docs/pro-themes.gif)
+
+#### Change docking position
+
+Click the dock icon at the footer of Octotree to switch the sidebar location.
+
+#### Quick file search
+
+Click the search icon to start file search. Note that this requires the "Load entire tree at once" option to be selected.
+
 #### GitHub Enterprise
 
 _Note: GitHub Enterprise is not supported on Safari._
@@ -76,32 +96,6 @@ Go to Settings and click the + icon to add more accounts.
 
 ![Multiple GitHub accounts](docs/pro-ma.jpg)
 
-#### Change Docking Position
-
-You can change the location of the Octotree sidebar to either the left or right side of the screen. Click the dock icon located at the bottom of Octotree to toggle the sidebar location.
-
-![Change docking position](docs/pro-dock.png)
-
-#### Dark Mode
-
-Click the dark mode icon located at the bottom of Octotree to toggle dark mode.
-
-![Dark mode](docs/pro-dark.png)
-
-#### File Search
-
-Click the search icon and type in search query.
-**Note:** this feature requires the "Load entire tree at once" option to be selected.
-
-![File search](docs/pro-search.png)
-
-## Contribution
-
-1.  Install [node 8 or above](https://nodejs.org/en/download/)
-1.  Run `npm install` to install dependencies
-1.  Run `npm start` to watch code changes and build unpacked extensions
-1.  Load the unpacked extensions in the `tmp` folder (check instructions of the specific browser)
-1.  Please follow existing style for new code
 
 ### Credits
 
