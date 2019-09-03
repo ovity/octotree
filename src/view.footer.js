@@ -17,7 +17,7 @@ const FOOTER_OPTIONS = [
 
 class FooterView {
   constructor($dom) {
-    this.$footer = $dom.find('.octotree-ad-small a');
+    this.$footer = $dom.find('.octotree-tip a');
   }
 
   init() {
