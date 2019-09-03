@@ -230,6 +230,10 @@ function prepareWexFolder(browser) {
       `./tmp/${browser}/icons`
     ),
     pipe(
+      './images/**/*',
+      `./tmp/${browser}/images`
+    ),
+    pipe(
       './libs/fonts/**/*',
       `./tmp/${browser}/fonts`
     ),
