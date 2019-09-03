@@ -288,6 +288,8 @@
 
     .octotree-error-view,
     .octotree-settings-view {
+      overflow: auto;
+      height: ~"calc(100% - 215px)";
       .octotree-view-header {
         padding-left: 8px;
       }
@@ -359,15 +361,45 @@
         }
       }
 
-      & > .octotree-ad-big {
+      & > .octotree-ad-description {
         position: absolute;
+        background-color: #f1f8ff;
+        border-top: 1px solid #c8e1ff;
+        border-right: 1px solid #c8e1ff;
+        color: rgb(15, 46, 71);    
         bottom: 0;
         z-index: 1; // hide the small ad
-        background-color: @accent;
-        color: white;
         font-size: 12px;
-        padding: 12px;
         width: 100%;
+
+        .is-padding {
+          padding: 12px;
+        }
+
+        i {
+          color: #e93838;
+          font-style: normal;
+        }
+
+        .octotree-ad-slides {
+          position: relative;
+          cursor: pointer;
+          
+          img {  
+            object-fit: cover;
+            width: 100%;
+            height: 122px;
+            max-height: 122px;
+          }
+
+          .octotree-feature-text {
+            position: absolute;
+            bottom: 0;
+            color: white;
+            background: ~"linear-gradient(to bottom, #00000000 0%, #000000 100%)";
+            width: 100%
+          }
+        }
 
         a {
           text-decoration: underline;
@@ -395,10 +427,7 @@
         }
 
         a {
-          color: white;
-          &:hover {
-            color: white;
-          }
+          color: rgb(15, 46, 71);
         }
 
         div:last-child {
