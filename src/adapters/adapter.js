@@ -270,12 +270,12 @@ class Adapter {
     // Smooth scroll to diff file on PR page
     const diffMatch = path.match(/#diff-\d+$/);
     if (diffMatch) {
-      const el = $(diffMatch[0])
-      if (el) {
+      const el = $(diffMatch[0]);
+      if (el.length > 0) {
         $('html, body').animate({
           scrollTop: el.offset().top - 68
-        }, 600);
-        return
+        }, 400);
+        return;
       }
     }
 
