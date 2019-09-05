@@ -271,7 +271,7 @@ class Adapter {
     const diffMatch = path.match(/#diff-\d+$/);
     if (diffMatch) {
       const el = $(diffMatch[0]);
-      if (el) {
+      if (el.length > 0) {
         $('html, body').animate({
           scrollTop: el.offset().top - 68
         }, 400);
