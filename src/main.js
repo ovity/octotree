@@ -64,7 +64,7 @@ $(document).ready(() => {
     adapter.init($sidebar);
     helpPopup.init();
 
-    await pluginManager.activate(
+    await octotree.activate(
       {
         adapter,
         $document,
@@ -109,7 +109,7 @@ $(document).ready(() => {
         }
       });
 
-      if (await pluginManager.applyOptions(changes)) {
+      if (await octotree.applyOptions(changes)) {
         reload = true;
       }
 
