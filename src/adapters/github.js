@@ -241,6 +241,16 @@ class GitHub extends PjaxAdapter {
     this._loadCodeTreeInternal(opts, null, cb);
   }
 
+  get isOnPRPage() {
+    const match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?(?:\/([^\/]+))?/);
+
+    if (!match) return false;
+
+    const type = match[3];
+
+    return type === 'pull';
+  }
+
   // @override
   _getTree(path, opts, cb) {
     if (opts.repo.pullNumber) {

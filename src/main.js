@@ -35,6 +35,10 @@ $(document).ready(() => {
         .on(EVENT.VIEW_READY, function(event) {
           if (this !== optsView) {
             $document.trigger(EVENT.REQ_END);
+
+            if (adapter.isOnPRPage) {
+              treeView.$tree.jstree('open_all');
+            }
           }
           showView(this);
         })
