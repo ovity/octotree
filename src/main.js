@@ -15,7 +15,6 @@ $(document).ready(() => {
     const optsView = new OptionsView($dom, store, adapter);
     const helpPopup = new HelpPopup($dom, store);
     const errorView = new ErrorView($dom, store);
-    const footerView = new FooterView($dom);
 
     let currRepo = false;
     let hasError = false;
@@ -64,10 +63,19 @@ $(document).ready(() => {
 
     adapter.init($sidebar);
     helpPopup.init();
-    footerView.init();
 
-    octotree.activate(
-      {adapter, $document, $dom, $sidebar, $toggler, $views, treeView, optsView, errorView},
+    await octotree.activate(
+      {
+        adapter,
+        $document,
+        $dom,
+        $sidebar,
+        $toggler,
+        $views,
+        treeView,
+        optsView,
+        errorView
+      },
       activationOpts
     );
 
@@ -137,7 +145,7 @@ $(document).ready(() => {
             $toggler.show();
           }
         } else {
-          // Not a repo and not show in non-code page
+          // Not a repo or not to be shown in this page
           $toggler.hide();
           toggleSidebar(false);
         }

@@ -1,3 +1,22 @@
+const browser = chrome || browser;
+const ads = [
+  {
+    url: browser.runtime.getURL('images/pro-themes.gif'),
+    title: 'Multiple themes',
+    duration: 10000,
+  },
+  {
+    url: browser.runtime.getURL('images/pro-pr.gif'),
+    title: 'Enhanced pull request review',
+    duration: 20000,
+  },
+  {
+    url: browser.runtime.getURL('images/pro-overview.gif'),
+    title: 'Dock and search',
+    duration: 10000,
+  },
+];
+
 class OptionsView {
   constructor($dom, store, adapter) {
     this.store = store;
@@ -9,7 +28,12 @@ class OptionsView {
     });
     this.$view.find('a.octotree-create-token').attr('href', this.adapter.getCreateTokenUrl());
 
+    this.$adSlides = $dom.find('.octotree-pro-feature').click(this._handleNextSlide.bind(this));
+    this.currentSlideIndex = 0;
+    this.currentSlideTimer;
+
     this.loadElements();
+    this._initSlides();
 
     // Hide options view when sidebar is hidden
     $(document).on(EVENT.TOGGLE, (event, visible) => {
@@ -96,5 +120,33 @@ class OptionsView {
       },
       completeFn
     );
+  }
+
+  _initSlides() {
+    $(this)
+      .on(EVENT.VIEW_CLOSE, () => this._clearSlideTimeOut())
+      .on(EVENT.VIEW_READY, () => this._nextSlide());
+  }
+
+  _nextSlide() {
+    this.$adSlides.find('img').attr('src', ads[this.currentSlideIndex].url);
+    this.$adSlides.find('.octotree-pro-feature-desc').text(ads[this.currentSlideIndex].title);
+    this.currentSlideTimer = setTimeout(() => {
+      this._handleNextSlide();
+    }, ads[this.currentSlideIndex].duration);
+  }
+
+  _handleNextSlide() {
+    if (this.currentSlideIndex === ads.length - 1) {
+      this.currentSlideIndex = 0;
+    } else {
+      this.currentSlideIndex++;
+    }
+    this._clearSlideTimeOut();
+    this._nextSlide();
+  }
+
+  _clearSlideTimeOut() {
+    clearTimeout(this.currentSlideTimer);
   }
 }

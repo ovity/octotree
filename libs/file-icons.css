@@ -202,7 +202,7 @@
 .sun-icon:before          { font-family: FontAwesome; font-size: 13px; content: "\f185"; font-size: 14px; -webkit-font-smoothing: subpixel-antialiased; }
 .toc-icon:before          { font-family: FontAwesome; font-size: 13px; content: "\f03a"; font-size: 15px; top: 2px; }
 .twig-icon:before         { font-family: FontAwesome; font-size: 13px; content: "\f1bb"; font-size: 14px; }
-.pdf-icon:before         { font-family: FontAwesome; font-size: 13px; content: "\f1c1"; font-size: 14px; }
+.pdf-icon:before          { font-family: FontAwesome; font-size: 13px; content: "\f1c1"; font-size: 14px; }
 
 
 

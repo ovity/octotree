@@ -2,8 +2,6 @@
   "env": {
     "browser": true
   },
-  "globals": {
-  },
   "parserOptions": {
     "ecmaVersion": 2017
   },

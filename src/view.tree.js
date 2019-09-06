@@ -14,7 +14,7 @@ class TreeView {
       .on('click', this._onItemClick.bind(this))
       .jstree({
         core: {multiple: false, animation: 50, worker: false, themes: {responsive: false}},
-        plugins: ['wholerow', 'search']
+        plugins: ['wholerow', 'search', 'truncate']
       });
   }
 
@@ -108,9 +108,25 @@ class TreeView {
     return folder.map((item) => {
       if (item.type === 'tree') {
         item.children = this._collapse(item.children);
-        if (item.children.length === 1 && item.children[0].type === 'tree') {
+        if (item.children.length === 1 && item.children[0].type === 'tree' && item.a_attr) {
           const onlyChild = item.children[0];
-          onlyChild.text = item.text + '/' + onlyChild.text;
+          const path = item.a_attr['data-download-filename'];
+
+          /**
+           * Using a_attr rather than item.text to concat in order to
+           * avoid the duplication of <div class="octotree-patch">
+           *
+           * For example:
+           *
+           * - item.text + onlyChild.text
+           * 'src/adapters/<span class="octotree-patch">+1</span>' + 'github.js<span class="octotree-patch">+1</span>'
+           *
+           * - path + onlyChild.text
+           * 'src/adapters/' + 'github.js<span class="octotree-patch">+1</span>'
+           *
+           */
+          onlyChild.text = path + '/' + onlyChild.text;
+
           return onlyChild;
         }
       }
@@ -143,6 +159,10 @@ class TreeView {
     }
 
     $target = $target.is('a.jstree-anchor') ? $target : $target.parent();
+
+    if ($target.is('.octotree-patch')) {
+      $target = $target.parent();
+    }
 
     if (!$target.is('a.jstree-anchor')) return;
 

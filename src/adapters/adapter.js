@@ -58,7 +58,7 @@ class Adapter {
             const name = deXss(path.substring(index + 1)); // Sanitizes, closes #9
 
             item.id = NODE_PREFIX + path;
-            item.text = `<span class="octotree-patch-name">${name}</span>`;
+            item.text = name;
 
             // Uses `type` as class name for tree node
             item.icon = type;
@@ -119,13 +119,10 @@ class Adapter {
                   moduleUrl = moduleUrl
                     .replace(/^git(:\/\/|@)/, window.location.protocol + '//')
                     .replace('github.com:', 'github.com/')
-                    .replace(/.git$/, '');
-                  item.text =
-                    `<a href="${moduleUrl}" class="jstree-anchor">${name}</a>` +
-                    '<span>@ </span>' +
-                    `<a href="${moduleUrl}/tree/${item.sha}" class="jstree-anchor">${item.sha.substr(0, 7)}</a>`;
+                    .replace(/.git$/, '') + '/tree/' + item.sha;
+                  item.text = `${name} @ ${item.sha.substr(0, 7)}`;
                 }
-                item.a_attr = {href: moduleUrl};
+                item.a_attr = {href: moduleUrl, 'data-skip-pjax': true};
               }
             }
           }
@@ -269,6 +266,19 @@ class Adapter {
    * @api public
    */
   selectFile(path) {
+
+    // Smooth scroll to diff file on PR page
+    const diffMatch = path.match(/#diff-\d+$/);
+    if (diffMatch) {
+      const el = $(diffMatch[0]);
+      if (el.length > 0) {
+        $('html, body').animate({
+          scrollTop: el.offset().top - 68
+        }, 400);
+        return;
+      }
+    }
+
     window.location.href = path;
   }
 
