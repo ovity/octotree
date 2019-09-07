@@ -3,18 +3,18 @@ const ads = [
   {
     url: browser.runtime.getURL('images/pro-themes.gif'),
     title: 'Multiple themes',
-    duration: 10000,
+    duration: 10000
   },
   {
     url: browser.runtime.getURL('images/pro-pr.gif'),
     title: 'Enhanced pull request review',
-    duration: 20000,
+    duration: 20000
   },
   {
     url: browser.runtime.getURL('images/pro-overview.gif'),
     title: 'Dock and search',
-    duration: 10000,
-  },
+    duration: 10000
+  }
 ];
 
 class OptionsView {
@@ -73,8 +73,8 @@ class OptionsView {
       ($elm, key, value, cb) => {
         if ($elm.is(':checkbox')) {
           $elm.prop('checked', value);
-        } else if ($elm.is(':radio')) {
-          $elm.prop('checked', $elm.val() === value);
+        } else if ($elm.is('select')) {
+          $elm.find(`option[value="${value}"]`).prop('selected', 'selected');
         } else {
           $elm.val(value);
         }
