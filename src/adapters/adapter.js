@@ -59,6 +59,9 @@ class Adapter {
 
             item.id = NODE_PREFIX + path;
             item.text = name;
+            item.li_attr = {
+              'title': path
+            };
 
             // Uses `type` as class name for tree node
             item.icon = type;
