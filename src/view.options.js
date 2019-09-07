@@ -91,7 +91,7 @@ class OptionsView {
     const changes = {};
     this._eachOption(
       ($elm, key, value, cb) => {
-        if ($elm.is(':radio') && !$elm.is(':checked')) {
+        if (!$elm.is(':checked')) {
           return cb();
         }
         const newValue = $elm.is(':checkbox') ? $elm.is(':checked') : $elm.val();
