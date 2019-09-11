@@ -288,8 +288,6 @@
 
     .octotree-error-view,
     .octotree-settings-view {
-      overflow: auto;
-      height: ~"calc(100% - 215px)";
       .octotree-view-header {
         padding-left: 8px;
       }
@@ -361,7 +359,7 @@
         }
       }
 
-      & > .octotree-settings-footer {
+      & > .octotree-pro-banner {
         position: absolute;
         background-color: #f1f8ff;
         border-top: 1px solid #c8e1ff;
@@ -376,8 +374,8 @@
           padding: 12px;
         }
 
-        i {
-          color: #e93838;
+        .octotree-icon-heart {
+          .icon-v2(@octicons-heart, @font-size: @icon-size, @color: @red, @hover-color: @red);
           font-style: normal;
         }
 
