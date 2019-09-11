@@ -360,63 +360,6 @@
           }
         }
       }
-
-      & > .octotree-pro-banner {
-        position: absolute;
-        background-color: #f1f8ff;
-        border-top: 1px solid #c8e1ff;
-        border-right: 1px solid #c8e1ff;
-        color: @dark;
-        bottom: 0;
-        z-index: 1; // hide the small ad
-        font-size: 12px;
-        width: 100%;
-
-        .is-padding {
-          padding: 12px;
-        }
-
-        .octotree-icon-heart {
-          .icon-v2(@octicons-heart, @font-size: @icon-size, @color: @red, @hover-color: @red);
-          font-style: normal;
-        }
-
-        .octotree-pro-feature {
-          position: relative;
-          cursor: pointer;
-          width: 100%;
-
-          img {
-            object-fit: cover;
-            width: 100%;
-          }
-
-          .octotree-pro-feature-desc {
-            position: absolute;
-            padding: 5px;
-            bottom: 0;
-            color: white;
-            background: ~"linear-gradient(to bottom, #00000000 0%, #000000 100%)";
-            width: 100%
-          }
-        }
-
-        a {
-          text-decoration: underline;
-        }
-
-        ul {
-          list-style: inside;
-
-          li {
-            font-weight: bold;
-          }
-        }
-
-        a {
-          color: @dark;
-        }
-      }
     }
   }
 
