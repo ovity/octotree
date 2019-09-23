@@ -57,7 +57,7 @@ $(document).ready(() => {
       .on(EVENT.REQ_END, () => $spinner.removeClass('octotree-spin--loading'))
       .on(EVENT.LAYOUT_CHANGE, layoutChanged)
       .on(EVENT.TOGGLE_PIN, layoutChanged)
-      .on(EVENT.LOC_CHANGE, () => tryLoadRepo());
+      .on(EVENT.LOC_CHANGE, (event, reload = false) => tryLoadRepo(reload));
 
     $sidebar
       .addClass(adapter.getCssClass())
