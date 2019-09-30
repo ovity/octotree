@@ -1,4 +1,12 @@
 class Storage {
+  static create(values, defaults) {
+    const store = new Storage();
+    for (const key of Object.keys(values)) {
+      store.setIfNull(values[key], defaults[key]);
+    }
+    return store;
+  }
+
   set(key, val, cb) {
     try {
       localStorage.setItem(key, JSON.stringify(val));
@@ -31,3 +39,6 @@ class Storage {
     });
   }
 }
+
+const store = Storage.create(STORE, DEFAULTS);
+window.store = store;

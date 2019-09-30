@@ -19,7 +19,6 @@ class Adapter {
    */
   _loadCodeTreeInternal(opts, transform, cb) {
     const folders = {'': []};
-    const $dummyDiv = $('<div/>');
     const {path, repo, node} = opts;
 
     opts.encodedBranch = opts.encodedBranch || encodeURIComponent(decodeURIComponent(repo.branch));
@@ -56,15 +55,17 @@ class Adapter {
             const path = item.path;
             const type = item.type;
             const index = path.lastIndexOf('/');
-            const name = $dummyDiv.text(path.substring(index + 1)).html(); // Sanitizes, closes #9
+            const name = deXss(path.substring(index + 1)); // Sanitizes, closes #9
 
             item.id = NODE_PREFIX + path;
             item.text = name;
+            item.li_attr = {
+              'title': path
+            };
 
             // Uses `type` as class name for tree node
             item.icon = type;
 
-            // @ifdef SUPPORT_FILE_ICONS
             if (type === 'blob') {
               if (this.store.get(STORE.ICONS)) {
                 const className = FileIcons.getClassWithColor(name);
@@ -73,42 +74,9 @@ class Adapter {
                 item.icon += ' file-generic';
               }
             }
-            // @endif
-
-            // @ifndef SUPPORT_FILE_ICONS
-            item.icon += ' file-generic';
-            // @endif
 
             if (item.patch) {
-              let patch_html = '';
-
-              switch (item.patch.action) {
-                case 'added':
-                  patch_html += '<span class="text-green">added</span>';
-                  break;
-                case 'renamed':
-                  patch_html += `<span class="text-green" title="${item.patch.previous}">renamed</span>`;
-                  break;
-                case 'removed':
-                  patch_html += `<span class="text-red" title="${item.patch.previous}">removed</span>`;
-                  break;
-                default:
-                  break;
-              }
-
-              if (item.patch.filesChanged) {
-                const fileString = item.patch.filesChanged === 1 ? 'file' : 'files';
-                patch_html += `<span>${item.patch.filesChanged} ${fileString}</span>`;
-              }
-
-              if (item.patch.additions !== 0) {
-                patch_html += `<span class="text-green">+${item.patch.additions}</span>`;
-              }
-              if (item.patch.deletions !== 0) {
-                patch_html += `<span class="text-red">-${item.patch.deletions}</span>`;
-              }
-
-              item.text += `<span class="patch">${patch_html}</span>`;
+              item.text += `<span class="octotree-patch">${this.buildPatchHtml(item)}</span>`;
             }
 
             if (node) {
@@ -154,13 +122,10 @@ class Adapter {
                   moduleUrl = moduleUrl
                     .replace(/^git(:\/\/|@)/, window.location.protocol + '//')
                     .replace('github.com:', 'github.com/')
-                    .replace(/.git$/, '');
-                  item.text =
-                    `<a href="${moduleUrl}" class="jstree-anchor">${name}</a>` +
-                    '<span>@ </span>' +
-                    `<a href="${moduleUrl}/tree/${item.sha}" class="jstree-anchor">${item.sha.substr(0, 7)}</a>`;
+                    .replace(/.git$/, '') + '/tree/' + item.sha;
+                  item.text = `${name} @ ${item.sha.substr(0, 7)}`;
                 }
-                item.a_attr = {href: moduleUrl};
+                item.a_attr = {href: moduleUrl, 'data-skip-pjax': true};
               }
             }
           }
@@ -177,8 +142,9 @@ class Adapter {
    * Generic error handler.
    * @api protected
    */
-  _handleError(jqXHR, cb) {
-    let error, message, needAuth;
+  _handleError(settings, jqXHR, cb) {
+    let error;
+    let message;
 
     switch (jqXHR.status) {
       case 0:
@@ -186,62 +152,58 @@ class Adapter {
         message = `Cannot connect to website.
           If your network connection to this website is fine, maybe there is an outage of the API.
           Please try again later.`;
-        needAuth = false;
-        break;
-      case 401:
-        error = 'Invalid token';
-        message = `The token is invalid.
-          Follow <a href="${this.getCreateTokenUrl()}" target="_blank">this link</a>
-          to create a new token and paste it below.`;
-        needAuth = true;
         break;
       case 409:
         error = 'Empty repository';
         message = 'This repository is empty.';
         break;
+      case 401:
+        error = 'Invalid token';
+        message = octotree.getInvalidTokenMessage({
+          responseStatus: jqXHR.status,
+          requestHeaders: settings.headers
+        });
+        break;
       case 404:
         error = 'Private repository';
-        message = `Accessing private repositories requires an access token.
-          Follow <a href="${this.getCreateTokenUrl()}" target="_blank">this link</a>
-          to create one and paste it below.`;
-        needAuth = true;
+        message =
+          'Accessing private repositories requires a GitHub access token. ' +
+          'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and enter a token.';
         break;
       case 403:
-        if (~jqXHR.getAllResponseHeaders().indexOf('X-RateLimit-Remaining: 0')) {
+        if (jqXHR.getResponseHeader('X-RateLimit-Remaining') === '0') {
           // It's kinda specific for GitHub
           error = 'API limit exceeded';
-          message = `You have exceeded the GitHub API hourly limit and need GitHub access token
-            to make extra requests. Follow <a href="${this.getCreateTokenUrl()}" target="_blank">this link</a>
-            to create one and paste it below.`;
-          needAuth = true;
-          break;
+          message =
+            'You have exceeded the <a href="https://developer.github.com/v3/#rate-limiting">GitHub API rate limit</a>. ' +
+            'To continue using Octotree, you need to provide a GitHub access token. ' +
+            'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and enter a token.';
         } else {
           error = 'Forbidden';
-          message = `You are not allowed to access the API.
-            You might need to provide an access token.
-            Follow <a href="${this.getCreateTokenUrl()}" target="_blank">this link</a>
-            to create one and paste it below.`;
-          needAuth = true;
-          break;
+          message =
+            'Accessing private repositories requires a GitHub access token. ' +
+            'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and enter a token.';
         }
+
+        break;
+
+      // Fallback message
       default:
         error = message = jqXHR.statusText;
-        needAuth = false;
         break;
     }
     cb({
       error: `Error: ${error}`,
       message: message,
-      needAuth: needAuth,
       status: jqXHR.status
     });
   }
 
   /**
    * Returns the CSS class to be added to the Octotree sidebar.
-   * @api protected
+   * @api public
    */
-  _getCssClass() {
+  getCssClass() {
     throw new Error('Not implemented');
   }
 
@@ -249,8 +211,8 @@ class Adapter {
    * Returns the minimum width acceptable for the sidebar.
    * @api protected
    */
-  _getMinWidth() {
-    return 200;
+  getMinWidth() {
+    return 220;
   }
 
   /**
@@ -258,7 +220,7 @@ class Adapter {
    * @api public
    */
   init($sidebar) {
-    $sidebar.resizable({handles: 'e', minWidth: this._getMinWidth()}).addClass(this._getCssClass());
+    $sidebar.resizable({handles: 'e', minWidth: this.getMinWidth()});
   }
 
   /**
@@ -290,7 +252,7 @@ class Adapter {
    * Updates the layout based on sidebar visibility and width.
    * @api public
    */
-  updateLayout(togglerVisible, sidebarVisible, sidebarWidth) {
+  updateLayout(sidebarPinned, sidebarVisible, sidebarWidth) {
     throw new Error('Not implemented');
   }
 
@@ -307,6 +269,19 @@ class Adapter {
    * @api public
    */
   selectFile(path) {
+
+    // Smooth scroll to diff file on PR page
+    const diffMatch = path.match(/#diff-\d+$/);
+    if (diffMatch) {
+      const el = $(diffMatch[0]);
+      if (el.length > 0) {
+        $('html, body').animate({
+          scrollTop: el.offset().top - 68
+        }, 400);
+        return;
+      }
+    }
+
     window.location.href = path;
   }
 
@@ -345,6 +320,25 @@ class Adapter {
     link.setAttribute('target', '_blank');
 
     link.click();
+  }
+
+  /**
+   * @param {HTML Text} patch
+   * @param {Object} treeItem
+   *
+   * Return the patch Html for tree item
+   */
+  buildPatchHtml(treeItem = {}) {
+    const {action, previous, filesChanged: files, additions, deletions} = treeItem.patch;
+    let patch = '';
+    patch += action === 'added' ? '<span class="text-green">added</span>' : '';
+    patch += action === 'renamed' ? `<span class="text-green" title="${previous}">renamed</span>` : '';
+    patch += action === 'removed' ? `<span class="text-red" title="${previous}">removed</span>` : '';
+    patch += files ? `<span class='octotree-patch-files'>${files} ${files === 1 ? 'file' : 'files'}</span>` : '';
+    patch += additions !== 0 ? `<span class="text-green">+${additions}</span>` : '';
+    patch += deletions !== 0 ? `<span class="text-red">-${deletions}</span>` : '';
+
+    return patch;
   }
 
   /**

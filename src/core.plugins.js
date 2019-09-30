@@ -48,7 +48,6 @@ class Plugin {
   /**
    * Activates the plugin.
    * @param {!{
-   *   store: !Storage,
    *   adapter: !Adapter,
    *   $sidebar: !JQuery,
    *   $toggler: !JQuery,
@@ -73,4 +72,5 @@ class Plugin {
   }
 }
 
-const pluginManager = new PluginManager();
+window.pluginManager = new PluginManager();
+window.Plugin = Plugin;

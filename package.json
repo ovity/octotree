@@ -1,12 +1,11 @@
 {
   "name": "octotree",
-  "version": "2.5.6",
-  "description": "Code tree for GitHub",
-  "main": "inject.js",
+  "version": "3.0.10",
+  "description": "GitHub on steroids",
   "scripts": {
     "start": "gulp",
+    "watch": "gulp",
     "build": "gulp build",
-    "test": "gulp test",
     "dist": "gulp dist --production"
   },
   "repository": {
@@ -44,6 +43,7 @@
     "gulp-run-sequence": "*",
     "gulp-uglify-es": "^1.0.4",
     "gulp-util": "^2.2.20",
+    "gulp-wrap": "^0.14.0",
     "gulp-zip": "^2.0.3",
     "jpm": "^1.0.4",
     "map-stream": "*",
