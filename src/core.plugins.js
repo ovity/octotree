@@ -42,4 +42,5 @@ class Plugin {
   }
 }
 
+window.pluginManager = new PluginManager();
 window.Plugin = Plugin;

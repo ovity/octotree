@@ -60,7 +60,7 @@ class Adapter {
             item.id = NODE_PREFIX + path;
             item.text = name;
             item.li_attr = {
-              title: path
+              'title': path
             };
 
             // Uses `type` as class name for tree node
@@ -119,13 +119,10 @@ class Adapter {
                 // Fixes #105
                 // Special handling for submodules hosted in GitHub
                 if (~moduleUrl.indexOf('github.com')) {
-                  moduleUrl =
-                    moduleUrl
-                      .replace(/^git(:\/\/|@)/, window.location.protocol + '//')
-                      .replace('github.com:', 'github.com/')
-                      .replace(/.git$/, '') +
-                    '/tree/' +
-                    item.sha;
+                  moduleUrl = moduleUrl
+                    .replace(/^git(:\/\/|@)/, window.location.protocol + '//')
+                    .replace('github.com:', 'github.com/')
+                    .replace(/.git$/, '') + '/tree/' + item.sha;
                   item.text = `${name} @ ${item.sha.substr(0, 7)}`;
                 }
                 item.a_attr = {href: moduleUrl, 'data-skip-pjax': true};
@@ -272,17 +269,15 @@ class Adapter {
    * @api public
    */
   selectFile(path) {
+
     // Smooth scroll to diff file on PR page
     const diffMatch = path.match(/#diff-\d+$/);
     if (diffMatch) {
       const el = $(diffMatch[0]);
       if (el.length > 0) {
-        $('html, body').animate(
-          {
-            scrollTop: el.offset().top - 68
-          },
-          400
-        );
+        $('html, body').animate({
+          scrollTop: el.offset().top - 68
+        }, 400);
         return;
       }
     }
