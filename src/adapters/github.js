@@ -31,15 +31,28 @@ const GH_RESERVED_USER_NAMES = [
   'open-source',
   'personal',
   'pricing',
-  'marketplace',
+  'sessions',
+  'topics',
+  'users',
+  'marketplace'
 ];
 const GH_RESERVED_REPO_NAMES = ['followers', 'following', 'repositories'];
 const GH_404_SEL = '#parallax_wrapper';
-const GH_PJAX_CONTAINER_SEL = '#js-repo-pjax-container, .context-loader-container, [data-pjax-container]';
+
+// When Github page loads at repo path e.g. https://github.com/jquery/jquery, the HTML tree has
+// <main id="js-repo-pjax-container"> to contain server-rendered HTML in response of pjax.
+// However, that <main> element doesn't have "id" attribute if the Github page loads at specific
+// File e.g. https://github.com/jquery/jquery/blob/master/.editorconfig.
+// Therefore, the below selector uses many path but only points to the same <main> element
+const GH_PJAX_CONTAINER_SEL =
+  '#js-repo-pjax-container, div[itemtype="http://schema.org/SoftwareSourceCode"] main, [data-pjax-container]';
+
 const GH_CONTAINERS = '.container, .container-lg, .container-responsive';
 const GH_HEADER = '.js-header-wrapper > header';
 const GH_RAW_CONTENT = 'body > pre';
 const GH_MAX_HUGE_REPOS_SIZE = 50;
+const GH_HIDDEN_RESPONSIVE_CLASS = '.d-none';
+const GH_RESPONSIVE_BREAKPOINT = 1010;
 
 class GitHub extends PjaxAdapter {
   constructor(store) {
@@ -70,8 +83,8 @@ class GitHub extends PjaxAdapter {
   }
 
   // @override
-  _getCssClass() {
-    return 'octotree_github_sidebar';
+  getCssClass() {
+    return 'octotree-github-sidebar';
   }
 
   // @override
@@ -95,23 +108,27 @@ class GitHub extends PjaxAdapter {
   }
 
   // @override
-  updateLayout(togglerVisible, sidebarVisible, sidebarWidth) {
+  updateLayout(sidebarPinned, sidebarVisible, sidebarWidth) {
     const SPACING = 10;
     const $header = $(GH_HEADER);
-    const $containers = $(GH_CONTAINERS);
+    const $containers =
+      $('html').width() <= GH_RESPONSIVE_BREAKPOINT
+        ? $(GH_CONTAINERS).not(GH_HIDDEN_RESPONSIVE_CLASS)
+        : $(GH_CONTAINERS);
+
     const autoMarginLeft = ($(document).width() - $containers.width()) / 2;
-    const shouldPushEverything = sidebarVisible && autoMarginLeft <= sidebarWidth + SPACING;
+    const shouldPushEverything = sidebarPinned && sidebarVisible;
+    const smallScreen = autoMarginLeft <= sidebarWidth + SPACING;
 
-    $('html').css('margin-left', shouldPushEverything ? sidebarWidth : '');
-    $containers.css('margin-left', shouldPushEverything ? SPACING : '');
+    $('html').css('margin-left', shouldPushEverything && smallScreen ? sidebarWidth : '');
+    $containers.css('margin-left', shouldPushEverything && smallScreen ? SPACING : '');
 
-    const headerPadding =
-      shouldPushEverything || (!togglerVisible && !sidebarVisible)
-        ? '' // Nothing is visible or already pushed, leave as-is
-        : !sidebarVisible
-        ? 25 // Sidebar is collapsed, move the logo to avoid hiding the toggler
-        : sidebarWidth; // Otherwise, move the header from the sidebar
-    $header.css('padding-left', headerPadding);
+    if (shouldPushEverything && !smallScreen) {
+      // Override important in Github Header class in large screen
+      $header.attr('style', `padding-left: ${sidebarWidth + SPACING}px !important`);
+    } else {
+      $header.removeAttr('style');
+    }
   }
 
   // @override
@@ -139,14 +156,6 @@ class GitHub extends PjaxAdapter {
 
     // Not a repository, skip
     if (~GH_RESERVED_USER_NAMES.indexOf(username) || ~GH_RESERVED_REPO_NAMES.indexOf(reponame)) {
-      return cb();
-    }
-
-    // Check if we should show in non-code pages
-    const isPR = type === 'pull';
-    const isCodePage = !type || isPR || ['tree', 'blob', 'commit'].indexOf(type) >= 0;
-    const showInNonCodePage = this.store.get(STORE.NONCODE);
-    if (!showInNonCodePage && !isCodePage) {
       return cb();
     }
 
@@ -190,6 +199,7 @@ class GitHub extends PjaxAdapter {
       // Get default branch from cache
       this._defaultBranch[username + '/' + reponame];
 
+    const isPR = type === 'pull';
     const showOnlyChangedInPR = this.store.get(STORE.PR);
     const pullNumber = isPR && showOnlyChangedInPR ? typeId : null;
     const repo = {username, reponame, branch, pullNumber};
@@ -217,13 +227,22 @@ class GitHub extends PjaxAdapter {
     this._loadCodeTreeInternal(opts, null, cb);
   }
 
+  get isOnPRPage() {
+    const match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?(?:\/([^\/]+))?/);
+
+    if (!match) return false;
+
+    const type = match[3];
+
+    return type === 'pull';
+  }
+
   // @override
   _getTree(path, opts, cb) {
     if (opts.repo.pullNumber) {
       this._getPatch(opts, cb);
     } else {
       this._get(`/git/trees/${path}`, opts, (err, res) => {
-        // Console.log('****', res.tree);
         if (err) cb(err);
         else cb(null, res.tree);
       });
@@ -327,9 +346,16 @@ class GitHub extends PjaxAdapter {
   }
 
   _get(path, opts, cb) {
-    const host =
-      location.protocol + '//' + (location.host === 'github.com' ? 'api.github.com' : location.host + '/api/v3');
-    const url = `${host}/repos/${opts.repo.username}/${opts.repo.reponame}${path || ''}`;
+    let url;
+
+    if (path && path.startsWith('http')) {
+      url = path;
+    } else {
+      const host =
+        location.protocol + '//' + (location.host === 'github.com' ? 'api.github.com' : location.host + '/api/v3');
+      url = `${host}/repos/${opts.repo.username}/${opts.repo.reponame}${path || ''}`;
+    }
+
     const cfg = {url, method: 'GET', cache: false};
 
     if (opts.token) {
@@ -337,7 +363,7 @@ class GitHub extends PjaxAdapter {
     }
 
     $.ajax(cfg)
-      .done((data) => {
+      .done((data, textStatus, jqXHR) => {
         if (path && path.indexOf('/git/trees') === 0 && data.truncated) {
           const hugeRepos = this.store.get(STORE.HUGE_REPOS);
           const repo = `${opts.repo.username}/${opts.repo.reponame}`;
@@ -345,15 +371,15 @@ class GitHub extends PjaxAdapter {
           if (!hugeRepos[repo]) {
             // If there are too many repos memoized, delete the oldest one
             if (repos.length >= GH_MAX_HUGE_REPOS_SIZE) {
-              const oldestRepo = repos.reduce((min, p) => hugeRepos[p] < hugeRepos[min] ? p : min);
+              const oldestRepo = repos.reduce((min, p) => (hugeRepos[p] < hugeRepos[min] ? p : min));
               delete hugeRepos[oldestRepo];
             }
             hugeRepos[repo] = new Date().getTime();
             this.store.set(STORE.HUGE_REPOS, hugeRepos);
           }
-          this._handleError({status: 206}, cb);
-        } else cb(null, data);
+          this._handleError(cfg, {status: 206}, cb);
+        } else cb(null, data, jqXHR);
       })
-      .fail((jqXHR) => this._handleError(jqXHR, cb));
+      .fail((jqXHR) => this._handleError(cfg, jqXHR, cb));
   }
 }

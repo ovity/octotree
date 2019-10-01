@@ -1,42 +1,63 @@
 // ====== Colors ======
-@dark: #24292e;
+@red: #e93838;
+@dark: #0f2e47;
+@dark-less: #373e43;
 @gray: #6a737d;
+@gray-less: #dfe2e5;
 @light: #959da5;
-@blue: #0366d6;
-@accent: #AC4142;
+@blue: #6cb5fe;
+@error: #ac4142;
+@accent: #04a9ff;
+
+// ====== Z-indices ======
+@index-base: 1000000001;
+@index-popup: 1000000002;
+
+// ====== Sizing ======
+@header-height: 64px;
+@footer-height: 30px;
+@icon-size: 16px;
+
+// ====== Icon names ======
+// Octicons: https://octicons.github.com/
+// Octicons codes: https://github.com/atom/atom/blob/master/static/variables/octicon-utf-codes.less
+@octicons-mark-github: '\f00a';
+@octicons-question: '\f02c';
+@octicons-key: '\f049';
+@octicons-pin: '\f041';
+@octicons-gear: '\f02f';
+@octicons-link-external: '\f07f';
+@octicons-heart: '\2665';
+@octicons-chevron-left: '\f0a4';
+@octicons-chevron-right: '\f078';
+@octicons-chevron-down: '\f0a3';
+@octicons-repo: '\f001';
+@octicons-git-branch: '\f020';
+@octicons-file-directory: '\f016';
+@octicons-file-text: '\f011';
+@octicons-file-submodule: '\f017';
 
 // ====== Icons ======
-// Octotree is bundled with the Octicons font. Steps to add an icon:
-// 1. Add it in this file, see example below.
-// 2. Define the icon class in base.less or github.less
-//    Example: heart-icon in base.less.
-// 3. Add this to the element's class atrribute: "octotree_icon <icon_name>".
-.icon() {
-  font-family: octicons;
-	font-weight: normal;
-	font-style: normal;
-	text-align: center;
-	width: 16px;
-	line-height: 1;
-	position: relative;
-	display: inline-block;
-	-webkit-font-smoothing: antialiased;
-  font-size: 14px;
-}
+.icon-v2(@code; @font-family: octicons; @color: @gray; @hover-color: @error; @font-size: 14px; @width: 16px; @top: 0) {
+  position: relative;
 
-#octicons {
-  // Icon list: https://octicons.github.com/
-  // Icon codes: https://github.com/atom/atom/blob/master/static/variables/octicon-utf-codes.less
-  .link-external()    {.icon(); content: "\f07f";}
-  .heart()            {.icon(); content: "\2665";}
-  .question()         {.icon(); content: "\f02c";}
-  .chevron-left()     {.icon(); content: "\f0a4";}
-  .chevron-right()    {.icon(); content: "\f078";}
-  .mark-github()      {.icon(); content: "\f00a";}
-  .repo()             {.icon(); content: "\f001";}
-  .git-branch()       {.icon(); content: "\f020";}
-  .gear()             {.icon(); content: "\f02f";}
-  .file-directory()   {.icon(); content: "\f016";}
-  .file-text()        {.icon(); content: "\f011";}
-  .file-submodule()   {.icon(); content: "\f017";}
+  &:before {
+    content: @code;
+    font-family: @font-family;
+    color: @color;
+    font-size: @font-size;
+    font-weight: normal;
+    font-style: normal;
+    text-align: center;
+    width: @width;
+    line-height: 1;
+    position: relative;
+    top: @top;
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  &:hover:before {
+    color: @hover-color;
+  }
 }

@@ -1,113 +1,123 @@
 <div>
-  <nav class="octotree_sidebar">
-    <a class="octotree_toggle btn">
-      <div class="loader"></div>
-      <span></span>
+  <nav class="octotree-sidebar">
+    <div class="octotree-toggle">
+      <i class="octotree-toggle-icon" role="button"></i> <span>Octotree</span>
 
       <div class="popup">
         <div class="arrow"></div>
         <div class="content">
-          Octotree is enabled on this page. Click this button or press
-          <kbd>cmd shift s</kbd> (or <kbd>ctrl shift s</kbd>)
-          to show it.
+          Hi there, this is Octotree. Move mouse over this button to display the code tree. You can also press the
+          shortkey <kbd>cmd shift s</kbd> (or <kbd>ctrl shift s</kbd>).
         </div>
       </div>
+    </div>
+
+    <a class="octotree-pin" data-store="PINNED" href="javascript:void(0)">
+      <span class="tooltipped tooltipped-s" aria-label="Pin this sidebar"> <i class="octotree-icon-pin"></i> </span>
     </a>
 
-    <a class="octotree_opts" href="javascript:void(0)">
-      <i class="settings"></i>
+    <a class="octotree-settings" href="javascript:void(0)">
+      <span class="tooltipped tooltipped-s" aria-label="Settings"> <i class="octotree-icon-settings"></i> </span>
     </a>
 
-    <div class="octotree_views">
-      <div class="octotree_view octotree_treeview current">
-        <div class="octotree_view_header"></div>
-        <div class="octotree_view_body"></div>
+    <div class="octotree-views">
+      <div class="octotree-view octotree-tree-view current">
+        <div class="octotree-view-header"></div>
+        <div class="octotree-view-body"></div>
+        <a class="octotree-spin"> <span class="octotree-spin--loader"></span> </a>
       </div>
 
-      <div class="octotree_view octotree_errorview">
-        <div class="octotree_view_header"></div>
-        <form class="octotree_view_body">
-          <div class="message"></div>
-          <div>
-            <input name="token" type="text" placeholder="Paste access token here" autocomplete="off">
-          </div>
-          <div>
-            <button type="submit" class="btn">Save</button>
-            <a href="https://github.com/ovity/octotree#access-token" target="_blank" tabIndex="-1">Why is this required?</a>
-          </div>
-          <div class="error"></div>
-        </form>
+      <div class="octotree-view octotree-error-view">
+        <div class="octotree-view-header"></div>
+        <form class="octotree-view-body"><div class="message"></div></form>
       </div>
 
-      <div class="octotree_view octotree_optsview">
-        <div class="octotree_view_header">Settings</div>
-        <form class="octotree_view_body">
+      <div class="octotree-view octotree-settings-view">
+        <div class="octotree-view-header">Settings</div>
+        <form class="octotree-view-body">
           <div>
-            <label>Site access token</label>
-            <a class="octotree_help" href="https://github.com/ovity/octotree#settings" target="_blank" tabIndex="-1">
-              <span></span>
-            </a>
-            <input type="text" data-store="TOKEN" data-perhost="true">
+            <label>GitHub access token</label>
+            <div class="octotree-token-actions">
+              <a class="octotree-create-token" target="_blank" tabindex="-1"
+                ><!--
+                --><span class="tooltipped tooltipped-n" aria-label="Generate new token"
+                  ><i class="octotree-icon-key"></i></span
+                ><!--
+              --></a>
+              <a
+                class="octotree-help"
+                href="https://github.com/ovity/octotree#access-token"
+                target="_blank"
+                tabindex="-1"
+              >
+                <span class="tooltipped tooltipped-n" aria-label="Learn more">
+                  <i class="octotree-icon-help"></i>
+                </span>
+              </a>
+            </div>
+            <input type="text" class="form-control input-block" data-store="TOKEN" />
+            <div class="octotree-disclaimer text-gray">Token is stored in local storage.</div>
           </div>
 
           <div>
             <div>
               <label>Hotkeys</label>
+              <div class="octotree-token-actions">
+                <a class="octotree-help" href="https://github.com/ovity/octotree#hotkeys" target="_blank" tabindex="-1">
+                  <span class="tooltipped tooltipped-n" aria-label="Learn more">
+                    <i class="octotree-icon-help"></i>
+                  </span>
+                </a>
+              </div>
             </div>
-            <input type="text" data-store="HOTKEYS">
-          </div>
-
-          <!-- @ifdef SUPPORT_GHE -->
-          <div class="octotree_github_only">
-            <div>
-              <label>GitHub Enterprise URLs</label>
-            </div>
-            <textarea data-store="GHEURLS" placeholder="https://github.mysite1.com__SPACES__https://github.mysite2.com">
-            </textarea>
-          </div>
-          <!-- @endif -->
-
-          <!-- @ifdef SUPPORT_FILE_ICONS -->
-          <div>
-            <label><input type="checkbox" data-store="ICONS"> Show file-specific icons</label>
-          </div>
-          <!-- @endif -->
-
-          <div>
-            <label><input type="checkbox" data-store="REMEMBER"> Remember sidebar visibility</label>
+            <input
+              type="text"
+              autocomplete="off"
+              spellcheck="false"
+              autocapitalize="off"
+              class="form-control"
+              data-store="HOTKEYS"
+            />
           </div>
 
           <div>
-            <label><input type="checkbox" data-store="NONCODE"> Show in non-code pages</label>
+            <label><input type="checkbox" data-store="HOVEROPEN" /> <span>Show sidebar on hover</span></label>
           </div>
-
-          <div class="octotree_github_only">
-            <label><input type="checkbox" data-store="LOADALL"> Load entire tree at once</label>
+          <div>
+            <label><input type="checkbox" data-store="LOADALL" /> <span>Load entire tree at once</span></label>
           </div>
-
-          <div class="octotree_github_only">
+          <div>
+            <label><input type="checkbox" data-store="ICONS" /> <span>Show file-specific icons</span></label>
+          </div>
+          <div>
             <label>
-              <input type="checkbox" data-store="PR">
-                Show only pull request changes
-              <span class="octotree_opts_disclaimer">Note: maximum of 300 files</span>
+              <input type="checkbox" data-store="PR" /> <span>Show pull request changes</span>
+              <span class="octotree-disclaimer is-margin-left text-gray">Note: maximum of 300 files</span>
             </label>
           </div>
 
-          <div>
-            <button type="submit" class="btn">Save</button>
-          </div>
+          <div><button class="btn btn-primary">Apply settings</button></div>
         </form>
+
+        <div class="octotree-pro-banner">
+          <div class="is-padding">
+            Loving Octotree? You will <i class="octotree-icon-heart"></i> Octotree Pro even more. Octotree Pro is loaded with features that bring your
+            productivity on GitHub to the next level.
+            <a href="https://www.octotree.io/?utm_source=lite&utm_medium=extension" target="_blank"> Learn more</a>
+          </div>
+
+          <div class="octotree-pro-feature">
+            <img src="" alt="Octotree Pro">
+            <div class="octotree-pro-feature-desc"></div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="octotree_bottom">
-      <a href="https://opencollective.com/octotree" target="_blank">
-        <i class="support"></i>Support us
-      </a>
-      &nbsp;•&nbsp;
-      <a href="https://github.com/ovity/octotree/issues/new" target="_blank">
-        <i class="github"></i>Feedback?
-      </a>
+    <div class="octotree-footer">
+      <div class="octotree-tip">
+        <a href="https://www.octotree.io/#pro?utm_source=lite&utm_medium=extension" target="_blank"></a>
+      </div>
     </div>
   </nav>
 </div>

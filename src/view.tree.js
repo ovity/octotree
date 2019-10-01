@@ -2,28 +2,28 @@ class TreeView {
   constructor($dom, store, adapter) {
     this.store = store;
     this.adapter = adapter;
-    this.$view = $dom.find('.octotree_treeview');
+    this.$view = $dom.find('.octotree-tree-view');
     this.$tree = this.$view
-      .find('.octotree_view_body')
+      .find('.octotree-view-body')
       .on('click.jstree', '.jstree-open>a', ({target}) => {
-        setTimeout(() => {
-          this.$jstree.close_node(target)
-        }, 0);
+        setTimeout(() => this.$jstree.close_node(target));
       })
       .on('click.jstree', '.jstree-closed>a', ({target}) => {
-        setTimeout(() => {
-          this.$jstree.open_node(target)
-        }, 0);
+        setTimeout(() => this.$jstree.open_node(target));
       })
       .on('click', this._onItemClick.bind(this))
       .jstree({
-        core: {multiple: false, worker: false, themes: {responsive: false}},
-        plugins: ['wholerow']
+        core: {multiple: false, animation: 50, worker: false, themes: {responsive: false}},
+        plugins: ['wholerow', 'search', 'truncate']
       });
   }
 
   get $jstree() {
     return this.$tree.jstree(true);
+  }
+
+  focus() {
+    this.$jstree.get_container().focus();
   }
 
   show(repo, token) {
@@ -37,7 +37,8 @@ class TreeView {
 
       this.adapter.loadCodeTree({repo, token, node}, (err, treeData) => {
         if (err) {
-          if (err.status === 206 && loadAll) { // The repo is too big to load all, need to retry
+          if (err.status === 206 && loadAll) {
+            // The repo is too big to load all, need to retry
             $jstree.refresh(true);
           } else {
             $(this).trigger(EVENT.FETCH_ERROR, [err]);
@@ -65,16 +66,19 @@ class TreeView {
     const adapter = this.adapter;
 
     this.$view
-      .find('.octotree_view_header')
+      .find('.octotree-view-header')
       .html(
-        `<div class="octotree_header_repo">
-           <a href="/${repo.username}">${repo.username}</a>
-           /
-           <a data-pjax href="/${repo.username}/${repo.reponame}">${repo.reponame}</a>
-         </div>
-         <div class="octotree_header_branch">
-           ${this._deXss(repo.branch.toString())}
-         </div>`
+        `<div class="octotree-header-summary">
+          <div class="octotree-header-repo">
+            <i class="octotree-icon-repo"></i>
+            <a href="/${repo.username}">${repo.username}</a> /
+            <a data-pjax href="/${repo.username}/${repo.reponame}">${repo.reponame}</a>
+          </div>
+          <div class="octotree-header-branch">
+            <i class="octotree-icon-branch"></i>
+            ${deXss(repo.branch.toString())}
+          </div>
+        </div>`
       )
       .on('click', 'a[data-pjax]', function(event) {
         event.preventDefault();
@@ -83,10 +87,6 @@ class TreeView {
         const newTab = event.shiftKey || event.ctrlKey || event.metaKey;
         newTab ? adapter.openInNewTab(href) : adapter.selectFile(href);
       });
-  }
-
-  _deXss(str) {
-    return str && str.replace(/[<>'"&]/g, '-');
   }
 
   _sort(folder) {
@@ -108,14 +108,39 @@ class TreeView {
     return folder.map((item) => {
       if (item.type === 'tree') {
         item.children = this._collapse(item.children);
-        if (item.children.length === 1 && item.children[0].type === 'tree') {
+        if (item.children.length === 1 && item.children[0].type === 'tree' && item.a_attr) {
           const onlyChild = item.children[0];
-          onlyChild.text = item.text + '/' + onlyChild.text;
+          const path = item.a_attr['data-download-filename'];
+
+          /**
+           * Using a_attr rather than item.text to concat in order to
+           * avoid the duplication of <div class="octotree-patch">
+           *
+           * For example:
+           *
+           * - item.text + onlyChild.text
+           * 'src/adapters/<span class="octotree-patch">+1</span>' + 'github.js<span class="octotree-patch">+1</span>'
+           *
+           * - path + onlyChild.text
+           * 'src/adapters/' + 'github.js<span class="octotree-patch">+1</span>'
+           *
+           */
+          onlyChild.text = path + '/' + onlyChild.text;
+
           return onlyChild;
         }
       }
       return item;
     });
+  }
+
+  /**
+   * Intercept the _onItemClick method
+   * return true to stop the current execution
+   * @param {Event} event
+   */
+  onItemClick(event) {
+    return false;
   }
 
   _onItemClick(event) {
@@ -125,10 +150,18 @@ class TreeView {
     // Handle middle click
     if (event.which === 2) return;
 
+    if (this.onItemClick(event)) return;
+
     // Handle icon click, fix #122
     if ($target.is('i.jstree-icon')) {
       $target = $target.parent();
       download = true;
+    }
+
+    $target = $target.is('a.jstree-anchor') ? $target : $target.parent();
+
+    if ($target.is('.octotree-patch')) {
+      $target = $target.parent();
     }
 
     if (!$target.is('a.jstree-anchor')) return;
