@@ -159,21 +159,6 @@ class GitHub extends PjaxAdapter {
       return cb();
     }
 
-    const isPR = type === 'pull';
-    const showIn = this.store.get(STORE.SHOWIN);
-
-    // Skip rendering the octotree in the unselected pages
-    if (showIn && showIn !== ShowInPage.All) {
-      const isCodeCommit = !type || ['tree', 'blob', 'commit'].includes(type);
-      const isCodeCommitPR = isPR || isCodeCommit;
-      const shouldRender = {
-        [ShowInPage.CodeAndPullRequest]: isCodeCommitPR,
-        [ShowInPage.Code]: isCodeCommit,
-        [ShowInPage.PullRequest]: isPR
-      }[showIn];
-      if (shouldRender !== undefined && !shouldRender) return cb();
-    }
-
     // Get branch by inspecting URL or DOM, quite fragile so provide multiple fallbacks.
     // TODO would be great if there's a more robust way to do this
     /**
@@ -214,6 +199,7 @@ class GitHub extends PjaxAdapter {
       // Get default branch from cache
       this._defaultBranch[username + '/' + reponame];
 
+    const isPR = type === 'pull';
     const showOnlyChangedInPR = this.store.get(STORE.PR);
     const pullNumber = isPR && showOnlyChangedInPR ? typeId : null;
     const repo = {username, reponame, branch, pullNumber};

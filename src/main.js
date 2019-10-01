@@ -99,7 +99,6 @@ $(document).ready(() => {
           case STORE.TOKEN:
           case STORE.LOADALL:
           case STORE.ICONS:
-          case STORE.SHOWIN:
           case STORE.PR:
             reload = true;
             break;
