@@ -311,6 +311,8 @@
     }
 
     .octotree-settings-view {
+      overflow: auto;
+
       & > form {
         padding: 8px;
 
@@ -508,6 +510,38 @@
 
   .octotree-icon-help {
     .icon-v2(@octicons-question);
+  }
+
+  .octotree-signin-features {
+    background: @orange-less;
+    border: 1px solid @orange;
+    padding: 8px 10px;
+    border-radius: 4px;
+    line-height: 1.75;
+    margin: 12px 0 16px 0;
+    header {
+      font-weight: bold;
+    }
+    footer {
+      color: @gray;
+      font-style: italic;
+    }
+    ul {
+      margin: 4px 0;
+      list-style-type: none;
+      list-style-position: inside;
+      li {
+        &::before {
+          content: "";
+          display: inline-block;
+          width: 6px;
+          height: 6px;
+          margin: 2px 4px 0 0;
+          background: @light;
+          border-radius: 50%;
+        }
+      }
+    }
   }
 }
 
