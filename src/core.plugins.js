@@ -1,54 +1,7 @@
-/**
- * Class to manage Octotree plugins.
- */
-class PluginManager {
-  /**
-   * @constructor
-   */
-  constructor() {
-    this._plugins = [];
-    this._forward({
-      activate: null,
-      applyOptions: (results) => results.some((shouldReload) => !!shouldReload)
-    });
-  }
-
-  /**
-   * Registers a plugin class.
-   * @param {!Plugin} pluginClass.
-   */
-  register(plugin) {
-    this._plugins.push(plugin);
-  }
-
-  /**
-   * Forwards the specified methods to every plugins.
-   * @private {!Object<!String, !function(Array<*>): *} methods
-   * @return the value returned by the collector function associated with each
-   * method.
-   */
-  _forward(methods) {
-    for (const method of Object.keys(methods)) {
-      this[method] = async (...args) => {
-        const promises = this._plugins.map((plugin) => plugin[method](...args));
-        const results = await Promise.all(promises);
-        const resultHandler = methods[method];
-
-        if (!resultHandler) return results;
-        else return resultHandler(results);
-      };
-    }
-  }
-}
-
-/**
- * Base plugin class.
- */
 class Plugin {
   /**
    * Activates the plugin.
    * @param {!{
-   *   store: !Storage,
    *   adapter: !Adapter,
    *   $sidebar: !JQuery,
    *   $toggler: !JQuery,
@@ -57,9 +10,25 @@ class Plugin {
    *   optsView: !OptionsView,
    *   errorView: !ErrorView,
    * }}
+   *
+   * @param {{
+   *  state: UserState,
+   * }}
+   *
    * @return {!Promise<undefined>}
    */
-  async activate(opts) {
+  async activate(opts, payload) {
+    return undefined;
+  }
+
+  /**
+   * Deactivate the plugin.
+   *
+   * @param {{
+   *  state: UserState,
+   * }} payload
+   */
+  async deactivate(payload) {
     return undefined;
   }
 
@@ -73,4 +42,4 @@ class Plugin {
   }
 }
 
-const pluginManager = new PluginManager();
+window.Plugin = Plugin;

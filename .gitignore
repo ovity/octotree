@@ -4,3 +4,4 @@ tmp
 .DS_Store
 submissions.txt
 npm-debug.log
+.vscode

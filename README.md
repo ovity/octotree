@@ -1,86 +1,110 @@
-[![OpenCollective](https://opencollective.com/octotree/backers/badge.svg)](#backers)
-[![OpenCollective](https://opencollective.com/octotree/sponsors/badge.svg)](#sponsors)
-
 ## Octotree
-Browser extension (Chrome, Firefox, Opera and Safari) to show a code tree on GitHub. Awesome for exploring project source without having to pull every single repository to your machine. Features:
 
-* Easy-to-navigate code tree, just like in IDEs
-* Fast browsing with pjax
-* Support private repositories (see [instructions](#access-token))
-* Support GitHub Enterprise (Chrome and Opera only, see [instructions](#enterprise-urls))
+Browser extension that improves your productivity on GitHub. [www.octotree.io](https://www.octotree.io)
 
-![Octotree on GitHub](docs/chrome-github.jpg)
+**Features**
 
-### Install on Chrome, Firefox and Opera
-* Install Octotree from [Chrome Web Store](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc), [Mozilla Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/octotree/) or [Opera Add-ons Store](https://addons.opera.com/en/extensions/details/octotree/)
-* Navigate to any GitHub repository (or just refresh this page as an example)
-* The code tree should show on the left-hand side of the screen
+- Browse GitHub repos with intuitive code tree
+- See detailed change stats in pull requests
 
-__Note__: to configure Octotree for GitHub Enterprise, see [instructions](#enterprise-urls)
+**Features of Octotree Pro**
 
-### Install on Safari
+- Enhanced code review: see code comments and file view status
+- Many beautiful color themes (and growing)
+- Quick file search
+- Change docking position
+- Multiple GitHub accounts
+- Support GitHub Enterprise on Chrome, Opera and Firefox
+- Official Safari version (Safari doesn't support GitHub Enterprise)
 
-Octotree is not available on the Safari gallery. You have to build from source.  Download this repo and run the following command:
+Subscribe to Octotree Pro on [our website](https://www.octotree.io).
 
-```bash
-gulp safari
-```
+![Octotree Pro](docs/pro-dock-search.gif)
 
-Find the extension folder in `tmp/safari`. Follow Apple instructions to install the extension to your browser.
+### Install Octotree
 
-### Install from prebuilt packages (all browsers)
-
-Prebuilt packages are available in the  [dist](https://github.com/ovity/octotree/tree/master/dist) folder. For security reason, only download Octotree from this location.
-
-__Note__: Firefox 43+ requires add-ons to be signed. Therefore, you should install Octotree from the Mozilla store. For some reason if you want to install the prebuilt package instead, you have to [disable sign-check](https://github.com/ovity/octotree/issues/220#issuecomment-166012724).
+- Octotree: [Chrome](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/octotree/), [Opera](https://addons.opera.com/en/extensions/details/octotree/)
+- Octotree Pro: [Chrome](https://chrome.google.com/webstore/detail/fjcahddnekkgihjnjnimgiggdmlgcnbc), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/octotree-pro/), [Opera](https://addons.opera.com/en/extensions/details/octotree-pro/), [Safari](https://itunes.apple.com/us/app/octotree-pro/id1457450145?mt=12)
 
 ## Settings
+
 ### Access Token
 
-__Note for the paranoids (like me!)__: Octotree stores access tokens in your browser local storage and never transmits it anywhere.
+Octotree uses the [GitHub API](https://developer.github.com/v3/) to retrieve repository metadata. By default, it makes unauthenticated requests to get these data. However, there are two situations when GitHub require such requests to be authenticated:
 
-#### GitHub
-Octotree uses [GitHub API](https://developer.github.com/v3/) to retrieve repository metadata. By default, it makes unauthenticated requests to the GitHub API. However, there are two situations when requests must be authenticated:
+- You access a private repository
+- You exceed the [API rate limit](https://developer.github.com/v3/#rate-limiting)
 
-* You access a private repository
-* You exceed the [rate limit of unauthenticated requests](https://developer.github.com/v3/#rate-limiting)
+When that happens, Octotree will ask for your [GitHub personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use). If you don't already have one, [create one](https://github.com/settings/tokens/new?scopes=repo&description=Octotree%20browser%20extension), then copy and paste it into the token textbox in the Settings screen. Note that the minimal scopes that should be granted are `public_repo` and `repo` (if you need access to private repositories).
 
-When that happens, Octotree will ask for your [GitHub personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use). If you don't already have one, [create one](https://github.com/settings/tokens/new), then copy and paste it into the textbox. Note that the minimal scopes that should be granted are `public_repo` and `repo` (if you need access to private repositories).
+**No BS Policy**: Octotree doesn't collect/share/care about your data at all. It stores the access token in your browser local storage and uses it only to communicate with GitHub API (see the code that does that [here](https://github.com/ovity/octotree/blob/559291ed9017f0c3429bc49419d001d9ea0ac510/src/adapters/github.js#L296-L313)).
 
-### Enterprise URLs
-By default, Octotree only works on `github.com`. To support enterprise version (Chrome and Opera only), you must grant Octotree sufficient permissions. Follow these steps to do so:
+**Access tokens are stored in the browser's local storage, only enter access tokens when you use a trusted computer.**
 
-* Go to any GitHub repo
-* Open the Octotree settings panel
+### Hotkeys
 
-![Settings](docs/settings.jpg)
+Hotkeys to pin or unpin the sidebar. You can enter multiple hotkeys by separating them with a comma.
 
-* Fill in the GitHub Enterprise URLs textbox, __one URL per line__
-* Click Save and accept the permission prompt
-* Navigate to your GitHub Enterprise site
-* You might be asked to create an [access token](#access-token)
+- Supported modifiers: `⇧`, `shift`, `option`, `⌥`, `alt`, `ctrl`, `control`, `command`, and `⌘`.
+- Supported special keys: `backspace`, `tab`, `clear`, `enter`, `return`, `esc`, `escape`, `space`, `up`, `down`, `left`, `right`, `home`, `end`, `pageup`, `pagedown`, `del`, `delete` and `f1` through `f19`.
+
+Learn more at [keymaster](https://github.com/madrobby/keymaster#supported-keys).
 
 ### Others
-* __Hotkeys__: Octotree uses [keymaster](https://github.com/madrobby/keymaster) to register hotkeys. Check out the [supported keys](https://github.com/madrobby/keymaster#supported-keys).
-* __Remember sidebar visibility__: if checked, show or hide Octotree based on its last visibility.
-* __Show in non-code pages__: if checked, allow Octotree to show in non-code pages such as Issues and Pull Requests.
-* __Load entire tree at once__: if checked, load and render the entire code tree at once. To avoid long loading, this should be unchecked if you frequently work with very large repos.
-* __Show only pull request changes__ _(new!)_: if checked and in "Pull requests" page, only show the change set of the pull request.
 
-## Contribution
+- **Load entire tree at once**: if checked, load the entire code tree at once. For large repos where Octotree can't load it in a single request, Octotree ignores this settings and lazily-loads the repo.
+- **Show in non-code pages**: if checked, show Octotree in non-code pages such as Issues and Wiki.
+- **Show file-specific icons**: if checked, show different icons for different file types.
+- **Show only pull request changes**: if checked, show only the change set of a pull request.
 
-1. Install [node 8 or above](https://nodejs.org/en/download/)
-1. Run `npm install` to install dependencies
-1. Run `npm run build` to watch code changes and build unpacked extensions
-1. Install unpacked extentions in the `tmp` folder (check specific browser instructions)
-1. Please follow existing style for new code
+### Octotree Pro Settings
 
-## Credits
-* [@crashbell](https://github.com/crashbell) for helping with GitLab and others
-* [@Ephemera](https://github.com/Ephemera) for fixing many bugs
-* [@athaeryn](https://github.com/athaeryn) and [@letunglam](https://github.com/letunglam) for helping with UI design
-* And many other people who submit bug fixes and reports
+#### Enhanced pull request review
 
-## Donate
+In the Pull Request page, you will automatically see file comments and file view status.
 
-Loving Octotree? [Donating](https://opencollective.com/octotree) to help us continue working on it.
+![Enhanced code review](docs/pro-pr.gif)
+
+#### Multiple themes
+
+Click the theme icon located at the bottom of Octotree to select a color theme.
+
+![Multiple themes](docs/pro-themes.gif)
+
+#### Change docking position
+
+Click the dock icon at the footer of Octotree to switch the sidebar location.
+
+#### Quick file search
+
+Click the search icon to start file search. Note that this requires the "Load entire tree at once" option to be selected.
+
+#### GitHub Enterprise
+
+_Note: GitHub Enterprise is not supported on Safari._
+
+After installing Octotree Pro, navigate to your GitHub Enterprise site. Right-click the Octotree Pro icon in the browser bar (see the image below) and select "Enable Octotree Pro on this domain". The page should refresh and Octotree Pro sidebar should show up. Alternatively, you can disable Octotree Pro on a domain by selecting "Disable Octotree Pro on this domain".
+
+![GitHub Enterprise](docs/pro-ghe.png)
+
+#### Multiple GitHub Accounts
+
+If you have multiple GitHub accounts with access to different private repositories, you will need to let Octotree know which access token to use for which account.
+This feature allows you to enter additional GitHub accounts and corresponding tokens. When you login to GitHub with an account, Octotree will use the matching token to make API requests to GitHub. If you don't login to GitHub or if the account you login is not in the account list, Octotree will use the default access token.
+
+Go to Settings and click the + icon to add more accounts.
+
+![Multiple GitHub accounts](docs/pro-ma.jpg)
+
+
+### Credits
+
+Octotree and Octotree Pro use the following open-source software:
+
+- [jQuery](https://github.com/jquery/jquery)
+- [jQuery UI](https://github.com/jquery/jquery-ui)
+- [jstree](https://github.com/vakata/jstree)
+- [file-icons](https://github.com/file-icons/atom)
+- [keymaster](https://github.com/madrobby/keymaster)
+- [jquery-pjax](https://github.com/defunkt/jquery-pjax)
+- [github-dark](https://github.com/StylishThemes/GitHub-Dark)

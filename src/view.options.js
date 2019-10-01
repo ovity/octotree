@@ -1,23 +1,43 @@
 class OptionsView {
-  constructor($dom, store) {
+  constructor($dom, store, adapter) {
     this.store = store;
-    this.$view = $dom.find('.octotree_optsview').submit(this._save.bind(this));
-    this.$toggler = $dom.find('.octotree_opts').click(this._toggle.bind(this));
-    this.elements = this.$view.find('[data-store]').toArray();
+    this.adapter = adapter;
+    this.$toggler = $dom.find('.octotree-settings').click(this.toggle.bind(this));
+    this.$view = $dom.find('.octotree-settings-view').submit((event) => {
+      event.preventDefault();
+      this.toggle(false);
+    });
+
+    this.$view.find('a.octotree-create-token').attr('href', this.adapter.getCreateTokenUrl());
+
+    this.loadElements();
 
     // Hide options view when sidebar is hidden
     $(document).on(EVENT.TOGGLE, (event, visible) => {
-      if (!visible) this._toggle(false);
+      if (!visible) this.toggle(false);
     });
   }
 
-  _toggle(visibility) {
+  /**
+   * Load elements with [data-store] attributes & attach enforeShowInRule to the
+   * elements in the show in section. Invoke this if there are dynamically added
+   * elements, so that they can be loaded and saved.
+   */
+  loadElements() {
+    this.elements = this.$view.find('[data-store]').toArray();
+  }
+
+  /**
+   * Toggles the visibility of this screen.
+   */
+  toggle(visibility) {
     if (visibility !== undefined) {
       if (this.$view.hasClass('current') === visibility) return;
-      return this._toggle();
+      return this.toggle();
     }
 
     if (this.$toggler.hasClass('selected')) {
+      this._save();
       this.$toggler.removeClass('selected');
       $(this).trigger(EVENT.VIEW_CLOSE);
     } else {
@@ -28,8 +48,13 @@ class OptionsView {
   _load() {
     this._eachOption(
       ($elm, key, value, cb) => {
-        if ($elm.is(':checkbox')) $elm.prop('checked', value);
-        else $elm.val(value);
+        if ($elm.is(':checkbox')) {
+          $elm.prop('checked', value);
+        } else if ($elm.is(':radio')) {
+          $elm.prop('checked', $elm.val() === value);
+        } else {
+          $elm.val(value);
+        }
         cb();
       },
       () => {
@@ -39,49 +64,19 @@ class OptionsView {
     );
   }
 
-  _save(event) {
-    event.preventDefault();
-
-    /*
-     * Certainly not a good place to put this logic but Chrome requires
-     * permissions to be requested only in response of user input. So...
-     */
-    // @ifdef SUPPORT_GHE
-    const $ta = this.$view.find('[data-store$=EURLS]').filter(':visible');
-    if ($ta.length > 0) {
-      const storeKey = $ta.data('store');
-      const urls = $ta
-        .val()
-        .split(/\n/)
-        .filter((url) => url !== '');
-
-      if (urls.length > 0) {
-        chrome.runtime.sendMessage({type: 'requestPermissions', urls: urls}, (granted) => {
-          if (!granted) {
-            // Permissions not granted (by user or error), reset value
-            $ta.val(this.store.get(STORE[storeKey]));
-          }
-          this._saveOptions();
-        });
-        return;
-      }
-    }
-    // @endif
-
-    return this._saveOptions();
-  }
-
-  _saveOptions() {
+  _save() {
     const changes = {};
     this._eachOption(
       ($elm, key, value, cb) => {
+        if ($elm.is(':radio') && !$elm.is(':checked')) {
+          return cb();
+        }
         const newValue = $elm.is(':checkbox') ? $elm.is(':checked') : $elm.val();
         if (value === newValue) return cb();
         changes[key] = [value, newValue];
         this.store.set(key, newValue, cb);
       },
       () => {
-        this._toggle(false);
         if (Object.keys(changes).length) {
           $(this).trigger(EVENT.OPTS_CHANGE, changes);
         }

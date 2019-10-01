@@ -76,6 +76,7 @@ class PjaxAdapter extends Adapter {
     const loadWithPjax = $(pjaxContainerSel).length && !isSamePage;
 
     if (loadWithPjax) {
+      this._patchPjax();
       $.pjax({
         // Needs full path for pjax to work with Firefox as per cross-domain-content setting
         url: location.protocol + '//' + location.host + path,
@@ -85,5 +86,31 @@ class PjaxAdapter extends Adapter {
     } else {
       super.selectFile(path);
     }
+  }
+
+  _patchPjax() {
+    // The pjax plugin ($.pjax) is loaded in same time with Octotree (document ready event) and
+    // we don't know when $.pjax fully loaded, so we will do patching once in runtime
+    if (!!this._$pjaxPatched) return;
+
+    /**
+     * At this moment, when users are on Github Code page, Github sometime refreshes the page when
+     * a file is clicked on its file list. Internally, Github uses pjax
+     * (a jQuery plugin - defunkt/jquery-pjax) to fetch the file content being selected, and there is
+     * a change on Github's server rendering that cause the refreshing problem. And this also impacts
+     * on Octotree where Github page refreshes when users select a file in Octotree's sidebar
+     *
+     * The refresh happens due to this code https://github.com/defunkt/jquery-pjax/blob/c9acf5e7e9e16fdd34cb2de882d627f97364a952/jquery.pjax.js#L272.
+     *
+     * While waiting for Github to solve the wrong refreshing, below code is a hacking fix that
+     * Octotree won't trigger refreshing when a file selected in sidebar (but Github still refreshes
+     * if file selected at Github file view)
+     */
+    $.pjax.defaults.version = function () {
+      // Disables checking layout version to prevent refreshing in pjax library
+      return null;
+    };
+
+    this._$pjaxPatched = true;
   }
 }
