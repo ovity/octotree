@@ -1,7 +1,7 @@
 $(document).ready(() => {
-  loadExtension();
+  octotree.load(loadExtension);
 
-  async function loadExtension() {
+  async function loadExtension(activationOpts = {}) {
     const $html = $('html');
     const $document = $(document);
     const $dom = $(TEMPLATE);
@@ -15,7 +15,6 @@ $(document).ready(() => {
     const optsView = new OptionsView($dom, store, adapter);
     const helpPopup = new HelpPopup($dom, store);
     const errorView = new ErrorView($dom, store);
-    const footerView = new FooterView($dom);
 
     let currRepo = false;
     let hasError = false;
@@ -24,7 +23,7 @@ $(document).ready(() => {
     setupSidebarFloatingBehaviors();
     setHotkeys(store.get(STORE.HOTKEYS));
 
-    $html.hasClass(ADDON_CLASS) ? helpPopup.setShowInstallationWarning() : $html.addClass(ADDON_CLASS);
+    if (!$html.hasClass(ADDON_CLASS)) $html.addClass(ADDON_CLASS);
 
     $(window).resize((event) => {
       if (event.target === window) layoutChanged();
@@ -58,7 +57,7 @@ $(document).ready(() => {
       .on(EVENT.REQ_END, () => $spinner.removeClass('octotree-spin--loading'))
       .on(EVENT.LAYOUT_CHANGE, layoutChanged)
       .on(EVENT.TOGGLE_PIN, layoutChanged)
-      .on(EVENT.LOC_CHANGE, () => tryLoadRepo());
+      .on(EVENT.LOC_CHANGE, (event, reload = false) => tryLoadRepo(reload));
 
     $sidebar
       .addClass(adapter.getCssClass())
@@ -68,19 +67,21 @@ $(document).ready(() => {
 
     adapter.init($sidebar);
     helpPopup.init();
-    footerView.init();
 
-    await pluginManager.activate({
-      adapter,
-      $document,
-      $dom,
-      $sidebar,
-      $toggler,
-      $views,
-      treeView,
-      optsView,
-      errorView
-    });
+    await octotree.activate(
+      {
+        adapter,
+        $document,
+        $dom,
+        $sidebar,
+        $toggler,
+        $views,
+        treeView,
+        optsView,
+        errorView
+      },
+      activationOpts
+    );
 
     return tryLoadRepo();
 
@@ -111,7 +112,7 @@ $(document).ready(() => {
         }
       });
 
-      if (await pluginManager.applyOptions(changes)) {
+      if (await octotree.applyOptions(changes)) {
         reload = true;
       }
 
