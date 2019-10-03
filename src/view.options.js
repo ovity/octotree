@@ -89,7 +89,8 @@ class OptionsView {
       this.elements,
       (elm, cb) => {
         const $elm = $(elm);
-        const key = STORE[$elm.data('store')];
+        const storeKey = $elm.data('store');
+        const key = STORE[storeKey] || storeKey;
 
         this.store.get(key, (value) => {
           processFn($elm, key, value, () => cb());

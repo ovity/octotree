@@ -1,44 +1,3 @@
-const GH_RESERVED_USER_NAMES = [
-  'settings',
-  'orgs',
-  'organizations',
-  'site',
-  'blog',
-  'about',
-  'explore',
-  'styleguide',
-  'showcases',
-  'trending',
-  'stars',
-  'dashboard',
-  'notifications',
-  'search',
-  'developer',
-  'account',
-  'pulls',
-  'issues',
-  'features',
-  'contact',
-  'security',
-  'join',
-  'login',
-  'watching',
-  'new',
-  'integrations',
-  'gist',
-  'business',
-  'mirrors',
-  'open-source',
-  'personal',
-  'pricing',
-  'sessions',
-  'topics',
-  'users',
-  'marketplace'
-];
-const GH_RESERVED_REPO_NAMES = ['followers', 'following', 'repositories'];
-const GH_404_SEL = '#parallax_wrapper';
-
 // When Github page loads at repo path e.g. https://github.com/jquery/jquery, the HTML tree has
 // <main id="js-repo-pjax-container"> to contain server-rendered HTML in response of pjax.
 // However, that <main> element doesn't have "id" attribute if the Github page loads at specific
@@ -49,7 +8,6 @@ const GH_PJAX_CONTAINER_SEL =
 
 const GH_CONTAINERS = '.container, .container-lg, .container-responsive';
 const GH_HEADER = '.js-header-wrapper > header';
-const GH_RAW_CONTENT = 'body > pre';
 const GH_MAX_HUGE_REPOS_SIZE = 50;
 const GH_HIDDEN_RESPONSIVE_CLASS = '.d-none';
 const GH_RESPONSIVE_BREAKPOINT = 1010;
@@ -133,46 +91,18 @@ class GitHub extends PjaxAdapter {
 
   // @override
   getRepoFromPath(currentRepo, token, cb) {
-    // 404 page, skip
-    if ($(GH_404_SEL).length) {
-      return cb();
-    }
-
-    // Skip raw page
-    if ($(GH_RAW_CONTENT).length) {
+    if (!octotree.shouldShowOctotree()) {
       return cb();
     }
 
     // (username)/(reponame)[/(type)][/(typeId)]
     const match = window.location.pathname.match(/([^\/]+)\/([^\/]+)(?:\/([^\/]+))?(?:\/([^\/]+))?/);
-    if (!match) {
-      return cb();
-    }
 
     const username = match[1];
     const reponame = match[2];
     const type = match[3];
     const typeId = match[4];
-
-    // Not a repository, skip
-    if (~GH_RESERVED_USER_NAMES.indexOf(username) || ~GH_RESERVED_REPO_NAMES.indexOf(reponame)) {
-      return cb();
-    }
-
     const isPR = type === 'pull';
-    const showIn = this.store.get(STORE.SHOWIN);
-
-    // Skip rendering the octotree in the unselected pages
-    if (showIn && showIn !== ShowInPage.All) {
-      const isCodeCommit = !type || ['tree', 'blob', 'commit'].includes(type);
-      const isCodeCommitPR = isPR || isCodeCommit;
-      const shouldRender = {
-        [ShowInPage.CodeAndPullRequest]: isCodeCommitPR,
-        [ShowInPage.Code]: isCodeCommit,
-        [ShowInPage.PullRequest]: isPR
-      }[showIn];
-      if (shouldRender !== undefined && !shouldRender) return cb();
-    }
 
     // Get branch by inspecting URL or DOM, quite fragile so provide multiple fallbacks.
     // TODO would be great if there's a more robust way to do this
