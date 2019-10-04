@@ -135,6 +135,8 @@ class GitHub extends PjaxAdapter {
     const branch =
       // Pick the commit ID as branch name when the code page is listing tree in a particular commit
       (type === 'commit' && typeId) ||
+      // Pick 'master' as branch name when viewing repo's releases or tags
+      ((type === 'releases' || type === 'tags') && 'master') ||
       // Pick the commit ID or branch name from the DOM
       branchFromSummary ||
       ($('.overall-summary .numbers-summary .commits a').attr('href') || '').replace(
