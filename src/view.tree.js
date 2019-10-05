@@ -76,7 +76,7 @@ class TreeView {
           </div>
           <div class="octotree-header-branch">
             <i class="octotree-icon-branch"></i>
-            ${deXss(repo.branch.toString())}
+            ${deXss((repo.displayBranch || repo.branch).toString())}
           </div>
         </div>`
       )
