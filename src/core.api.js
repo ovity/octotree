@@ -40,7 +40,6 @@ const GH_RESERVED_REPO_NAMES = ['followers', 'following', 'repositories'];
 const GH_404_SEL = '#parallax_wrapper';
 const GH_RAW_CONTENT = 'body > pre';
 
-
 class OctotreeService {
   getAccessToken() {
     return window.store.get(window.STORE.TOKEN);
@@ -63,7 +62,7 @@ class OctotreeService {
     return false;
   }
 
-  shouldShowOctotree () {
+  shouldShowOctotree() {
     if ($(GH_404_SEL).length) {
       return false;
     }
@@ -87,7 +86,7 @@ class OctotreeService {
       return false;
     }
 
-    return true
+    return true;
   }
 }
 
