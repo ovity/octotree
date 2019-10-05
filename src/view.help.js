@@ -2,7 +2,6 @@ class HelpPopup {
   constructor($dom, store) {
     this.$view = $dom.find('.popup');
     this.store = store;
-    this.showInstallationWarning = false;
   }
 
   init() {
@@ -11,11 +10,7 @@ class HelpPopup {
     const popupShown = store.get(STORE.POPUP);
     const sidebarVisible = $('html').hasClass(SHOW_CLASS);
 
-    if (this.showInstallationWarning) {
-      $view
-        .find('.content')
-        .text('You currently have 2 versions of Octotree installed. Please uninstall one of the them.');
-    } else if (popupShown || sidebarVisible) {
+    if (popupShown || sidebarVisible) {
       return hideAndDestroy();
     }
 
@@ -34,9 +29,5 @@ class HelpPopup {
         $view.remove();
       }
     }
-  }
-
-  setShowInstallationWarning() {
-    this.showInstallationWarning = true;
   }
 }
