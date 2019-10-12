@@ -65,6 +65,8 @@ $(document).ready(() => {
       .resize(() => layoutChanged(true))
       .appendTo($('body'));
 
+    $document.trigger(EVENT.SIDEBAR_HTML_INSERTED);
+
     adapter.init($sidebar);
     helpPopup.init();
 

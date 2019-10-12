@@ -42,7 +42,8 @@ const EVENT = {
   VIEW_READY: 'octotree:ready',
   VIEW_CLOSE: 'octotree:close',
   VIEW_SHOW: 'octotree:show',
-  FETCH_ERROR: 'octotree:error'
+  FETCH_ERROR: 'octotree:error',
+  SIDEBAR_HTML_INSERTED: 'octotree:sidebarHtmlInserted'
 };
 
 window.STORE = STORE;
