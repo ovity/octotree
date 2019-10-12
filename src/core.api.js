@@ -41,28 +41,39 @@ const GH_404_SEL = '#parallax_wrapper';
 const GH_RAW_CONTENT = 'body > pre';
 
 class OctotreeService {
-  getAccessToken() {
-    return window.store.get(window.STORE.TOKEN);
-  }
-
-  getInvalidTokenMessage({responseStatus, requestHeaders}) {
-    return (
-      'The GitHub access token is invalid. ' +
-      'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and update the token.'
-    );
+  constructor() {
+    this.reset();
   }
 
   load(loadFn) {
     loadFn();
   }
 
+  // Hooks
   activate(inputs, opts) {}
 
   applyOptions(opts) {
     return false;
   }
 
-  shouldShowOctotree() {
+  reset() {
+    this.getAccessToken = this._getAccessToken;
+    this.shouldShowOctotree = this._shouldShowOctotree;
+    this.getInvalidTokenMessage = this._getInvalidTokenMessage;
+  }
+
+  _getAccessToken() {
+    return window.store.get(window.STORE.TOKEN);
+  }
+
+  _getInvalidTokenMessage({responseStatus, requestHeaders}) {
+    return (
+      'The GitHub access token is invalid. ' +
+      'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and update the token.'
+    );
+  }
+
+  _shouldShowOctotree() {
     if ($(GH_404_SEL).length) {
       return false;
     }
