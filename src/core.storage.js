@@ -33,6 +33,16 @@ class Storage {
     }
   }
 
+  remove(key, cb) {
+    try {
+      localStorage.removeItem(key);
+    } catch (e) {
+      const msg = `Octotree cannot remove ${key} from localStorage.`;
+      console.error(msg, e);
+    }
+    if (cb) cb();
+  }
+
   setIfNull(key, val, cb) {
     this.get(key, (existingVal) => {
       this.set(key, existingVal == null ? val : existingVal, cb);
