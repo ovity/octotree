@@ -288,8 +288,14 @@
 
     .octotree-error-view,
     .octotree-settings-view {
+      overflow: auto;
       .octotree-view-header {
         padding-left: 8px;
+      }
+      .octotree-view-body {
+        input[type="checkbox"], input[type="radio"] {
+          vertical-align: middle;
+        }
       }
     }
 
