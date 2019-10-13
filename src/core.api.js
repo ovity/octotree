@@ -45,15 +45,16 @@ class OctotreeService {
     this.reset();
   }
 
-  load(loadFn) {
-    loadFn();
-  }
-
   // Hooks
   activate(inputs, opts) {}
 
   applyOptions(opts) {
     return false;
+  }
+
+  // Public
+  load(loadFn) {
+    loadFn();
   }
 
   reset() {
@@ -62,6 +63,7 @@ class OctotreeService {
     this.getInvalidTokenMessage = this._getInvalidTokenMessage;
   }
 
+  // Private
   _getAccessToken() {
     return window.store.get(window.STORE.TOKEN);
   }
