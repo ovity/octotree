@@ -100,6 +100,10 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+
+        &.octotree-header-text-top {
+          padding-bottom: 17px;
+        }
       }
 
       .octotree-help {
@@ -366,10 +370,21 @@
   //
   // Common buttons
   //
+  .octotree-main-icons {
+    position: absolute;
+    display: flex;
+    flex-flow: row-reverse;
+    top: 16px;
+    right: 6px;
+
+    a {
+      margin-left: 4px;
+    }
+  }
+
   a.octotree-settings,
   a.octotree-pin,
   a.octotree-spin {
-    position: absolute !important;
     text-align: center;
     line-height: 1;
     cursor: pointer;
@@ -478,8 +493,6 @@
   }
 
   a.octotree-pin {
-    top: (@header-height - @icon-size) / 2;
-    right: 6px;
     width: @icon-size;
     height: @icon-size;
 
@@ -494,8 +507,6 @@
   }
 
   a.octotree-settings {
-    top: (@header-height - @icon-size) / 2;
-    right: 26px;
     width: @icon-size;
     height: @icon-size;
 
