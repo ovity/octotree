@@ -1,14 +1,12 @@
 $(document).ready(() => {
-  if (octotree.shouldShowOctotree()) {
-    octotree.load(loadExtension);
-  }
+  octotree.load(loadExtension);
 
   async function loadExtension(activationOpts = {}) {
     const $html = $('html');
     const $document = $(document);
     const $dom = $(TEMPLATE);
     const $sidebar = $dom.find('.octotree-sidebar');
-    const $toggler = $sidebar.find('.octotree-toggle');
+    const $toggler = $sidebar.find('.octotree-toggle').hide();
     const $views = $sidebar.find('.octotree-view');
     const $spinner = $sidebar.find('.octotree-spin');
     const $pinner = $sidebar.find('.octotree-pin');
