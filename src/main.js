@@ -1,5 +1,7 @@
 $(document).ready(() => {
-  octotree.load(loadExtension);
+  if (octotree.shouldShowOctotree()) {
+    octotree.load(loadExtension);
+  }
 
   async function loadExtension(activationOpts = {}) {
     const $html = $('html');
