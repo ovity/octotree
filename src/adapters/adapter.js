@@ -277,12 +277,7 @@ class Adapter {
     if (diffMatch) {
       const el = $(diffMatch[0]);
       if (el.length > 0) {
-        $('html, body').animate(
-          {
-            scrollTop: el.offset().top - 68
-          },
-          400
-        );
+        $('html, body').animate({scrollTop: el.offset().top - 68}, 400);
         return;
       }
     }
