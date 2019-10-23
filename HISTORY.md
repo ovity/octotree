@@ -1,3 +1,13 @@
+### v4.0
+
+Dealing with 2 separate versions of Octotree in many browsers has been a major pain for our team. Starting from this version, we have combined them to make our release effort simpler as well as ease the process of trial, downgrading and upgrading for our users. There is now one software: Octotree. We will deprecated Octotree Pro in the near future. All Octotree Pro users should switch to Octotree to enjoy the new features.
+
+Other notable changes in this release:
+
+- Octotree for Safari is now available for free!
+- File search, bookmarking and dark mode are available for free when you log in.
+- More Pro features (see README).
+
 ### v3.0.10
 
 - Hot fix bug on Windows
