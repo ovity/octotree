@@ -71,7 +71,7 @@ class OctotreeService {
   _getInvalidTokenMessage({responseStatus, requestHeaders}) {
     return (
       'The GitHub access token is invalid. ' +
-      'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and update the token.'
+      'Please go to <a class="settings-btn">Settings</a> and update the token.'
     );
   }
 

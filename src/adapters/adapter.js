@@ -171,7 +171,7 @@ class Adapter {
         error = 'Private repository';
         message =
           'Accessing private repositories requires a GitHub access token. ' +
-          'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and enter a token.';
+          'Please go to <a class="settings-btn">Settings</a> and enter a token.';
         break;
       case 403:
         if (jqXHR.getResponseHeader('X-RateLimit-Remaining') === '0') {
@@ -180,12 +180,12 @@ class Adapter {
           message =
             'You have exceeded the <a href="https://developer.github.com/v3/#rate-limiting">GitHub API rate limit</a>. ' +
             'To continue using Octotree, you need to provide a GitHub access token. ' +
-            'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and enter a token.';
+            'Please go to <a class="settings-btn">Settings</a> and enter a token.';
         } else {
           error = 'Forbidden';
           message =
             'Accessing private repositories requires a GitHub access token. ' +
-            'Please go to <a class="settings-btn" href="javascript:void(0)">Settings</a> and enter a token.';
+            'Please go to <a class="settings-btn">Settings</a> and enter a token.';
         }
 
         break;
