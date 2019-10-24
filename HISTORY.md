@@ -1,6 +1,6 @@
 ### v4.0
 
-Dealing with 2 separate versions of Octotree in many browsers has been a major pain for our team. Starting from this version, we have combined them to make our release effort simpler as well as ease the process of trial, downgrading and upgrading for our users. There is now one software: Octotree. We will deprecated Octotree Pro in the near future. All Octotree Pro users should switch to Octotree to enjoy the new features.
+Dealing with 2 separate versions of Octotree in many browsers has been a major pain for our team. Starting from this version, we have combined them to simplify our release process as well as ease the process of trial, downgrading and upgrading for our users. There is now one software to be installed: Octotree. We will deprecated Octotree Pro in the near future. All Octotree Pro users should switch to Octotree to enjoy the new features.
 
 Other notable changes in this release:
 

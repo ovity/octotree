@@ -2,7 +2,7 @@
 
 Browser extension that brings GitHub experience to the next level. This repository contains the source code of Octotree core. You can build and run it locally to access all features of the free version. Or you can download the full version on [our website](https://www.octotree.io). Octotree support Chrome, Firefox, Opera and Safari.
 
-![Octotree](docs/pro-dock-search.gif)
+![Octotree](docs/demo.gif)
 
 ## Features and Settings
 
@@ -37,18 +37,6 @@ Hotkeys to pin or unpin the sidebar. You can enter multiple hotkeys by separatin
 
 Learn more at [keymaster](https://github.com/madrobby/keymaster#supported-keys).
 
-#### Enhanced code review (Pro)
-
-In the Pull Request page, you will automatically see file comments and file view status.
-
-![Enhanced code review](docs/pro-pr.gif)
-
-#### Multiple themes (Pro)
-
-Click the theme icon located at the bottom of Octotree to select a color theme. The "Only Sidebar" theme changes the Octotree sidebar to the dark theme without changing the theme of the GitHub page.
-
-![Multiple themes](docs/pro-themes.gif)
-
 #### GitHub Enterprise (Pro)
 
 _Note: GitHub Enterprise is not supported on Safari._
@@ -63,6 +51,8 @@ After installing Octotree, navigate to your GitHub Enterprise site. Right-click 
 - **Load entire tree at once**. If checked, load and render the entire repository file structure at once. Otherwise, Octotree loads when a specific directory is clicked. For large repos where Octotree can't load in a single request, Octotree ignores this settings and lazily-loads the repo.
 - **Show file-specific icons**. If checked, show different icons for different file types.
 - **Show only pull request changes**. If checked, show only the change set of the current pull request. Otherwise, show the full code tree.
+- **Enhanced code review (Pro)**. In the Pull Request page, you will automatically see file comments and file view status.
+- **Multiple themes (Pro)**. Click the theme icon located at the bottom of Octotree to select a color theme. The "Only Sidebar" theme changes the Octotree sidebar to the dark theme without changing the theme of the GitHub page.
 - **File search (Pro)**. Click the search icon to start file search. Note that this requires the "Load entire tree at once" option to be selected.
 - **Change docking position (Pro)**. Click the dock icon at the footer of Octotree to change the sidebar location to the right or left of the screen.
 - **Repository and PR bookmark (Pro)**. When viewing a repository or pull request, you can click the bookmark icon next to its title to bookmark it. You can view all bookmarks by clicking the bookmark icon in Octotree header.
