@@ -76,13 +76,10 @@ class OctotreeService {
     );
   }
 
-  _setNodeIconAndText(item, name = '') {
-    // Uses `type` as class name for tree node
-    item.icon = item.type;
-    
+  _setNodeIconAndText(context, item) {
     if (item.type === 'blob') {
-      if (window.store.get(STORE.ICONS)) {
-        const className = FileIcons.getClassWithColor(name);
+      if (context.store.get(STORE.ICONS)) {
+        const className = FileIcons.getClassWithColor(item.text);
         item.icon += ' ' + (className || 'file-generic');
       } else {
         item.icon += ' file-generic';

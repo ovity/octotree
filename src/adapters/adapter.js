@@ -63,7 +63,10 @@ class Adapter {
               title: path
             };
 
-            octotree.setNodeIconAndText(item, name);
+            // Uses `type` as class name for tree node
+            item.icon = item.type;
+
+            octotree.setNodeIconAndText(this, item);
 
             if (item.patch) {
               item.text += `<span class="octotree-patch">${this.buildPatchHtml(item)}</span>`;
