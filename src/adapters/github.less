@@ -106,6 +106,31 @@
         }
       }
 
+      .octotree-view-toolbar {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f1f8ff;
+        border-right: 1px @gray-less solid;
+        font-size: 12px;
+        font-weight: normal;
+        top: 0;
+        left: 0;
+        line-height: 1;
+        width: 100%;
+        height: @footer-height;
+        padding: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        a {
+          color: @dark-less;
+          text-decoration: none;
+        }
+      }
+
       .octotree-help {
         outline: 0;
         cursor: pointer;

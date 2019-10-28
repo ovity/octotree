@@ -10,6 +10,7 @@ $(document).ready(() => {
     const $views = $sidebar.find('.octotree-view');
     const $spinner = $sidebar.find('.octotree-spin');
     const $pinner = $sidebar.find('.octotree-pin');
+    const $expander = $sidebar.find('.octotree-expand');
     const adapter = new GitHub(store);
     const treeView = new TreeView($dom, store, adapter);
     const optsView = new OptionsView($dom, store, adapter);
@@ -20,6 +21,7 @@ $(document).ready(() => {
     let hasError = false;
 
     $pinner.click(togglePin);
+    $expander.click(toggleFolders);
     setupSidebarFloatingBehaviors();
     setHotkeys(store.get(STORE.HOTKEYS));
 
@@ -204,6 +206,16 @@ $(document).ready(() => {
       store.set(STORE.PINNED, sidebarPinned);
       toggleSidebar(sidebarPinned);
       return sidebarPinned;
+    }
+
+    function toggleFolders() {
+      if ($expander.text() === 'Expand All') {
+        treeView.$tree.jstree('open_all');
+        $expander.text('Collapse All');
+      } else if ($expander.text() === 'Collapse All') {
+        treeView.$tree.jstree('close_all');
+        $expander.text('Expand All');
+      }
     }
 
     function layoutChanged(save = false) {
