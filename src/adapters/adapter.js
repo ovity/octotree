@@ -64,7 +64,7 @@ class Adapter {
             };
 
             // Uses `type` as class name for tree node
-            item.icon = item.type;
+            item.icon = type;
 
             octotree.setNodeIconAndText(this, item);
 
