@@ -63,17 +63,7 @@ class Adapter {
               title: path
             };
 
-            // Uses `type` as class name for tree node
-            item.icon = type;
-
-            if (type === 'blob') {
-              if (this.store.get(STORE.ICONS)) {
-                const className = FileIcons.getClassWithColor(name);
-                item.icon += ' ' + (className || 'file-generic');
-              } else {
-                item.icon += ' file-generic';
-              }
-            }
+            octotree.setNodeIconAndText(item, name);
 
             if (item.patch) {
               item.text += `<span class="octotree-patch">${this.buildPatchHtml(item)}</span>`;

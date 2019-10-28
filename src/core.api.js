@@ -61,6 +61,7 @@ class OctotreeService {
     this.getAccessToken = this._getAccessToken;
     this.shouldShowOctotree = this._shouldShowOctotree;
     this.getInvalidTokenMessage = this._getInvalidTokenMessage;
+    this.setNodeIconAndText = this._setNodeIconAndText;
   }
 
   // Private
@@ -73,6 +74,20 @@ class OctotreeService {
       'The GitHub access token is invalid. ' +
       'Please go to <a class="settings-btn">Settings</a> and update the token.'
     );
+  }
+
+  _setNodeIconAndText(item, name = '') {
+    // Uses `type` as class name for tree node
+    item.icon = item.type;
+    
+    if (item.type === 'blob') {
+      if (window.store.get(STORE.ICONS)) {
+        const className = FileIcons.getClassWithColor(name);
+        item.icon += ' ' + (className || 'file-generic');
+      } else {
+        item.icon += ' file-generic';
+      }
+    }
   }
 
   _shouldShowOctotree() {
