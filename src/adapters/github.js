@@ -46,13 +46,13 @@ class GitHub extends PjaxAdapter {
   }
 
   // @override
-  canLoadEntireTree(repo) {
+  async canLoadEntireTree(repo) {
     const key = `${repo.username}/${repo.reponame}`;
-    const hugeRepos = this.store.get(STORE.HUGE_REPOS);
+    const hugeRepos = await this.store.get(STORE.HUGE_REPOS);
     if (hugeRepos[key]) {
       // Update the last load time of the repo
       hugeRepos[key] = new Date().getTime();
-      this.store.set(STORE.HUGE_REPOS, hugeRepos);
+      await this.store.set(STORE.HUGE_REPOS, hugeRepos);
     }
     return !hugeRepos[key];
   }
@@ -90,7 +90,7 @@ class GitHub extends PjaxAdapter {
   }
 
   // @override
-  getRepoFromPath(currentRepo, token, cb) {
+  async getRepoFromPath(currentRepo, token, cb) {
     if (!octotree.shouldShowOctotree()) {
       return cb();
     }
@@ -151,7 +151,7 @@ class GitHub extends PjaxAdapter {
       this._defaultBranch[username + '/' + reponame];
 
     const isPR = type === 'pull';
-    const showOnlyChangedInPR = this.store.get(STORE.PR);
+    const showOnlyChangedInPR = await this.store.get(STORE.PR);
     const pullNumber = isPR && showOnlyChangedInPR ? typeId : null;
     const repo = {username, reponame, branch, pullNumber};
     if (repo.branch) {
@@ -315,21 +315,23 @@ class GitHub extends PjaxAdapter {
 
     $.ajax(cfg)
       .done((data, textStatus, jqXHR) => {
-        if (path && path.indexOf('/git/trees') === 0 && data.truncated) {
-          const hugeRepos = this.store.get(STORE.HUGE_REPOS);
-          const repo = `${opts.repo.username}/${opts.repo.reponame}`;
-          const repos = Object.keys(hugeRepos);
-          if (!hugeRepos[repo]) {
-            // If there are too many repos memoized, delete the oldest one
-            if (repos.length >= GH_MAX_HUGE_REPOS_SIZE) {
-              const oldestRepo = repos.reduce((min, p) => (hugeRepos[p] < hugeRepos[min] ? p : min));
-              delete hugeRepos[oldestRepo];
+        (async () => {
+          if (path && path.indexOf('/git/trees') === 0 && data.truncated) {
+            const hugeRepos = await this.store.get(STORE.HUGE_REPOS);
+            const repo = `${opts.repo.username}/${opts.repo.reponame}`;
+            const repos = Object.keys(hugeRepos);
+            if (!hugeRepos[repo]) {
+              // If there are too many repos memoized, delete the oldest one
+              if (repos.length >= GH_MAX_HUGE_REPOS_SIZE) {
+                const oldestRepo = repos.reduce((min, p) => (hugeRepos[p] < hugeRepos[min] ? p : min));
+                delete hugeRepos[oldestRepo];
+              }
+              hugeRepos[repo] = new Date().getTime();
+              await this.store.set(STORE.HUGE_REPOS, hugeRepos);
             }
-            hugeRepos[repo] = new Date().getTime();
-            this.store.set(STORE.HUGE_REPOS, hugeRepos);
-          }
-          this._handleError(cfg, {status: 206}, cb);
-        } else cb(null, data, jqXHR);
+            this._handleError(cfg, {status: 206}, cb);
+          } else cb(null, data, jqXHR);
+        })()
       })
       .fail((jqXHR) => this._handleError(cfg, jqXHR, cb));
   }

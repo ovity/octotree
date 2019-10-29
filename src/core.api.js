@@ -65,7 +65,7 @@ class OctotreeService {
 
   // Private
   _getAccessToken() {
-    return window.store.get(window.STORE.TOKEN);
+    return window.extStore.get(window.STORE.TOKEN);
   }
 
   _getInvalidTokenMessage({responseStatus, requestHeaders}) {

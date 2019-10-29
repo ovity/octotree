@@ -31,7 +31,7 @@ class Adapter {
 
         submodules = submodules || {};
 
-        const nextChunk = (iteration = 0) => {
+        const nextChunk = async (iteration = 0) => {
           const CHUNK_SIZE = 300;
 
           for (let i = 0; i < CHUNK_SIZE; i++) {
@@ -67,7 +67,7 @@ class Adapter {
             item.icon = type;
 
             if (type === 'blob') {
-              if (this.store.get(STORE.ICONS)) {
+              if (await this.store.get(STORE.ICONS)) {
                 const className = FileIcons.getClassWithColor(name);
                 item.icon += ' ' + (className || 'file-generic');
               } else {
@@ -231,7 +231,7 @@ class Adapter {
    * a single request. This is usually determined by the underlying the API.
    * @api public
    */
-  canLoadEntireTree(opts) {
+  async canLoadEntireTree(opts) {
     return false;
   }
 
