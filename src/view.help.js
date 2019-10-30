@@ -1,12 +1,11 @@
 class HelpPopup {
-  constructor($dom, store) {
+  constructor($dom) {
     this.$view = $dom.find('.popup');
-    this.store = store;
   }
 
   async init() {
     const $view = this.$view;
-    const store = this.store;
+    const store = extStore;
     const popupShown = await extStore.get(STORE.POPUP);
     const sidebarVisible = $('html').hasClass(SHOW_CLASS);
 

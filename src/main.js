@@ -12,11 +12,11 @@ $(document).ready(() => {
     const $views = $sidebar.find('.octotree-view');
     const $spinner = $sidebar.find('.octotree-spin');
     const $pinner = $sidebar.find('.octotree-pin');
-    const adapter = new GitHub(extStore);
-    const treeView = new TreeView($dom, extStore, adapter);
-    const optsView = new OptionsView($dom, extStore, adapter);
-    const helpPopup = new HelpPopup($dom, extStore);
-    const errorView = new ErrorView($dom, extStore);
+    const adapter = new GitHub();
+    const treeView = new TreeView($dom, adapter);
+    const optsView = new OptionsView($dom, adapter);
+    const helpPopup = new HelpPopup($dom);
+    const errorView = new ErrorView($dom);
 
     let currRepo = false;
     let hasError = false;

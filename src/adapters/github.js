@@ -13,10 +13,6 @@ const GH_HIDDEN_RESPONSIVE_CLASS = '.d-none';
 const GH_RESPONSIVE_BREAKPOINT = 1010;
 
 class GitHub extends PjaxAdapter {
-  constructor(store) {
-    super(store);
-  }
-
   // @override
   init($sidebar) {
     const pjaxContainer = $(GH_PJAX_CONTAINER_SEL)[0];
@@ -48,11 +44,11 @@ class GitHub extends PjaxAdapter {
   // @override
   async canLoadEntireTree(repo) {
     const key = `${repo.username}/${repo.reponame}`;
-    const hugeRepos = await this.store.get(STORE.HUGE_REPOS);
+    const hugeRepos = await extStore.get(STORE.HUGE_REPOS);
     if (hugeRepos[key]) {
       // Update the last load time of the repo
       hugeRepos[key] = new Date().getTime();
-      await this.store.set(STORE.HUGE_REPOS, hugeRepos);
+      await extStore.set(STORE.HUGE_REPOS, hugeRepos);
     }
     return !hugeRepos[key];
   }
@@ -151,7 +147,7 @@ class GitHub extends PjaxAdapter {
       this._defaultBranch[username + '/' + reponame];
 
     const isPR = type === 'pull';
-    const showOnlyChangedInPR = await this.store.get(STORE.PR);
+    const showOnlyChangedInPR = await extStore.get(STORE.PR);
     const pullNumber = isPR && showOnlyChangedInPR ? typeId : null;
     const repo = {username, reponame, branch, pullNumber};
     if (repo.branch) {
@@ -317,7 +313,7 @@ class GitHub extends PjaxAdapter {
       .done((data, textStatus, jqXHR) => {
         (async () => {
           if (path && path.indexOf('/git/trees') === 0 && data.truncated) {
-            const hugeRepos = await this.store.get(STORE.HUGE_REPOS);
+            const hugeRepos = await extStore.get(STORE.HUGE_REPOS);
             const repo = `${opts.repo.username}/${opts.repo.reponame}`;
             const repos = Object.keys(hugeRepos);
             if (!hugeRepos[repo]) {
@@ -327,7 +323,7 @@ class GitHub extends PjaxAdapter {
                 delete hugeRepos[oldestRepo];
               }
               hugeRepos[repo] = new Date().getTime();
-              await this.store.set(STORE.HUGE_REPOS, hugeRepos);
+              await extStore.set(STORE.HUGE_REPOS, hugeRepos);
             }
             this._handleError(cfg, {status: 206}, cb);
           } else cb(null, data, jqXHR);

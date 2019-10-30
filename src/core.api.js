@@ -76,9 +76,9 @@ class OctotreeService {
     );
   }
 
-  _setNodeIconAndText(context, item) {
+  async _setNodeIconAndText(context, item) {
     if (item.type === 'blob') {
-      if (context.store.get(STORE.ICONS)) {
+      if (await extStore.get(STORE.ICONS)) {
         const className = FileIcons.getClassWithColor(item.text);
         item.icon += ' ' + (className || 'file-generic');
       } else {

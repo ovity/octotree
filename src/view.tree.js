@@ -1,6 +1,5 @@
 class TreeView {
-  constructor($dom, store, adapter) {
-    this.store = store;
+  constructor($dom, adapter) {
     this.adapter = adapter;
     this.$view = $dom.find('.octotree-tree-view');
     this.$tree = this.$view
@@ -31,8 +30,8 @@ class TreeView {
 
     $jstree.settings.core.data = (node, cb) => {
       (async () => {
-        const prMode = await this.store.get(STORE.PR) && repo.pullNumber;
-        const loadAll = await this.adapter.canLoadEntireTree(repo) && (prMode || await this.store.get(STORE.LOADALL));
+        const prMode = await extStore.get(STORE.PR) && repo.pullNumber;
+        const loadAll = await this.adapter.canLoadEntireTree(repo) && (prMode || await extStore.get(STORE.LOADALL));
 
         node = !loadAll && (node.id === '#' ? {path: ''} : node.original);
 
@@ -206,7 +205,7 @@ class TreeView {
     if (!match) return;
 
     const currentPath = match[1];
-    const loadAll = await this.adapter.canLoadEntireTree(repo) && await this.store.get(STORE.LOADALL);
+    const loadAll = await this.adapter.canLoadEntireTree(repo) && await extStore.get(STORE.LOADALL);
 
     selectPath(loadAll ? [currentPath] : breakPath(currentPath));
 

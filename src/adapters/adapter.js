@@ -1,8 +1,7 @@
 class Adapter {
-  constructor(deps, store) {
+  constructor(deps) {
     deps.forEach((dep) => window[dep]());
     this._defaultBranch = {};
-    this.store = store;
   }
 
   /**
@@ -66,7 +65,7 @@ class Adapter {
             // Uses `type` as class name for tree node
             item.icon = type;
 
-            octotree.setNodeIconAndText(this, item);
+            await octotree.setNodeIconAndText(this, item);
 
             if (item.patch) {
               item.text += `<span class="octotree-patch">${this.buildPatchHtml(item)}</span>`;
