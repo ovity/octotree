@@ -35,13 +35,11 @@ class ExtStore {
   }
 
   static create(values, defaults) {
-    return new Promise(async (resolve, reject) => {
-      const store = new ExtStore();
-      for (const key of Object.keys(values)) {
-        await store.setIfNull(values[key], defaults[key]);
-      }
-      resolve(store);
-    })
+    const store = new ExtStore();
+    return Promise.all(Object.keys(values).map((key) => {
+      return store.setIfNull(values[key], defaults[key]);
+    }))
+      .then(() => store);
   }
 
   set(key, value) {
