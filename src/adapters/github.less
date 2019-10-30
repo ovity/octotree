@@ -110,7 +110,7 @@
         position: relative;
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-end;
         background-color: #f1f8ff;
         border-right: 1px @gray-less solid;
         font-size: 12px;
@@ -125,9 +125,26 @@
         text-overflow: ellipsis;
         white-space: nowrap;
 
-        a {
-          color: @dark-less;
+        .octotree-expand,
+        .octotree-collapse {
+          margin-left: 12px;
+          color: @dark;
           text-decoration: none;
+        }
+
+        .octotree-expand:hover,
+        .octotree-collapse:hover {
+          color: @gray;
+        }
+
+        .octotree-icon-fold {
+          .icon-v2(@octicons-fold, @color: @dark, @hover-color: @gray);
+          vertical-align: middle;
+        }
+
+        .octotree-icon-unfold {
+          .icon-v2(@octicons-unfold, @color: @dark, @hover-color: @gray);
+          vertical-align: middle;
         }
       }
 
@@ -403,7 +420,7 @@
     display: flex;
     flex-flow: row-reverse;
     align-items: center;
-    top: 16px;
+    top: 25px;
     right: 6px;
 
     a {
