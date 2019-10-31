@@ -44,13 +44,13 @@ class ExtStore {
 
   set(key, value) {
     const payload = {[key]: value};
-    return key === STORE.TOKEN
+    return key.endsWith('local')
       ? this._setLocal(payload)
       : this._setAsync(payload);
   }
 
   async get(key) {
-    const result = key === STORE.TOKEN
+    const result = key.endsWith('local')
       ? await this._getLocal(key)
       : await this._getAsync(key);
 
