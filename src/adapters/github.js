@@ -87,7 +87,7 @@ class GitHub extends PjaxAdapter {
 
   // @override
   async getRepoFromPath(currentRepo, token, cb) {
-    if (!octotree.shouldShowOctotree()) {
+    if (!await octotree.shouldShowOctotree()) {
       return cb();
     }
 
