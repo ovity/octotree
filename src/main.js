@@ -2,8 +2,6 @@ $(document).ready(() => {
   octotree.load(loadExtension);
 
   async function loadExtension(activationOpts = {}) {
-    window.extStore = await ExtStore.create(STORE, DEFAULTS);
-
     const $html = $('html');
     const $document = $(document);
     const $dom = $(TEMPLATE);

@@ -1,6 +1,18 @@
 
 class ExtStore {
-  constructor() {
+  constructor(values, defaults) {
+    this._isInit = false;
+
+    this._init = async function () {
+      if (this._isInit) return;
+  
+      await Promise.all(Object.keys(values).map((key) => {
+        return this.setIfNull(values[key], defaults[key]);
+      }));
+  
+      this._isInit = true;
+    }
+
     this._setLocal = function (obj) {
       return new Promise(function (resolve) {
         const entries = Object.entries(obj);
@@ -34,22 +46,7 @@ class ExtStore {
     }
   }
 
-  static create(values, defaults) {
-    const store = new ExtStore();
-    return Promise.all(Object.keys(values).map((key) => {
-      return store.setIfNull(values[key], defaults[key]);
-    }))
-      .then(() => store);
-  }
-
-  set(key, value) {
-    const payload = {[key]: value};
-    return key.endsWith('local')
-      ? this._setLocal(payload)
-      : this._setAsync(payload);
-  }
-
-  async get(key) {
+  async _innerGet (key) {
     const result = key.endsWith('local')
       ? await this._getLocal(key)
       : await this._getAsync(key);
@@ -57,14 +54,33 @@ class ExtStore {
     return result[key];
   }
 
+  _innerSet (key, value) {
+    const payload = {[key]: value};
+    return key.endsWith('local')
+      ? this._setLocal(payload)
+      : this._setAsync(payload);
+  }
+
+  async set(key, value) {
+    if (!this._isInit) await this._init();
+
+    return this._innerSet(key, value);
+  }
+
+  async get(key) {
+    if (!this._isInit) await this._init();
+
+    return this._innerGet(key);
+  }
+
   remove(key) {
     return this._removeAsync(key);
   }
 
   async setIfNull(key, val) {
-    const existingVal = await this.get(key);
+    const existingVal = await this._innerGet(key);
     if (existingVal == null) {
-      await this.set(key, val);
+      await this._innerSet(key, val);
     }
   }
 }
@@ -102,3 +118,5 @@ function promisify(fn, method) {
 function isSafari() {
   return typeof safari !== 'undefined' && safari.self && typeof safari.self.addEventListener === 'function';
 }
+
+window.extStore = new ExtStore(STORE, DEFAULTS)
