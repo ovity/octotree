@@ -310,8 +310,8 @@ class GitHub extends PjaxAdapter {
     }
 
     $.ajax(cfg)
-      .done((data, textStatus, jqXHR) => {
-        (async () => {
+      .then((data, textStatus, jqXHR) => {
+        return new Promise(async (resolve, reject) => {
           if (path && path.indexOf('/git/trees') === 0 && data.truncated) {
             const hugeRepos = await extStore.get(STORE.HUGE_REPOS);
             const repo = `${opts.repo.username}/${opts.repo.reponame}`;
@@ -326,8 +326,14 @@ class GitHub extends PjaxAdapter {
               await extStore.set(STORE.HUGE_REPOS, hugeRepos);
             }
             this._handleError(cfg, {status: 206}, cb);
-          } else cb(null, data, jqXHR);
-        })()
+          } else {
+            try {
+              cb(null, data, jqXHR);
+            } catch (err) {
+              return reject(err);
+            }
+          }
+        })
       })
       .fail((jqXHR) => this._handleError(cfg, jqXHR, cb));
   }

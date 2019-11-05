@@ -29,6 +29,8 @@ class TreeView {
     const $jstree = this.$jstree;
 
     $jstree.settings.core.data = (node, cb) => {
+      // This function does not accept an async function as its value
+      // Thus, we use an async anonymous function inside to fix it
       (async () => {
         const prMode = await extStore.get(STORE.PR) && repo.pullNumber;
         const loadAll = await this.adapter.canLoadEntireTree(repo) && (prMode || await extStore.get(STORE.LOADALL));
