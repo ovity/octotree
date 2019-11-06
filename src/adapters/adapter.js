@@ -1,8 +1,7 @@
 class Adapter {
-  constructor(deps, store) {
+  constructor(deps) {
     deps.forEach((dep) => window[dep]());
     this._defaultBranch = {};
-    this.store = store;
   }
 
   /**
@@ -31,7 +30,7 @@ class Adapter {
 
         submodules = submodules || {};
 
-        const nextChunk = (iteration = 0) => {
+        const nextChunk = async (iteration = 0) => {
           const CHUNK_SIZE = 300;
 
           for (let i = 0; i < CHUNK_SIZE; i++) {
@@ -66,7 +65,7 @@ class Adapter {
             // Uses `type` as class name for tree node
             item.icon = type;
 
-            octotree.setNodeIconAndText(this, item);
+            await octotree.setNodeIconAndText(this, item);
 
             if (item.patch) {
               item.text += `<span class="octotree-patch">${this.buildPatchHtml(item)}</span>`;
@@ -224,7 +223,7 @@ class Adapter {
    * a single request. This is usually determined by the underlying the API.
    * @api public
    */
-  canLoadEntireTree(opts) {
+  async canLoadEntireTree(opts) {
     return false;
   }
 

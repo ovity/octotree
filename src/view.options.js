@@ -1,6 +1,5 @@
 class OptionsView {
-  constructor($dom, store, adapter) {
-    this.store = store;
+  constructor($dom, adapter) {
     this.adapter = adapter;
     this.$toggler = $dom.find('.octotree-settings').click(this.toggle.bind(this));
     this.$view = $dom.find('.octotree-settings-view').submit((event) => {
@@ -67,14 +66,15 @@ class OptionsView {
   _save() {
     const changes = {};
     this._eachOption(
-      ($elm, key, value, cb) => {
+      async ($elm, key, value, cb) => {
         if ($elm.is(':radio') && !$elm.is(':checked')) {
           return cb();
         }
         const newValue = $elm.is(':checkbox') ? $elm.is(':checked') : $elm.val();
         if (value === newValue) return cb();
         changes[key] = [value, newValue];
-        this.store.set(key, newValue, cb);
+        await extStore.set(key, newValue);
+        cb();
       },
       () => {
         if (Object.keys(changes).length) {
@@ -87,13 +87,12 @@ class OptionsView {
   _eachOption(processFn, completeFn) {
     parallel(
       this.elements,
-      (elm, cb) => {
+      async (elm, cb) => {
         const $elm = $(elm);
         const key = STORE[$elm.data('store')];
+        const value = await extStore.get(key);
 
-        this.store.get(key, (value) => {
-          processFn($elm, key, value, () => cb());
-        });
+        processFn($elm, key, value, () => cb());
       },
       completeFn
     );

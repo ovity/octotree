@@ -1,13 +1,12 @@
 class HelpPopup {
-  constructor($dom, store) {
+  constructor($dom) {
     this.$view = $dom.find('.popup');
-    this.store = store;
   }
 
-  init() {
+  async init() {
     const $view = this.$view;
-    const store = this.store;
-    const popupShown = store.get(STORE.POPUP);
+    const store = extStore;
+    const popupShown = await extStore.get(STORE.POPUP);
     const sidebarVisible = $('html').hasClass(SHOW_CLASS);
 
     if (popupShown || sidebarVisible) {
@@ -21,8 +20,8 @@ class HelpPopup {
       $view.addClass('show').click(hideAndDestroy);
     }, 500);
 
-    function hideAndDestroy() {
-      store.set(STORE.POPUP, true);
+    async function hideAndDestroy() {
+      await store.set(STORE.POPUP, true);
       if ($view.hasClass('show')) {
         $view.removeClass('show').one('transitionend', () => $view.remove());
       } else {
