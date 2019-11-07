@@ -13,25 +13,6 @@ class ExtStore {
       this._isInit = true;
     }
 
-    this._setLocal = function (obj) {
-      return new Promise(function (resolve) {
-        const entries = Object.entries(obj);
-
-        if (entries.length > 0) {
-          const [key, value] = entries[0];
-          window.localStorage.setItem(key, value);
-          resolve();
-        }
-      });
-    }
-
-    this._getLocal = function (key) {
-      return new Promise(function (resolve) {
-        const value = window.localStorage.getItem(key);
-        resolve({[key]: value});
-      });
-    };
-
     this._removeLocal = promisify(window.localStorage, 'removeItem');
 
     // Safari hasn't supported storage at extension level yet. Fallback to localstorage
@@ -44,6 +25,40 @@ class ExtStore {
       this._getAsync = promisify(chrome.storage.local, 'get');
       this._removeAsync = promisify(chrome.storage.local, 'remove');
     }
+  }
+
+  _getLocal (key) {
+    return new Promise(function (resolve) {
+      var value = parse(localStorage.getItem(key));
+      resolve({[key]: value});
+    });
+
+    function parse(val) {
+      try {
+        return JSON.parse(val);
+      } catch (e) {
+        return val;
+      }
+    }
+  }
+
+  _setLocal (obj) {
+    return new Promise(function (resolve) {
+      const entries = Object.entries(obj);
+
+      if (entries.length > 0) {
+        const [key, value] = entries[0];
+        try {
+          localStorage.setItem(key, JSON.stringify(value));
+        } catch (e) {
+          const msg =
+            'Octotree cannot save its settings. ' +
+            'If the local storage for this domain is full, please clean it up and try again.';
+          console.error(msg, e);
+        }
+        resolve();
+      }
+    });
   }
 
   async _innerGet (key) {
