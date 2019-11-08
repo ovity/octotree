@@ -325,7 +325,7 @@ class GitHub extends PjaxAdapter {
               hugeRepos[repo] = new Date().getTime();
               await extStore.set(STORE.HUGE_REPOS, hugeRepos);
             }
-            this._handleError(cfg, {status: 206}, cb);
+            await this._handleError(cfg, {status: 206}, cb);
           } else {
             try {
               cb(null, data, jqXHR);
