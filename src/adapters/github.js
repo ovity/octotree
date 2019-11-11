@@ -310,28 +310,29 @@ class GitHub extends PjaxAdapter {
     }
 
     $.ajax(cfg)
-      .then((data, textStatus, jqXHR) => {
-        return new Promise(async (resolve, reject) => {
+      .done((data, textStatus, jqXHR) => {
+        (async () => {
           if (path && path.indexOf('/git/trees') === 0 && data.truncated) {
-            const hugeRepos = await extStore.get(STORE.HUGE_REPOS);
-            const repo = `${opts.repo.username}/${opts.repo.reponame}`;
-            const repos = Object.keys(hugeRepos);
-            if (!hugeRepos[repo]) {
-              // If there are too many repos memoized, delete the oldest one
-              if (repos.length >= GH_MAX_HUGE_REPOS_SIZE) {
-                const oldestRepo = repos.reduce((min, p) => (hugeRepos[p] < hugeRepos[min] ? p : min));
-                delete hugeRepos[oldestRepo];
-              }
-              hugeRepos[repo] = new Date().getTime();
-              await extStore.set(STORE.HUGE_REPOS, hugeRepos);
-            }
-            this._handleError(cfg, {status: 206}, cb);
-          } else {
             try {
-              cb(null, data, jqXHR);
-            } catch (err) {
-              return reject(err);
+              const hugeRepos = await extStore.get(STORE.HUGE_REPOS);
+              const repo = `${opts.repo.username}/${opts.repo.reponame}`;
+              const repos = Object.keys(hugeRepos);
+              if (!hugeRepos[repo]) {
+                // If there are too many repos memoized, delete the oldest one
+                if (repos.length >= GH_MAX_HUGE_REPOS_SIZE) {
+                  const oldestRepo = repos.reduce((min, p) => (hugeRepos[p] < hugeRepos[min] ? p : min));
+                  delete hugeRepos[oldestRepo];
+                }
+                hugeRepos[repo] = new Date().getTime();
+                await extStore.set(STORE.HUGE_REPOS, hugeRepos);
+              }
             }
+            catch (ignored) { }
+            finally {
+              await this._handleError(cfg, {status: 206}, cb);
+            }
+          } else {
+            cb(null, data, jqXHR);
           }
         })
       })

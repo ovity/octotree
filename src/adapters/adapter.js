@@ -137,7 +137,7 @@ class Adapter {
    * Generic error handler.
    * @api protected
    */
-  _handleError(settings, jqXHR, cb) {
+  async _handleError(settings, jqXHR, cb) {
     let error;
     let message;
 
@@ -154,7 +154,7 @@ class Adapter {
         break;
       case 401:
         error = 'Invalid token';
-        message = octotree.getInvalidTokenMessage({
+        message = await octotree.getInvalidTokenMessage({
           responseStatus: jqXHR.status,
           requestHeaders: settings.headers
         });
