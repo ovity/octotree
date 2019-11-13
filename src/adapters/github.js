@@ -326,15 +326,14 @@ class GitHub extends PjaxAdapter {
                 hugeRepos[repo] = new Date().getTime();
                 await extStore.set(STORE.HUGE_REPOS, hugeRepos);
               }
-            }
-            catch (ignored) { }
-            finally {
+            } catch (ignored) {
+            } finally {
               await this._handleError(cfg, {status: 206}, cb);
             }
           } else {
             cb(null, data, jqXHR);
           }
-        })
+        })();
       })
       .fail((jqXHR) => this._handleError(cfg, jqXHR, cb));
   }
