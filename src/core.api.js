@@ -87,7 +87,7 @@ class OctotreeService {
     }
   }
 
-  _shouldShowOctotree() {
+  async _shouldShowOctotree() {
     if ($(GH_404_SEL).length) {
       return false;
     }
