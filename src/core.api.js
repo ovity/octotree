@@ -61,11 +61,12 @@ class OctotreeService {
     this.getAccessToken = this._getAccessToken;
     this.shouldShowOctotree = this._shouldShowOctotree;
     this.getInvalidTokenMessage = this._getInvalidTokenMessage;
+    this.setNodeIconAndText = this._setNodeIconAndText;
   }
 
   // Private
   _getAccessToken() {
-    return window.store.get(window.STORE.TOKEN);
+    return window.extStore.get(window.STORE.TOKEN);
   }
 
   _getInvalidTokenMessage({responseStatus, requestHeaders}) {
@@ -75,7 +76,18 @@ class OctotreeService {
     );
   }
 
-  _shouldShowOctotree() {
+  async _setNodeIconAndText(context, item) {
+    if (item.type === 'blob') {
+      if (await extStore.get(STORE.ICONS)) {
+        const className = FileIcons.getClassWithColor(item.text);
+        item.icon += ' ' + (className || 'file-generic');
+      } else {
+        item.icon += ' file-generic';
+      }
+    }
+  }
+
+  async _shouldShowOctotree() {
     if ($(GH_404_SEL).length) {
       return false;
     }

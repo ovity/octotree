@@ -1,6 +1,5 @@
 class TreeView {
-  constructor($dom, store, adapter) {
-    this.store = store;
+  constructor($dom, adapter) {
     this.adapter = adapter;
     this.$view = $dom.find('.octotree-tree-view');
     this.$tree = this.$view
@@ -30,31 +29,35 @@ class TreeView {
     const $jstree = this.$jstree;
 
     $jstree.settings.core.data = (node, cb) => {
-      const prMode = this.store.get(STORE.PR) && repo.pullNumber;
-      const loadAll = this.adapter.canLoadEntireTree(repo) && (prMode || this.store.get(STORE.LOADALL));
+      // This function does not accept an async function as its value
+      // Thus, we use an async anonymous function inside to fix it
+      (async () => {
+        const prMode = await extStore.get(STORE.PR) && repo.pullNumber;
+        const loadAll = await this.adapter.canLoadEntireTree(repo) && (prMode || await extStore.get(STORE.LOADALL));
 
-      node = !loadAll && (node.id === '#' ? {path: ''} : node.original);
+        node = !loadAll && (node.id === '#' ? {path: ''} : node.original);
 
-      this.adapter.loadCodeTree({repo, token, node}, (err, treeData) => {
-        if (err) {
-          if (err.status === 206 && loadAll) {
-            // The repo is too big to load all, need to retry
-            $jstree.refresh(true);
+        this.adapter.loadCodeTree({repo, token, node}, (err, treeData) => {
+          if (err) {
+            if (err.status === 206 && loadAll) {
+              // The repo is too big to load all, need to retry
+              $jstree.refresh(true);
+            } else {
+              $(this).trigger(EVENT.FETCH_ERROR, [err]);
+            }
           } else {
-            $(this).trigger(EVENT.FETCH_ERROR, [err]);
+            treeData = this._sort(treeData);
+            if (loadAll) {
+              treeData = this._collapse(treeData);
+            }
+            cb(treeData);
           }
-        } else {
-          treeData = this._sort(treeData);
-          if (loadAll) {
-            treeData = this._collapse(treeData);
-          }
-          cb(treeData);
-        }
-      });
+        });
+      })()
     };
 
-    this.$tree.one('refresh.jstree', () => {
-      this.syncSelection(repo);
+    this.$tree.one('refresh.jstree', async () => {
+      await this.syncSelection(repo);
       $(this).trigger(EVENT.VIEW_READY);
     });
 
@@ -194,7 +197,7 @@ class TreeView {
     }
   }
 
-  syncSelection(repo) {
+  async syncSelection(repo) {
     const $jstree = this.$jstree;
     if (!$jstree) return;
 
@@ -204,7 +207,7 @@ class TreeView {
     if (!match) return;
 
     const currentPath = match[1];
-    const loadAll = this.adapter.canLoadEntireTree(repo) && this.store.get(STORE.LOADALL);
+    const loadAll = await this.adapter.canLoadEntireTree(repo) && await extStore.get(STORE.LOADALL);
 
     selectPath(loadAll ? [currentPath] : breakPath(currentPath));
 
