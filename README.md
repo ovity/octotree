@@ -1,6 +1,6 @@
 ## About
 
-Browser extension that brings GitHub experience to the next level. This repository contains the source code of Octotree core. You can build and run it locally to access all features of the free version. Or you can download the full version on [our website](https://www.octotree.io). Octotree support Chrome, Firefox, Opera and Safari.
+Browser extension that brings GitHub experience to the next level. This repository contains the source code of Octotree core. You can build and run it locally to access all features of the free version. Or you can download the full version on [our website](https://www.octotree.io). Octotree supports Chrome, Firefox, Opera and Safari.
 
 ![Octotree](docs/demo.gif)
 
@@ -58,6 +58,23 @@ After installing Octotree, navigate to your GitHub Enterprise site. Right-click 
 - **Repository and PR bookmark (Pro)**. When viewing a repository or pull request, you can click the bookmark icon next to its title to bookmark it. You can view all bookmarks by clicking the bookmark icon in Octotree header.
 - **Octotree visibility (Pro)**. Control which pages Octotree will show up in by choosing among the provided options.
 - **Repository caching (Pro)**. Whether to cache the repository file structure in **local machine cache** (via browser Cache API). This speeds up loading of large repositories and reduces the number of API requests to GitHub.
+
+### Browser Permissions
+
+Octotree Core (built from source from this repo) requires some [browser permissions](https://developer.chrome.com/extensions/declare_permissions):
+
+* Read/change data in `github.com` and `api.github.com`: needed to show Octotree and make requests to GitHub API
+* `storage`: needed to store Octotree settings
+
+The full version of Octotree requires these additional permissions:
+
+* Read/change data in `octotree.io`: needed to authenticate users and load/store bookmarks from Octotree API
+* `contextMenus`: needed to show Octotree context menu items
+* `activeTab`: needed for context menu actions to enable/disable Octotree in GitHub Enterprise domains
+* `webNavigation` (optional): needed to enable Octotree in GitHub Enterprise domains
+* `tabs` (optional): needed to enable Octotree in GitHub Enterprise domains
+
+*Note for those enabling Octotree in a GitHub Enterprise domain:* when enabling Octotree in a GitHub Enterprise domain, browsers request the "Read your browsing history" permission in order to grant the `tabs` and `webNavigation` permissions. Octotree doesn't request the `history` permission and it doesn't collect/share/care about your data at all. See [this discussion](https://github.com/ovity/octotree/issues/844#issuecomment-557364850) for more details.
 
 ### Credits
 
