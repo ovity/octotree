@@ -72,7 +72,7 @@ The full version of Octotree requires these additional permissions:
 * `contextMenus`: needed to show Octotree context menu items
 * `activeTab`: needed for context menu actions to trigger enabling/disabling Octotree in GitHub Enterprise domains
 
-The following permissions are optional and only needed when you enable Octotree in a GitHub Enterprise domain:
+The following permissions are **optional** and only requested when you enable Octotree in a GitHub Enterprise domain:
 
 * `webNavigation` (**optional**): needed to inject Octotree sidebar in GitHub Enterprise domains
 * `tabs` (**optional**): needed to inject Octotree sidebar in GitHub Enterprise domains
