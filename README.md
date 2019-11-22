@@ -74,7 +74,7 @@ The full version of Octotree requires these additional permissions:
 * `webNavigation` (optional): needed to enable Octotree in GitHub Enterprise domains
 * `tabs` (optional): needed to enable Octotree in GitHub Enterprise domains
 
-*Note for those enabling Octotree in a GitHub Enterprise domain:* when enabling Octotree in a GitHub Enterprise domain, browsers request the "Read your browsing history" permission in order to grant the `tabs` and `webNavigation` permissions. Octotree doesn't request the `history` permission and it doesn't collect/share/care about your data at all. See [this discussion](https://github.com/ovity/octotree/issues/844#issuecomment-557364850) for more details.
+*Note for those enabling Octotree in a GitHub Enterprise domain:* when enabling Octotree in a GitHub Enterprise domain, browsers request the "Read your browsing history" permission in order to grant the `tabs` and `webNavigation` permissions. That's a bit confusing as Octotree doesn't request the `history` permission or collect/share/care about your data. See [this discussion](https://github.com/ovity/octotree/issues/844#issuecomment-557364850) for more details.
 
 ### Credits
 
