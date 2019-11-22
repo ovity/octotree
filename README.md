@@ -70,11 +70,14 @@ The full version of Octotree requires these additional permissions:
 
 * Read/change data in `octotree.io`: needed to authenticate users and load/store bookmarks from Octotree API
 * `contextMenus`: needed to show Octotree context menu items
-* `activeTab`: needed for context menu actions to enable/disable Octotree in GitHub Enterprise domains
-* `webNavigation` (optional): needed to enable Octotree in GitHub Enterprise domains
-* `tabs` (optional): needed to enable Octotree in GitHub Enterprise domains
+* `activeTab`: needed for context menu actions to trigger enabling/disabling Octotree in GitHub Enterprise domains
 
-*Note for those enabling Octotree in a GitHub Enterprise domain:* when enabling Octotree in a GitHub Enterprise domain, browsers request the "Read your browsing history" permission in order to grant the `tabs` and `webNavigation` permissions. That's a bit confusing as Octotree doesn't request the `history` permission or collect/share/care about your data. See [this discussion](https://github.com/ovity/octotree/issues/844#issuecomment-557364850) for more details.
+The following permissions are optional and only needed when you enable Octotree in a GitHub Enterprise domain:
+
+* `webNavigation` (**optional**): needed to inject Octotree sidebar in GitHub Enterprise domains
+* `tabs` (**optional**): needed to inject Octotree sidebar in GitHub Enterprise domains
+
+*Note:* when enabling Octotree in a GitHub Enterprise domain, browsers request the "Read your browsing history" permission in order to grant the `tabs` and `webNavigation` permissions. That's a bit confusing as Octotree doesn't request the `history` permission or collect/share/care about your data. See [this discussion](https://github.com/ovity/octotree/issues/844#issuecomment-557364850) for more details.
 
 ### Credits
 
