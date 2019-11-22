@@ -1,6 +1,6 @@
 ## About
 
-Browser extension that brings GitHub experience to the next level. This repository contains the source code of Octotree core. You can build and run it locally to access all features of the free version. Or you can download the full version on [our website](https://www.octotree.io). Octotree supports Chrome, Firefox, Opera and Safari.
+Browser extension that brings GitHub experience to the next level. This repository contains the source code of Octotree Core. You can build and run it locally to access all features of the free version. Or you can download the full version on [our website](https://www.octotree.io). Octotree supports Chrome, Firefox, Opera and Safari.
 
 ![Octotree](docs/demo.gif)
 
@@ -81,7 +81,7 @@ The following permissions are **optional** and only requested when you enable Oc
 
 ### Credits
 
-Octotree and Octotree Pro use the following open-source software:
+Octotree uses the following open-source software:
 
 - [jQuery](https://github.com/jquery/jquery)
 - [jQuery UI](https://github.com/jquery/jquery-ui)
