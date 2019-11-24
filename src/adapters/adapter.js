@@ -279,7 +279,6 @@ class Adapter {
     window.location.href = path;
   }
 
-
   /**
    * Selects a submodule.
    * @api public
