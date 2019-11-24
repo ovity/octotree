@@ -17,9 +17,11 @@ class ExtStore {
       this._isInitialized = true;
     }
 
-    this._setInExtensionStorage = promisify(chrome.storage.local, 'set');
-    this._getInExtensionStorage = promisify(chrome.storage.local, 'get');
-    this._removeInExtensionStorage = promisify(chrome.storage.local, 'remove');
+    if (!this._isSafari) {
+      this._setInExtensionStorage = promisify(chrome.storage.local, 'set');
+      this._getInExtensionStorage = promisify(chrome.storage.local, 'get');
+      this._removeInExtensionStorage = promisify(chrome.storage.local, 'remove');
+    }
   }
 
   // Public
