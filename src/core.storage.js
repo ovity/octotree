@@ -1,4 +1,3 @@
-
 class ExtStore {
   constructor(values, defaults) {
     this._isInit = false;
@@ -12,8 +11,6 @@ class ExtStore {
   
       this._isInit = true;
     }
-
-    this._removeLocal = promisify(window.localStorage, 'removeItem');
 
     // Safari hasn't supported storage at extension level yet. Fallback to localstorage
     if (isSafari()) {
@@ -58,6 +55,13 @@ class ExtStore {
         }
         resolve();
       }
+    });
+  }
+
+  _removeLocal (key) {
+    return new Promise(function (resolve) {
+      localStorage.removeItem(key);
+      resolve();
     });
   }
 
