@@ -127,7 +127,11 @@ $(document).ready(() => {
       const token = await octotree.getAccessToken();
       await adapter.getRepoFromPath(currRepo, token, async (err, repo) => {
         if (err) {
+          // Error making API, likely private repo but no token
           await showError(err);
+          if (!isSidebarVisible()) {
+            $toggler.show();
+          }
         } else if (repo) {
           if (await extStore.get(STORE.PINNED) && !isSidebarVisible()) {
             // If we're in pin mode but sidebar doesn't show yet, show it.
