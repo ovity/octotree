@@ -1,32 +1,75 @@
 class ExtStore {
   constructor(values, defaults) {
-    this._isInit = false;
+    this._isInitialized = false;
+    this._isSafari = isSafari();
 
-    this._init = async function () {
-      if (this._isInit) return;
-  
-      await Promise.all(Object.keys(values).map((key) => {
-        return this.setIfNull(values[key], defaults[key]);
+    // Initialize default values
+    this._init = async () => {
+      if (this._isInitialized) return;
+
+      await Promise.all(Object.keys(values).map(async (key) => {
+        const existingVal = await this._innerGet(values[key]);
+        if (existingVal == null) {
+          await this._innerSet(values[key], defaults[key]);
+        }
       }));
-  
-      this._isInit = true;
+
+      this._isInitialized = true;
     }
 
-    // Safari hasn't supported storage at extension level yet. Fallback to localstorage
-    if (isSafari()) {
-      this._setAsync = this._setLocal;
-      this._getAsync = this._getLocal;
-      this._removeAsync = this._removeLocal;
-    } else {
-      this._setAsync = promisify(chrome.storage.local, 'set');
-      this._getAsync = promisify(chrome.storage.local, 'get');
-      this._removeAsync = promisify(chrome.storage.local, 'remove');
+    this._setInExtensionStorage = promisify(chrome.storage.local, 'set');
+    this._getInExtensionStorage = promisify(chrome.storage.local, 'get');
+    this._removeInExtensionStorage = promisify(chrome.storage.local, 'remove');
+  }
+
+  // Public
+  async set(key, value) {
+    if (!this._isInitialized) await this._init();
+    return this._innerSet(key, value);
+  }
+
+  async get(key) {
+    if (!this._isInitialized) await this._init();
+    return this._innerGet(key);
+  }
+
+  async remove(key) {
+    if (!this._isInitialized) await this._init();
+    return this._innerRemove(key);
+  }
+
+  async setIfNull(key, val) {
+    const existingVal = await this.get(key);
+    if (existingVal == null) {
+      await this.set(key, val);
     }
   }
 
+  // Private
+  async _innerGet (key) {
+    const result = (key.endsWith('local') || this._isSafari)
+      ? await this._getLocal(key)
+      : await this._getInExtensionStorage(key);
+
+    return result[key];
+  }
+
+  _innerSet (key, value) {
+    const payload = {[key]: value};
+    return (key.endsWith('local') || this._isSafari)
+      ? this._setLocal(payload)
+      : this._setInExtensionStorage(payload);
+  }
+
+  _innerRemove (key) {
+    return (key.endsWith('local') || this._isSafari)
+      ? this._removeLocal(key)
+      : this._removeInExtensionStorage(key);
+  }
+
   _getLocal (key) {
-    return new Promise(function (resolve) {
-      var value = parse(localStorage.getItem(key));
+    return new Promise((resolve) => {
+      const value = parse(localStorage.getItem(key));
       resolve({[key]: value});
     });
 
@@ -40,7 +83,7 @@ class ExtStore {
   }
 
   _setLocal (obj) {
-    return new Promise(function (resolve) {
+    return new Promise((resolve) => {
       const entries = Object.entries(obj);
 
       if (entries.length > 0) {
@@ -59,58 +102,13 @@ class ExtStore {
   }
 
   _removeLocal (key) {
-    return new Promise(function (resolve) {
+    return new Promise((resolve) => {
       localStorage.removeItem(key);
       resolve();
     });
   }
-
-  async _innerGet (key) {
-    const result = key.endsWith('local')
-      ? await this._getLocal(key)
-      : await this._getAsync(key);
-
-    return result[key];
-  }
-
-  _innerSet (key, value) {
-    const payload = {[key]: value};
-    return key.endsWith('local')
-      ? this._setLocal(payload)
-      : this._setAsync(payload);
-  }
-
-  async set(key, value) {
-    if (!this._isInit) await this._init();
-
-    return this._innerSet(key, value);
-  }
-
-  async get(key) {
-    if (!this._isInit) await this._init();
-
-    return this._innerGet(key);
-  }
-
-  remove(key) {
-    return this._removeAsync(key);
-  }
-
-  async setIfNull(key, val) {
-    const existingVal = await this._innerGet(key);
-    if (existingVal == null) {
-      await this._innerSet(key, val);
-    }
-  }
 }
 
-/**
- *
- * @param {context function} fn
- * @param {method in context function} method
- *
- * Passing method to call context function in order to remain the context execution
- */
 function promisify(fn, method) {
   if (typeof fn[method] !== 'function') {
     throw new Error(`promisify: fn does not have ${method} method`);
@@ -119,11 +117,6 @@ function promisify(fn, method) {
   return function(...args) {
     return new Promise(function(resolve, reject) {
       fn[method](...args, function(res) {
-        // No method for detecting error in Safari extension
-        if (isSafari()) {
-          return resolve(res);
-        }
-
         if (chrome.runtime.lastError) {
           reject(chrome.runtime.lastError);
         } else {
