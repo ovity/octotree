@@ -41,7 +41,14 @@ Learn more at [keymaster](https://github.com/madrobby/keymaster#supported-keys).
 
 _Note: GitHub Enterprise is not supported on Safari._
 
-After installing Octotree, navigate to your GitHub Enterprise site. Right-click the Octotree icon in the browser bar (see the image below) and select "Enable Octotree on this domain". The page should refresh and Octotree Pro sidebar should show up. Alternatively, you can disable Octotree Pro on a domain by selecting "Disable Octotree on this domain".
+Follow these steps to enable Octotree for GitHub Enterprise:
+
+* Navigate to any repository on github.com (**not** GitHub Enterprise)
+* Open the Octotree sidebar
+* Click the login link in the footer (or in Settings view)
+* Login using your Octotree account
+* Navigate to your GitHub Enterprise domain
+* Right-click the Octotree icon the browser bar (see image below) select "Enable Octotree on this domain"
 
 ![GitHub Enterprise](docs/pro-ghe.png)
 
