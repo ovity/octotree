@@ -79,12 +79,12 @@ The full version of Octotree requires these additional permissions:
 * `contextMenus`: needed to show Octotree context menu items
 * `activeTab`: needed for context menu actions to trigger enabling/disabling Octotree in GitHub Enterprise domains
 
-The following permissions are **optional** and only requested when you enable Octotree in a GitHub Enterprise domain:
+The following permissions are **optional** and only requested when you enable Octotree in a GitHub Enterprise domain (\*):
 
-* `webNavigation` (**optional**): needed to inject Octotree sidebar in GitHub Enterprise domains
-* `tabs` (**optional**): needed to inject Octotree sidebar in GitHub Enterprise domains
+* `webNavigation`: needed to inject Octotree sidebar in GitHub Enterprise domains
+* `tabs`: needed to inject Octotree sidebar in GitHub Enterprise domains
 
-*Note:* when enabling Octotree in a GitHub Enterprise domain, browsers request the "Read your browsing history" permission in order to grant the `tabs` and `webNavigation` permissions. That's a bit confusing as Octotree doesn't request the `history` permission or collect/share/care about your data. See [this discussion](https://github.com/ovity/octotree/issues/844#issuecomment-557364850) for more details.
+\*: when enabling Octotree in a GitHub Enterprise domain, Chrome displays the prompt for the "Read your browsing history" permission. That's a bit confusing as Octotree doesn't request the `history` permission or collect your data at all. See [this discussion](https://github.com/ovity/octotree/issues/844#issuecomment-557364850) for more details. Firefox, on the other hand, is clearer about the specific permissions being requested by Octotree.
 
 ### Credits
 
