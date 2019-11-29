@@ -58,13 +58,13 @@ Follow these steps to enable Octotree for GitHub Enterprise:
 - **Load entire tree at once**. If checked, load and render the entire repository file structure at once. Otherwise, Octotree loads when a specific directory is clicked. For large repos where Octotree can't load in a single request, Octotree ignores this settings and lazily-loads the repo.
 - **Show file-specific icons**. If checked, show different icons for different file types.
 - **Show only pull request changes**. If checked, show only the change set of the current pull request. Otherwise, show the full code tree.
+- **Enable Octotree in pages (Pro)**. Control which pages Octotree will show up in by choosing among the provided options.
+- **Cache repositories locally (Pro)**. Whether to cache the repository file structure in **local machine cache** (via browser Cache API). This speeds up loading of large repositories and reduces the number of API requests to GitHub.
 - **Enhanced code review (Pro)**. In the Pull Request page, you will automatically see file comments and file view status.
 - **Multiple themes (Pro)**. Click the theme icon located at the bottom of Octotree to select a color theme. The "Only Sidebar" theme changes the Octotree sidebar to the dark theme without changing the theme of the GitHub page.
-- **File search (Pro)**. Click the search icon to start file search. Note that this requires the "Load entire tree at once" option to be selected.
 - **Change docking position (Pro)**. Click the dock icon at the footer of Octotree to change the sidebar location to the right or left of the screen.
+- **File search (Pro)**. Click the search icon to start file search. Note that this requires the "Load entire tree at once" option to be selected.
 - **Repository and PR bookmark (Pro)**. When viewing a repository or pull request, you can click the bookmark icon next to its title to bookmark it. You can view all bookmarks by clicking the bookmark icon in Octotree header.
-- **Octotree visibility (Pro)**. Control which pages Octotree will show up in by choosing among the provided options.
-- **Repository caching (Pro)**. Whether to cache the repository file structure in **local machine cache** (via browser Cache API). This speeds up loading of large repositories and reduces the number of API requests to GitHub.
 
 ### Browser Permissions
 
