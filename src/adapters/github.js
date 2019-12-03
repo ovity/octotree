@@ -43,6 +43,8 @@ class GitHub extends PjaxAdapter {
 
   // @override
   async canLoadEntireTree(repo) {
+    const prMode = await extStore.get(STORE.PR) && repo.pullNumber;
+    if (prMode) return true;
     const key = `${repo.username}/${repo.reponame}`;
     const hugeRepos = await extStore.get(STORE.HUGE_REPOS);
     if (hugeRepos[key]) {
