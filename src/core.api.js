@@ -62,6 +62,7 @@ class OctotreeService {
     this.shouldShowOctotree = this._shouldShowOctotree;
     this.getInvalidTokenMessage = this._getInvalidTokenMessage;
     this.setNodeIconAndText = this._setNodeIconAndText;
+    this.loadAllTree = this._loadAllTree;
   }
 
   // Private
@@ -87,6 +88,16 @@ class OctotreeService {
     }
   }
 
+  async _loadAllTree(context, repo) {
+    const prMode = await extStore.get(STORE.PR) && repo.pullNumber;
+    // Lazy load is not supported in PR mode.
+    if (prMode) return true;
+
+    const loadAll = await context.adapter.canLoadEntireTree(repo) && await extStore.get(STORE.LOADALL);
+    
+    return loadAll;
+  }
+  
   async _shouldShowOctotree() {
     if ($(GH_404_SEL).length) {
       return false;
