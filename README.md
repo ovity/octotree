@@ -55,7 +55,7 @@ Follow these steps to enable Octotree for GitHub Enterprise:
 ### Others
 
 - **Show sidebar on hover**. If checked, hover the Octotree button to open the sidebar. Otherwise, click the button to open the sidebar.
-- **Load entire tree at once**. If checked, load and render the entire repository file structure at once. Otherwise, Octotree loads when a specific directory is clicked. For large repos where Octotree can't load in a single request, Octotree ignores this settings and lazily-loads the repo.
+- **Load code tree lazily**. By default, Octotree loads everything in a single API request to render the full code tree. If you frequently work with big repositories, you should select this option so that Octotree only loads and renders the code tree lazily.
 - **Show file-specific icons**. If checked, show different icons for different file types.
 - **Show only pull request changes**. If checked, show only the change set of the current pull request. Otherwise, show the full code tree.
 - **Enable Octotree in pages (Pro)**. Control which pages Octotree will show up in by choosing among the provided options.
