@@ -56,7 +56,7 @@ class GitHub extends PjaxAdapter {
     // Else, return true only if it isn't in a huge repo list, which we must lazy load
     const key = `${repo.username}/${repo.reponame}`;
     const hugeRepos = await extStore.get(STORE.HUGE_REPOS);
-    if (hugeRepos[key]) {
+    if (hugeRepos[key] && isValidTimeStamp(hugeRepos[key])) {
       // Update the last load time of the repo
       hugeRepos[key] = new Date().getTime();
       await extStore.set(STORE.HUGE_REPOS, hugeRepos);
@@ -327,7 +327,7 @@ class GitHub extends PjaxAdapter {
             try {
               const hugeRepos = await extStore.get(STORE.HUGE_REPOS);
               const repo = `${opts.repo.username}/${opts.repo.reponame}`;
-              const repos = Object.keys(hugeRepos);
+              const repos = Object.keys(hugeRepos).filter((hugeRepoKey) => isValidTimeStamp(hugeRepos[hugeRepoKey]));
               if (!hugeRepos[repo]) {
                 // If there are too many repos memoized, delete the oldest one
                 if (repos.length >= GH_MAX_HUGE_REPOS_SIZE) {
