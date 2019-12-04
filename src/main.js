@@ -100,7 +100,7 @@ $(document).ready(() => {
 
         switch (storeKey) {
           case STORE.TOKEN:
-          case STORE.LOADALL:
+          case STORE.LAZYLOAD:
           case STORE.ICONS:
           case STORE.PR:
             reload = true;

@@ -48,11 +48,12 @@ class GitHub extends PjaxAdapter {
       return true;
     }
 
-    const isGlobalLoadAll = await extStore.get(STORE.LOADALL);
-    if (!isGlobalLoadAll) {
+    const isGlobalLazyLoad = await extStore.get(STORE.LAZYLOAD);
+    if (isGlobalLazyLoad) {
       return false;
     }
 
+    // Else, return true only if it isn't in a huge repo list, which we must lazy load
     const key = `${repo.username}/${repo.reponame}`;
     const hugeRepos = await extStore.get(STORE.HUGE_REPOS);
     if (hugeRepos[key]) {

@@ -11,12 +11,12 @@
         </div>
       </div>
     </div>
-    
+
     <div class="octotree-main-icons">
       <a class="octotree-pin" data-store="PINNED">
         <span class="tooltipped tooltipped-s" aria-label="Pin this sidebar"> <i class="octotree-icon-pin"></i> </span>
       </a>
-      
+
       <a class="octotree-settings">
         <span class="tooltipped tooltipped-s" aria-label="Settings"> <i class="octotree-icon-settings"></i> </span>
       </a>
@@ -86,7 +86,8 @@
             <label><input type="checkbox" data-store="HOVEROPEN" /> <span>Show sidebar on hover</span></label>
           </div>
           <div>
-            <label><input type="checkbox" data-store="LOADALL" /> <span>Load entire tree at once</span></label>
+            <label><input type="checkbox" data-store="LAZYLOAD" /> <span>Lazy-load tree data</span></label>
+            <span class="octotree-disclaimer is-margin-left text-gray">Good for large repositories</span>
           </div>
           <div>
             <label><input type="checkbox" data-store="ICONS" /> <span>Show file-specific icons</span></label>
@@ -94,7 +95,7 @@
           <div>
             <label>
               <input type="checkbox" data-store="PR" /> <span>Show pull request changes</span>
-              <span class="octotree-disclaimer is-margin-left text-gray">Note: maximum of 300 files</span>
+              <span class="octotree-disclaimer is-margin-left text-gray">Maximum of 300 files</span>
             </label>
           </div>
           <div><button class="btn btn-primary">Apply settings</button></div>
