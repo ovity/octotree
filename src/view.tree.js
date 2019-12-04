@@ -32,8 +32,7 @@ class TreeView {
       // This function does not accept an async function as its value
       // Thus, we use an async anonymous function inside to fix it
       (async () => {
-        const prMode = await extStore.get(STORE.PR) && repo.pullNumber;
-        const loadAll = await this.adapter.canLoadEntireTree(repo) && (prMode || await extStore.get(STORE.LOADALL));
+        const loadAll = await this.adapter.shouldLoadEntireTree(repo);
 
         node = !loadAll && (node.id === '#' ? {path: ''} : node.original);
 
@@ -207,7 +206,7 @@ class TreeView {
     if (!match) return;
 
     const currentPath = match[1];
-    const loadAll = await this.adapter.canLoadEntireTree(repo) && await extStore.get(STORE.LOADALL);
+    const loadAll = await this.adapter.shouldLoadEntireTree(repo);
 
     selectPath(loadAll ? [currentPath] : breakPath(currentPath));
 

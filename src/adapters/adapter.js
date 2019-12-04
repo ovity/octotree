@@ -219,11 +219,10 @@ class Adapter {
   }
 
   /**
-   * Returns whether the adapter is capable of loading the entire tree in
-   * a single request. This is usually determined by the underlying the API.
+   * Returns whether we should load the entire tree in a single request.
    * @api public
    */
-  async canLoadEntireTree(opts) {
+  async shouldLoadEntireTree(opts) {
     return false;
   }
 
