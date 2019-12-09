@@ -4,7 +4,7 @@ Browser extension that brings GitHub experience to the next level. This reposito
 
 ![Octotree](docs/demo.gif)
 
-## Features and Settings
+## Settings
 
 ### Access Token
 
@@ -37,7 +37,20 @@ Hotkeys to pin or unpin the sidebar. You can enter multiple hotkeys by separatin
 
 Learn more at [keymaster](https://github.com/madrobby/keymaster#supported-keys).
 
-#### GitHub Enterprise (Pro)
+### Others
+
+- **Show sidebar on hover**. If checked, hover the Octotree button to open the sidebar. Otherwise, click the button to open the sidebar.
+- **Lazy-load code tree**. By default, Octotree loads everything in a single API request to render the full code tree. If you frequently work with big repositories, you should select this option so that Octotree only loads and renders the code tree lazily.
+- **Show file-type icons**. If checked, show different icons for different file types.
+- **Show only pull request changes**. If checked, show only the change set of the current pull request. Otherwise, show the full code tree.
+- **Enable Octotree in pages (Pro)**. Control the GitHub pages in which Octotree shows up.
+- **Cache repositories locally (Pro)**. Whether to cache the repository file structure in **local machine cache** (via browser Cache API). This speeds up loading of large repositories and reduces the number of API requests to GitHub.
+
+## Pro Features
+
+The following features require Pro subscription.
+
+### GitHub Enterprise
 
 _Note: GitHub Enterprise is not supported on Safari._
 
@@ -52,21 +65,44 @@ Follow these steps to enable Octotree for GitHub Enterprise:
 
 ![GitHub Enterprise](docs/pro-ghe.png)
 
-### Others
+### Lazy-load a specific repository
 
-- **Show sidebar on hover**. If checked, hover the Octotree button to open the sidebar. Otherwise, click the button to open the sidebar.
-- **Load code tree lazily**. By default, Octotree loads everything in a single API request to render the full code tree. If you frequently work with big repositories, you should select this option so that Octotree only loads and renders the code tree lazily.
-- **Show file-specific icons**. If checked, show different icons for different file types.
-- **Show only pull request changes**. If checked, show only the change set of the current pull request. Otherwise, show the full code tree.
-- **Enable Octotree in pages (Pro)**. Control which pages Octotree will show up in by choosing among the provided options.
-- **Cache repositories locally (Pro)**. Whether to cache the repository file structure in **local machine cache** (via browser Cache API). This speeds up loading of large repositories and reduces the number of API requests to GitHub.
-- **Enhanced code review (Pro)**. In the Pull Request page, you will automatically see file comments and file view status.
-- **Multiple themes (Pro)**. Click the theme icon located at the bottom of Octotree to select a color theme. The "Only Sidebar" theme changes the Octotree sidebar to the dark theme without changing the theme of the GitHub page.
-- **Change docking position (Pro)**. Click the dock icon at the footer of Octotree to change the sidebar location to the right or left of the screen.
-- **File search (Pro)**. Click the search icon to start file search. Note that this requires the "Load entire tree at once" option to be selected.
-- **Repository and PR bookmark (Pro)**. When viewing a repository or pull request, you can click the bookmark icon next to its title to bookmark it. You can view all bookmarks by clicking the bookmark icon in Octotree header.
+Activate lazy-loading for specific repositories by clicking the ⚡️ icon in the Octotree sidebar header.
 
-### Browser Permissions
+Lazy-loading is helpful when you work with a big repositories (e.g. Linux, Kubernetes). The drawback is it doesn't feel as smooth as non-lazy-loading because Octotree has to make additional requests and render each subdirectory when you click on it. By activating lazy-loading only for large repositories, you'll have the best of both worlds.
+
+### Enhanced code review
+
+In the Pull Request page, Octotree shows file comments and file view status. The "Show non-file comments" group shows those comments that are added to the pull request, not to individual files. The file view status display in the Octotree sidebar helps you review large pull requests easier.
+
+### Multiple themes
+
+Click the theme icon located at the bottom of Octotree to select a color theme. The "Only Sidebar" theme changes the Octotree sidebar to the dark theme without changing the theme of the GitHub page. This is helpful if you already use another mechanism to show GitHub in dark mode.
+
+### Change docking position
+
+Click the dock icon at the footer of Octotree to change the sidebar location to the right or left of the screen.
+
+### Repository and PR bookmark
+
+When viewing a repository or pull request, you can click the bookmark icon next to its title to bookmark it. You can view all bookmarks by clicking the bookmark icon in Octotree header.
+
+### File search
+
+Click the search icon to start file search.
+
+Note that when lazy-loading is used, search only works with directories and files that were loaded.
+
+### Collapse tree
+
+Click the collapse tree icon at the Octotree sidebar header to collapse the code tree.
+
+### View full file
+
+Click to view the entire file with diffs. For large files, this might take a while.
+
+
+## Browser Permissions
 
 Octotree Core (built from source from this repo) requires some [browser permissions](https://developer.chrome.com/extensions/declare_permissions):
 
@@ -86,7 +122,7 @@ The following permissions are **optional** and only requested when you enable Oc
 
 \*: when enabling Octotree in a GitHub Enterprise domain, Chrome displays the prompt for the "Read your browsing history" permission. That's a bit confusing as Octotree doesn't request the `history` permission or collect your data at all. See [this discussion](https://github.com/ovity/octotree/issues/844#issuecomment-557364850) for more details. Firefox, on the other hand, is clearer about the specific permissions being requested by Octotree.
 
-### Credits
+## Credits
 
 Octotree uses the following open-source software:
 
