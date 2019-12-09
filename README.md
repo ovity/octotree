@@ -69,11 +69,11 @@ Follow these steps to enable Octotree for GitHub Enterprise:
 
 Activate lazy-loading for specific repositories by clicking the ⚡️ icon in the Octotree sidebar header.
 
-Lazy-loading is helpful when you work with a big repositories (e.g. Linux, Kubernetes). The drawback is it doesn't feel as smooth as non-lazy-loading because Octotree has to make additional requests and render each subdirectory when you click on it. By activating lazy-loading only for large repositories, you'll have the best of both worlds.
+Lazy-loading is helpful when you work with a big repositories (e.g. Linux, Kubernetes). The drawback is it doesn't feel as smooth as non-lazy-loading because Octotree has to make an API request and render every subdirectory as you click on it. By activating lazy-loading only for large repositories, you'll have the best of both worlds.
 
 ### Enhanced code review
 
-In the Pull Request page, Octotree shows file comments and file view status. The "Show non-file comments" group shows those comments that are added to the pull request, not to individual files. The file view status display in the Octotree sidebar helps you review large pull requests easier.
+In the Pull Request page, Octotree shows file comments and file view status. The "Show non-file comments" group shows those comments that are added to the pull request, not to individual files. The file view status displayed in the Octotree sidebar helps you review large pull requests easier.
 
 ### Multiple themes
 
@@ -85,22 +85,21 @@ Click the dock icon at the footer of Octotree to change the sidebar location to 
 
 ### Repository and PR bookmark
 
-When viewing a repository or pull request, you can click the bookmark icon next to its title to bookmark it. You can view all bookmarks by clicking the bookmark icon in Octotree header.
+You can click the bookmark icon next to a repository or pull request title to bookmark it. You can view the list of bookmarks by clicking the bookmark icon in Octotree header.
 
 ### File search
 
 Click the search icon to start file search.
 
-Note that when lazy-loading is used, search only works with directories and files that were loaded.
+Note that when lazy-loading is used, search only works with directories and files that were already loaded.
+
+### View full file
+
+Sometimes, it's necessary to view the surrounding code around a diff. But keep clicking "Expand" is a pain. Octotree solves that. You can click the "View full" button at the top of each file in a pull request to view the entire file in a popup, with all the diffs.
 
 ### Collapse tree
 
 Click the collapse tree icon at the Octotree sidebar header to collapse the code tree.
-
-### View full file
-
-Click to view the entire file with diffs. For large files, this might take a while.
-
 
 ## Browser Permissions
 
