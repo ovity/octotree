@@ -42,13 +42,13 @@ Learn more at [keymaster](https://github.com/madrobby/keymaster#supported-keys).
 - **Show sidebar on hover**. If checked, hover the Octotree button to open the sidebar. Otherwise, click the button to open the sidebar.
 - **Lazy-load code tree**. By default, Octotree loads everything in a single API request to render the full code tree. If you frequently work with big repositories, you should select this option so that Octotree only loads and renders the code tree lazily.
 - **Show file-type icons**. If checked, show different icons for different file types.
-- **Show only pull request changes**. If checked, show only the change set of the current pull request. Otherwise, show the full code tree.
+- **Show only pull request changes**. If checked, show only the change set of the current pull request. Otherwise, show the full code tree. If a PR has more than 300 files, only 300 are shown.
 - **Enable Octotree in pages (Pro)**. Control the GitHub pages in which Octotree shows up.
 - **Cache repositories locally (Pro)**. Whether to cache the repository file structure in **local machine cache** (via browser Cache API). This speeds up loading of large repositories and reduces the number of API requests to GitHub.
 
 ## Pro Features
 
-The following features require Pro subscription.
+The following features require [Pro subscription](https://www.octotree.io/pricing).
 
 ### GitHub Enterprise
 
