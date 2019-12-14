@@ -93,9 +93,9 @@ Click the search icon to start file search.
 
 Note that when lazy-loading is used, search only works with directories and files that were already loaded.
 
-### View full file
+### View full PR changed file
 
-Sometimes, it's necessary to view the surrounding code around a diff. But keep clicking "Expand" is a pain. Octotree solves that. You can click the "View full" button at the top of each file in a pull request to view the entire file in a popup, with all the diffs.
+Sometimes, it's necessary to view the entire changed file in a pull request. But keep clicking "Expand" is a pain. Octotree solves that. You can click the "View full" button at the top of each file in a pull request to view its entire content and all the diffs.
 
 ### Collapse tree
 
