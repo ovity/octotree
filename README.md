@@ -83,9 +83,9 @@ Click the theme icon located at the bottom of Octotree to select a color theme. 
 
 Click the dock icon at the footer of Octotree to change the sidebar location to the right or left of the screen.
 
-### Repository and PR bookmark
+### Repo/PR/issue/file bookmark
 
-You can click the bookmark icon next to a repository or pull request title to bookmark it. You can view the list of bookmarks by clicking the bookmark icon in Octotree header.
+You can click the bookmark icon next to a repository, pull request, issue or file name to bookmark it. You can view the list of bookmarks by clicking the bookmark icon in Octotree header.
 
 ### File search
 
