@@ -31,11 +31,11 @@ $(document).ready(() => {
 
     for (const view of [treeView, errorView, optsView]) {
       $(view)
-        .on(EVENT.VIEW_READY, function(event) {
+        .on(EVENT.VIEW_READY, async function(event) {
           if (this !== optsView) {
             $document.trigger(EVENT.REQ_END);
 
-            if (adapter.isOnPRPage) {
+            if (adapter.isOnPRPage && await extStore.get(STORE.PR)) {
               treeView.$tree.jstree('open_all');
             }
           }
