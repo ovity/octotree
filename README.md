@@ -44,7 +44,7 @@ Learn more at [keymaster](https://github.com/madrobby/keymaster#supported-keys).
 - **Show file-type icons**. If checked, show different icons for different file types.
 - **Show only pull request changes**. If checked, show only the change set of the current pull request. Otherwise, show the full code tree. If a PR has more than 300 files, only 300 are shown.
 - **Enable Octotree in pages (Pro)**. Control the GitHub pages in which Octotree shows up.
-- **Cache repositories locally (Pro)**. Whether to cache the repository file structure in **local machine cache** (via browser Cache API). This speeds up loading of large repositories and reduces the number of API requests to GitHub.
+- **Cache repositories locally (Pro)**. Whether to cache the repository file structure in **local machine cache** (via browser Cache API). This *significantly* speeds up subsequent visits to large repositories and reduces the number of API requests to GitHub.
 
 ## Pro Features
 
@@ -69,7 +69,7 @@ Follow these steps to enable Octotree for GitHub Enterprise:
 
 Activate lazy-loading for specific repositories by clicking the ⚡️ icon in the Octotree sidebar header.
 
-Lazy-loading is helpful when you work with a big repositories (e.g. Linux, Kubernetes). The drawback is it doesn't feel as smooth as non-lazy-loading because Octotree has to make an API request and render every subdirectory as you click on it. By activating lazy-loading only for large repositories, you'll have the best of both worlds.
+Lazy-loading is helpful when you work with a big repositories (e.g. Linux, Kubernetes). The downside is it requires Octotree to make an API request and render every subdirectory as you click on the directory. This feature allows you to activate lazy-load for only certain repositories.
 
 ### Enhanced code review
 
