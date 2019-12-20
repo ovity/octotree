@@ -47,7 +47,7 @@
     "gulp-zip": "^2.0.3",
     "jpm": "^1.0.4",
     "map-stream": "*",
-    "mocha": "2.0.1",
+    "mocha": "6.2.2",
     "request": "^2.88.0",
     "selenium-webdriver": "2.44.0",
     "starx": "~0.1.7",
