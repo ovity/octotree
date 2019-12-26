@@ -33,7 +33,6 @@ class TreeView {
       // Thus, we use an async anonymous function inside to fix it
       (async () => {
         const loadAll = await this.adapter.shouldLoadEntireTree(repo);
-
         node = !loadAll && (node.id === '#' ? {path: ''} : node.original);
 
         this.adapter.loadCodeTree({repo, token, node}, (err, treeData) => {
@@ -44,13 +43,10 @@ class TreeView {
             } else {
               $(this).trigger(EVENT.FETCH_ERROR, [err]);
             }
-          } else {
-            treeData = this._sort(treeData);
-            if (loadAll) {
-              treeData = this._collapse(treeData);
-            }
-            cb(treeData);
+            return;
           }
+
+          cb(treeData);
         });
       })()
     };
@@ -89,51 +85,6 @@ class TreeView {
         const newTab = event.shiftKey || event.ctrlKey || event.metaKey;
         newTab ? adapter.openInNewTab(href) : adapter.selectFile(href);
       });
-  }
-
-  _sort(folder) {
-    folder.sort((a, b) => {
-      if (a.type === b.type) return a.text === b.text ? 0 : a.text < b.text ? -1 : 1;
-      return a.type === 'blob' ? 1 : -1;
-    });
-
-    folder.forEach((item) => {
-      if (item.type === 'tree' && item.children !== true && item.children.length > 0) {
-        this._sort(item.children);
-      }
-    });
-
-    return folder;
-  }
-
-  _collapse(folder) {
-    return folder.map((item) => {
-      if (item.type === 'tree') {
-        item.children = this._collapse(item.children);
-        if (item.children.length === 1 && item.children[0].type === 'tree' && item.a_attr) {
-          const onlyChild = item.children[0];
-          const path = item.a_attr['data-download-filename'];
-
-          /**
-           * Using a_attr rather than item.text to concat in order to
-           * avoid the duplication of <div class="octotree-patch">
-           *
-           * For example:
-           *
-           * - item.text + onlyChild.text
-           * 'src/adapters/<span class="octotree-patch">+1</span>' + 'github.js<span class="octotree-patch">+1</span>'
-           *
-           * - path + onlyChild.text
-           * 'src/adapters/' + 'github.js<span class="octotree-patch">+1</span>'
-           *
-           */
-          onlyChild.text = path + '/' + onlyChild.text;
-
-          return onlyChild;
-        }
-      }
-      return item;
-    });
   }
 
   /**

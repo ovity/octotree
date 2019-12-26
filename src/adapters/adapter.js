@@ -9,7 +9,7 @@ class Adapter {
    * @param {Object} opts: {
    *                  path: the starting path to load the tree,
    *                  repo: the current repository,
-   *                  node (optional): the selected node (null to load entire tree),
+   *                  node (optional): the selected node (null/false to load entire tree),
    *                  token (optional): the personal access token
    *                 }
    * @param {Function} transform(item)
@@ -38,7 +38,12 @@ class Adapter {
 
             // We're done
             if (item === undefined) {
-              return cb(null, folders['']);
+              let treeData = folders[''];
+              treeData = this._sort(treeData);
+              if (!opts.node) {
+                treeData = this._collapse(treeData);
+              }
+              return cb(null, treeData);
             }
 
             // Runs transform requested by subclass
@@ -365,5 +370,50 @@ class Adapter {
    */
   _getPatchHref(repo, patch) {
     return `/${repo.username}/${repo.reponame}/pull/${repo.pullNumber}/files#diff-${patch.diffId}`;
+  }
+
+  _sort(folder) {
+    folder.sort((a, b) => {
+      if (a.type === b.type) return a.text === b.text ? 0 : a.text < b.text ? -1 : 1;
+      return a.type === 'blob' ? 1 : -1;
+    });
+
+    folder.forEach((item) => {
+      if (item.type === 'tree' && item.children !== true && item.children.length > 0) {
+        this._sort(item.children);
+      }
+    });
+
+    return folder;
+  }
+
+  _collapse(folder) {
+    return folder.map((item) => {
+      if (item.type === 'tree') {
+        item.children = this._collapse(item.children);
+        if (item.children.length === 1 && item.children[0].type === 'tree' && item.a_attr) {
+          const onlyChild = item.children[0];
+          const path = item.a_attr['data-download-filename'];
+
+          /**
+           * Using a_attr rather than item.text to concat in order to
+           * avoid the duplication of <div class="octotree-patch">
+           *
+           * For example:
+           *
+           * - item.text + onlyChild.text
+           * 'src/adapters/<span class="octotree-patch">+1</span>' + 'github.js<span class="octotree-patch">+1</span>'
+           *
+           * - path + onlyChild.text
+           * 'src/adapters/' + 'github.js<span class="octotree-patch">+1</span>'
+           *
+           */
+          onlyChild.text = path + '/' + onlyChild.text;
+
+          return onlyChild;
+        }
+      }
+      return item;
+    });
   }
 }
