@@ -43,7 +43,8 @@ const EVENT = {
   VIEW_CLOSE: 'octotree:close',
   VIEW_SHOW: 'octotree:show',
   FETCH_ERROR: 'octotree:error',
-  SIDEBAR_HTML_INSERTED: 'octotree:sidebarHtmlInserted'
+  SIDEBAR_HTML_INSERTED: 'octotree:sidebarHtmlInserted',
+  REPO_LOADED: 'octotree:repoLoaded'
 };
 
 window.STORE = STORE;

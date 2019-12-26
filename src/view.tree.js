@@ -32,6 +32,7 @@ class TreeView {
       // This function does not accept an async function as its value
       // Thus, we use an async anonymous function inside to fix it
       (async () => {
+        const startTime = Date.now();
         const loadAll = await this.adapter.shouldLoadEntireTree(repo);
         node = !loadAll && (node.id === '#' ? {path: ''} : node.original);
 
@@ -47,6 +48,7 @@ class TreeView {
           }
 
           cb(treeData);
+          $(document).trigger(EVENT.REPO_LOADED, {repo, loadAll, duration: Date.now() - startTime});
         });
       })()
     };
