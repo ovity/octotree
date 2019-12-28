@@ -1,6 +1,7 @@
 class PjaxAdapter extends Adapter {
-  constructor(store) {
-    super(['jquery.pjax.js'], store);
+  constructor(pjaxContainerSel) {
+    super(['jquery.pjax.js']);
+    this._pjaxContainerSel = pjaxContainerSel;
 
     $(document)
       .on('pjax:start', () => $(document).trigger(EVENT.REQ_START))
@@ -9,13 +10,11 @@ class PjaxAdapter extends Adapter {
   }
 
   // @override
-  // @param {Object} opts - {pjaxContainer: the specified pjax container}
   // @api public
-  init($sidebar, opts) {
+  init($sidebar) {
     super.init($sidebar);
 
-    opts = opts || {};
-    const pjaxContainer = opts.pjaxContainer;
+    const pjaxContainer = $(this._pjaxContainerSel)[0];
 
     if (!window.MutationObserver) return;
 
@@ -60,11 +59,8 @@ class PjaxAdapter extends Adapter {
   }
 
   // @override
-  // @param {Object} opts - {$pjax_container: jQuery object}
   // @api public
-  selectFile(path, opts) {
-    opts = opts || {};
-
+  selectFile(path) {
     // Do nothing if file is already selected.
     if (location.pathname === path) return;
 
@@ -72,15 +68,14 @@ class PjaxAdapter extends Adapter {
     // Don't bother fetching the page with pjax
     const pathWithoutAnchor = path.replace(/#.*$/, '');
     const isSamePage = location.pathname === pathWithoutAnchor;
-    const pjaxContainerSel = opts.pjaxContainerSel;
-    const loadWithPjax = $(pjaxContainerSel).length && !isSamePage;
+    const loadWithPjax = $(this._pjaxContainerSel).length && !isSamePage;
 
     if (loadWithPjax) {
       this._patchPjax();
       $.pjax({
         // Needs full path for pjax to work with Firefox as per cross-domain-content setting
         url: location.protocol + '//' + location.host + path,
-        container: pjaxContainerSel,
+        container: this._pjaxContainerSel,
         timeout: 0 // global timeout doesn't seem to work, use this instead
       });
     } else {
