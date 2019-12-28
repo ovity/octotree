@@ -1,6 +1,6 @@
 class PjaxAdapter extends Adapter {
-  constructor(store) {
-    super(['jquery.pjax.js'], store);
+  constructor() {
+    super(['jquery.pjax.js']);
 
     $(document)
       .on('pjax:start', () => $(document).trigger(EVENT.REQ_START))
