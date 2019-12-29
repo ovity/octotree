@@ -4,8 +4,14 @@ class PjaxAdapter extends Adapter {
     this._pjaxContainerSel = pjaxContainerSel;
 
     $(document)
-      .on('pjax:start', () => $(document).trigger(EVENT.REQ_START))
-      .on('pjax:end', () => $(document).trigger(EVENT.REQ_END))
+      .on('pjax:start', () => {
+        $(document).trigger(EVENT.REQ_START);
+        this._dispatchPjaxEventInDom('pjax:start');
+      })
+      .on('pjax:end', () => {
+        $(document).trigger(EVENT.REQ_END);
+        this._dispatchPjaxEventInDom('pjax:end');
+      })
       .on('pjax:timeout', (e) => e.preventDefault());
   }
 
@@ -83,6 +89,34 @@ class PjaxAdapter extends Adapter {
     }
   }
 
+  /**
+   * Dispatches a pjax event directly in the DOM.
+   *
+   * GitHub's own pjax implementation dispatches its events directly in the DOM, while
+   * the jQuery pjax library we use dispatches its events only within its jQuery instance.
+   * Because some GitHub add-ons listen to certain pjax events in the DOM it may be
+   * necessary to forward an event from jQuery to the DOM to make sure those add-ons
+   * don't break.
+   *
+   * Note that we don't forward the details/extra parameters or whether they're cancellable,
+   * because the pjax implementations differ in this case!
+   *
+   * @see https://github.com/ovity/octotree/issues/490
+   *
+   * @param {string} type The name of the event
+   * @api protected
+   */
+  _dispatchPjaxEventInDom(type) {
+    const pjaxContainer = $(this._pjaxContainerSel)[0];
+
+    if (pjaxContainer) {
+      pjaxContainer.dispatchEvent(new Event(type, {
+        bubbles: true
+      }));
+    }
+  }
+
+  // @api protected
   _patchPjax() {
     // The pjax plugin ($.pjax) is loaded in same time with Octotree (document ready event) and
     // we don't know when $.pjax fully loaded, so we will do patching once in runtime
