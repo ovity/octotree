@@ -3,7 +3,11 @@ class PjaxAdapter extends Adapter {
     super(['jquery.pjax.js']);
     this._pjaxContainerSel = pjaxContainerSel;
 
-    // When dispatching event to native DOM, jQuery Pjax fires event again. We don't want repeated re-entrance.
+    // When dispatching an event to the native DOM, jQuery Pjax fires the pjax event again. Add to check
+    // to avoid re-entrance to cause call stack error.
+    // dispatchEvent() is synchronous, a badly implemented event handler from a different extension
+    // could stop legit event handling if users navigate among files quickly.
+    // Hopefully no such poor extension exists, so we'll deal with it IFF it happens.
     let isDispatching = false;
 
     $(document)
