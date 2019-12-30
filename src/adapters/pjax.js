@@ -3,17 +3,28 @@ class PjaxAdapter extends Adapter {
     super(['jquery.pjax.js']);
     this._pjaxContainerSel = pjaxContainerSel;
 
+    // When dispatching event to native DOM, jQuery Pjax fires event again. We don't want repeated re-entrance.
+    let isDispatching = false;
+
     $(document)
       .on('pjax:start', () => {
-        if (!this._isDispatching) {
+        if (isDispatching) return;
+        isDispatching = true;
+        try {
           $(document).trigger(EVENT.REQ_START);
           this._dispatchPjaxEventInDom('pjax:start');
+        } finally {
+          isDispatching = false;
         }
       })
       .on('pjax:end', () => {
-        if (!this._isDispatching) {
+        if (isDispatching) return;
+        isDispatching = true;
+        try {
           $(document).trigger(EVENT.REQ_END);
           this._dispatchPjaxEventInDom('pjax:end');
+        } finally {
+          isDispatching = false;
         }
       })
       .on('pjax:timeout', (e) => e.preventDefault());
@@ -111,20 +122,11 @@ class PjaxAdapter extends Adapter {
    * @api protected
    */
   _dispatchPjaxEventInDom(type) {
-    // Avoid re-entrance as dispatching on native DOM will trigger the jQuery Pjax event we're listening.
-    // NOTE: anywhere in the source code that listens to pjax:start pjax:end should hanlde reentrance.
-    this._isDispatching = true;
-    try {
-      const pjaxContainer = $(this._pjaxContainerSel)[0];
-      if (pjaxContainer) {
-        pjaxContainer.dispatchEvent(new Event(type, {
-          bubbles: true
-        }));
-      }
-    } catch (e) {
-      // Nothing we can do
-    } finally {
-      this._isDispatching = false;
+    const pjaxContainer = $(this._pjaxContainerSel)[0];
+    if (pjaxContainer) {
+      pjaxContainer.dispatchEvent(new Event(type, {
+        bubbles: true
+      }));
     }
   }
 
