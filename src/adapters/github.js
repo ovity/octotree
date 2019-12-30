@@ -13,10 +13,13 @@ const GH_HIDDEN_RESPONSIVE_CLASS = '.d-none';
 const GH_RESPONSIVE_BREAKPOINT = 1010;
 
 class GitHub extends PjaxAdapter {
+  constructor() {
+    super(GH_PJAX_CONTAINER_SEL);
+  }
+
   // @override
   init($sidebar) {
-    const pjaxContainer = $(GH_PJAX_CONTAINER_SEL)[0];
-    super.init($sidebar, {pjaxContainer: pjaxContainer});
+    super.init($sidebar);
 
     // Fix #151 by detecting when page layout is updated.
     // In this case, split-diff page has a wider layout, so need to recompute margin.
@@ -171,11 +174,6 @@ class GitHub extends PjaxAdapter {
         cb(null, repo);
       });
     }
-  }
-
-  // @override
-  selectFile(path) {
-    super.selectFile(path, {pjaxContainerSel: GH_PJAX_CONTAINER_SEL});
   }
 
   // @override
