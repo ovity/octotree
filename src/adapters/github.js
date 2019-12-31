@@ -112,7 +112,7 @@ class GitHub extends PjaxAdapter {
     const reponame = match[2];
     const type = match[3];
     const typeId = match[4];
-    
+
     const isPR = type === 'pull';
 
     // Not a repository, skip
@@ -145,18 +145,20 @@ class GitHub extends PjaxAdapter {
         : branchNameInTitle;
 
     const branch =
-      // Pick the commit ID as branch name when the code page is listing tree in a particular commit
+      // Use the commit ID when showing a particular commit
       (type === 'commit' && typeId) ||
-      // Pick 'master' as branch name when viewing repo's releases or tags
+      // Use tree name when showing a tag/branch
+      (type === 'tree' && typeId) ||
+      // Use 'master' when viewing repo's releases or tags
       ((type === 'releases' || type === 'tags') && 'master') ||
-      // Pick the commit ID or branch name from the DOM
+      // Get commit ID or branch name from the DOM
       branchFromSummary ||
       ($('.overall-summary .numbers-summary .commits a').attr('href') || '').replace(
         `/${username}/${reponame}/commits/`,
         ''
       ) ||
-      // Pull requests page
-      isPR && typeId ? ($('.commit-ref.base-ref').attr('title') || ':').match(/:(.*)/)[1] : null ||
+      // Use target branch in a PR page
+      (isPR ? ($('.commit-ref').not('.head-ref').attr('title') || ':').match(/:(.*)/)[1] : null) ||
       // Reuse last selected branch if exist
       (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch) ||
       // Get default branch from cache
