@@ -112,6 +112,8 @@ class GitHub extends PjaxAdapter {
     const reponame = match[2];
     const type = match[3];
     const typeId = match[4];
+    
+    const isPR = type === 'pull';
 
     // Not a repository, skip
     if (~GH_RESERVED_USER_NAMES.indexOf(username) || ~GH_RESERVED_REPO_NAMES.indexOf(reponame)) {
@@ -154,13 +156,12 @@ class GitHub extends PjaxAdapter {
         ''
       ) ||
       // Pull requests page
-      ($('.commit-ref.base-ref').attr('title') || ':').match(/:(.*)/)[1] ||
+      isPR && typeId ? ($('.commit-ref.base-ref').attr('title') || ':').match(/:(.*)/)[1] : null ||
       // Reuse last selected branch if exist
       (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch) ||
       // Get default branch from cache
       this._defaultBranch[username + '/' + reponame];
 
-    const isPR = type === 'pull';
     const showOnlyChangedInPR = await extStore.get(STORE.PR);
     const pullNumber = isPR && showOnlyChangedInPR ? typeId : null;
     const repo = {username, reponame, branch, pullNumber};
