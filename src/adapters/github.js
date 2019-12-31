@@ -124,7 +124,7 @@ class GitHub extends PjaxAdapter {
     // TODO would be great if there's a more robust way to do this
     /**
      * Github renders the branch name in one of below structure depending on the length
-     * of branch name
+     * of branch name. We're using this for default code page or tree/blob.
      *
      * Option 1: when the length is short enough
      * <summary title="Switch branches or tags">
@@ -147,8 +147,6 @@ class GitHub extends PjaxAdapter {
     const branch =
       // Use the commit ID when showing a particular commit
       (type === 'commit' && typeId) ||
-      // Use tree name when showing a tag/branch
-      (type === 'tree' && typeId) ||
       // Use 'master' when viewing repo's releases or tags
       ((type === 'releases' || type === 'tags') && 'master') ||
       // Get commit ID or branch name from the DOM
@@ -157,6 +155,8 @@ class GitHub extends PjaxAdapter {
         `/${username}/${reponame}/commits/`,
         ''
       ) ||
+      // The above should work for tree|blob, but if DOM changes, fallback to use ID from URL
+      ((type === 'tree' || type === 'blob') && typeId) ||
       // Use target branch in a PR page
       (isPR ? ($('.commit-ref').not('.head-ref').attr('title') || ':').match(/:(.*)/)[1] : null) ||
       // Reuse last selected branch if exist
