@@ -166,7 +166,9 @@ class GitHub extends PjaxAdapter {
 
     const showOnlyChangedInPR = await extStore.get(STORE.PR);
     const pullNumber = isPR && showOnlyChangedInPR ? typeId : null;
-    const repo = {username, reponame, branch, pullNumber};
+    const pullHead = isPR ? ($('.commit-ref.head-ref').attr('title') || ':').match(/:(.*)/)[1] : null;
+    const displayBranch = isPR && pullHead ? `${branch} < ${pullHead}` : null;
+    const repo = {username, reponame, branch, displayBranch, pullNumber};
     if (repo.branch) {
       cb(null, repo);
     } else {
