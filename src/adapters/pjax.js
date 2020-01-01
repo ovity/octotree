@@ -3,34 +3,9 @@ class PjaxAdapter extends Adapter {
     super(['jquery.pjax.js']);
     this._pjaxContainerSel = pjaxContainerSel;
 
-    // When dispatching an event to the native DOM, jQuery Pjax fires the pjax event again. Add to check
-    // to avoid re-entrance to cause call stack error.
-    // dispatchEvent() is synchronous, a badly implemented event handler from a different extension
-    // could stop legit event handling if users navigate among files quickly.
-    // Hopefully no such poor extension exists, so we'll deal with it IFF it happens.
-    let isDispatching = false;
-
     $(document)
-      .on('pjax:start', () => {
-        if (isDispatching) return;
-        isDispatching = true;
-        try {
-          $(document).trigger(EVENT.REQ_START);
-          this._dispatchPjaxEventInDom('pjax:start');
-        } finally {
-          isDispatching = false;
-        }
-      })
-      .on('pjax:end', () => {
-        if (isDispatching) return;
-        isDispatching = true;
-        try {
-          $(document).trigger(EVENT.REQ_END);
-          this._dispatchPjaxEventInDom('pjax:end');
-        } finally {
-          isDispatching = false;
-        }
-      })
+      .on('pjax:start', (e) => this._handlePjaxEvent(e, EVENT.REQ_START, 'pjax:start'))
+      .on('pjax:end', (e) => this._handlePjaxEvent(e, EVENT.REQ_END, 'pjax:end'))
       .on('pjax:timeout', (e) => e.preventDefault());
   }
 
@@ -109,6 +84,32 @@ class PjaxAdapter extends Adapter {
   }
 
   /**
+   * Event handler of pjax events.
+   * @api private
+   */
+  _handlePjaxEvent(event, octotreeEventName, pjaxEventName) {
+    // Avoid re-entrance, which would blow the callstack. Because dispatchEvent() is synchronous, it's possible
+    // for badly implemented handler from another extension to prevent legit event handling if users navigate
+    // among files too quickly. Hopefully none is that bad. We'll deal with it IFF it happens.
+    if (this._isDispatching) {
+      return;
+    }
+    this._isDispatching = true;
+
+    try {
+      $(document).trigger(octotreeEventName);
+
+      // Only dispatch to native DOM if the event is started by Octotree. If the event is started in the DOM, jQuery
+      // wraps it in the originalEvent property, that's what we use to check. Fixes #864.
+      if (event.originalEvent == null) {
+        this._dispatchPjaxEventInDom(pjaxEventName);
+      }
+    } finally {
+      this._isDispatching = false;
+    }
+  }
+
+  /**
    * Dispatches a pjax event directly in the DOM.
    *
    * GitHub's own pjax implementation dispatches its events directly in the DOM, while
@@ -123,7 +124,7 @@ class PjaxAdapter extends Adapter {
    * @see https://github.com/ovity/octotree/issues/490
    *
    * @param {string} type The name of the event
-   * @api protected
+   * @api private
    */
   _dispatchPjaxEventInDom(type) {
     const pjaxContainer = $(this._pjaxContainerSel)[0];
