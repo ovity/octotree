@@ -48,9 +48,11 @@ $(document).ready(() => {
             showView(hasError ? errorView : treeView);
           }
         })
-        .on(EVENT.OPTS_CHANGE, optionsChanged)
         .on(EVENT.FETCH_ERROR, (event, err) => showError(err));
     }
+
+    $(extStore)
+      .on(EVENT.STORE_CHANGE, optionsChanged);
 
     $document
       .on(EVENT.REQ_START, () => $spinner.addClass('octotree-spin--loading'))
