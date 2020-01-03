@@ -128,7 +128,7 @@ class ExtStore {
           if (!this._init) {
             // Need to notify the changes programmatically since window.onstorage event only
             // get triggerred if the changes are from other tabs
-            const oldValue = await this._getLocal(key);
+            const oldValue = (await this._getLocal(key))[key];
             this._notifyChange(key, oldValue, newValue);
           }
           localStorage.setItem(key, value);
