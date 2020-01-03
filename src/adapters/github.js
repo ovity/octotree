@@ -7,7 +7,6 @@ const GH_PJAX_CONTAINER_SEL =
   '#js-repo-pjax-container, div[itemtype="http://schema.org/SoftwareSourceCode"] main, [data-pjax-container]';
 
 const GH_CONTAINERS = '.container, .container-lg, .container-responsive';
-const GH_HEADER = '.js-header-wrapper > header';
 const GH_MAX_HUGE_REPOS_SIZE = 50;
 const GH_HIDDEN_RESPONSIVE_CLASS = '.d-none';
 const GH_RESPONSIVE_BREAKPOINT = 1010;
@@ -77,25 +76,27 @@ class GitHub extends PjaxAdapter {
 
   // @override
   updateLayout(sidebarPinned, sidebarVisible, sidebarWidth) {
-    const SPACING = 10;
-    const $header = $(GH_HEADER);
+    const SPACING = 20;
     const $containers =
       $('html').width() <= GH_RESPONSIVE_BREAKPOINT
         ? $(GH_CONTAINERS).not(GH_HIDDEN_RESPONSIVE_CLASS)
         : $(GH_CONTAINERS);
 
-    const autoMarginLeft = ($(document).width() - $containers.width()) / 2;
     const shouldPushEverything = sidebarPinned && sidebarVisible;
-    const smallScreen = autoMarginLeft <= sidebarWidth + SPACING;
 
-    $('html').css('margin-left', shouldPushEverything && smallScreen ? sidebarWidth : '');
-    $containers.css('margin-left', shouldPushEverything && smallScreen ? SPACING : '');
+    if (shouldPushEverything) {
+      $('html').css('margin-left', sidebarWidth);
 
-    if (shouldPushEverything && !smallScreen) {
-      // Override important in Github Header class in large screen
-      $header.attr('style', `padding-left: ${sidebarWidth + SPACING}px !important`);
+      const autoMarginLeft = ($(document).width() - $containers.width()) / 2;
+      const marginLeft = Math.max(SPACING, autoMarginLeft - sidebarWidth);
+      $containers.each(function () {
+        const $container = $(this);
+        const paddingLeft = ($container.innerWidth() - $container.width()) / 2;
+        $container.css('margin-left', marginLeft - paddingLeft);
+      })
     } else {
-      $header.removeAttr('style');
+      $('html').css('margin-left', '');
+      $containers.css('margin-left', '');
     }
   }
 
