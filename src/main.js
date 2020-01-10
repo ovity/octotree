@@ -104,8 +104,10 @@ $(document).ready(() => {
           case STORE.TOKEN:
           case STORE.LAZYLOAD:
           case STORE.ICONS:
-          case STORE.PR:
             reload = true;
+            break;
+          case STORE.PR:
+            reload = adapter.isOnPRPage;
             break;
           case STORE.HOVEROPEN:
             handleHoverOpenOption(newValue);
