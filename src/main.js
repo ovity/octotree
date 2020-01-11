@@ -115,6 +115,9 @@ $(document).ready(() => {
           case STORE.HOTKEYS:
             setHotkeys(newValue, oldValue);
             break;
+          case STORE.PINNED:
+            onPinToggled(newValue);
+            break;
         }
       });
 
@@ -141,7 +144,7 @@ $(document).ready(() => {
             // If we're in pin mode but sidebar doesn't show yet, show it.
             // Note if we're from another page back to code page, sidebar is "pinned", but not visible.
             if (isSidebarPinned()) await toggleSidebar();
-            else await togglePin();
+            else await onPinToggled(true);
           } else if (isSidebarVisible()) {
             const replacer = ['username', 'reponame', 'branch', 'pullNumber'];
             const repoChanged = JSON.stringify(repo, replacer) !== JSON.stringify(currRepo, replacer);
@@ -204,14 +207,22 @@ $(document).ready(() => {
         return togglePin();
       }
 
+      const sidebarPinned = !isSidebarPinned();
+      await extStore.set(STORE.PINNED, sidebarPinned);
+      return sidebarPinned;
+    }
+
+    async function onPinToggled(isPinned) {
+      if (isPinned === isSidebarPinned()) {
+        return;
+      }
+
       $pinner.toggleClass(PINNED_CLASS);
 
       const sidebarPinned = isSidebarPinned();
       $pinner.find('.tooltipped').attr('aria-label', `${sidebarPinned ? 'Unpin' : 'Pin'} this sidebar`);
       $document.trigger(EVENT.TOGGLE_PIN, sidebarPinned);
-      await extStore.set(STORE.PINNED, sidebarPinned);
       await toggleSidebar(sidebarPinned);
-      return sidebarPinned;
     }
 
     async function layoutChanged(save = false) {
