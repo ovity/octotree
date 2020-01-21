@@ -76,17 +76,28 @@ class GitHub extends PjaxAdapter {
 
   // @override
   updateLayout(sidebarPinned, sidebarVisible, sidebarWidth) {
-    const SPACING = 10;
+    const SPACING = 20;
     const $containers =
       $('html').width() <= GH_RESPONSIVE_BREAKPOINT
         ? $(GH_CONTAINERS).not(GH_HIDDEN_RESPONSIVE_CLASS)
         : $(GH_CONTAINERS);
 
-    const autoMarginLeft = ($(document).width() - $containers.width()) / 2;
     const shouldPushEverything = sidebarPinned && sidebarVisible;
 
-    $('html').css('margin-left', shouldPushEverything ? sidebarWidth : '');
-    $containers.css('margin-left', shouldPushEverything ? Math.max(SPACING, autoMarginLeft - sidebarWidth) : '');
+    if (shouldPushEverything) {
+      $('html').css('margin-left', sidebarWidth);
+
+      const autoMarginLeft = ($(document).width() - $containers.width()) / 2;
+      const marginLeft = Math.max(SPACING, autoMarginLeft - sidebarWidth);
+      $containers.each(function () {
+        const $container = $(this);
+        const paddingLeft = ($container.innerWidth() - $container.width()) / 2;
+        $container.css('margin-left', marginLeft - paddingLeft);
+      })
+    } else {
+      $('html').css('margin-left', '');
+      $containers.css('margin-left', '');
+    }
   }
 
   // @override

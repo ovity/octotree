@@ -1,42 +1,75 @@
 class ExtStore {
   constructor(values, defaults) {
-    this._isInitialized = false;
     this._isSafari = isSafari();
-
-    // Initialize default values
-    this._init = async () => {
-      if (this._isInitialized) return;
-
-      await Promise.all(Object.keys(values).map(async (key) => {
-        const existingVal = await this._innerGet(values[key]);
-        if (existingVal == null) {
-          await this._innerSet(values[key], defaults[key]);
-        }
-      }));
-
-      this._isInitialized = true;
-    }
+    this._tempChanges = {};
 
     if (!this._isSafari) {
       this._setInExtensionStorage = promisify(chrome.storage.local, 'set');
       this._getInExtensionStorage = promisify(chrome.storage.local, 'get');
       this._removeInExtensionStorage = promisify(chrome.storage.local, 'remove');
     }
+
+    // Initialize default values
+    this._init = Promise.all(
+      Object.keys(values).map(async (key) => {
+        const existingVal = await this._innerGet(values[key]);
+        if (existingVal == null) {
+          await this._innerSet(values[key], defaults[key]);
+        }
+      })
+    ).then(() => {
+      this._init = null;
+      this._setupOnChangeEvent();
+    });
+  }
+
+  _setupOnChangeEvent() {
+    window.addEventListener('storage', (evt) => {
+      if (this._isOctotreeKey(evt.key)) {
+        this._notifyChange(evt.key, evt.oldValue, evt.newValue);
+      }
+    });
+
+    if (!this._isSafari) {
+      chrome.storage.onChanged.addListener((changes) => {
+        Object.entries(changes).forEach(([key, change]) => {
+          if (this._isOctotreeKey(key)) {
+            this._notifyChange(key, change.oldValue, change.newValue);
+          }
+        });
+      });
+    }
+  }
+
+  _isOctotreeKey(key) {
+    return key.startsWith('octotree');
+  }
+
+  // Debounce and group the trigger of EVENT.STORE_CHANGE because the
+  // changes are all made one by one
+  _notifyChange(key, oldVal, newVal) {
+    this._tempTimer && clearTimeout(this._tempTimer);
+    this._tempChanges[key] = [oldVal, newVal];
+    this._tempTimer = setTimeout(() => {
+      $(this).trigger(EVENT.STORE_CHANGE, this._tempChanges);
+      this._tempTimer = null;
+      this._tempChanges = {};
+    }, 50);
   }
 
   // Public
   async set(key, value) {
-    if (!this._isInitialized) await this._init();
+    if (this._init) await this._init;
     return this._innerSet(key, value);
   }
 
   async get(key) {
-    if (!this._isInitialized) await this._init();
+    if (this._init) await this._init;
     return this._innerGet(key);
   }
 
   async remove(key) {
-    if (!this._isInitialized) await this._init();
+    if (this._init) await this._init;
     return this._innerRemove(key);
   }
 
@@ -85,13 +118,20 @@ class ExtStore {
   }
 
   _setLocal (obj) {
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
       const entries = Object.entries(obj);
 
       if (entries.length > 0) {
-        const [key, value] = entries[0];
+        const [key, newValue] = entries[0];
         try {
-          localStorage.setItem(key, JSON.stringify(value));
+          const value = JSON.stringify(newValue);
+          if (!this._init) {
+            // Need to notify the changes programmatically since window.onstorage event only
+            // get triggerred if the changes are from other tabs
+            const oldValue = (await this._getLocal(key))[key];
+            this._notifyChange(key, oldValue, newValue);
+          }
+          localStorage.setItem(key, value);
         } catch (e) {
           const msg =
             'Octotree cannot save its settings. ' +
