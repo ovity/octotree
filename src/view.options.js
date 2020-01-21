@@ -76,11 +76,7 @@ class OptionsView {
         await extStore.set(key, newValue);
         cb();
       },
-      () => {
-        if (Object.keys(changes).length) {
-          $(this).trigger(EVENT.OPTS_CHANGE, changes);
-        }
-      }
+      () => {}
     );
   }
 
