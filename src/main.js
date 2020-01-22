@@ -35,6 +35,8 @@ $(document).ready(() => {
           if (this !== optsView) {
             $document.trigger(EVENT.REQ_END);
 
+            optsView.$toggler.removeClass('selected');
+
             if (adapter.isOnPRPage && await extStore.get(STORE.PR)) {
               treeView.$tree.jstree('open_all');
             }
