@@ -281,21 +281,17 @@ $(document).ready(() => {
           // Prevent mouseover from propagating to document
           event.stopPropagation();
         })
-        .on('focusin mousemove', (event) => {
+        .on('mousemove', (event) => {
           // Don't do anything while hovering on Toggler
           const isHoveringToggler = $toggler.is(event.target) || $toggler.has(event.target).length;
-
           if (isHoveringToggler) return;
 
-          /**
-           * Use 'focusin' instead of 'mouseenter' to handle the case when clicking a file in the
-           * sidebar then move outside -> 'mouseenter' is triggered in sidebar, clear the timer
-           * and keep sidebar open.
-           */
           isMouseInSidebar = true;
           clearTimer();
 
-          if (event.type === 'mousemove' && !isSidebarVisible()) toggleSidebar(true);
+          if (!isSidebarVisible()) {
+            toggleSidebar(true);
+          }
         });
     }
 
