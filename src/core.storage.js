@@ -26,7 +26,7 @@ class ExtStore {
   _setupOnChangeEvent() {
     window.addEventListener('storage', (evt) => {
       if (this._isOctotreeKey(evt.key)) {
-        this._notifyChange(evt.key, evt.oldValue, evt.newValue);
+        this._notifyChange(evt.key, _parse(evt.oldValue), _parse(evt.newValue));
       }
     });
 
@@ -104,17 +104,9 @@ class ExtStore {
 
   _getLocal (key) {
     return new Promise((resolve) => {
-      const value = parse(localStorage.getItem(key));
+      const value = _parse(localStorage.getItem(key));
       resolve({[key]: value});
     });
-
-    function parse(val) {
-      try {
-        return JSON.parse(val);
-      } catch (e) {
-        return val;
-      }
-    }
   }
 
   _setLocal (obj) {
@@ -167,6 +159,14 @@ function promisify(fn, method) {
       });
     });
   };
+}
+
+function _parse (val) {
+  try {
+    return JSON.parse(val);
+  } catch (_) {
+    return val
+  }
 }
 
 window.extStore = new ExtStore(STORE, DEFAULTS)
