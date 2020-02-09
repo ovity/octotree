@@ -89,10 +89,7 @@ class GitHub extends PjaxAdapter {
 
       const autoMarginLeft = ($(document).width() - $containers.width()) / 2;
       const marginLeft = Math.max(0, autoMarginLeft - sidebarWidth);
-      $containers.each(function () {
-        const $container = $(this);
-        $container.css('margin-left', marginLeft);
-      });
+      $containers.css('margin-left', marginLeft);
     } else {
       $('html').css('margin-left', '');
       $containers.css('margin-left', '');
