@@ -77,22 +77,25 @@ class GitHub extends PjaxAdapter {
 
   // @override
   updateLayout(sidebarPinned, sidebarVisible, sidebarWidth) {
+    const SPACING = 10;
+    const $header = $(GH_HEADER);
     const $containers =
       $('html').width() <= GH_RESPONSIVE_BREAKPOINT
         ? $(GH_CONTAINERS).not(GH_HIDDEN_RESPONSIVE_CLASS)
         : $(GH_CONTAINERS);
 
+    const autoMarginLeft = ($(document).width() - $containers.width()) / 2;
     const shouldPushEverything = sidebarPinned && sidebarVisible;
+    const smallScreen = autoMarginLeft <= sidebarWidth + SPACING;
 
-    if (shouldPushEverything) {
-      $('html').css('margin-left', sidebarWidth);
+    $('html').css('margin-left', shouldPushEverything && smallScreen ? sidebarWidth : '');
+    $containers.css('margin-left', shouldPushEverything && smallScreen ? SPACING : '');
 
-      const autoMarginLeft = ($(document).width() - $containers.width()) / 2;
-      const marginLeft = Math.max(0, autoMarginLeft - sidebarWidth);
-      $containers.css('margin-left', marginLeft);
+    if (shouldPushEverything && !smallScreen) {
+      // Override important in Github Header class in large screen
+      $header.attr('style', `padding-left: ${sidebarWidth + SPACING}px !important`);
     } else {
-      $('html').css('margin-left', '');
-      $containers.css('margin-left', '');
+      $header.removeAttr('style');
     }
   }
 
