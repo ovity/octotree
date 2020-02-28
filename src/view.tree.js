@@ -13,7 +13,12 @@ class TreeView {
       .on('click', this._onItemClick.bind(this))
       .jstree({
         core: {multiple: false, animation: 50, worker: false, themes: {responsive: false}},
-        plugins: ['wholerow', 'search', 'truncate']
+        plugins: ['wholerow', 'search', 'truncate', 'contextmenu'],
+        contextmenu: {
+          show_at_node: false,
+          select_node: false,
+          items: ($node) => this._getContextMenuItems($node, this.$jstree.is_leaf($node))
+        }
       });
   }
 
@@ -89,6 +94,30 @@ class TreeView {
       });
   }
 
+  _getContextMenuItems ($node, isLeaf) {
+    const _nodeAttr = $node.a_attr;
+
+    const _commonItems = {
+      newTab: {
+        label: 'Open in new tab',
+        action: () => this.adapter.openInNewTab(_nodeAttr.href)
+      }
+    };
+
+    const _specificItems = isLeaf ? {
+      viewRaw: {
+        label: 'View raw',
+        action: () => {
+          const downloadUrl = _nodeAttr['data-download-url'];
+          const downloadFileName = _nodeAttr['data-download-filename'];
+          this.adapter.downloadFile(downloadUrl, downloadFileName);
+        }
+      }
+    } : {};
+
+    return Object.assign(_commonItems, _specificItems);
+  }
+
   /**
    * Intercept the _onItemClick method
    * return true to stop the current execution
@@ -100,7 +129,6 @@ class TreeView {
 
   _onItemClick(event) {
     let $target = $(event.target);
-    let download = false;
 
     // Handle middle click
     if (event.which === 2) return;
@@ -110,7 +138,6 @@ class TreeView {
     // Handle icon click, fix #122
     if ($target.is('i.jstree-icon')) {
       $target = $target.parent();
-      download = true;
     }
 
     $target = $target.is('a.jstree-anchor') ? $target : $target.parent();
@@ -138,14 +165,8 @@ class TreeView {
       refocusAfterCompletion();
       newTab ? adapter.openInNewTab(href) : adapter.selectSubmodule(href);
     } else if ($icon.hasClass('blob')) {
-      if (download) {
-        const downloadUrl = $target.attr('data-download-url');
-        const downloadFileName = $target.attr('data-download-filename');
-        adapter.downloadFile(downloadUrl, downloadFileName);
-      } else {
-        refocusAfterCompletion();
-        newTab ? adapter.openInNewTab(href) : adapter.selectFile(href);
-      }
+      refocusAfterCompletion();
+      newTab ? adapter.openInNewTab(href) : adapter.selectFile(href);
     }
   }
 
