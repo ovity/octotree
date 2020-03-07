@@ -369,7 +369,7 @@ class Adapter {
    * @api protected
    */
   _getPatchHref(repo, patch) {
-    return `/${repo.username}/${repo.reponame}/pull/${repo.pullNumber}/files#diff-${patch.diffId}`;
+    return `/${repo.username}/${repo.reponame}/pull/${repo.pullNumber}/files${patch.diffId}`;
   }
 
   _sort(folder) {
