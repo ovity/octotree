@@ -89,7 +89,7 @@ class Adapter {
               }
 
               // If item is part of a PR, jump to that file's diff
-              if (item.patch && typeof item.patch.diffId === 'number') {
+              if (item.patch && item.patch.diffId) {
                 const url = this._getPatchHref(repo, item.patch);
                 item.a_attr = {
                   href: url,
@@ -270,7 +270,7 @@ class Adapter {
   selectFile(path) {
     if (!isSafari()) {
       // Smooth scroll to diff file on PR page
-      const diffMatch = path.match(/#diff-\d+$/);
+      const diffMatch = path.match(/#diff-.+$/);
       if (diffMatch) {
         const el = $(diffMatch[0]);
         if (el.length > 0) {

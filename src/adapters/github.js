@@ -225,16 +225,18 @@ class GitHub extends PjaxAdapter {
   _getPatch(opts, cb) {
     const {pullNumber} = opts.repo;
 
-    this._get(`/pulls/${pullNumber}/files?per_page=300`, opts, (err, res) => {
+    this._get(`/pulls/${pullNumber}/files?per_page=300`, opts, async (err, res) => {
       if (err) cb(err);
       else {
         const diffMap = {};
+
+        const diffsId = this._getDiffsId() || await this._fetchDiffsId(opts);
 
         res.forEach((file, index) => {
           // Record file patch info
           diffMap[file.filename] = {
             type: 'blob',
-            diffId: index,
+            diffId: diffsId[index] || index + '',
             action: file.status,
             additions: file.additions,
             blob_url: file.blob_url,
@@ -292,6 +294,30 @@ class GitHub extends PjaxAdapter {
         cb(null, tree);
       }
     });
+  }
+
+  _getDiffsId(doc) {
+    const $doc = doc ? $(doc) : $('html');
+    const $diffs = $doc.find('#files .file');
+
+    if ($diffs.length) {
+      return $diffs.toArray()
+        .map((el) => $(el).attr('id').split('-').slice(-1)[0]);
+    }
+  }
+
+  _fetchDiffsId(opts) {
+    return new Promise((resolve, reject) => {
+      const repo = opts.repo;
+      const filesPageHref = `https://github.com/${repo.username}/${repo.reponame}/pull/${repo.pullNumber}/files`;
+      this._get(filesPageHref, opts, (err, data) => {
+        if (err || !data) {
+          return resolve([]);
+        }
+
+        resolve(this._getDiffsId(data) || [])
+      })
+    })
   }
 
   // @override
