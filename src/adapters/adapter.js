@@ -89,7 +89,7 @@ class Adapter {
               }
 
               // If item is part of a PR, jump to that file's diff
-              if (item.patch && typeof item.patch.diffId === 'number') {
+              if (item.patch && item.patch.diffId) {
                 const url = this._getPatchHref(repo, item.patch);
                 item.a_attr = {
                   href: url,
@@ -369,7 +369,7 @@ class Adapter {
    * @api protected
    */
   _getPatchHref(repo, patch) {
-    return `/${repo.username}/${repo.reponame}/pull/${repo.pullNumber}/files#diff-${patch.diffId}`;
+    return `/${repo.username}/${repo.reponame}/pull/${repo.pullNumber}/files${patch.diffId}`;
   }
 
   _sort(folder) {
