@@ -270,7 +270,7 @@ class Adapter {
   selectFile(path) {
     if (!isSafari()) {
       // Smooth scroll to diff file on PR page
-      const diffMatch = path.match(/#diff-\d+$/);
+      const diffMatch = path.match(/#diff-.+$/);
       if (diffMatch) {
         const el = $(diffMatch[0]);
         if (el.length > 0) {
