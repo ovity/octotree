@@ -46,11 +46,6 @@ class Adapter {
               return cb(null, treeData);
             }
 
-            // Runs transform requested by subclass
-            if (transform) {
-              transform(item);
-            }
-
             // If lazy load and has parent, prefix with parent path
             if (node && node.path) {
               item.path = node.path + '/' + item.path;
@@ -72,10 +67,6 @@ class Adapter {
 
             await octotree.setNodeIconAndText(this, item);
 
-            if (item.patch) {
-              item.text += `<span class="octotree-patch">${this.buildPatchHtml(item)}</span>`;
-            }
-
             if (node) {
               folders[''].push(item);
             } else {
@@ -88,27 +79,17 @@ class Adapter {
                 else folders[item.path] = item.children = [];
               }
 
-              // If item is part of a PR, jump to that file's diff
-              if (item.patch && item.patch.diffId) {
-                const url = this._getPatchHref(repo, item.patch);
-                item.a_attr = {
-                  href: url,
-                  'data-download-url': item.url,
-                  'data-download-filename': name
-                };
-              } else {
-                // Encodes but retains the slashes, see #274
-                const encodedPath = path
-                  .split('/')
-                  .map(encodeURIComponent)
-                  .join('/');
-                const url = this._getItemHref(repo, type, encodedPath, opts.encodedBranch);
-                item.a_attr = {
-                  href: url,
-                  'data-download-url': url,
-                  'data-download-filename': name
-                };
-              }
+              // Encodes but retains the slashes, see #274
+              const encodedPath = path
+                .split('/')
+                .map(encodeURIComponent)
+                .join('/');
+              const url = this._getItemHref(repo, type, encodedPath, opts.encodedBranch);
+              item.a_attr = {
+                href: url,
+                'data-download-url': url,
+                'data-download-filename': name
+              };
             } else if (type === 'commit') {
               let moduleUrl = submodules[item.path];
 
@@ -127,6 +108,11 @@ class Adapter {
                 }
                 item.a_attr = {href: moduleUrl, 'data-skip-pjax': true};
               }
+            }
+
+            // Runs transform requested by subclass
+            if (transform) {
+              transform(item);
             }
           }
 
@@ -268,18 +254,6 @@ class Adapter {
    * @api public
    */
   selectFile(path) {
-    if (!isSafari()) {
-      // Smooth scroll to diff file on PR page
-      const diffMatch = path.match(/#diff-.+$/);
-      if (diffMatch) {
-        const el = $(diffMatch[0]);
-        if (el.length > 0) {
-          $('html, body').animate({scrollTop: el.offset().top - 68}, 400);
-          return;
-        }
-      }
-    }
-
     window.location.href = path;
   }
 
@@ -321,25 +295,6 @@ class Adapter {
   }
 
   /**
-   * @param {HTML Text} patch
-   * @param {Object} treeItem
-   *
-   * Return the patch Html for tree item
-   */
-  buildPatchHtml(treeItem = {}) {
-    const {action, previous, filesChanged: files, additions, deletions} = treeItem.patch;
-    let patch = '';
-    patch += action === 'added' ? '<span class="text-green">added</span>' : '';
-    patch += action === 'renamed' ? `<span class="text-green" title="${previous}">renamed</span>` : '';
-    patch += action === 'removed' ? `<span class="text-red" title="${previous}">removed</span>` : '';
-    patch += files ? `<span class='octotree-patch-files'>${files} ${files === 1 ? 'file' : 'files'}</span>` : '';
-    patch += additions !== 0 ? `<span class="text-green">+${additions}</span>` : '';
-    patch += deletions !== 0 ? `<span class="text-red">-${deletions}</span>` : '';
-
-    return patch;
-  }
-
-  /**
    * Gets tree at path.
    * @param {Object} opts - {token, repo}
    * @api protected
@@ -363,13 +318,6 @@ class Adapter {
    */
   _getItemHref(repo, type, encodedPath, encodedBranch) {
     return `/${repo.username}/${repo.reponame}/${type}/${encodedBranch}/${encodedPath}`;
-  }
-  /**
-   * Returns patch's href value.
-   * @api protected
-   */
-  _getPatchHref(repo, patch) {
-    return `/${repo.username}/${repo.reponame}/pull/${repo.pullNumber}/files${patch.diffId}`;
   }
 
   _sort(folder) {

@@ -31,15 +31,11 @@ $(document).ready(() => {
 
     for (const view of [treeView, errorView, optsView]) {
       $(view)
-        .on(EVENT.VIEW_READY, async function(event) {
+        .on(EVENT.VIEW_READY, function(event) {
           if (this !== optsView) {
             $document.trigger(EVENT.REQ_END);
 
             optsView.$toggler.removeClass('selected');
-
-            if (adapter.isOnPRPage && await extStore.get(STORE.PR)) {
-              treeView.$tree.jstree('open_all');
-            }
           }
           showView(this);
         })
@@ -108,9 +104,6 @@ $(document).ready(() => {
           case STORE.ICONS:
             reload = true;
             break;
-          case STORE.PR:
-            reload = adapter.isOnPRPage;
-            break;
           case STORE.HOVEROPEN:
             handleHoverOpenOption(newValue);
             break;
@@ -148,7 +141,7 @@ $(document).ready(() => {
             if (isSidebarPinned()) await toggleSidebar();
             else await onPinToggled(true);
           } else if (isSidebarVisible()) {
-            const replacer = ['username', 'reponame', 'branch', 'pullNumber'];
+            const replacer = ['username', 'reponame', 'branch'];
             const repoChanged = JSON.stringify(repo, replacer) !== JSON.stringify(currRepo, replacer);
             if (repoChanged || reload === true) {
               hasError = false;
