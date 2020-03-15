@@ -99,25 +99,12 @@ class TreeView {
   }
 
   _onItemClick(event) {
-    let $target = $(event.target);
-    let download = false;
-
     // Handle middle click
     if (event.which === 2) return;
 
     if (this.onItemClick(event)) return;
 
-    // Handle icon click, fix #122
-    if ($target.is('i.jstree-icon')) {
-      $target = $target.parent();
-      download = true;
-    }
-
-    $target = $target.is('a.jstree-anchor') ? $target : $target.parent();
-
-    if ($target.is('.octotree-patch')) {
-      $target = $target.parent();
-    }
+    const $target = this._getClickTarget(event);
 
     if (!$target.is('a.jstree-anchor')) return;
 
@@ -138,15 +125,19 @@ class TreeView {
       refocusAfterCompletion();
       newTab ? adapter.openInNewTab(href) : adapter.selectSubmodule(href);
     } else if ($icon.hasClass('blob')) {
-      if (download) {
-        const downloadUrl = $target.attr('data-download-url');
-        const downloadFileName = $target.attr('data-download-filename');
-        adapter.downloadFile(downloadUrl, downloadFileName);
-      } else {
-        refocusAfterCompletion();
-        newTab ? adapter.openInNewTab(href) : adapter.selectFile(href);
-      }
+      refocusAfterCompletion();
+      newTab ? adapter.openInNewTab(href) : adapter.selectFile(href);
     }
+  }
+
+  _getClickTarget(event) {
+    const $target = $(event.target);
+
+    if ($target.is('i.jstree-icon') || $target.is('a.jstree-anchor')) {
+      return $target.parent();
+    }
+
+    return $target;
   }
 
   async syncSelection(repo) {

@@ -6,7 +6,6 @@ const PINNED_CLASS = 'octotree-pinned';
 const STORE = {
   TOKEN: 'octotree.token.local',
   HOVEROPEN: 'octotree.hover_open',
-  PR: 'octotree.prdiff_shown',
   HOTKEYS: 'octotree.hotkeys',
   ICONS: 'octotree.icons',
   LAZYLOAD: 'octotree.lazyload',
@@ -20,7 +19,6 @@ const STORE = {
 const DEFAULTS = {
   TOKEN: '',
   HOVEROPEN: true,
-  PR: true,
   LAZYLOAD: false,
   HOTKEYS: '⌘+⇧+s, ⌃+⇧+s',
   ICONS: true,

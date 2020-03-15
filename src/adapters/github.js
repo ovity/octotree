@@ -46,11 +46,6 @@ class GitHub extends PjaxAdapter {
 
   // @override
   async shouldLoadEntireTree(repo) {
-    const isLoadingPr = await extStore.get(STORE.PR) && repo.pullNumber;
-    if (isLoadingPr) {
-      return true;
-    }
-
     const isGlobalLazyLoad = await extStore.get(STORE.LAZYLOAD);
     if (isGlobalLazyLoad) {
       return false;
@@ -164,11 +159,9 @@ class GitHub extends PjaxAdapter {
       // Get default branch from cache
       this._defaultBranch[username + '/' + reponame];
 
-    const showOnlyChangedInPR = await extStore.get(STORE.PR);
-    const pullNumber = isPR && showOnlyChangedInPR ? typeId : null;
     const pullHead = isPR ? ($('.commit-ref.head-ref').attr('title') || ':').match(/:(.*)/)[1] : null;
     const displayBranch = isPR && pullHead ? `${branch} < ${pullHead}` : null;
-    const repo = {username, reponame, branch, displayBranch, pullNumber};
+    const repo = {username, reponame, branch, displayBranch};
     if (repo.branch) {
       cb(null, repo);
     } else {
@@ -200,97 +193,9 @@ class GitHub extends PjaxAdapter {
 
   // @override
   _getTree(path, opts, cb) {
-    if (opts.repo.pullNumber) {
-      this._getPatch(opts, cb);
-    } else {
-      this._get(`/git/trees/${path}`, opts, (err, res) => {
-        if (err) cb(err);
-        else cb(null, res.tree);
-      });
-    }
-  }
-
-  /**
-   * Get files that were patched in Pull Request.
-   * The diff map that is returned contains changed files, as well as the parents of the changed files.
-   * This allows the tree to be filtered for only folders that contain files with diffs.
-   * @param {Object} opts: {
-   *                  path: the starting path to load the tree,
-   *                  repo: the current repository,
-   *                  node (optional): the selected node (null to load entire tree),
-   *                  token (optional): the personal access token
-   *                 }
-   * @param {Function} cb(err: error, diffMap: Object)
-   */
-  _getPatch(opts, cb) {
-    const {pullNumber} = opts.repo;
-
-    this._get(`/pulls/${pullNumber}/files?per_page=300`, opts, (err, res) => {
+    this._get(`/git/trees/${path}`, opts, (err, res) => {
       if (err) cb(err);
-      else {
-        const diffMap = {};
-
-        res.forEach((file, index) => {
-          // Record file patch info
-          diffMap[file.filename] = {
-            type: 'blob',
-            diffId: index,
-            action: file.status,
-            additions: file.additions,
-            blob_url: file.blob_url,
-            deletions: file.deletions,
-            filename: file.filename,
-            path: file.path,
-            sha: file.sha
-          };
-
-          // Record ancestor folders
-          const folderPath = file.filename
-            .split('/')
-            .slice(0, -1)
-            .join('/');
-          const split = folderPath.split('/');
-
-          // Aggregate metadata for ancestor folders
-          split.reduce((path, curr) => {
-            if (path.length) path = `${path}/${curr}`;
-            else path = `${curr}`;
-
-            if (diffMap[path] == null) {
-              diffMap[path] = {
-                type: 'tree',
-                filename: path,
-                filesChanged: 1,
-                additions: file.additions,
-                deletions: file.deletions
-              };
-            } else {
-              diffMap[path].additions += file.additions;
-              diffMap[path].deletions += file.deletions;
-              diffMap[path].filesChanged++;
-            }
-            return path;
-          }, '');
-        });
-
-        // Transform to emulate response from get `tree`
-        const tree = Object.keys(diffMap).map((fileName) => {
-          const patch = diffMap[fileName];
-          return {
-            patch,
-            path: fileName,
-            sha: patch.sha,
-            type: patch.type,
-            url: patch.blob_url
-          };
-        });
-
-        // Sort by path, needs to be alphabetical order (so parent folders come before children)
-        // Note: this is still part of the above transform to mimic the behavior of get tree
-        tree.sort((a, b) => a.path.localeCompare(b.path));
-
-        cb(null, tree);
-      }
+      else cb(null, res.tree);
     });
   }
 
