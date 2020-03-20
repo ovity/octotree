@@ -125,15 +125,22 @@ class TreeView {
       refocusAfterCompletion();
       newTab ? adapter.openInNewTab(href) : adapter.selectSubmodule(href);
     } else if ($icon.hasClass('blob')) {
-      refocusAfterCompletion();
-      newTab ? adapter.openInNewTab(href) : adapter.selectFile(href);
+      const download = $(event.target).is('i.jstree-icon');
+      if (download) {
+        const downloadUrl = $target.attr('data-download-url');
+        const downloadFileName = $target.attr('data-download-filename');
+        adapter.downloadFile(downloadUrl, downloadFileName);
+      } else {
+        refocusAfterCompletion();
+        newTab ? adapter.openInNewTab(href) : adapter.selectFile(href);
+      }
     }
   }
 
   _getClickTarget(event) {
     const $target = $(event.target);
 
-    if ($target.is('i.jstree-icon') || $target.is('a.jstree-anchor')) {
+    if (!$target.is('a.jstree-anchor')) {
       return $target.parent();
     }
 
