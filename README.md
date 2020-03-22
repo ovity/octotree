@@ -42,7 +42,7 @@ Learn more at [keymaster](https://github.com/madrobby/keymaster#supported-keys).
 - **Show sidebar on hover**. If checked, hover the Octotree button to open the sidebar. Otherwise, click the button to open the sidebar.
 - **Lazy-load code tree**. By default, Octotree loads everything in a single API request to render the full code tree. If you frequently work with big repositories, you should select this option so that Octotree only loads and renders the code tree lazily.
 - **Show file-type icons**. If checked, show different icons for different file types.
-- **Show only pull request changes**. If checked, show only the change set of the current pull request. Otherwise, show the full code tree. If a PR has more than 300 files, only 300 are shown.
+- **Show only pull request changes (Pro)**. If checked, show only the change set of the current pull request. Otherwise, show the full code tree. If a PR has more than 300 files, only 300 are shown.
 - **Enable Octotree in pages (Pro)**. Control the GitHub pages in which Octotree shows up.
 - **Cache repositories locally (Pro)**. Whether to cache the repository file structure in **local machine cache** (via browser Cache API). This *significantly* speeds up subsequent visits to large repositories and reduces the number of API requests to GitHub.
 
@@ -71,9 +71,15 @@ Activate lazy-loading for specific repositories by clicking the ⚡️ icon in t
 
 Lazy-loading is helpful when you work with a big repositories (e.g. Linux, Kubernetes). The downside is it requires Octotree to make an API request and render every subdirectory as you click on the directory. This feature allows you to activate lazy-load for only certain repositories.
 
-### Enhanced code review
+### Pull request code review pack
 
-In the Pull Request page, Octotree shows file comments and file view status. The "Show non-file comments" group shows those comments that are added to the pull request, not to individual files. The file view status displayed in the Octotree sidebar helps you review large pull requests easier.
+A collection of features that make pull request review awesome! If the "Show pull request changes" option is selected, Octotree shows
+
+* Show changed files
+* Show comments in each file
+* Show file view status for each file
+
+In addition, it's sometimes necessary to view the entire changed file in a pull request. But keep clicking "Expand" is a pain. Octotree solves that. You can click the "View full" button at the top of each file in a pull request to view its entire content and all the diffs.
 
 ### Multiple themes
 
@@ -92,10 +98,6 @@ You can click the bookmark icon next to a repository, pull request, issue or fil
 Click the search icon to start file search.
 
 Note that when lazy-loading is used, search only works with directories and files that were already loaded.
-
-### View full PR changed file
-
-Sometimes, it's necessary to view the entire changed file in a pull request. But keep clicking "Expand" is a pain. Octotree solves that. You can click the "View full" button at the top of each file in a pull request to view its entire content and all the diffs.
 
 ### Collapse tree
 
