@@ -157,7 +157,7 @@ class Adapter {
           'Please go to <a class="settings-btn">Settings</a> and enter a token.';
         break;
       case 403:
-        if (jqXHR.getResponseHeader('X-RateLimit-Remaining') === '0') {
+        if (jqXHR.statusText === 'rate limit exceeded') {
           // It's kinda specific for GitHub
           error = 'API limit exceeded';
           message =
@@ -167,7 +167,7 @@ class Adapter {
         } else {
           error = 'Forbidden';
           message =
-            'Accessing private repositories requires a GitHub access token. ' +
+            'A GitHub access token is required to access private repositories, or when the API rate limit is exceeded. ' +
             'Please go to <a class="settings-btn">Settings</a> and enter a token.';
         }
 
