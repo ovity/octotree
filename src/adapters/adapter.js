@@ -157,7 +157,7 @@ class Adapter {
           'Please go to <a class="settings-btn">Settings</a> and enter a token.';
         break;
       case 403:
-        if (jqXHR.getResponseHeader('X-RateLimit-Remaining') === '0') {
+        if (jqXHR.statusText === 'rate limit exceeded') {
           // It's kinda specific for GitHub
           error = 'API limit exceeded';
           message =
