@@ -125,11 +125,10 @@ class TreeView {
       refocusAfterCompletion();
       newTab ? adapter.openInNewTab(href) : adapter.selectSubmodule(href);
     } else if ($icon.hasClass('blob')) {
-      const download = $(event.target).is('i.jstree-icon');
-      if (download) {
-        const downloadUrl = $target.attr('data-download-url');
-        const downloadFileName = $target.attr('data-download-filename');
-        adapter.downloadFile(downloadUrl, downloadFileName);
+      const isIconClicked = $(event.target).is('i.jstree-icon');
+      if (isIconClicked) {
+        const editUrl = $target.attr('data-download-url').replace(/\/blob\/|\/src\//, '/edit/');
+        adapter.selectFile(editUrl);
       } else {
         refocusAfterCompletion();
         newTab ? adapter.openInNewTab(href) : adapter.selectFile(href);
