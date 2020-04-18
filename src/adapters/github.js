@@ -131,7 +131,7 @@ class GitHub extends PjaxAdapter {
      *   <span class="css-truncate-target">feature/1/2/3...</span>
      * </summary>
      */
-    const branchDropdownMenuSummary = $('.branch-select-menu summary');
+    const branchDropdownMenuSummary = $('.branch-select-menu summary').first();
     const branchNameInTitle = branchDropdownMenuSummary.attr('title');
     const branchNameInSpan = branchDropdownMenuSummary.find('span').text();
     const branchFromSummary =
