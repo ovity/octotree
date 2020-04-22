@@ -29,6 +29,7 @@ const GH_RESERVED_USER_NAMES = [
   'settings',
   'showcases',
   'site',
+  'sponsors',
   'stars',
   'styleguide',
   'topics',
