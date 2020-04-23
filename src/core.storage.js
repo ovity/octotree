@@ -1,6 +1,7 @@
 class ExtStore {
   constructor(values, defaults) {
     this._isSafari = isSafari();
+    this._siteDomain = this._getCurrentSiteDomain();
     this._tempChanges = {};
 
     if (!this._isSafari) {
@@ -65,7 +66,13 @@ class ExtStore {
 
   async get(key) {
     if (this._init) await this._init;
-    return this._innerGet(key);
+    const value = await this._innerGet(key);
+    
+    if (this._isTokenStore(key)) {
+      return value[this._siteDomain];
+    }
+
+    return value;
   }
 
   async remove(key) {
@@ -89,8 +96,16 @@ class ExtStore {
     return result[key];
   }
 
-  _innerSet (key, value) {
+  async _innerSet (key, value) {
     const payload = {[key]: value};
+    
+    if (this._isTokenStore(key)) {
+      const tokenMap = await this._innerGet(key);
+      tokenMap[this._siteDomain] = value;
+      
+      payload[key] = tokenMap;
+    }
+
     return (key.endsWith('local') || this._isSafari)
       ? this._setLocal(payload)
       : this._setInExtensionStorage(payload);
@@ -140,6 +155,14 @@ class ExtStore {
       localStorage.removeItem(key);
       resolve();
     });
+  }
+
+  _getCurrentSiteDomain() {
+    return location.protocol + '//' + location.host;
+  }
+
+  _isTokenStore(key) {
+    return key === STORE.TOKEN;
   }
 }
 
