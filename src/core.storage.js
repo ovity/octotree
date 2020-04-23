@@ -14,7 +14,7 @@ class ExtStore {
     this._init = Promise.all(
       Object.keys(values).map(async (key) => {
         const existingVal = await this._innerGet(values[key]);
-        if (existingVal == null) {
+        if (existingVal === undefined || existingVal === null) {
           await this._innerSet(values[key], defaults[key]);
         }
       })
@@ -68,7 +68,7 @@ class ExtStore {
     if (this._init) await this._init;
     const value = await this._innerGet(key);
     
-    if (this._isTokenStore(key)) {
+    if (this._isPerHost(key)) {
       return value[this._siteDomain];
     }
 
@@ -89,31 +89,30 @@ class ExtStore {
 
   // Private
   async _innerGet (key) {
-    const result = (key.endsWith('local') || this._isSafari)
+    const result = this._isSafari
       ? await this._getLocal(key)
       : await this._getInExtensionStorage(key);
-
+      
     return result[key];
   }
 
   async _innerSet (key, value) {
+    const currentStore = await this._innerGet(key);
     const payload = {[key]: value};
-    
-    if (this._isTokenStore(key)) {
-      const tokenMap = await this._innerGet(key);
-      tokenMap[this._siteDomain] = value;
-      
-      payload[key] = tokenMap;
+
+    if (this._isPerHost(key) && currentStore) {
+      currentStore[this._siteDomain] = value;
+      payload[key] = currentStore;  
     }
 
-    return (key.endsWith('local') || this._isSafari)
-      ? this._setLocal(payload)
+    return this._isSafari 
+      ? this._setLocal(payload) 
       : this._setInExtensionStorage(payload);
   }
 
   _innerRemove (key) {
-    return (key.endsWith('local') || this._isSafari)
-      ? this._removeLocal(key)
+    return this._isSafari 
+      ? this._removeLocal(key) 
       : this._removeInExtensionStorage(key);
   }
 
@@ -161,8 +160,8 @@ class ExtStore {
     return location.protocol + '//' + location.host;
   }
 
-  _isTokenStore(key) {
-    return key === STORE.TOKEN;
+  _isPerHost(key) {
+    return key.endsWith('perhost');
   }
 }
 

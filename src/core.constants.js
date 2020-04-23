@@ -4,7 +4,7 @@ const SHOW_CLASS = 'octotree-show';
 const PINNED_CLASS = 'octotree-pinned';
 
 const STORE = {
-  TOKEN: 'octotree.token',
+  TOKEN: 'octotree.token.perhost',
   HOVEROPEN: 'octotree.hover_open',
   HOTKEYS: 'octotree.hotkeys',
   ICONS: 'octotree.icons',
