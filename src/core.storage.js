@@ -14,7 +14,7 @@ class ExtStore {
     this._init = Promise.all(
       Object.keys(values).map(async (key) => {
         const existingVal = await this._innerGet(values[key]);
-        if (existingVal === undefined || existingVal === null) {
+        if (existingVal === null) {
           await this._innerSet(values[key], defaults[key]);
         }
       })
