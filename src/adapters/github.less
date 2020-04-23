@@ -8,6 +8,9 @@
   overflow: visible;
   padding-bottom: @footer-height;
   padding-top: @header-height;
+  @media all and (min-width: @lg-width) {
+    padding-top: @lg-header-height;
+  }
   position: fixed;
   transform: translate3d(-100%, 0, 0);
   transition: transform 0.3s ease-in;
@@ -95,6 +98,9 @@
         line-height: 1;
         width: 100%;
         height: @header-height;
+        @media all and (min-width: @lg-width) {
+          height: @lg-header-height;
+        }
         margin: 0;
         padding-right: 65px;
         overflow: hidden;
