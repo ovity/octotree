@@ -1,6 +1,7 @@
 class ExtStore {
   constructor(values, defaults) {
     this._isSafari = isSafari();
+    this._siteDomain = this._getCurrentSiteDomain();
     this._tempChanges = {};
 
     if (!this._isSafari) {
@@ -13,7 +14,7 @@ class ExtStore {
     this._init = Promise.all(
       Object.keys(values).map(async (key) => {
         const existingVal = await this._innerGet(values[key]);
-        if (existingVal == null) {
+        if (existingVal === null) {
           await this._innerSet(values[key], defaults[key]);
         }
       })
@@ -65,7 +66,13 @@ class ExtStore {
 
   async get(key) {
     if (this._init) await this._init;
-    return this._innerGet(key);
+    const value = await this._innerGet(key);
+    
+    if (this._isPerHost(key)) {
+      return value[this._siteDomain];
+    }
+
+    return value;
   }
 
   async remove(key) {
@@ -82,23 +89,30 @@ class ExtStore {
 
   // Private
   async _innerGet (key) {
-    const result = (key.endsWith('local') || this._isSafari)
+    const result = this._isSafari
       ? await this._getLocal(key)
       : await this._getInExtensionStorage(key);
-
+      
     return result[key];
   }
 
-  _innerSet (key, value) {
+  async _innerSet (key, value) {
+    const currentStore = await this._innerGet(key);
     const payload = {[key]: value};
-    return (key.endsWith('local') || this._isSafari)
-      ? this._setLocal(payload)
+
+    if (this._isPerHost(key) && currentStore) {
+      currentStore[this._siteDomain] = value;
+      payload[key] = currentStore;  
+    }
+
+    return this._isSafari 
+      ? this._setLocal(payload) 
       : this._setInExtensionStorage(payload);
   }
 
   _innerRemove (key) {
-    return (key.endsWith('local') || this._isSafari)
-      ? this._removeLocal(key)
+    return this._isSafari 
+      ? this._removeLocal(key) 
       : this._removeInExtensionStorage(key);
   }
 
@@ -140,6 +154,14 @@ class ExtStore {
       localStorage.removeItem(key);
       resolve();
     });
+  }
+
+  _getCurrentSiteDomain() {
+    return location.protocol + '//' + location.host;
+  }
+
+  _isPerHost(key) {
+    return key.endsWith('perhost');
   }
 }
 
