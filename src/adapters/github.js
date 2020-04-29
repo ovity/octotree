@@ -172,8 +172,9 @@ class GitHub extends PjaxAdapter {
       this._defaultBranch[username + '/' + reponame];
 
     const pullHead = isPR ? ($('.commit-ref.head-ref').attr('title') || ':').match(/:(.*)/)[1] : null;
+    const pullNumber = isPR ? typeId : null;
     const displayBranch = isPR && pullHead ? `${branch} < ${pullHead}` : null;
-    const repo = {username, reponame, branch, displayBranch};
+    const repo = {username, reponame, branch, displayBranch, pullNumber};
     if (repo.branch) {
       cb(null, repo);
     } else {
