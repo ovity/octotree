@@ -177,6 +177,8 @@ $(document).ready(() => {
       } else {
         $toggler.show();
       }
+
+      return;
     }
 
     async function toggleSidebar(visibility) {
