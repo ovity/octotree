@@ -82,6 +82,7 @@ class GitHub extends PjaxAdapter {
 
     let htmlMarginLeft = '';
     let containersMarginLeft = '';
+    const dockSide = this.getDockSide();
 
     if (this.isOnFilePage) {
       const SPACING = 10;
@@ -90,7 +91,7 @@ class GitHub extends PjaxAdapter {
 
       if (shouldPushEverything && !smallScreen) {
         // Override important in Github Header class in large screen
-        $header.attr('style', `padding-left: ${sidebarWidth + SPACING}px !important`);
+        $header.attr('style', `padding-${dockSide}: ${sidebarWidth + SPACING}px !important`);
       } else {
         $header.removeAttr('style');
       }
@@ -102,8 +103,12 @@ class GitHub extends PjaxAdapter {
       containersMarginLeft = Math.max(0, autoMarginLeft - sidebarWidth);
     }
 
-    $('html').css('margin-left', htmlMarginLeft);
-    $containers.css('margin-left', containersMarginLeft);
+    $('html').css(`margin-${dockSide}`, htmlMarginLeft);
+    $containers.css(`margin-${dockSide}`, containersMarginLeft);
+  }
+
+  getDockSide() {
+    return 'left';
   }
 
   // @override
