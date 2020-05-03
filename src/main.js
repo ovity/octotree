@@ -131,9 +131,6 @@ $(document).ready(() => {
         if (err) {
           // Error making API, likely private repo but no token
           await showError(err);
-          if (!isSidebarVisible()) {
-            $toggler.show();
-          }
         } else if (repo) {
           if (await extStore.get(STORE.PINNED) && !isSidebarVisible()) {
             // If we're in pin mode but sidebar doesn't show yet, show it.
@@ -174,7 +171,12 @@ $(document).ready(() => {
       hasError = true;
       errorView.show(err);
 
-      if (await extStore.get(STORE.PINNED)) await togglePin(true);
+      if (await extStore.get(STORE.PINNED) && !isSidebarVisible()) {
+        if (isSidebarPinned()) await toggleSidebar();
+        else await onPinToggled(true);
+      } else {
+        $toggler.show();
+      }
     }
 
     async function toggleSidebar(visibility) {
