@@ -174,11 +174,9 @@ $(document).ready(() => {
       if (await extStore.get(STORE.PINNED) && !isSidebarVisible()) {
         if (isSidebarPinned()) await toggleSidebar();
         else await onPinToggled(true);
-      } else {
+      } else if (!isSidebarVisible()) {
         $toggler.show();
       }
-
-      return;
     }
 
     async function toggleSidebar(visibility) {
