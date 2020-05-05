@@ -377,7 +377,10 @@
     display: flex;
     flex-flow: row-reverse;
     align-items: center;
-    top: 10px;
+    @media all and (min-width: @lg-width) {
+      top: 10px;
+    }
+    top: 16px;
     right: 6px;
 
     a {
@@ -554,6 +557,9 @@
     .octotree-spin {
       position: absolute;
       right: 8px;
+      @media all and (min-width: @lg-width) {
+        top: @lg-header-height + 5;
+      }
       top: @header-height + 5;
       display: none;
 
