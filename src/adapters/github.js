@@ -6,10 +6,9 @@
 const GH_PJAX_CONTAINER_SEL =
   '#js-repo-pjax-container, div[itemtype="http://schema.org/SoftwareSourceCode"] main, [data-pjax-container]';
 
-const GH_CONTAINERS = '.container, .container-lg, .container-responsive';
-const GH_HEADER = '.js-header-wrapper > header';
+const GH_PAGE_HEAD = '.pagehead > div:first-child';
+const GH_FULL_WIDTH_CONTAINERS = '.js-header-wrapper > header, .application-main .full-width';
 const GH_MAX_HUGE_REPOS_SIZE = 50;
-const GH_HIDDEN_RESPONSIVE_CLASS = '.d-none';
 const GH_RESPONSIVE_BREAKPOINT = 1010;
 
 class GitHub extends PjaxAdapter {
@@ -72,39 +71,23 @@ class GitHub extends PjaxAdapter {
 
   // @override
   updateLayout(sidebarPinned, sidebarVisible, sidebarWidth) {
-    const $containers =
-      $('html').width() <= GH_RESPONSIVE_BREAKPOINT
-        ? $(GH_CONTAINERS).not(GH_HIDDEN_RESPONSIVE_CLASS)
-        : $(GH_CONTAINERS);
-
-    const autoMarginLeft = ($(document).width() - $containers.width()) / 2;
-    const shouldPushEverything = sidebarPinned && sidebarVisible;
-
-    let htmlMarginLeft = '';
-    let containersMarginLeft = '';
+    const SPACING = 20;
+    const $fullWidthContainers = $(GH_FULL_WIDTH_CONTAINERS);
+    const $html = $('html');
     const dockSide = this.getDockSide();
 
-    if (this.isOnFilePage) {
-      const SPACING = 10;
-      const $header = $(GH_HEADER);
-      const smallScreen = autoMarginLeft <= sidebarWidth + SPACING;
+    if (sidebarPinned && sidebarVisible) {
+      const $pageHead = $(GH_PAGE_HEAD);
+      const autoMarginLeft = ($(document).width() - $pageHead.width()) / 2;
+      const htmlMarginLeft = Math.min(sidebarWidth, Math.max(0, sidebarWidth - autoMarginLeft + SPACING) * 2);
+      const fullWidthsPaddingLeft = Math.max(0, sidebarWidth - htmlMarginLeft + SPACING);
 
-      if (shouldPushEverything && !smallScreen) {
-        // Override important in Github Header class in large screen
-        $header.attr('style', `padding-${dockSide}: ${sidebarWidth + SPACING}px !important`);
-      } else {
-        $header.removeAttr('style');
-      }
-
-      htmlMarginLeft = shouldPushEverything && smallScreen ? sidebarWidth : '';
-      containersMarginLeft = shouldPushEverything && smallScreen ? SPACING : '';
-    } else if (shouldPushEverything) {
-      htmlMarginLeft = sidebarWidth;
-      containersMarginLeft = Math.max(0, autoMarginLeft - sidebarWidth);
+      $fullWidthContainers.attr('style', `padding-${dockSide}: ${fullWidthsPaddingLeft}px !important`);
+      $html.css(`margin-${dockSide}`, `${htmlMarginLeft}px`);
+    } else {
+      $fullWidthContainers.removeAttr('style');
+      $html.css(`margin-${dockSide}`, '');
     }
-
-    $('html').css(`margin-${dockSide}`, htmlMarginLeft);
-    $containers.css(`margin-${dockSide}`, containersMarginLeft);
   }
 
   getDockSide() {
