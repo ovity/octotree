@@ -5,9 +5,9 @@ class ExtStore {
     this._tempChanges = {};
 
     if (!this._isSafari) {
-      this._setInExtensionStorage = promisify(chrome.storage.local, 'set');
-      this._getInExtensionStorage = promisify(chrome.storage.local, 'get');
-      this._removeInExtensionStorage = promisify(chrome.storage.local, 'remove');
+      this._setInExtensionStorage = promisify(chrome.storage.sync, 'set');
+      this._getInExtensionStorage = promisify(chrome.storage.sync, 'get');
+      this._removeInExtensionStorage = promisify(chrome.storage.sync, 'remove');
     }
 
     // Initialize default values
