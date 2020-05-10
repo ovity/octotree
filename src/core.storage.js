@@ -67,7 +67,7 @@ class ExtStore {
   async get(key) {
     if (this._init) await this._init;
     const value = await this._innerGet(key);
-    
+
     if (this._isPerHost(key)) {
       return value[this._siteDomain];
     }
@@ -97,12 +97,17 @@ class ExtStore {
   }
 
   async _innerSet (key, value) {
-    const currentStore = await this._innerGet(key);
     const payload = {[key]: value};
+    
+    if (this._isPerHost(key)) {
+      const currentStore = await this._innerGet(key);
 
-    if (this._isPerHost(key) && currentStore) {
-      currentStore[this._siteDomain] = value;
-      payload[key] = currentStore;  
+      if (currentStore) {
+        currentStore[this._siteDomain] = value;
+        payload[key] = currentStore;
+      } else {
+        payload[key] = {[this._siteDomain]: value};
+      }
     }
 
     return this._isSafari 
