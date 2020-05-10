@@ -17,7 +17,7 @@ const STORE = {
 };
 
 const DEFAULTS = {
-  TOKEN: {},
+  TOKEN: '',
   HOVEROPEN: true,
   LAZYLOAD: false,
   HOTKEYS: '⌘+⇧+s, ⌃+⇧+s',
