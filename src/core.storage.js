@@ -67,8 +67,9 @@ class ExtStore {
   async get(key) {
     if (this._init) await this._init;
     const value = await this._innerGet(key);
+    if (!value) return null;
 
-    if (value && this._isPerHost(key)) {
+    if (this._isPerHost(key)) {
       return value[this._siteDomain];
     }
 
