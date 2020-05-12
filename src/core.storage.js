@@ -67,12 +67,9 @@ class ExtStore {
   async get(key) {
     if (this._init) await this._init;
     const value = await this._innerGet(key);
-    if (!value) return null;
-
-    if (this._isPerHost(key)) {
+    if (value != null && this._isPerHost(key)) {
       return value[this._siteDomain];
     }
-
     return value;
   }
 
@@ -93,13 +90,13 @@ class ExtStore {
     const result = this._isSafari
       ? await this._getLocal(key)
       : await this._getInExtensionStorage(key);
-      
+
     return result[key];
   }
 
   async _innerSet (key, value) {
     const payload = {[key]: value};
-    
+
     if (this._isPerHost(key)) {
       const currentStore = await this._innerGet(key);
 
@@ -111,14 +108,14 @@ class ExtStore {
       }
     }
 
-    return this._isSafari 
-      ? this._setLocal(payload) 
+    return this._isSafari
+      ? this._setLocal(payload)
       : this._setInExtensionStorage(payload);
   }
 
   _innerRemove (key) {
-    return this._isSafari 
-      ? this._removeLocal(key) 
+    return this._isSafari
+      ? this._removeLocal(key)
       : this._removeInExtensionStorage(key);
   }
 
