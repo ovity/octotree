@@ -16,6 +16,10 @@ $(document).ready(() => {
     const helpPopup = new HelpPopup($dom);
     const errorView = new ErrorView($dom);
 
+    const saveSidebarWidth = debounce((width) => {
+      extStore.set(STORE.WIDTH, width);
+    }, 100);
+
     let currRepo = false;
     let hasError = false;
 
@@ -157,7 +161,7 @@ $(document).ready(() => {
           $toggler.hide();
           toggleSidebar(false);
         }
-        await layoutChanged();
+        layoutChanged();
       });
     }
 
@@ -222,11 +226,11 @@ $(document).ready(() => {
       await toggleSidebar(sidebarPinned);
     }
 
-    async function layoutChanged(save = false) {
+    function layoutChanged(save = false) {
       const width = $sidebar.outerWidth();
       adapter.updateLayout(isSidebarPinned(), isSidebarVisible(), width);
       if (save === true) {
-        await extStore.set(STORE.WIDTH, width);
+        saveSidebarWidth(width);
       }
     }
 
