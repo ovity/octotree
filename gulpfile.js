@@ -158,10 +158,7 @@ function html2js(template) {
 function buildJs(prefix = '.', ctx = {}) {
   const src = [
     `${prefix}/tmp/template.js`,
-    `${prefix}/src/util.module.js`,
-    `${prefix}/src/util.async.js`,
     `${prefix}/src/util.misc.js`,
-    `${prefix}/src/util.deXss.js`,
     `${prefix}/src/util.plugins.js`,
     `${prefix}/src/core.constants.js`,
     `${prefix}/src/core.storage.js`,
