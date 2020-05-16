@@ -60,3 +60,11 @@ function parseGitmodules(data) {
 
   return submodules;
 }
+
+// Due to the build output, need to export to 'window' if plugins use these
+window.isSafari = isSafari;
+window.isValidTimeStamp = isValidTimeStamp;
+window.deXss = deXss;
+window.parallel = parallel;
+window.debounce = debounce;
+window.parseGitmodules = parseGitmodules;
