@@ -25,13 +25,13 @@ class ExtStore {
   }
 
   _setupOnChangeEvent() {
-    window.addEventListener('storage', (evt) => {
-      if (this._isOctotreeKey(evt.key)) {
-        this._notifyChange(evt.key, _parse(evt.oldValue), _parse(evt.newValue));
-      }
-    });
-
-    if (!this._isSafari) {
+    if (this._isSafari) {
+      window.addEventListener('storage', (evt) => {
+        if (this._isOctotreeKey(evt.key)) {
+          this._notifyChange(evt.key, _parse(evt.oldValue), _parse(evt.newValue));
+        }
+      });
+    } else {
       chrome.storage.onChanged.addListener((changes) => {
         Object.entries(changes).forEach(([key, change]) => {
           if (this._isOctotreeKey(key)) {
@@ -43,7 +43,10 @@ class ExtStore {
   }
 
   _isOctotreeKey(key) {
-    return key.startsWith('octotree');
+    // Filter out HUGE_REPOS because it causes recursive change notification
+    //   HUGE_REPOS change -> reload tree
+    //   reload tree -> update huge repo timestamp (to store only most recent) -> HUGE_REPOS change -> ...
+    return key.startsWith('octotree') && key !== STORE.HUGE_REPOS;
   }
 
   // Debounce and group the trigger of EVENT.STORE_CHANGE because the
