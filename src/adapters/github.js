@@ -6,10 +6,9 @@
 const GH_PJAX_CONTAINER_SEL =
   '#js-repo-pjax-container, div[itemtype="http://schema.org/SoftwareSourceCode"] main, [data-pjax-container]';
 
-const GH_PAGE_HEAD = '.pagehead > div:first-child';
-const GH_FULL_WIDTH_CONTAINERS = '.js-header-wrapper > header, .application-main .full-width';
+const GH_CONTAINERS = '.pagehead > nav, .container, .container-lg, .container-responsive';
+const GH_FULL_WIDTH_CONTAINERS = '.js-header-wrapper > header, .application-main .full-width, .flash-full';
 const GH_MAX_HUGE_REPOS_SIZE = 50;
-const GH_RESPONSIVE_BREAKPOINT = 1010;
 
 class GitHub extends PjaxAdapter {
   constructor() {
@@ -77,8 +76,8 @@ class GitHub extends PjaxAdapter {
     const dockSide = this.getDockSide();
 
     if (sidebarPinned && sidebarVisible) {
-      const $pageHead = $(GH_PAGE_HEAD);
-      const autoMarginLeft = ($(document).width() - $pageHead.width()) / 2;
+      const $containers = $(GH_CONTAINERS);
+      const autoMarginLeft = Math.max(0, ($(window).width() - $containers.width()) / 2);
       const htmlMarginLeft = Math.min(sidebarWidth, Math.max(0, sidebarWidth - autoMarginLeft + SPACING) * 2);
       const fullWidthsPaddingLeft = Math.max(0, sidebarWidth - htmlMarginLeft + SPACING);
 
