@@ -15,16 +15,16 @@ Octotree uses the [GitHub API](https://developer.github.com/v3/) to retrieve rep
 
 When that happens, Octotree will ask for your [GitHub personal access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use). If you don't already have one, [create one](https://github.com/settings/tokens/new?scopes=repo&description=Octotree%20browser%20extension), then copy and paste it into the token textbox in the Settings screen. Note that the minimal scopes that should be granted are `public_repo` and `repo` (if you need access to private repositories).
 
-**No BS Policy**: Octotree doesn't collect/share/care about your data at all. It stores the access token in your browser local storage and uses it only to communicate with GitHub API (see the code that does that [here](https://github.com/ovity/octotree/blob/559291ed9017f0c3429bc49419d001d9ea0ac510/src/adapters/github.js#L296-L313)).
+**No BS Policy**: Octotree doesn't collect/share/care about your data at all. It stores the access token in your [browser storage](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/sync) and uses it only to communicate with GitHub API (see the code that does that [here](https://github.com/ovity/octotree/blob/559291ed9017f0c3429bc49419d001d9ea0ac510/src/adapters/github.js#L296-L313)).
 
-**Access tokens are stored in the browser's local storage, only enter access tokens when you use a trusted computer.**
+**Access tokens are stored in the browser storage, only enter access tokens when you use a TRUSTED computer.**
 
 ### Multiple Access Tokens (Pro)
 
 If you have multiple GitHub accounts with access to different private repositories, you can let Octotree know which access token to use for which account.
 When you login to GitHub with an account, Octotree will use the matching token to make API requests to GitHub. If you don't login to GitHub or if the account you login is not in the account list, Octotree will use the default access token.
 
-Go to Settings and click the + icon to add more accounts. Similar to access token, these accounts and tokens are stored in the browser's local storage.
+Go to Settings and click the + icon to add more accounts. Similar to access token, these accounts and tokens are stored in the browser's storage. Therefore, only enter these on a TRUSTED computer.
 
 ![Multiple GitHub accounts](docs/pro-ma.jpg)
 
@@ -40,11 +40,13 @@ Learn more at [keymaster](https://github.com/madrobby/keymaster#supported-keys).
 ### Others
 
 - **Show sidebar on hover**. If checked, hover the Octotree button to open the sidebar. Otherwise, click the button to open the sidebar.
-- **Lazy-load code tree**. By default, Octotree loads everything in a single API request to render the full code tree. If you frequently work with big repositories, you should select this option so that Octotree only loads and renders the code tree lazily.
 - **Show file-type icons**. If checked, show different icons for different file types.
-- **Show only pull request changes (Pro)**. If checked, show only the change set of the current pull request. Otherwise, show the full code tree. If a PR has more than 300 files, only 300 are shown.
+- **Enable bookmarking**. If checked, show the bookmark icon for repositories, files, pull requests and issues.
 - **Enable Octotree in pages (Pro)**. Control the GitHub pages in which Octotree shows up.
 - **Cache repositories locally (Pro)**. Whether to cache the repository file structure in **local machine cache** (via browser Cache API). This *significantly* speeds up subsequent visits to large repositories and reduces the number of API requests to GitHub.
+- **Lazy-load code tree**. By default, Octotree loads everything in a single API request to render the full code tree. It could be slow if working with a large repository. If you frequently work with big repositories, you should select this option so that Octotree only loads and renders the code tree lazily.
+- **Enable multi-tab (Pro)**. What it says.
+- **Font settings (Pro)**. This will affect the source code font only.
 
 ## Pro Features
 
@@ -64,6 +66,16 @@ Follow these steps to enable Octotree for GitHub Enterprise:
 * Right-click the Octotree icon the browser bar (see image below) select "Enable Octotree on this domain"
 
 ![GitHub Enterprise](docs/pro-ghe.png)
+
+### Multi-tab
+
+This makes it even better and faster to browser source with Octotree.
+
+![Multi-tab](docs/pro-tabs.png)
+
+### Code font settings
+
+Easily change code font type and size. Open the Settings screen to do so, will only affect code file, not GitHub font.
 
 ### Lazy-load a specific repository
 

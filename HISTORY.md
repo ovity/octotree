@@ -1,3 +1,19 @@
+### v5.0
+
+Changes to Octotree core:
+
+- Store settings in [`storage.sync`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/sync) per user feedback
+- Many bug fixes
+
+New Pro features:
+
+- Multiple tabs
+- Code font settings
+
+### v4.2.1
+
+Made PR mode a Pro feature. See this [thread](https://github.com/ovity/octotree/issues/895).
+
 ### v4.0
 
 Dealing with 2 separate versions of Octotree in many browsers has been a major pain for our team. Starting from this version, we have combined them to simplify our release process as well as ease the process of trial, downgrading and upgrading for our users. There is now one software to be installed: Octotree. We will deprecated Octotree Pro in the near future. All Octotree Pro users should switch to Octotree to enjoy the new features.
