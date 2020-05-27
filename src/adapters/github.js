@@ -9,6 +9,8 @@ const GH_PJAX_CONTAINER_SEL =
 const GH_CONTAINERS = '.pagehead > nav, .container, .container-lg, .container-responsive';
 const GH_FULL_WIDTH_CONTAINERS = '.js-header-wrapper > header, .application-main .full-width, .flash-full';
 const GH_MAX_HUGE_REPOS_SIZE = 50;
+const GH_HIDDEN_RESPONSIVE_CLASS = '.d-none';
+const GH_RESPONSIVE_BREAKPOINT = 1010;
 
 class GitHub extends PjaxAdapter {
   constructor() {
@@ -76,8 +78,11 @@ class GitHub extends PjaxAdapter {
     const dockSide = this.getDockSide();
 
     if (sidebarPinned && sidebarVisible) {
-      const $containers = $(GH_CONTAINERS);
-      const autoMarginLeft = Math.max(0, ($(window).width() - $containers.width()) / 2);
+      const screenWidth = $(window).width();
+      const $containers = screenWidth <= GH_RESPONSIVE_BREAKPOINT
+        ? $(GH_CONTAINERS).not(GH_HIDDEN_RESPONSIVE_CLASS)
+        : $(GH_CONTAINERS);
+      const autoMarginLeft = Math.max(0, (screenWidth - $containers.outerWidth()) / 2);
       const htmlMarginLeft = Math.min(sidebarWidth, Math.max(0, sidebarWidth - autoMarginLeft + SPACING) * 2);
       const fullWidthsPaddingLeft = Math.max(0, sidebarWidth - htmlMarginLeft + SPACING);
 
