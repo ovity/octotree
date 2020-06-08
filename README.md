@@ -142,7 +142,7 @@ Octotree uses the following open-source software:
 - [jQuery](https://github.com/jquery/jquery)
 - [jQuery UI](https://github.com/jquery/jquery-ui)
 - [jstree](https://github.com/vakata/jstree)
-- [file-icons](https://github.com/file-icons/atom)
+- [file-icons-js](https://github.com/websemantics/file-icons-js)
 - [keymaster](https://github.com/madrobby/keymaster)
 - [jquery-pjax](https://github.com/defunkt/jquery-pjax)
 - [github-dark](https://github.com/StylishThemes/GitHub-Dark)
