@@ -341,7 +341,7 @@
     ["chartjs-icon",["dark-pink","dark-pink"],/^Chart\.js$/i,2],
     ["circleci-icon",["medium-green","medium-green"],/^circle\.yml$/i,2],
     ["cc-icon",["medium-green","medium-green"],/\.codeclimate\.yml$/i,2],
-    ["codecov-icon",["dark-pink","dark-pink"],/^codecov\.ya?ml$/i,2],
+    ["codecov-icon",["dark-pink","dark-pink"],/^\.?codecov\.ya?ml$/i,2],
     ["coffee-icon",["medium-cyan","medium-cyan"],/\.coffee\.ecr$/i,2],
     ["coffee-icon",["medium-red","medium-red"],/\.coffee\.erb$/i,2],
     ["compass-icon",["medium-red","medium-red"],/^_?(?:compass|lemonade)\.scss$/i,2],
