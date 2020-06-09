@@ -75,27 +75,33 @@ This makes it even better and faster to browser source with Octotree.
 
 ### Code font settings
 
-Easily change code font type and size. Open the Settings screen to do so, will only affect code file, not GitHub font.
+Easily change code font type and size. Open the Settings screen to select among the built-in fonts.
 
-### Lazy-load a specific repository
+![Fonts](docs/pro-font.png)
 
-Activate lazy-loading for specific repositories by clicking the ⚡️ icon in the Octotree sidebar header.
+### Code review pack
 
-Lazy-loading is helpful when you work with a big repositories (e.g. Linux, Kubernetes). The downside is it requires Octotree to make an API request and render every subdirectory as you click on the directory. This feature allows you to activate lazy-load for only certain repositories.
+A collection of features that make pull request review awesome:
 
-### Pull request code review pack
+* Show PR files and changes
+* Show code comments
+* Show file view status
+* View full file by clicking the "View full" button at the top of each file
 
-A collection of features that make pull request review awesome! If the "Show pull request changes" option is selected, Octotree shows
+![Fonts](docs/pro-pr.png)
 
-* Show changed files
-* Show comments in each file
-* Show file view status for each file
+### Performance pack
 
-In addition, it's sometimes necessary to view the entire changed file in a pull request. But keep clicking "Expand" is a pain. Octotree solves that. You can click the "View full" button at the top of each file in a pull request to view its entire content and all the diffs.
+This package includes features that boost up performance when working with large repositories:
+
+* Repository caching. Whether to cache the repository file structure in **local machine cache** (via browser Cache API). This *significantly* speeds up subsequent visits to large repositories and reduces the number of API requests to GitHub.
+* Activate lazy-loading for specific repositories by clicking the ⚡️ icon in the Octotree sidebar header. Lazy-loading is helpful when you work with a big repositories (e.g. Linux, Kubernetes). The downside is it requires Octotree to make an API request and render every subdirectory as you click on the directory. This feature allows you to activate lazy-load for only certain repositories.
 
 ### Multiple themes
 
 Click the theme icon located at the bottom of Octotree to select a color theme. The "Only Sidebar" theme changes the Octotree sidebar to the dark theme without changing the theme of the GitHub page. This is helpful if you already use another mechanism to show GitHub in dark mode.
+
+![Themes](docs/pro-themes.png)
 
 ### Change docking position
 

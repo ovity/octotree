@@ -9,6 +9,7 @@ New Pro features:
 
 - Multiple tabs
 - Code font settings
+- Support Solarized Dark and One Dark
 
 ### v4.2.1
 
