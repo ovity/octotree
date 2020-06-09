@@ -69,7 +69,8 @@ Follow these steps to enable Octotree for GitHub Enterprise:
 
 ### Multi-tab
 
-This makes it even better and faster to browser source with Octotree.
+Double-click a file on the sidebar to open it in a new tab. Switching among tabs is very fast because they're cached
+in the browser. Tabs and their scroll position are cached locally so they survive reloads.
 
 ![Multi-tab](docs/pro-tabs.png)
 
@@ -83,8 +84,7 @@ Easily change code font type and size. Open the Settings screen to select among 
 
 A collection of features that make pull request review awesome:
 
-* Show PR files and changes
-* Show code comments
+* Show PR files, changes and comments
 * Show file view status
 * View full file by clicking the "View full" button at the top of each file
 
