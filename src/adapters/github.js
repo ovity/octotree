@@ -76,6 +76,8 @@ class GitHub extends PjaxAdapter {
     const $fullWidthContainers = $(GH_FULL_WIDTH_CONTAINERS);
     const $html = $('html');
     const dockSide = this.getDockSide();
+    const paddingSide = `padding-${dockSide}`;
+    const marginSide = `margin-${dockSide}`;
 
     if (sidebarPinned && sidebarVisible) {
       const screenWidth = $(window).width();
@@ -86,11 +88,13 @@ class GitHub extends PjaxAdapter {
       const htmlMarginLeft = Math.min(sidebarWidth, Math.max(0, sidebarWidth - autoMarginLeft + SPACING) * 2);
       const fullWidthsPaddingLeft = Math.max(0, sidebarWidth - htmlMarginLeft + SPACING);
 
-      $fullWidthContainers.attr('style', `padding-${dockSide}: ${fullWidthsPaddingLeft}px !important`);
-      $html.css(`margin-${dockSide}`, `${htmlMarginLeft}px`);
+      $fullWidthContainers.each(function () {
+        this.style.setProperty(paddingSide, `${fullWidthsPaddingLeft}px`, 'important');
+      })
+      $html.css(marginSide, `${htmlMarginLeft}px`);
     } else {
-      $fullWidthContainers.removeAttr('style');
-      $html.css(`margin-${dockSide}`, '');
+      $fullWidthContainers.css(paddingSide, '');
+      $html.css(marginSide, '');
     }
   }
 
@@ -157,13 +161,13 @@ class GitHub extends PjaxAdapter {
       // The above should work for tree|blob, but if DOM changes, fallback to use ID from URL
       ((type === 'tree' || type === 'blob') && typeId) ||
       // Use target branch in a PR page
-      (isPR ? ($('.commit-ref').not('.head-ref').attr('title') || ':').match(/:(.*)/)[1] : null) ||
+      (isPR ? ($('.commit-ref:not(.head-ref) a').attr('title') || ':').match(/:(.*)/)[1] : null) ||
       // Reuse last selected branch if exist
       (currentRepo.username === username && currentRepo.reponame === reponame && currentRepo.branch) ||
       // Get default branch from cache
       this._defaultBranch[username + '/' + reponame];
 
-    const pullHead = isPR ? ($('.commit-ref.head-ref').attr('title') || ':').match(/:(.*)/)[1] : null;
+    const pullHead = isPR ? ($('.commit-ref.head-ref a').attr('title') || ':').match(/:(.*)/)[1] : null;
     const pullNumber = isPR ? typeId : null;
     const displayBranch = isPR && pullHead ? `${branch} < ${pullHead}` : null;
     const repo = {username, reponame, branch, displayBranch, pullNumber};
