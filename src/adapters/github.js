@@ -88,7 +88,9 @@ class GitHub extends PjaxAdapter {
       const htmlMarginLeft = Math.min(sidebarWidth, Math.max(0, sidebarWidth - autoMarginLeft + SPACING) * 2);
       const fullWidthsPaddingLeft = Math.max(0, sidebarWidth - htmlMarginLeft + SPACING);
 
-      $fullWidthContainers.css(paddingSide, `${fullWidthsPaddingLeft}px`);
+      $fullWidthContainers.each(function () {
+        this.style.setProperty(paddingSide, `${fullWidthsPaddingLeft}px`, 'important');
+      })
       $html.css(marginSide, `${htmlMarginLeft}px`);
     } else {
       $fullWidthContainers.css(paddingSide, '');
