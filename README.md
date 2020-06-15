@@ -40,7 +40,6 @@ Learn more at [keymaster](https://github.com/madrobby/keymaster#supported-keys).
 ### Others
 
 - **Show sidebar on hover**. If checked, hover the Octotree button to open the sidebar. Otherwise, click the button to open the sidebar.
-- **Show file-type icons**. If checked, show different icons for different file types.
 - **Enable bookmarking**. If checked, show the bookmark icon for repositories, files, pull requests and issues.
 - **Enable Octotree in pages (Pro)**. Control the GitHub pages in which Octotree shows up.
 - **Cache repositories locally (Pro)**. Whether to cache the repository file structure in **local machine cache** (via browser Cache API). This *significantly* speeds up subsequent visits to large repositories and reduces the number of API requests to GitHub.

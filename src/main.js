@@ -105,7 +105,6 @@ $(document).ready(() => {
         switch (storeKey) {
           case STORE.TOKEN:
           case STORE.LAZYLOAD:
-          case STORE.ICONS:
             reload = true;
             break;
           case STORE.HOVEROPEN:

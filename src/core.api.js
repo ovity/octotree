@@ -79,12 +79,8 @@ class OctotreeService {
 
   async _setNodeIconAndText(context, item) {
     if (item.type === 'blob') {
-      if (await extStore.get(STORE.ICONS)) {
-        const className = FileIcons.getClassWithColor(item.text);
-        item.icon += ' ' + (className || 'file-generic');
-      } else {
-        item.icon += ' file-generic';
-      }
+      const className = FileIcons.getClassWithColor(item.text);
+      item.icon += ' ' + (className || 'file-generic');
     }
   }
 
