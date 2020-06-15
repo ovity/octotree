@@ -188,12 +188,14 @@ $(document).ready(() => {
         if (isSidebarVisible() === visibility) return;
         await toggleSidebar();
       } else {
+        treeView.$tree.hide();
         $html.toggleClass(SHOW_CLASS);
         $document.trigger(EVENT.TOGGLE, isSidebarVisible());
 
         // Ensure the repo is loaded when the sidebar shows after being hidden.
         // Note that tryLoadRepo() already takes care of not reloading if nothing changes.
         if (isSidebarVisible()) {
+          treeView.$tree.show();
           $toggler.show();
           await tryLoadRepo();
         }
