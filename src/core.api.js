@@ -4,6 +4,7 @@ const GH_RESERVED_USER_NAMES = [
   'blog',
   'business',
   'contact',
+  'collections',
   'dashboard',
   'developer',
   'explore',
