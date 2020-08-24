@@ -1,6 +1,6 @@
 ## About
 
-Browser extension (Chrome, Firefox, Edge, Opera, Safari) that improves GitHub code review and exploration. This repository is for submitting bugs and feature requests. (Check out the master branch for the source code of a limited version of Octotree.) You can download Octotree by clicking the icons below or from [our website](https://www.octotree.io/). 
+Browser extension (Chrome, Firefox, Edge, Opera, Safari) that improves GitHub code review and exploration. This repository is for submitting bugs and feature requests. (Check out the master branch for the source code of a limited version of Octotree.) You can download Octotree by clicking the images below or from [our website](https://www.octotree.io/). 
 
 [![Chrome](docs/chrome.png "Chrome")](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc)
 [![Firefox](docs/firefox.png "Firefox")](https://addons.mozilla.org/en-US/firefox/addon/octotree/)
