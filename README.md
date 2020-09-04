@@ -8,10 +8,10 @@ Browser extension (Chrome, Firefox, Edge, Opera, Safari) that improves GitHub co
 [![Edge](assets/edge.png "Edge")](https://microsoftedge.microsoft.com/addons/detail/octotree/joagmknfcgpikbadjkaikmnhpjadihjg?hl=en-US)
 [![Safari](assets/safari.png "Safari")](https://itunes.apple.com/us/app/octotree-pro/id1457450145?mt=12)
 
-
 ### Learn more:
 
-* [User guide](https://www.octotree.io/features)
-* [Browser permissions](https://www.octotree.io/features#browser-permissions)
+- [User guide](https://www.octotree.io/features)
+- [Browser permissions](https://www.octotree.io/features#browser-permissions)
+- Follow us on [Twitter](https://twitter.com/octotree) for product updates
 
 ![Octotree](assets/demo.gif)
