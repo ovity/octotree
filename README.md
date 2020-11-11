@@ -8,7 +8,11 @@ Browser extension that enhances GitHub code review and exploration. This branch 
 [![Edge](assets/edge.png "Edge")](https://microsoftedge.microsoft.com/addons/detail/octotree/joagmknfcgpikbadjkaikmnhpjadihjg?hl=en-US)
 [![Safari](assets/safari.png "Safari")](https://itunes.apple.com/us/app/octotree-pro/id1457450145?mt=12)
 
-### Learn more:
+### Support
+
+Please send bug report and feature request to support@octotree.io
+
+### Learn more
 
 - [Demo](https://www.youtube.com/watch?v=tyUNy-WFs-c)
 - [User guide](https://www.octotree.io/features)
