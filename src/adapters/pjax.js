@@ -102,36 +102,10 @@ class PjaxAdapter extends Adapter {
       // Only dispatch to native DOM if the event is started by Octotree. If the event is started in the DOM, jQuery
       // wraps it in the originalEvent property, that's what we use to check. Fixes #864.
       if (event.originalEvent == null) {
-        this._dispatchPjaxEventInDom(pjaxEventName);
+        // TODO dispatch pjax event so other add-ons can handle
       }
     } finally {
       this._isDispatching = false;
-    }
-  }
-
-  /**
-   * Dispatches a pjax event directly in the DOM.
-   *
-   * GitHub's own pjax implementation dispatches its events directly in the DOM, while
-   * the jQuery pjax library we use dispatches its events (during selectFile()) only
-   * within its jQuery instance. Because some GitHub add-ons listen to certain pjax events
-   * in the DOM it may be necessary to forward an event from jQuery to the DOM to make sure
-   * those add-ons don't break.
-   *
-   * Note that we don't forward the details/extra parameters or whether they're cancellable,
-   * because the pjax implementations differ in this case!
-   *
-   * @see https://github.com/ovity/octotree/issues/490
-   *
-   * @param {string} type The name of the event
-   * @api private
-   */
-  _dispatchPjaxEventInDom(type) {
-    const pjaxContainer = $(this._pjaxContainerSel)[0];
-    if (pjaxContainer) {
-      pjaxContainer.dispatchEvent(new Event(type, {
-        bubbles: true
-      }));
     }
   }
 

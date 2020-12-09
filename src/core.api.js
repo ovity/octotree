@@ -34,7 +34,6 @@ const GH_RESERVED_USER_NAMES = [
   'styleguide',
   'topics',
   'trending',
-  'users',
   'watching',
 ];
 const GH_RESERVED_REPO_NAMES = ['followers', 'following', 'repositories'];

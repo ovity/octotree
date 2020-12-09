@@ -5,10 +5,10 @@ class TreeView {
     this.$tree = this.$view
       .find('.octotree-view-body')
       .on('click.jstree', '.jstree-open>a', ({target}) => {
-        setTimeout(() => this.$jstree.close_node(target));
+        this.$jstree.close_node(target);
       })
       .on('click.jstree', '.jstree-closed>a', ({target}) => {
-        setTimeout(() => this.$jstree.open_node(target));
+        this.$jstree.open_node(target);
       })
       .on('click', this._onItemClick.bind(this))
       .jstree({
@@ -101,9 +101,6 @@ class TreeView {
   _onItemClick(event) {
     let $target = $(event.target);
     let download = false;
-
-    // Handle middle click
-    if (event.which === 2) return;
 
     if (this.onItemClick(event)) return;
 
