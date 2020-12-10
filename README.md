@@ -1,6 +1,6 @@
 ## About
 
-Browser extension that enhances GitHub code review and exploration. This branch contains the old source code of a limited version of Octotree. You can download Octotree for your browser from [our website](https://www.octotree.io). Octotree supports Chrome, Firefox, Edge, Opera and Safari.
+Browser extension that enhances GitHub code review and exploration. This repo contains the old source code of a limited version of Octotree. You can download Octotree for your browser from [our website](https://www.octotree.io). Octotree supports Chrome, Firefox, Edge, Opera and Safari.
 
 [![Chrome](assets/chrome.png "Chrome")](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc)
 [![Firefox](assets/firefox.png "Firefox")](https://addons.mozilla.org/en-US/firefox/addon/octotree/)
@@ -10,13 +10,13 @@ Browser extension that enhances GitHub code review and exploration. This branch 
 
 ### Support
 
-Please send bug report and feature request to support@octotree.io
+Please check out the [troubleshooting guide](https://github.com/ovity/octotree/issues/1025) to see if it solves the problem. If it doesn't, please either create [a forum ticket](https://github.com/ovity/octotree/issues/new) or send an email to support@octotree.io.
 
 ### Learn more
 
 - [Demo](https://www.youtube.com/watch?v=tyUNy-WFs-c)
 - [User guide](https://www.octotree.io/features)
+- [Authentication](https://www.octotree.io/features#authentication)
 - [Browser permissions](https://www.octotree.io/features#browser-permissions)
-- Follow us on [Twitter](https://twitter.com/octotree) for product updates
 
 [![Octotree](assets/demo.png)](https://www.youtube.com/watch?v=tyUNy-WFs-c)
