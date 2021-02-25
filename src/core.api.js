@@ -23,6 +23,7 @@ const GH_RESERVED_USER_NAMES = [
   'personal',
   'pricing',
   'pulls',
+  'readme',
   'search',
   'security',
   'sessions',
