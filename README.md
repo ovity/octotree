@@ -1,6 +1,6 @@
 ## About
 
-Browser extension that enhances GitHub code review and exploration. This repo contains the old source code of a limited version of Octotree. You can download Octotree for your browser from [our website](https://www.octotree.io). Octotree supports Chrome, Firefox, Edge, Opera and Safari.
+Browser extension that enhances GitHub code review and exploration. You can download Octotree for your browser from [our website](https://www.octotree.io). Octotree supports Chrome, Firefox, Edge, Opera and Safari.
 
 [![Chrome](assets/chrome.png "Chrome")](https://chrome.google.com/webstore/detail/octotree/bkhaagjahfmjljalopjnoealnfndnagc)
 [![Firefox](assets/firefox.png "Firefox")](https://addons.mozilla.org/en-US/firefox/addon/octotree/)
@@ -20,3 +20,7 @@ Please check out the [troubleshooting guide](https://github.com/ovity/octotree/i
 - [Browser permissions](https://www.octotree.io/features#browser-permissions)
 
 [![Octotree](assets/demo.png)](https://www.youtube.com/watch?v=tyUNy-WFs-c)
+
+### Copyright
+
+Octotree is a proprietary software. This repository contains the old source code of a very limited version of Octotree. The Octotree team owns the complete copyright over this code.
