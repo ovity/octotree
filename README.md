@@ -10,7 +10,7 @@ Browser extension that enhances GitHub code review and exploration. You can down
 
 ### Support
 
-Please check out the [troubleshooting guide](https://github.com/ovity/octotree/issues/1025) to see if it solves the problem. If it doesn't, please either create [a forum ticket](https://github.com/ovity/octotree/issues/new) or send an email to support@octotree.io.
+Please check out the [troubleshooting guide](https://github.com/ovity/octotree/issues/1097) to see if it solves the problem. If it doesn't, please either create [a forum ticket](https://github.com/ovity/octotree/issues/new) or send an email to support@octotree.io.
 
 ### Learn more
 
