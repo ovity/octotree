@@ -11,10 +11,12 @@ Browser extension that enhances GitHub code review and exploration. You can down
 
 > Octotree is a __proprietary__ software. This repository contains the old source code of a very limited version of Octotree. The Octotree team owns the complete copyright over this code.
 
+[![Octotree](assets/demo.png)](https://www.octotree.io/)
+
 ### Support
 
 * Check the [troubleshooting guide](https://github.com/ovity/octotree/issues/1097) for common issues
-* To request feature or report bug, submit [a ticket](https://github.com/ovity/octotree/issues/new) 
+* To request features or report bugs, submit a [ticket](https://github.com/ovity/octotree/issues/new) 
 * If you need help with payment and billing, email support@octotree.io 
 
 ### Learn more
@@ -26,4 +28,3 @@ Browser extension that enhances GitHub code review and exploration. You can down
 - [Browser permissions](https://www.octotree.io/features#browser-permissions)
 - [Plan comparison](https://www.octotree.io/pricing)
 
-[![Octotree](assets/demo.png)](https://www.youtube.com/watch?v=tyUNy-WFs-c)
