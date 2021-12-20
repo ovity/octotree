@@ -22,10 +22,7 @@ Browser extension that enhances GitHub code review and exploration. You can down
 
 ### Learn more
 
-- [Demo](https://www.youtube.com/watch?v=tyUNy-WFs-c)
-- [User guide](https://www.octotree.io/features)
+- [Website](https://www.octotree.io)
 - [Release notes](https://www.octotree.io/changes)
-- [Authentication](https://www.octotree.io/features#authentication)
 - [Browser permissions](https://www.octotree.io/features#browser-permissions)
-- [Plan comparison](https://www.octotree.io/pricing)
 
