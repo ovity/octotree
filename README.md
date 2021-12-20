@@ -16,7 +16,8 @@ Browser extension that enhances GitHub code review and exploration. You can down
 ### Support
 
 * Check the [troubleshooting guide](https://github.com/ovity/octotree/issues/1097) for common issues
-* To request features or report bugs, submit a [ticket](https://github.com/ovity/octotree/issues/new) 
+* Submit a [ticket](https://github.com/ovity/octotree/issues/new) if you want to report bugs or suggest features
+* Follow [@octotree](https://twitter.com/octotree) on Twitter for product updates
 * If you need help with payment and billing, email support@octotree.io 
 
 ### Learn more
