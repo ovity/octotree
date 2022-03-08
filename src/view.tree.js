@@ -1,22 +1,4 @@
-class TreeView {
-  constructor($dom, adapter) {
-    this.adapter = adapter;
-    this.$view = $dom.find('.octotree-tree-view');
-    this.$tree = this.$view
-      .find('.octotree-view-body')
-      .on('click.jstree', '.jstree-open>a', ({target}) => {
-        this.$jstree.close_node(target);
-      })
-      .on('click.jstree', '.jstree-closed>a', ({target}) => {
-        this.$jstree.open_node(target);
-      })
-      .on('click', this._onItemClick.bind(this))
-      .jstree({
-        core: {multiple: false, animation: 50, worker: false, themes: {responsive: false}},
-        plugins: ['wholerow', 'search', 'truncate']
-      });
-  }
-
+This has been ____________======= altered. ################
   get $jstree() {
     return this.$tree.jstree(true);
   }
