@@ -3,6 +3,7 @@ const ADDON_CLASS = 'octotree';
 const SHOW_CLASS = 'octotree-show';
 const PINNED_CLASS = 'octotree-pinned';
 
+
 const STORE = {
   TOKEN: 'octotree.token.local',
   HOVEROPEN: 'octotree.hover_open',
@@ -17,6 +18,7 @@ const STORE = {
   HUGE_REPOS: 'octotree.huge_repos'
 };
 
+
 const DEFAULTS = {
   TOKEN: '',
   HOVEROPEN: true,
@@ -30,6 +32,7 @@ const DEFAULTS = {
   PINNED: false,
   HUGE_REPOS: {}
 };
+
 
 const EVENT = {
   TOGGLE: 'octotree:toggle',
